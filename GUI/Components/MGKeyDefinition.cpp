@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -24,22 +24,18 @@ extern CSoundData *_psdPress;
 
 extern BOOL _bDefiningKey;
 
-
-CMGKeyDefinition::CMGKeyDefinition(void)
-{
+CMGKeyDefinition::CMGKeyDefinition(void) {
   mg_iState = DOING_NOTHING;
 }
 
-void CMGKeyDefinition::OnActivate(void)
-{
+void CMGKeyDefinition::OnActivate(void) {
   PlayMenuSound(_psdPress);
   IFeel_PlayEffect("Menu_press");
   SetBindingNames(/*bDefining=*/TRUE);
   mg_iState = RELEASE_RETURN_WAITING;
 }
 
-BOOL CMGKeyDefinition::OnKeyDown(int iVKey)
-{
+BOOL CMGKeyDefinition::OnKeyDown(int iVKey) {
   // if waiting for a key definition
   if (mg_iState == PRESS_KEY_WAITING) {
     // do nothing
@@ -58,8 +54,7 @@ BOOL CMGKeyDefinition::OnKeyDown(int iVKey)
 }
 
 // set names for both key bindings
-void CMGKeyDefinition::SetBindingNames(BOOL bDefining)
-{
+void CMGKeyDefinition::SetBindingNames(BOOL bDefining) {
   // find the button
   INDEX ict = 0;
   INDEX iDik = 0;
@@ -86,8 +81,7 @@ void CMGKeyDefinition::SetBindingNames(BOOL bDefining)
           mg_strBinding = "?";
         }
         // if not defining
-      }
-      else {
+      } else {
         // if second key is defined
         if (bKey2Bound) {
           // add both
@@ -107,19 +101,16 @@ void CMGKeyDefinition::SetBindingNames(BOOL bDefining)
   mg_strBinding = "???";
 }
 
-void CMGKeyDefinition::Appear(void)
-{
+void CMGKeyDefinition::Appear(void) {
   SetBindingNames(/*bDefining=*/FALSE);
   CMenuGadget::Appear();
 }
 
-void CMGKeyDefinition::Disappear(void)
-{
+void CMGKeyDefinition::Disappear(void) {
   CMenuGadget::Disappear();
 }
 
-void CMGKeyDefinition::DefineKey(INDEX iDik)
-{
+void CMGKeyDefinition::DefineKey(INDEX iDik) {
   // for each button in controls
   INDEX ict = 0;
   FOREACHINLIST(CButtonAction, ba_lnNode, _pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions, itba) {
@@ -159,30 +150,21 @@ void CMGKeyDefinition::DefineKey(INDEX iDik)
   SetBindingNames(/*bDefining=*/FALSE);
 }
 
-void CMGKeyDefinition::Think(void)
-{
-  if (mg_iState == RELEASE_RETURN_WAITING)
-  {
+void CMGKeyDefinition::Think(void) {
+  if (mg_iState == RELEASE_RETURN_WAITING) {
     _bDefiningKey = TRUE;
     extern BOOL _bMouseUsedLast;
     _bMouseUsedLast = FALSE;
     _pInput->SetJoyPolling(TRUE);
     _pInput->GetInput(FALSE);
-    if (_pInput->IsInputEnabled() &&
-      !_pInput->GetButtonState(KID_ENTER) &&
-      !_pInput->GetButtonState(KID_MOUSE1))
-    {
+    if (_pInput->IsInputEnabled() && !_pInput->GetButtonState(KID_ENTER) && !_pInput->GetButtonState(KID_MOUSE1)) {
       mg_iState = PRESS_KEY_WAITING;
     }
-  }
-  else if (mg_iState == PRESS_KEY_WAITING)
-  {
+  } else if (mg_iState == PRESS_KEY_WAITING) {
     _pInput->SetJoyPolling(TRUE);
     _pInput->GetInput(FALSE);
-    for (INDEX iDik = 0; iDik<MAX_OVERALL_BUTTONS; iDik++)
-    {
-      if (_pInput->GetButtonState(iDik))
-      {
+    for (INDEX iDik = 0; iDik < MAX_OVERALL_BUTTONS; iDik++) {
+      if (_pInput->GetButtonState(iDik)) {
         // skip keys that cannot be defined
         if (iDik == KID_TILDE) {
           continue;
@@ -208,13 +190,12 @@ void CMGKeyDefinition::Think(void)
   }
 }
 
-void CMGKeyDefinition::Render(CDrawPort *pdp)
-{
+void CMGKeyDefinition::Render(CDrawPort *pdp) {
   SetFontMedium(pdp);
 
   PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
-  PIX pixIL = box.Min()(1) + box.Size()(1)*0.45f;
-  PIX pixIR = box.Min()(1) + box.Size()(1)*0.55f;
+  PIX pixIL = box.Min()(1) + box.Size()(1) * 0.45f;
+  PIX pixIR = box.Min()(1) + box.Size()(1) * 0.55f;
   PIX pixJ = box.Min()(2);
 
   COLOR col = GetCurrentColor();

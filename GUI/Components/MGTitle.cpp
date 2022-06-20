@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -19,9 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <GameMP/LCDDrawing.h>
 #include "MGTitle.h"
 
-
-void CMGTitle::Render(CDrawPort *pdp)
-{
+void CMGTitle::Render(CDrawPort *pdp) {
   SetFontTitle(pdp);
 
   PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);

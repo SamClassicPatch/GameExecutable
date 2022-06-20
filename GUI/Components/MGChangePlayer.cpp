@@ -1,4 +1,4 @@
-/* C/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* C/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -22,9 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern CSoundData *_psdPress;
 
-
-void CMGChangePlayer::OnActivate(void)
-{
+void CMGChangePlayer::OnActivate(void) {
   PlayMenuSound(_psdPress);
   IFeel_PlayEffect("Menu_press");
   _iLocalPlayer = mg_iLocalPlayer;
@@ -40,12 +38,11 @@ void CMGChangePlayer::OnActivate(void)
   ChangeToMenu(&_pGUIM->gmPlayerProfile);
 }
 
-void CMGChangePlayer::SetPlayerText(void)
-{
+void CMGChangePlayer::SetPlayerText(void) {
   INDEX iPlayer = _pGame->gm_aiMenuLocalPlayers[mg_iLocalPlayer];
   CPlayerCharacter &pc = _pGame->gm_apcPlayers[iPlayer];
 
-  if (iPlayer<0 || iPlayer>7) {
+  if (iPlayer < 0 || iPlayer > 7) {
     mg_strText = "????";
   } else {
     mg_strText.PrintF(TRANS("Player %d: %s\n"), mg_iLocalPlayer + 1, pc.GetNameForPrinting());

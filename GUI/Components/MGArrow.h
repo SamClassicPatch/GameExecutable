@@ -16,18 +16,17 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_MENU_GADGET_ARROW_H
 #define SE_INCL_MENU_GADGET_ARROW_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
 
 #include "ArrowDir.h"
 #include "MGButton.h"
 
-
 class CMGArrow : public CMGButton {
-public:
-  enum ArrowDir mg_adDirection;
-  void Render(CDrawPort *pdp);
-  void OnActivate(void);
+  public:
+    enum ArrowDir mg_adDirection;
+    void Render(CDrawPort *pdp);
+    void OnActivate(void);
 };
 
-#endif  /* include-once check. */
+#endif /* include-once check. */

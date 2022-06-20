@@ -16,18 +16,17 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_MENU_GADGET_LEVELBUTTON_H
 #define SE_INCL_MENU_GADGET_LEVELBUTTON_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
 
 #include "MGButton.h"
 
-
 class CMGLevelButton : public CMGButton {
-public:
-  CTFileName mg_fnmLevel;
+  public:
+    CTFileName mg_fnmLevel;
 
-  void OnActivate(void);
-  void OnSetFocus(void);
+    void OnActivate(void);
+    void OnSetFocus(void);
 };
 
-#endif  /* include-once check. */
+#endif /* include-once check. */

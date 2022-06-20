@@ -16,28 +16,27 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_MENU_GADGET_EDIT_H
 #define SE_INCL_MENU_GADGET_EDIT_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
 
 #include "MGButton.h"
 
-
 class CMGEdit : public CMGButton {
-public:
-  INDEX mg_ctMaxStringLen;
-  CTString *mg_pstrToChange;
+  public:
+    INDEX mg_ctMaxStringLen;
+    CTString *mg_pstrToChange;
 
-  CMGEdit(void);
+    CMGEdit(void);
 
-  // return TRUE if handled
-  BOOL OnKeyDown(int iVKey);
-  BOOL OnChar(MSG msg);
-  void Clear(void);
-  void OnActivate(void);
-  void OnKillFocus(void);
-  void Render(CDrawPort *pdp);
-  virtual void OnStringChanged(void);
-  virtual void OnStringCanceled(void);
+    // return TRUE if handled
+    BOOL OnKeyDown(int iVKey);
+    BOOL OnChar(MSG msg);
+    void Clear(void);
+    void OnActivate(void);
+    void OnKillFocus(void);
+    void Render(CDrawPort *pdp);
+    virtual void OnStringChanged(void);
+    virtual void OnStringCanceled(void);
 };
 
-#endif  /* include-once check. */
+#endif /* include-once check. */

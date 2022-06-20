@@ -16,18 +16,17 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_MENU_GADGET_CHANGEPLAYER_H
 #define SE_INCL_MENU_GADGET_CHANGEPLAYER_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
 
 #include "MGButton.h"
 
-
 class CMGChangePlayer : public CMGButton {
-public:
-  INDEX mg_iLocalPlayer;
+  public:
+    INDEX mg_iLocalPlayer;
 
-  void SetPlayerText(void);
-  void OnActivate(void);
+    void SetPlayerText(void);
+    void OnActivate(void);
 };
 
-#endif  /* include-once check. */
+#endif /* include-once check. */

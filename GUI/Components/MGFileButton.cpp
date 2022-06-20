@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -22,15 +22,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern CSoundData *_psdPress;
 
-
-CMGFileButton::CMGFileButton(void)
-{
+CMGFileButton::CMGFileButton(void) {
   mg_iState = FBS_NORMAL;
 }
 
 // refresh current text from description
-void CMGFileButton::RefreshText(void)
-{
+void CMGFileButton::RefreshText(void) {
   mg_strText = mg_strDes;
   mg_strText.OnlyFirstLine();
   mg_strInfo = mg_strDes;
@@ -38,8 +35,7 @@ void CMGFileButton::RefreshText(void)
   mg_strInfo.DeleteChar(0);
 }
 
-void CMGFileButton::SaveDescription(void)
-{
+void CMGFileButton::SaveDescription(void) {
   CTFileName fnFileNameDescription = mg_fnm.NoExt() + ".des";
   try {
     mg_strDes.Save_t(fnFileNameDescription);
@@ -49,15 +45,13 @@ void CMGFileButton::SaveDescription(void)
 }
 
 CMGFileButton *_pmgFileToSave = NULL;
-void OnFileSaveOK(void)
-{
+void OnFileSaveOK(void) {
   if (_pmgFileToSave != NULL) {
     _pmgFileToSave->SaveYes();
   }
 }
 
-void CMGFileButton::DoSave(void)
-{
+void CMGFileButton::DoSave(void) {
   if (FileExistsForWriting(mg_fnm)) {
     _pmgFileToSave = this;
     extern void SaveConfirm(void);
@@ -67,8 +61,7 @@ void CMGFileButton::DoSave(void)
   }
 }
 
-void CMGFileButton::SaveYes(void)
-{
+void CMGFileButton::SaveYes(void) {
   ASSERT(_pGUIM->gmLoadSaveMenu.gm_bSave);
   // call saving function
   BOOL bSucceeded = _pGUIM->gmLoadSaveMenu.gm_pAfterFileChosen(mg_fnm);
@@ -79,8 +72,7 @@ void CMGFileButton::SaveYes(void)
   }
 }
 
-void CMGFileButton::DoLoad(void)
-{
+void CMGFileButton::DoLoad(void) {
   ASSERT(!_pGUIM->gmLoadSaveMenu.gm_bSave);
   // if no file
   if (!FileExists(mg_fnm)) {
@@ -98,13 +90,11 @@ void CMGFileButton::DoLoad(void)
 static CTString _strTmpDescription;
 static CTString _strOrgDescription;
 
-void CMGFileButton::StartEdit(void)
-{
+void CMGFileButton::StartEdit(void) {
   CMGEdit::OnActivate();
 }
 
-void CMGFileButton::OnActivate(void)
-{
+void CMGFileButton::OnActivate(void) {
   if (mg_fnm == "") {
     return;
   }
@@ -134,8 +124,7 @@ void CMGFileButton::OnActivate(void)
   }
 }
 
-BOOL CMGFileButton::OnKeyDown(int iVKey)
-{
+BOOL CMGFileButton::OnKeyDown(int iVKey) {
   if (mg_iState == FBS_NORMAL) {
     if (_pGUIM->gmLoadSaveMenu.gm_bSave || _pGUIM->gmLoadSaveMenu.gm_bManage) {
       if (iVKey == VK_F2) {
@@ -175,8 +164,7 @@ BOOL CMGFileButton::OnKeyDown(int iVKey)
   }
 }
 
-void CMGFileButton::OnSetFocus(void)
-{
+void CMGFileButton::OnSetFocus(void) {
   mg_iState = FBS_NORMAL;
 
   if (_pGUIM->gmLoadSaveMenu.gm_bAllowThumbnails && mg_bEnabled) {
@@ -189,8 +177,7 @@ void CMGFileButton::OnSetFocus(void)
   CMGButton::OnSetFocus();
 }
 
-void CMGFileButton::OnKillFocus(void)
-{
+void CMGFileButton::OnKillFocus(void) {
   // go out of editing mode
   if (mg_bEditing) {
     OnKeyDown(VK_ESCAPE);
@@ -200,8 +187,7 @@ void CMGFileButton::OnKillFocus(void)
 }
 
 // override from edit gadget
-void CMGFileButton::OnStringChanged(void)
-{
+void CMGFileButton::OnStringChanged(void) {
   // if saving
   if (mg_iState == FBS_SAVENAME) {
     // do the save
@@ -218,13 +204,11 @@ void CMGFileButton::OnStringChanged(void)
     OnSetFocus();
   }
 }
-void CMGFileButton::OnStringCanceled(void)
-{
+void CMGFileButton::OnStringCanceled(void) {
   mg_strText = _strOrgDescription;
 }
 
-void CMGFileButton::Render(CDrawPort *pdp)
-{
+void CMGFileButton::Render(CDrawPort *pdp) {
   // render original gadget first
   CMGEdit::Render(pdp);
 

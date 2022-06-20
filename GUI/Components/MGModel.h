@@ -16,21 +16,20 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_MENU_GADGET_MODEL_H
 #define SE_INCL_MENU_GADGET_MODEL_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
 
 #include "MGButton.h"
 
-
 class CMGModel : public CMGButton {
-public:
-  CModelObject mg_moModel;
-  CModelObject mg_moFloor;
-  CPlacement3D mg_plModel;
-  BOOL mg_fFloorY;
+  public:
+    CModelObject mg_moModel;
+    CModelObject mg_moFloor;
+    CPlacement3D mg_plModel;
+    BOOL mg_fFloorY;
 
-  CMGModel(void);
-  void Render(CDrawPort *pdp);
+    CMGModel(void);
+    void Render(CDrawPort *pdp);
 };
 
-#endif  /* include-once check. */
+#endif /* include-once check. */

@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -21,18 +21,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern CSoundData *_psdPress;
 
-
-void CMGLevelButton::OnActivate(void)
-{
+void CMGLevelButton::OnActivate(void) {
   PlayMenuSound(_psdPress);
   IFeel_PlayEffect("Menu_press");
   _pGame->gam_strCustomLevel = mg_fnmLevel;
-  extern void(*_pAfterLevelChosen)(void);
+  extern void (*_pAfterLevelChosen)(void);
   _pAfterLevelChosen();
 }
 
-void CMGLevelButton::OnSetFocus(void)
-{
+void CMGLevelButton::OnSetFocus(void) {
   SetThumbnail(mg_fnmLevel);
   CMGButton::OnSetFocus();
 }

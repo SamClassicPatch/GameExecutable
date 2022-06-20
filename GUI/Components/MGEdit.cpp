@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -23,23 +23,19 @@ extern CSoundData *_psdPress;
 
 extern BOOL _bEditingString;
 
-
-CMGEdit::CMGEdit(void)
-{
+CMGEdit::CMGEdit(void) {
   mg_pstrToChange = NULL;
   mg_ctMaxStringLen = 70;
   Clear();
 }
 
-void CMGEdit::Clear(void)
-{
+void CMGEdit::Clear(void) {
   mg_iCursorPos = 0;
   mg_bEditing = FALSE;
   _bEditingString = FALSE;
 }
 
-void CMGEdit::OnActivate(void)
-{
+void CMGEdit::OnActivate(void) {
   if (!mg_bEnabled) {
     return;
   }
@@ -52,10 +48,8 @@ void CMGEdit::OnActivate(void)
   _bEditingString = TRUE;
 }
 
-
 // focus lost
-void CMGEdit::OnKillFocus(void)
-{
+void CMGEdit::OnKillFocus(void) {
   // go out of editing mode
   if (mg_bEditing) {
     OnKeyDown(VK_RETURN);
@@ -66,12 +60,15 @@ void CMGEdit::OnKillFocus(void)
 }
 
 // helper function for deleting char(s) from string
-static void Key_BackDel(CTString &str, INDEX &iPos, BOOL bShift, BOOL bRight)
-{
+static void Key_BackDel(CTString &str, INDEX &iPos, BOOL bShift, BOOL bRight) {
   // do nothing if string is empty
   INDEX ctChars = strlen(str);
-  if (ctChars == 0) return;
-  if (bRight && iPos<ctChars) {  // DELETE key
+
+  if (ctChars == 0) {
+    return;
+  }
+
+  if (bRight && iPos < ctChars) { // DELETE key
     if (bShift) {
       // delete to end of line
       str.TrimRight(iPos);
@@ -80,7 +77,7 @@ static void Key_BackDel(CTString &str, INDEX &iPos, BOOL bShift, BOOL bRight)
       str.DeleteChar(iPos);
     }
   }
-  if (!bRight && iPos>0) {       // BACKSPACE key
+  if (!bRight && iPos > 0) { // BACKSPACE key
     if (bShift) {
       // delete to start of line
       str.TrimLeft(ctChars - iPos);
@@ -94,8 +91,7 @@ static void Key_BackDel(CTString &str, INDEX &iPos, BOOL bShift, BOOL bRight)
 }
 
 // key/mouse button pressed
-BOOL CMGEdit::OnKeyDown(int iVKey)
-{
+BOOL CMGEdit::OnKeyDown(int iVKey) {
   // if not in edit mode
   if (!mg_bEditing) {
     // behave like normal gadget
@@ -105,16 +101,51 @@ BOOL CMGEdit::OnKeyDown(int iVKey)
   // finish editing?
   BOOL bShift = GetKeyState(VK_SHIFT) & 0x8000;
   switch (iVKey) {
-  case VK_UP: case VK_DOWN:
-  case VK_RETURN:  case VK_LBUTTON: *mg_pstrToChange = mg_strText;  Clear(); OnStringChanged();  break;
-  case VK_ESCAPE:  case VK_RBUTTON:  mg_strText = *mg_pstrToChange; Clear(); OnStringCanceled(); break;
-  case VK_LEFT:    if (mg_iCursorPos > 0)                  mg_iCursorPos--;  break;
-  case VK_RIGHT:   if (mg_iCursorPos < strlen(mg_strText)) mg_iCursorPos++;  break;
-  case VK_HOME:    mg_iCursorPos = 0;                   break;
-  case VK_END:     mg_iCursorPos = strlen(mg_strText);  break;
-  case VK_BACK:    Key_BackDel(mg_strText, mg_iCursorPos, bShift, FALSE);  break;
-  case VK_DELETE:  Key_BackDel(mg_strText, mg_iCursorPos, bShift, TRUE);   break;
-  default:  break; // ignore all other special keys
+    case VK_UP:
+    case VK_DOWN:
+    case VK_RETURN:
+    case VK_LBUTTON:
+      *mg_pstrToChange = mg_strText;
+      Clear();
+      OnStringChanged();
+      break;
+
+    case VK_ESCAPE:
+    case VK_RBUTTON:
+      mg_strText = *mg_pstrToChange;
+      Clear();
+      OnStringCanceled();
+      break;
+
+    case VK_LEFT:
+      if (mg_iCursorPos > 0) {
+        mg_iCursorPos--;
+      }
+      break;
+
+    case VK_RIGHT:
+      if (mg_iCursorPos < strlen(mg_strText)) {
+        mg_iCursorPos++;
+      }
+      break;
+
+    case VK_HOME:
+      mg_iCursorPos = 0;
+      break;
+
+    case VK_END:
+      mg_iCursorPos = strlen(mg_strText);
+      break;
+
+    case VK_BACK:
+      Key_BackDel(mg_strText, mg_iCursorPos, bShift, FALSE);
+      break;
+
+    case VK_DELETE:
+      Key_BackDel(mg_strText, mg_iCursorPos, bShift, TRUE);
+      break;
+
+    default: break; // ignore all other special keys
   }
 
   // key is handled
@@ -122,8 +153,7 @@ BOOL CMGEdit::OnKeyDown(int iVKey)
 }
 
 // char typed
-BOOL CMGEdit::OnChar(MSG msg)
-{
+BOOL CMGEdit::OnChar(MSG msg) {
   // if not in edit mode
   if (!mg_bEditing) {
     // behave like normal gadget
@@ -142,8 +172,7 @@ BOOL CMGEdit::OnChar(MSG msg)
   return TRUE;
 }
 
-void CMGEdit::Render(CDrawPort *pdp)
-{
+void CMGEdit::Render(CDrawPort *pdp) {
   if (mg_bEditing) {
     mg_iTextMode = -1;
   } else if (mg_bFocused) {
@@ -165,10 +194,6 @@ void CMGEdit::Render(CDrawPort *pdp)
   }
 }
 
-void CMGEdit::OnStringChanged(void)
-{
-}
+void CMGEdit::OnStringChanged(void) {}
 
-void CMGEdit::OnStringCanceled(void)
-{
-}
+void CMGEdit::OnStringCanceled(void) {}

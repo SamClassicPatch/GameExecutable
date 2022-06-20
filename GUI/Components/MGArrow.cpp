@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -19,9 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <GameMP/LCDDrawing.h>
 #include "MGArrow.h"
 
-
-void CMGArrow::Render(CDrawPort *pdp)
-{
+void CMGArrow::Render(CDrawPort *pdp) {
   SetFontMedium(pdp);
 
   PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
@@ -43,12 +41,10 @@ void CMGArrow::Render(CDrawPort *pdp)
   pdp->PutText(str, pixI, pixJ, col);
 }
 
-void CMGArrow::OnActivate(void)
-{
+void CMGArrow::OnActivate(void) {
   if (mg_adDirection == AD_UP) {
     pgmCurrentMenu->ScrollList(-3);
-  }
-  else if (mg_adDirection == AD_DOWN) {
+  } else if (mg_adDirection == AD_DOWN) {
     pgmCurrentMenu->ScrollList(+3);
   }
 }

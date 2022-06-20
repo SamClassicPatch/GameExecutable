@@ -16,20 +16,19 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_MENU_GADGET_VARBUTTON_H
 #define SE_INCL_MENU_GADGET_VARBUTTON_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
 
 #include "MGButton.h"
 
-
 class CMGVarButton : public CMGButton {
-public:
-  class CVarSetting *mg_pvsVar;
-  PIXaabbox2D GetSliderBox(void);
-  BOOL OnKeyDown(int iVKey);
-  void Render(CDrawPort *pdp);
-  BOOL IsSeparator(void);
-  BOOL IsEnabled(void);
+  public:
+    class CVarSetting *mg_pvsVar;
+    PIXaabbox2D GetSliderBox(void);
+    BOOL OnKeyDown(int iVKey);
+    void Render(CDrawPort *pdp);
+    BOOL IsSeparator(void);
+    BOOL IsEnabled(void);
 };
 
-#endif  /* include-once check. */
+#endif /* include-once check. */
