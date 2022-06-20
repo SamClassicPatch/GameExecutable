@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -13,21 +13,20 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
-
 extern CListHead _lhAutoDemos;
 extern CListHead _lhAllLevels;
 extern CListHead _lhFilteredLevels;
 
 class CLevelInfo {
-public:
-  CListNode li_lnNode;
-  CTFileName li_fnLevel;
-  CTString li_strName;
-  ULONG li_ulSpawnFlags;
+  public:
+    CListNode li_lnNode;
+    CTFileName li_fnLevel;
+    CTString li_strName;
+    ULONG li_ulSpawnFlags;
 
-  CLevelInfo(void);
-  CLevelInfo(const CLevelInfo &li);
-  void operator=(const CLevelInfo &li);
+    CLevelInfo(void);
+    CLevelInfo(const CLevelInfo &li);
+    void operator=(const CLevelInfo &li);
 };
 
 // find all levels that match given flags

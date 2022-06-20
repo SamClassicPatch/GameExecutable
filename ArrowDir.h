@@ -16,9 +16,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_ARROWDIR_H
 #define SE_INCL_ARROWDIR_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
-
 
 enum ArrowDir {
   AD_NONE,
@@ -28,4 +27,4 @@ enum ArrowDir {
   AD_RIGHT,
 };
 
-#endif  /* include-once check. */
+#endif /* include-once check. */

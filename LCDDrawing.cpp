@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -16,76 +16,61 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Stdh.h"
 #include "LCDDrawing.h"
 
-extern void LCDInit(void)
-{
+extern void LCDInit(void) {
   _pGame->LCDInit();
 }
 
-extern void LCDEnd(void)
-{
+extern void LCDEnd(void) {
   _pGame->LCDEnd();
 }
 
-extern void LCDPrepare(FLOAT fFade)
-{
+extern void LCDPrepare(FLOAT fFade) {
   _pGame->LCDPrepare(fFade);
 }
 
-extern void LCDSetDrawport(CDrawPort *pdp)
-{
+extern void LCDSetDrawport(CDrawPort *pdp) {
   _pGame->LCDSetDrawport(pdp);
 }
 
-extern void LCDDrawBox(PIX pixUL, PIX pixDR, PIXaabbox2D &box, COLOR col)
-{
+extern void LCDDrawBox(PIX pixUL, PIX pixDR, PIXaabbox2D &box, COLOR col) {
   _pGame->LCDDrawBox(pixUL, pixDR, box, col);
 }
 
-extern void LCDScreenBoxOpenLeft(COLOR col)
-{
+extern void LCDScreenBoxOpenLeft(COLOR col) {
   _pGame->LCDScreenBoxOpenLeft(col);
 }
 
-extern void LCDScreenBoxOpenRight(COLOR col)
-{
+extern void LCDScreenBoxOpenRight(COLOR col) {
   _pGame->LCDScreenBoxOpenRight(col);
 }
 
-extern void LCDScreenBox(COLOR col)
-{
+extern void LCDScreenBox(COLOR col) {
   _pGame->LCDScreenBox(col);
 }
 
-extern void LCDRenderClouds1(void)
-{
+extern void LCDRenderClouds1(void) {
   _pGame->LCDRenderClouds1();
 }
 
-extern void LCDRenderClouds2(void)
-{
+extern void LCDRenderClouds2(void) {
   _pGame->LCDRenderClouds2();
 }
 
-extern void LCDRenderGrid(void)
-{
+extern void LCDRenderGrid(void) {
   _pGame->LCDRenderGrid();
 }
 
-extern COLOR LCDGetColor(COLOR colDefault, const char *strName)
-{
+extern COLOR LCDGetColor(COLOR colDefault, const char *strName) {
   return _pGame->LCDGetColor(colDefault, strName);
 }
-extern COLOR LCDFadedColor(COLOR col)
-{
+extern COLOR LCDFadedColor(COLOR col) {
   return _pGame->LCDFadedColor(col);
 }
 
-extern COLOR LCDBlinkingColor(COLOR col0, COLOR col1)
-{
+extern COLOR LCDBlinkingColor(COLOR col0, COLOR col1) {
   return _pGame->LCDBlinkingColor(col0, col1);
 }
 
-extern void LCDDrawPointer(PIX pixI, PIX pixJ)
-{
+extern void LCDDrawPointer(PIX pixI, PIX pixJ) {
   _pGame->LCDDrawPointer(pixI, pixJ);
 }

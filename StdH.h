@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -18,13 +18,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Templates/Stock_CModelData.h>
 #include <GameMP/Game.h>
 
-/* rcg10042001 protect against Visual C-isms. */
+// rcg10042001 protect against Visual C-isms.
 #ifdef _MSC_VER
 #define DECL_DLL _declspec(dllimport)
 #endif
 
 #ifdef PLATFORM_UNIX
-#define DECL_DLL 
+#define DECL_DLL
 #endif
 
 #include <EntitiesMP/Global.h>
