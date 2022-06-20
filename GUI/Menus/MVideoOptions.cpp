@@ -22,31 +22,23 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 extern void InitVideoOptionsButtons();
 extern void UpdateVideoOptionsButtons(INDEX iSelected);
 
-
-void CVideoOptionsMenu::Initialize_t(void)
-{
+void CVideoOptionsMenu::Initialize_t(void) {
   // intialize video options menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("VIDEO");
   gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
 
-  TRIGGER_MG(gm_mgDisplayAPITrigger, 0,
-    gm_mgApply, gm_mgDisplayAdaptersTrigger, TRANS("GRAPHICS API"), astrDisplayAPIRadioTexts);
+  TRIGGER_MG(gm_mgDisplayAPITrigger, 0, gm_mgApply, gm_mgDisplayAdaptersTrigger, TRANS("GRAPHICS API"), astrDisplayAPIRadioTexts);
   gm_mgDisplayAPITrigger.mg_strTip = TRANS("choose graphics API to be used");
-  TRIGGER_MG(gm_mgDisplayAdaptersTrigger, 1,
-    gm_mgDisplayAPITrigger, gm_mgDisplayPrefsTrigger, TRANS("DISPLAY ADAPTER"), astrNoYes);
+  TRIGGER_MG(gm_mgDisplayAdaptersTrigger, 1, gm_mgDisplayAPITrigger, gm_mgDisplayPrefsTrigger, TRANS("DISPLAY ADAPTER"), astrNoYes);
   gm_mgDisplayAdaptersTrigger.mg_strTip = TRANS("choose display adapter to be used");
-  TRIGGER_MG(gm_mgDisplayPrefsTrigger, 2,
-    gm_mgDisplayAdaptersTrigger, gm_mgResolutionsTrigger, TRANS("PREFERENCES"), astrDisplayPrefsRadioTexts);
+  TRIGGER_MG(gm_mgDisplayPrefsTrigger, 2, gm_mgDisplayAdaptersTrigger, gm_mgResolutionsTrigger, TRANS("PREFERENCES"), astrDisplayPrefsRadioTexts);
   gm_mgDisplayPrefsTrigger.mg_strTip = TRANS("balance between speed and rendering quality, depending on your system");
-  TRIGGER_MG(gm_mgResolutionsTrigger, 3,
-    gm_mgDisplayPrefsTrigger, gm_mgFullScreenTrigger, TRANS("RESOLUTION"), astrNoYes);
+  TRIGGER_MG(gm_mgResolutionsTrigger, 3, gm_mgDisplayPrefsTrigger, gm_mgFullScreenTrigger, TRANS("RESOLUTION"), astrNoYes);
   gm_mgResolutionsTrigger.mg_strTip = TRANS("select video mode resolution");
-  TRIGGER_MG(gm_mgFullScreenTrigger, 4,
-    gm_mgResolutionsTrigger, gm_mgBitsPerPixelTrigger, TRANS("FULL SCREEN"), astrNoYes);
+  TRIGGER_MG(gm_mgFullScreenTrigger, 4, gm_mgResolutionsTrigger, gm_mgBitsPerPixelTrigger, TRANS("FULL SCREEN"), astrNoYes);
   gm_mgFullScreenTrigger.mg_strTip = TRANS("make game run in a window or in full screen");
-  TRIGGER_MG(gm_mgBitsPerPixelTrigger, 5,
-    gm_mgFullScreenTrigger, gm_mgVideoRendering, TRANS("BITS PER PIXEL"), astrBitsPerPixelRadioTexts);
+  TRIGGER_MG(gm_mgBitsPerPixelTrigger, 5, gm_mgFullScreenTrigger, gm_mgVideoRendering, TRANS("BITS PER PIXEL"), astrBitsPerPixelRadioTexts);
   gm_mgBitsPerPixelTrigger.mg_strTip = TRANS("select number of colors used for display");
 
   gm_mgDisplayPrefsTrigger.mg_pOnTriggerChange = NULL;
@@ -75,8 +67,7 @@ void CVideoOptionsMenu::Initialize_t(void)
   gm_mgApply.mg_pActivatedFunction = NULL;
 }
 
-void CVideoOptionsMenu::StartMenu(void)
-{
+void CVideoOptionsMenu::StartMenu(void) {
   InitVideoOptionsButtons();
 
   CGameMenu::StartMenu();

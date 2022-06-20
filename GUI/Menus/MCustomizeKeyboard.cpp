@@ -19,11 +19,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MCustomizeKeyboard.h"
 
-
-void CCustomizeKeyboardMenu::FillListItems(void)
-{
+void CCustomizeKeyboardMenu::FillListItems(void) {
   // disable all items first
-  for (INDEX i = 0; i<KEYS_ON_SCREEN; i++) {
+  for (INDEX i = 0; i < KEYS_ON_SCREEN; i++) {
     gm_mgKey[i].mg_bEnabled = FALSE;
     gm_mgKey[i].mg_iInList = -2;
   }
@@ -33,12 +31,9 @@ void CCustomizeKeyboardMenu::FillListItems(void)
   // set diks to key buttons
   INDEX iLabel = 0;
   INDEX ctLabels = _pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions.Count();
-  FOREACHINLIST(CButtonAction, ba_lnNode, _pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions, itAct)
-  {
+  FOREACHINLIST(CButtonAction, ba_lnNode, _pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions, itAct) {
     INDEX iInMenu = iLabel - gm_iListOffset;
-    if ((iLabel >= gm_iListOffset) &&
-      (iLabel<(gm_iListOffset + gm_ctListVisible)))
-    {
+    if ((iLabel >= gm_iListOffset) && (iLabel < (gm_iListOffset + gm_ctListVisible))) {
       bHasFirst |= (iLabel == 0);
       bHasLast |= (iLabel == ctLabels - 1);
       gm_mgKey[iInMenu].mg_strLabel = TranslateConst(itAct->ba_strName, 0);
@@ -52,12 +47,11 @@ void CCustomizeKeyboardMenu::FillListItems(void)
   }
 
   // enable/disable up/down arrows
-  gm_mgArrowUp.mg_bEnabled = !bHasFirst && ctLabels>0;
-  gm_mgArrowDn.mg_bEnabled = !bHasLast  && ctLabels>0;
+  gm_mgArrowUp.mg_bEnabled = !bHasFirst && ctLabels > 0;
+  gm_mgArrowDn.mg_bEnabled = !bHasLast && ctLabels > 0;
 }
 
-void CCustomizeKeyboardMenu::Initialize_t(void)
-{
+void CCustomizeKeyboardMenu::Initialize_t(void) {
   // intialize Audio options menu
   gm_mgTitle.mg_strText = TRANS("CUSTOMIZE BUTTONS");
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
@@ -65,8 +59,7 @@ void CCustomizeKeyboardMenu::Initialize_t(void)
 
 #define KL_START 3.0f
 #define KL_STEEP -1.45f
-  for (INDEX iLabel = 0; iLabel<KEYS_ON_SCREEN; iLabel++)
-  {
+  for (INDEX iLabel = 0; iLabel < KEYS_ON_SCREEN; iLabel++) {
     INDEX iPrev = (gm_ctListVisible + iLabel - 1) % KEYS_ON_SCREEN;
     INDEX iNext = (iLabel + 1) % KEYS_ON_SCREEN;
     // initialize label entities
@@ -84,10 +77,8 @@ void CCustomizeKeyboardMenu::Initialize_t(void)
   gm_mgArrowUp.mg_adDirection = AD_UP;
   gm_mgArrowDn.mg_boxOnScreen = BoxArrow(AD_DOWN);
   gm_mgArrowUp.mg_boxOnScreen = BoxArrow(AD_UP);
-  gm_mgArrowDn.mg_pmgRight = gm_mgArrowDn.mg_pmgUp =
-    &gm_mgKey[KEYS_ON_SCREEN - 1];
-  gm_mgArrowUp.mg_pmgRight = gm_mgArrowUp.mg_pmgDown =
-    &gm_mgKey[0];
+  gm_mgArrowDn.mg_pmgRight = gm_mgArrowDn.mg_pmgUp = &gm_mgKey[KEYS_ON_SCREEN - 1];
+  gm_mgArrowUp.mg_pmgRight = gm_mgArrowUp.mg_pmgDown = &gm_mgKey[0];
 
   gm_ctListVisible = KEYS_ON_SCREEN;
   gm_pmgArrowUp = &gm_mgArrowUp;
@@ -96,8 +87,7 @@ void CCustomizeKeyboardMenu::Initialize_t(void)
   gm_pmgListBottom = &gm_mgKey[KEYS_ON_SCREEN - 1];
 }
 
-void CCustomizeKeyboardMenu::StartMenu(void)
-{
+void CCustomizeKeyboardMenu::StartMenu(void) {
   ControlsMenuOn();
   gm_iListOffset = 0;
   gm_ctListTotal = _pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions.Count();
@@ -105,8 +95,7 @@ void CCustomizeKeyboardMenu::StartMenu(void)
   CGameMenu::StartMenu();
 }
 
-void CCustomizeKeyboardMenu::EndMenu(void)
-{
+void CCustomizeKeyboardMenu::EndMenu(void) {
   ControlsMenuOff();
   CGameMenu::EndMenu();
 }

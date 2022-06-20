@@ -18,9 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 #include "MDisabled.h"
 
-
-void CDisabledMenu::Initialize_t(void)
-{
+void CDisabledMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
 

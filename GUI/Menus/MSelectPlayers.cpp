@@ -19,7 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MSelectPlayers.h"
 
-#define ADD_GADGET( gd, box, up, dn, lf, rt, txt) \
+#define ADD_GADGET(gd, box, up, dn, lf, rt, txt) \
   gd.mg_boxOnScreen = box; \
   gd.mg_pmgUp = up; \
   gd.mg_pmgDown = dn; \
@@ -33,8 +33,7 @@ extern CTString astrSplitScreenRadioTexts[4];
 extern void SelectPlayersFillMenu(void);
 extern void SelectPlayersApplyMenu(void);
 
-void CSelectPlayersMenu::Initialize_t(void)
-{
+void CSelectPlayersMenu::Initialize_t(void) {
   // intialize split screen menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("SELECT PLAYERS");
@@ -104,15 +103,13 @@ void CSelectPlayersMenu::Initialize_t(void)
   gm_mgStart.mg_iCenterI = 0;
 }
 
-void CSelectPlayersMenu::StartMenu(void)
-{
+void CSelectPlayersMenu::StartMenu(void) {
   CGameMenu::StartMenu();
   SelectPlayersFillMenu();
   SelectPlayersApplyMenu();
 }
 
-void CSelectPlayersMenu::EndMenu(void)
-{
+void CSelectPlayersMenu::EndMenu(void) {
   SelectPlayersApplyMenu();
   CGameMenu::EndMenu();
 }

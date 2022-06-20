@@ -18,9 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 #include "MNetwork.h"
 
-
-void CNetworkMenu::Initialize_t(void)
-{
+void CNetworkMenu::Initialize_t(void) {
   // intialize network menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("NETWORK");
@@ -63,7 +61,6 @@ void CNetworkMenu::Initialize_t(void)
   gm_mgLoad.mg_pActivatedFunction = NULL;
 }
 
-void CNetworkMenu::StartMenu(void)
-{
+void CNetworkMenu::StartMenu(void) {
   CGameMenu::StartMenu();
 }

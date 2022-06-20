@@ -16,7 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_MENU_STUFF_H
 #define SE_INCL_MENU_STUFF_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
 
 #include "FileInfo.h"
@@ -31,7 +31,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   mg.mg_iSelected = 0; \
   mg.mg_strLabel = text; \
   mg.mg_strValue = astr[0];
-
 
 extern INDEX ctGameTypeRadioTexts;
 
@@ -49,7 +48,10 @@ extern CTString astrBitsPerPixelRadioTexts[3];
 extern CTString astrFrequencyRadioTexts[4];
 extern CTString astrSoundAPIRadioTexts[3];
 
-extern PIX apixWidths[20][2];
+// [Cecil] Available resolutions
+#define CT_RESOLUTIONS 20
+
+extern PIX apixWidths[CT_RESOLUTIONS][2];
 
 ULONG GetSpawnFlagsForGameType(INDEX iGameType);
 BOOL IsMenuEnabled(const CTString &strMenuName);
@@ -68,4 +70,4 @@ enum DisplayDepth SwitchToDepth(INDEX i);
 void ControlsMenuOn();
 void ControlsMenuOff();
 
-#endif  /* include-once check. */
+#endif /* include-once check. */

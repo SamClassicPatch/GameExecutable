@@ -18,9 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 #include "MOptions.h"
 
-
-void COptionsMenu::Initialize_t(void)
-{
+void COptionsMenu::Initialize_t(void) {
   // intialize options menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("OPTIONS");

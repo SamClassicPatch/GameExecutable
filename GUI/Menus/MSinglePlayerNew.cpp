@@ -19,9 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MSinglePlayerNew.h"
 
-
-void CSinglePlayerNewMenu::Initialize_t(void)
-{
+void CSinglePlayerNewMenu::Initialize_t(void) {
   // intialize single player new menu
   gm_mgTitle.mg_strText = TRANS("NEW GAME");
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
@@ -81,11 +79,8 @@ void CSinglePlayerNewMenu::Initialize_t(void)
   gm_mgMental.mg_pmgDown = &gm_mgTourist;
   gm_mgMental.mg_pActivatedFunction = NULL;
   gm_mgMental.mg_bMental = TRUE;
-
-
 }
-void CSinglePlayerNewMenu::StartMenu(void)
-{
+void CSinglePlayerNewMenu::StartMenu(void) {
   CGameMenu::StartMenu();
   extern INDEX sam_bMentalActivated;
   if (sam_bMentalActivated) {

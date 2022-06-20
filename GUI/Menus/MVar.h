@@ -16,7 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_GAME_MENU_VAR_H
 #define SE_INCL_GAME_MENU_VAR_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
 
 #include "GameMenu.h"
@@ -25,22 +25,21 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "GUI/Components/MGTitle.h"
 #include "GUI/Components/MGVarButton.h"
 
-
 class CVarMenu : public CGameMenu {
-public:
-  CTFileName gm_fnmMenuCFG;
+  public:
+    CTFileName gm_fnmMenuCFG;
 
-  CMGTitle gm_mgTitle;
-  CMGVarButton gm_mgVar[LEVELS_ON_SCREEN];
-  CMGButton gm_mgApply;
-  CMGArrow gm_mgArrowUp;
-  CMGArrow gm_mgArrowDn;
+    CMGTitle gm_mgTitle;
+    CMGVarButton gm_mgVar[LEVELS_ON_SCREEN];
+    CMGButton gm_mgApply;
+    CMGArrow gm_mgArrowUp;
+    CMGArrow gm_mgArrowDn;
 
-  void Initialize_t(void);
-  void FillListItems(void);
-  void StartMenu(void);
-  void EndMenu(void);
-  void Think(void);
+    void Initialize_t(void);
+    void FillListItems(void);
+    void StartMenu(void);
+    void EndMenu(void);
+    void Think(void);
 };
 
-#endif  /* include-once check. */
+#endif /* include-once check. */

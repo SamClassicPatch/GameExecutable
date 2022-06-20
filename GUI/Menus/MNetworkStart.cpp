@@ -22,9 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern void UpdateNetworkLevel(INDEX iDummy);
 
-
-void CNetworkStartMenu::Initialize_t(void)
-{
+void CNetworkStartMenu::Initialize_t(void) {
   // title
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("START SERVER");
@@ -44,15 +42,13 @@ void CNetworkStartMenu::Initialize_t(void)
   gm_lhGadgets.AddTail(gm_mgSessionName.mg_lnNode);
 
   // game type trigger
-  TRIGGER_MG(gm_mgGameType, 2,
-    gm_mgSessionName, gm_mgDifficulty, TRANS("Game type:"), astrGameTypeRadioTexts);
+  TRIGGER_MG(gm_mgGameType, 2, gm_mgSessionName, gm_mgDifficulty, TRANS("Game type:"), astrGameTypeRadioTexts);
   gm_mgGameType.mg_ctTexts = ctGameTypeRadioTexts;
   gm_mgGameType.mg_strTip = TRANS("choose type of multiplayer game");
   gm_mgGameType.mg_pOnTriggerChange = &UpdateNetworkLevel;
 
   // difficulty trigger
-  TRIGGER_MG(gm_mgDifficulty, 3,
-    gm_mgGameType, gm_mgLevel, TRANS("Difficulty:"), astrDifficultyRadioTexts);
+  TRIGGER_MG(gm_mgDifficulty, 3, gm_mgGameType, gm_mgLevel, TRANS("Difficulty:"), astrDifficultyRadioTexts);
   gm_mgDifficulty.mg_strTip = TRANS("choose difficulty level");
 
   // level name
@@ -68,18 +64,15 @@ void CNetworkStartMenu::Initialize_t(void)
   gm_lhGadgets.AddTail(gm_mgLevel.mg_lnNode);
 
   // max players trigger
-  TRIGGER_MG(gm_mgMaxPlayers, 5,
-    gm_mgLevel, gm_mgWaitAllPlayers, TRANS("Max players:"), astrMaxPlayersRadioTexts);
+  TRIGGER_MG(gm_mgMaxPlayers, 5, gm_mgLevel, gm_mgWaitAllPlayers, TRANS("Max players:"), astrMaxPlayersRadioTexts);
   gm_mgMaxPlayers.mg_strTip = TRANS("choose maximum allowed number of players");
 
   // wait all players trigger
-  TRIGGER_MG(gm_mgWaitAllPlayers, 6,
-    gm_mgMaxPlayers, gm_mgVisible, TRANS("Wait for all players:"), astrNoYes);
+  TRIGGER_MG(gm_mgWaitAllPlayers, 6, gm_mgMaxPlayers, gm_mgVisible, TRANS("Wait for all players:"), astrNoYes);
   gm_mgWaitAllPlayers.mg_strTip = TRANS("if on, game won't start until all players have joined");
 
   // server visible trigger
-  TRIGGER_MG(gm_mgVisible, 7,
-    gm_mgMaxPlayers, gm_mgGameOptions, TRANS("Server visible:"), astrNoYes);
+  TRIGGER_MG(gm_mgVisible, 7, gm_mgMaxPlayers, gm_mgGameOptions, TRANS("Server visible:"), astrNoYes);
   gm_mgVisible.mg_strTip = TRANS("invisible servers are not listed, cleints have to join manually");
 
   // options button
@@ -103,8 +96,7 @@ void CNetworkStartMenu::Initialize_t(void)
   gm_mgStart.mg_pActivatedFunction = NULL;
 }
 
-void CNetworkStartMenu::StartMenu(void)
-{
+void CNetworkStartMenu::StartMenu(void) {
   extern INDEX sam_bMentalActivated;
   gm_mgDifficulty.mg_ctTexts = sam_bMentalActivated ? 6 : 5;
 
@@ -116,7 +108,7 @@ void CNetworkStartMenu::StartMenu(void)
   _pShell->SetINDEX("gam_iStartMode", CSessionProperties::GM_COOPERATIVE);
 
   INDEX ctMaxPlayers = _pShell->GetINDEX("gam_ctMaxPlayers");
-  if (ctMaxPlayers<2 || ctMaxPlayers>16) {
+  if (ctMaxPlayers < 2 || ctMaxPlayers > 16) {
     ctMaxPlayers = 2;
     _pShell->SetINDEX("gam_ctMaxPlayers", ctMaxPlayers);
   }
@@ -135,8 +127,7 @@ void CNetworkStartMenu::StartMenu(void)
   CGameMenu::StartMenu();
 }
 
-void CNetworkStartMenu::EndMenu(void)
-{
+void CNetworkStartMenu::EndMenu(void) {
   _pShell->SetINDEX("gam_iStartDifficulty", gm_mgDifficulty.mg_iSelected - 1);
   _pShell->SetINDEX("gam_iStartMode", gm_mgGameType.mg_iSelected);
   _pShell->SetINDEX("gam_bWaitAllPlayers", gm_mgWaitAllPlayers.mg_iSelected);

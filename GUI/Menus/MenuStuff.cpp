@@ -37,16 +37,16 @@ extern CTString astrWeapon[] = {
   RADIOTRANS("Only if stronger"),
 };
 
-extern PIX apixWidths[][2] = {
-  320, 240,
-  400, 300,
-  512, 384,
-  640, 240,
-  640, 480,
-  720, 540,
-  800, 300,
-  800, 600,
-  960, 720,
+extern PIX apixWidths[CT_RESOLUTIONS][2] = {
+  320,  240,
+  400,  300,
+  512,  384,
+  640,  240,
+  640,  480,
+  720,  540,
+  800,  300,
+  800,  600,
+  960,  720,
   1024, 384,
   1024, 768,
   1152, 864,
@@ -146,12 +146,13 @@ extern CTString astrSoundAPIRadioTexts[] = {
   RADIOTRANS("EAX"),
 };
 
-ULONG GetSpawnFlagsForGameType(INDEX iGameType)
-{
-  if (iGameType == -1) return SPF_SINGLEPLAYER;
+ULONG GetSpawnFlagsForGameType(INDEX iGameType) {
+  if (iGameType == -1) {
+    return SPF_SINGLEPLAYER;
+  }
 
   // get function that will provide us the flags
-  CShellSymbol *pss = _pShell->GetSymbol("GetSpawnFlagsForGameType", /*bDeclaredOnly=*/ TRUE); // [Cecil] Removed "SS" suffix
+  CShellSymbol *pss = _pShell->GetSymbol("GetSpawnFlagsForGameType", /*bDeclaredOnly=*/TRUE);
   // if none
   if (pss == NULL) {
     // error
@@ -159,14 +160,13 @@ ULONG GetSpawnFlagsForGameType(INDEX iGameType)
     return 0;
   }
 
-  ULONG(*pFunc)(INDEX) = (ULONG(*)(INDEX))pss->ss_pvValue;
+  ULONG (*pFunc)(INDEX) = (ULONG(*)(INDEX))pss->ss_pvValue;
   return pFunc(iGameType);
 }
 
-BOOL IsMenuEnabled(const CTString &strMenuName)
-{
+BOOL IsMenuEnabled(const CTString &strMenuName) {
   // get function that will provide us the flags
-  CShellSymbol *pss = _pShell->GetSymbol("IsMenuEnabled", /*bDeclaredOnly=*/ TRUE); // [Cecil] Removed "SS" suffix
+  CShellSymbol *pss = _pShell->GetSymbol("IsMenuEnabled", /*bDeclaredOnly=*/TRUE);
   // if none
   if (pss == NULL) {
     // error
@@ -174,15 +174,14 @@ BOOL IsMenuEnabled(const CTString &strMenuName)
     return TRUE;
   }
 
-  BOOL(*pFunc)(const CTString &) = (BOOL(*)(const CTString &))pss->ss_pvValue;
+  BOOL (*pFunc)(const CTString &) = (BOOL(*)(const CTString &))pss->ss_pvValue;
   return pFunc(strMenuName);
 }
 
 // initialize game type strings table
-void InitGameTypes(void)
-{
+void InitGameTypes(void) {
   // get function that will provide us the info about gametype
-  CShellSymbol *pss = _pShell->GetSymbol("GetGameTypeName", /*bDeclaredOnly=*/ TRUE); // [Cecil] Removed "SS" suffix
+  CShellSymbol *pss = _pShell->GetSymbol("GetGameTypeName", /*bDeclaredOnly=*/TRUE);
   // if none
   if (pss == NULL) {
     // error
@@ -192,9 +191,9 @@ void InitGameTypes(void)
   }
 
   // for each mode
-  for (ctGameTypeRadioTexts = 0; ctGameTypeRadioTexts<ARRAYCOUNT(astrGameTypeRadioTexts); ctGameTypeRadioTexts++) {
+  for (ctGameTypeRadioTexts = 0; ctGameTypeRadioTexts < ARRAYCOUNT(astrGameTypeRadioTexts); ctGameTypeRadioTexts++) {
     // get the text
-    CTString(*pFunc)(INDEX) = (CTString(*)(INDEX))pss->ss_pvValue;
+    CTString (*pFunc)(INDEX) = (CTString(*)(INDEX))pss->ss_pvValue;
     CTString strMode = pFunc(ctGameTypeRadioTexts);
     // if no mode modes
     if (strMode == "") {
@@ -206,98 +205,86 @@ void InitGameTypes(void)
   }
 }
 
-int qsort_CompareFileInfos_NameUp(const void *elem1, const void *elem2)
-{
+int qsort_CompareFileInfos_NameUp(const void *elem1, const void *elem2) {
   const CFileInfo &fi1 = **(CFileInfo **)elem1;
   const CFileInfo &fi2 = **(CFileInfo **)elem2;
   return strcmp(fi1.fi_strName, fi2.fi_strName);
 }
 
-int qsort_CompareFileInfos_NameDn(const void *elem1, const void *elem2)
-{
+int qsort_CompareFileInfos_NameDn(const void *elem1, const void *elem2) {
   const CFileInfo &fi1 = **(CFileInfo **)elem1;
   const CFileInfo &fi2 = **(CFileInfo **)elem2;
   return -strcmp(fi1.fi_strName, fi2.fi_strName);
 }
 
-int qsort_CompareFileInfos_FileUp(const void *elem1, const void *elem2)
-{
+int qsort_CompareFileInfos_FileUp(const void *elem1, const void *elem2) {
   const CFileInfo &fi1 = **(CFileInfo **)elem1;
   const CFileInfo &fi2 = **(CFileInfo **)elem2;
   return strcmp(fi1.fi_fnFile, fi2.fi_fnFile);
 }
 
-int qsort_CompareFileInfos_FileDn(const void *elem1, const void *elem2)
-{
+int qsort_CompareFileInfos_FileDn(const void *elem1, const void *elem2) {
   const CFileInfo &fi1 = **(CFileInfo **)elem1;
   const CFileInfo &fi2 = **(CFileInfo **)elem2;
   return -strcmp(fi1.fi_fnFile, fi2.fi_fnFile);
 }
 
-INDEX APIToSwitch(enum GfxAPIType gat)
-{
+INDEX APIToSwitch(enum GfxAPIType gat) {
   switch (gat) {
-  case GAT_OGL: return 0;
+    case GAT_OGL: return 0;
 #ifdef SE1_D3D
-  case GAT_D3D: return 1;
+    case GAT_D3D: return 1;
 #endif // SE1_D3D
-  default: ASSERT(FALSE); return 0;
+    default: ASSERT(FALSE); return 0;
   }
 }
 
-enum GfxAPIType SwitchToAPI(INDEX i)
-{
+enum GfxAPIType SwitchToAPI(INDEX i) {
   switch (i) {
-  case 0: return GAT_OGL;
+    case 0: return GAT_OGL;
 #ifdef SE1_D3D
-  case 1: return GAT_D3D;
+    case 1: return GAT_D3D;
 #endif // SE1_D3D
-  default: ASSERT(FALSE); return GAT_OGL;
+    default: ASSERT(FALSE); return GAT_OGL;
   }
 }
 
-INDEX DepthToSwitch(enum DisplayDepth dd)
-{
+INDEX DepthToSwitch(enum DisplayDepth dd) {
   switch (dd) {
-  case DD_DEFAULT: return 0;
-  case DD_16BIT: return 1;
-  case DD_32BIT: return 2;
-  default: ASSERT(FALSE); return 0;
+    case DD_DEFAULT: return 0;
+    case DD_16BIT: return 1;
+    case DD_32BIT: return 2;
+    default: ASSERT(FALSE); return 0;
   }
 }
 
-enum DisplayDepth SwitchToDepth(INDEX i)
-{
+enum DisplayDepth SwitchToDepth(INDEX i) {
   switch (i) {
-  case 0: return DD_DEFAULT;
-  case 1: return DD_16BIT;
-  case 2: return DD_32BIT;
-  default: ASSERT(FALSE); return DD_DEFAULT;
+    case 0: return DD_DEFAULT;
+    case 1: return DD_16BIT;
+    case 2: return DD_32BIT;
+    default: ASSERT(FALSE); return DD_DEFAULT;
   }
 }
 
 // controls that are currently customized
 CTFileName _fnmControlsToCustomize = CTString("");
 
-void ControlsMenuOn()
-{
+void ControlsMenuOn() {
   _pGame->SavePlayersAndControls();
   try {
     _pGame->gm_ctrlControlsExtra.Load_t(_fnmControlsToCustomize);
-  }
-  catch (char *strError) {
+  } catch (char *strError) {
     WarningMessage(strError);
   }
 }
 
-void ControlsMenuOff()
-{
+void ControlsMenuOff() {
   try {
-    if (_pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions.Count()>0) {
+    if (_pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions.Count() > 0) {
       _pGame->gm_ctrlControlsExtra.Save_t(_fnmControlsToCustomize);
     }
-  }
-  catch (char *strError) {
+  } catch (char *strError) {
     FatalError(strError);
   }
   FORDELETELIST(CButtonAction, ba_lnNode, _pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions, itAct) {

@@ -18,9 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 #include "MSplitScreen.h"
 
-
-void CSplitScreenMenu::Initialize_t(void)
-{
+void CSplitScreenMenu::Initialize_t(void) {
   // intialize split screen menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("SPLIT SCREEN");
@@ -54,7 +52,6 @@ void CSplitScreenMenu::Initialize_t(void)
   gm_mgLoad.mg_pActivatedFunction = NULL;
 }
 
-void CSplitScreenMenu::StartMenu(void)
-{
+void CSplitScreenMenu::StartMenu(void) {
   CGameMenu::StartMenu();
 }

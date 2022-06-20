@@ -16,16 +16,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_GAME_MENU_RENDERINGOPTIONS_H
 #define SE_INCL_GAME_MENU_RENDERINGOPTIONS_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
 
 #include "GameMenu.h"
 
-
 class CRenderingOptionsMenu : public CGameMenu {
-public:
-  void StartMenu(void);
-  void EndMenu(void);
-  void Initialize_t(void);
+  public:
+    void StartMenu(void);
+    void EndMenu(void);
+    void Initialize_t(void);
 };
-#endif  /* include-once check. */
+#endif /* include-once check. */

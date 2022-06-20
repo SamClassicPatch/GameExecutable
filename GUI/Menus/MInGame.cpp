@@ -18,9 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 #include "MInGame.h"
 
-
-void CInGameMenu::Initialize_t(void)
-{
+void CInGameMenu::Initialize_t(void) {
   // intialize main menu
   gm_mgTitle.mg_strText = TRANS("GAME");
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
@@ -123,16 +121,14 @@ void CInGameMenu::Initialize_t(void)
   gm_mgQuit.mg_pActivatedFunction = NULL;
 }
 
-void CInGameMenu::StartMenu(void)
-{
+void CInGameMenu::StartMenu(void) {
   gm_mgQuickLoad.mg_bEnabled = _pNetwork->IsServer();
   gm_mgQuickSave.mg_bEnabled = _pNetwork->IsServer();
   gm_mgLoad.mg_bEnabled = _pNetwork->IsServer();
   gm_mgSave.mg_bEnabled = _pNetwork->IsServer();
-  gm_mgDemoRec.mg_bEnabled = TRUE;//_pNetwork->IsServer();
+  gm_mgDemoRec.mg_bEnabled = TRUE; //_pNetwork->IsServer();
   extern void SetDemoStartStopRecText();
   SetDemoStartStopRecText();
-
 
   if (_gmRunningGameMode == GM_SINGLE_PLAYER) {
     CPlayerCharacter &pc = _pGame->gm_apcPlayers[_pGame->gm_iSinglePlayer];
@@ -141,14 +137,12 @@ void CInGameMenu::StartMenu(void)
 
   } else {
     if (_pNetwork->IsServer()) {
-
       CTString strHost, strAddress;
       CTString strHostName;
       _pNetwork->GetHostName(strHost, strAddress);
       if (strHost == "") {
         strHostName = TRANS("<not started yet>");
-      }
-      else {
+      } else {
         strHostName = strHost + " (" + strAddress + ")";
       }
 
@@ -156,7 +150,6 @@ void CInGameMenu::StartMenu(void)
       gm_mgLabel2.mg_strText = "";
 
     } else {
-
       CTString strConfig;
       strConfig = TRANS("<not adjusted>");
       extern CTString sam_strNetworkSettings;

@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -21,9 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern CTFileName _fnmControlsToCustomize;
 
-
-void CControlsMenu::Initialize_t(void)
-{
+void CControlsMenu::Initialize_t(void) {
   // intialize player and controls menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("CONTROLS");
@@ -64,17 +62,13 @@ void CControlsMenu::Initialize_t(void)
   gm_mgSensitivity.mg_strTip = TRANS("sensitivity for all axis in this control set");
   gm_lhGadgets.AddTail(gm_mgSensitivity.mg_lnNode);
 
-  TRIGGER_MG(gm_mgInvertTrigger, 5.5, gm_mgSensitivity, gm_mgSmoothTrigger,
-    TRANS("INVERT LOOK"), astrNoYes);
+  TRIGGER_MG(gm_mgInvertTrigger, 5.5, gm_mgSensitivity, gm_mgSmoothTrigger, TRANS("INVERT LOOK"), astrNoYes);
   gm_mgInvertTrigger.mg_strTip = TRANS("invert up/down looking");
-  TRIGGER_MG(gm_mgSmoothTrigger, 6.5, gm_mgInvertTrigger, gm_mgAccelTrigger,
-    TRANS("SMOOTH AXIS"), astrNoYes);
+  TRIGGER_MG(gm_mgSmoothTrigger, 6.5, gm_mgInvertTrigger, gm_mgAccelTrigger, TRANS("SMOOTH AXIS"), astrNoYes);
   gm_mgSmoothTrigger.mg_strTip = TRANS("smooth mouse/joystick movements");
-  TRIGGER_MG(gm_mgAccelTrigger, 7.5, gm_mgSmoothTrigger, gm_mgIFeelTrigger,
-    TRANS("MOUSE ACCELERATION"), astrNoYes);
+  TRIGGER_MG(gm_mgAccelTrigger, 7.5, gm_mgSmoothTrigger, gm_mgIFeelTrigger, TRANS("MOUSE ACCELERATION"), astrNoYes);
   gm_mgAccelTrigger.mg_strTip = TRANS("allow mouse acceleration");
-  TRIGGER_MG(gm_mgIFeelTrigger, 8.5, gm_mgAccelTrigger, gm_mgPredefined,
-    TRANS("ENABLE IFEEL"), astrNoYes);
+  TRIGGER_MG(gm_mgIFeelTrigger, 8.5, gm_mgAccelTrigger, gm_mgPredefined, TRANS("ENABLE IFEEL"), astrNoYes);
   gm_mgIFeelTrigger.mg_strTip = TRANS("enable support for iFeel tactile feedback mouse");
 
   gm_mgPredefined.mg_strText = TRANS("LOAD PREDEFINED SETTINGS");
@@ -88,11 +82,10 @@ void CControlsMenu::Initialize_t(void)
   gm_mgPredefined.mg_strTip = TRANS("load one of several predefined control settings");
 }
 
-void CControlsMenu::StartMenu(void)
-{
+void CControlsMenu::StartMenu(void) {
   gm_pmgSelectedByDefault = &gm_mgButtons;
   INDEX iPlayer = _pGame->gm_iSinglePlayer;
-  if (_iLocalPlayer >= 0 && _iLocalPlayer<4) {
+  if (_iLocalPlayer >= 0 && _iLocalPlayer < 4) {
     iPlayer = _pGame->gm_aiMenuLocalPlayers[_iLocalPlayer];
   }
   _fnmControlsToCustomize.PrintF("Controls\\Controls%d.ctl", iPlayer);
@@ -105,8 +98,7 @@ void CControlsMenu::StartMenu(void)
   CGameMenu::StartMenu();
 }
 
-void CControlsMenu::EndMenu(void)
-{
+void CControlsMenu::EndMenu(void) {
   ApplyActionSettings();
 
   ControlsMenuOff();
@@ -114,8 +106,7 @@ void CControlsMenu::EndMenu(void)
   CGameMenu::EndMenu();
 }
 
-void CControlsMenu::ObtainActionSettings(void)
-{
+void CControlsMenu::ObtainActionSettings(void) {
   CControls &ctrls = _pGame->gm_ctrlControlsExtra;
 
   gm_mgSensitivity.mg_iMinPos = 0;
@@ -127,7 +118,7 @@ void CControlsMenu::ObtainActionSettings(void)
   gm_mgSmoothTrigger.mg_iSelected = ctrls.ctrl_bSmoothAxes ? 1 : 0;
   gm_mgAccelTrigger.mg_iSelected = _pShell->GetINDEX("inp_bAllowMouseAcceleration") ? 1 : 0;
   gm_mgIFeelTrigger.mg_bEnabled = _pShell->GetINDEX("sys_bIFeelEnabled") ? 1 : 0;
-  gm_mgIFeelTrigger.mg_iSelected = _pShell->GetFLOAT("inp_fIFeelGain")>0 ? 1 : 0;
+  gm_mgIFeelTrigger.mg_iSelected = _pShell->GetFLOAT("inp_fIFeelGain") > 0 ? 1 : 0;
 
   gm_mgInvertTrigger.ApplyCurrentSelection();
   gm_mgSmoothTrigger.ApplyCurrentSelection();
@@ -135,13 +126,12 @@ void CControlsMenu::ObtainActionSettings(void)
   gm_mgIFeelTrigger.ApplyCurrentSelection();
 }
 
-void CControlsMenu::ApplyActionSettings(void)
-{
+void CControlsMenu::ApplyActionSettings(void) {
   CControls &ctrls = _pGame->gm_ctrlControlsExtra;
 
   FLOAT fSensitivity =
     FLOAT(gm_mgSensitivity.mg_iCurPos - gm_mgSensitivity.mg_iMinPos) /
-    FLOAT(gm_mgSensitivity.mg_iMaxPos - gm_mgSensitivity.mg_iMinPos)*100.0f;
+    FLOAT(gm_mgSensitivity.mg_iMaxPos - gm_mgSensitivity.mg_iMinPos) * 100.0f;
 
   BOOL bInvert = gm_mgInvertTrigger.mg_iSelected != 0;
   BOOL bSmooth = gm_mgSmoothTrigger.mg_iSelected != 0;

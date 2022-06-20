@@ -19,9 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MSinglePlayer.h"
 
-
-void CSinglePlayerMenu::Initialize_t(void)
-{
+void CSinglePlayerMenu::Initialize_t(void) {
   // intialize single player menu
   gm_mgTitle.mg_strText = TRANS("SINGLE PLAYER");
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
@@ -107,8 +105,7 @@ void CSinglePlayerMenu::Initialize_t(void)
   gm_mgOptions.mg_pActivatedFunction = NULL;
 }
 
-void CSinglePlayerMenu::StartMenu(void)
-{
+void CSinglePlayerMenu::StartMenu(void) {
   gm_mgTraining.mg_bEnabled = IsMenuEnabled("Training");
   gm_mgTechTest.mg_bEnabled = IsMenuEnabled("Technology Test");
 

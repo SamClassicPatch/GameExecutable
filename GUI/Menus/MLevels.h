@@ -16,7 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_GAME_MENU_LEVELS_H
 #define SE_INCL_GAME_MENU_LEVELS_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
 
 #include "GameMenu.h"
@@ -24,17 +24,16 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "GUI/Components/MGLevelButton.h"
 #include "GUI/Components/MGTitle.h"
 
-
 class CLevelsMenu : public CGameMenu {
-public:
-  CMGTitle gm_mgTitle;
-  CMGLevelButton gm_mgManualLevel[LEVELS_ON_SCREEN];
-  CMGArrow gm_mgArrowUp;
-  CMGArrow gm_mgArrowDn;
+  public:
+    CMGTitle gm_mgTitle;
+    CMGLevelButton gm_mgManualLevel[LEVELS_ON_SCREEN];
+    CMGArrow gm_mgArrowUp;
+    CMGArrow gm_mgArrowDn;
 
-  void Initialize_t(void);
-  void FillListItems(void);
-  void StartMenu(void);
+    void Initialize_t(void);
+    void FillListItems(void);
+    void StartMenu(void);
 };
 
-#endif  /* include-once check. */
+#endif /* include-once check. */

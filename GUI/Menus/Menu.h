@@ -16,7 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_MENU_H
 #define SE_INCL_MENU_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
 
 // set new thumbnail
@@ -24,23 +24,23 @@ void SetThumbnail(CTFileName fn);
 // remove thumbnail
 void ClearThumbnail(void);
 
-void InitializeMenus( void);
-void DestroyMenus( void);
-void MenuOnKeyDown( int iVKey);
+void InitializeMenus(void);
+void DestroyMenus(void);
+void MenuOnKeyDown(int iVKey);
 void MenuOnChar(MSG msg);
 void MenuOnMouseMove(PIX pixI, PIX pixJ);
 void MenuOnLMBDown(void);
-BOOL DoMenu( CDrawPort *pdp); // returns TRUE if still active, FALSE if should quit
-void StartMenus( char *str="");
-void StopMenus(BOOL bGoToRoot =TRUE);
+BOOL DoMenu(CDrawPort *pdp); // returns TRUE if still active, FALSE if should quit
+void StartMenus(char *str = "");
+void StopMenus(BOOL bGoToRoot = TRUE);
 BOOL IsMenusInRoot(void);
-void ChangeToMenu( class CGameMenu *pgmNew);
+void ChangeToMenu(class CGameMenu *pgmNew);
 extern void PlayMenuSound(CSoundData *psd);
 
-#define KEYS_ON_SCREEN 14
-#define LEVELS_ON_SCREEN 16
+#define KEYS_ON_SCREEN    14
+#define LEVELS_ON_SCREEN  16
 #define SERVERS_ON_SCREEN 15
-#define VARS_ON_SCREEN 14
+#define VARS_ON_SCREEN    14
 
 extern CListHead _lhServers;
 
@@ -65,5 +65,4 @@ extern CGameMenu *pgmCurrentMenu;
 #include "MPlayerProfile.h"
 #include "MSelectPlayers.h"
 
-
-#endif  /* include-once check. */
+#endif /* include-once check. */

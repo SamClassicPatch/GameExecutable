@@ -19,9 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MNetworkOpen.h"
 
-
-void CNetworkOpenMenu::Initialize_t(void)
-{
+void CNetworkOpenMenu::Initialize_t(void) {
   // intialize network join menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("JOIN");
@@ -67,13 +65,11 @@ void CNetworkOpenMenu::Initialize_t(void)
   gm_mgJoin.mg_pActivatedFunction = NULL;
 }
 
-void CNetworkOpenMenu::StartMenu(void)
-{
+void CNetworkOpenMenu::StartMenu(void) {
   gm_strPort = _pShell->GetValue("net_iPort");
   gm_mgPort.mg_strText = gm_strPort;
 }
 
-void CNetworkOpenMenu::EndMenu(void)
-{
+void CNetworkOpenMenu::EndMenu(void) {
   _pShell->SetValue("net_iPort", gm_strPort);
 }

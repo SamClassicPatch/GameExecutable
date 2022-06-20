@@ -19,15 +19,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "LevelInfo.h"
 #include "MLevels.h"
 
-
-void CLevelsMenu::Initialize_t(void)
-{
+void CLevelsMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("CHOOSE LEVEL");
   gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
 
-  for (INDEX iLabel = 0; iLabel<LEVELS_ON_SCREEN; iLabel++)
-  {
+  for (INDEX iLabel = 0; iLabel < LEVELS_ON_SCREEN; iLabel++) {
     INDEX iPrev = (LEVELS_ON_SCREEN + iLabel - 1) % LEVELS_ON_SCREEN;
     INDEX iNext = (iLabel + 1) % LEVELS_ON_SCREEN;
     // initialize label gadgets
@@ -44,10 +41,8 @@ void CLevelsMenu::Initialize_t(void)
   gm_mgArrowDn.mg_adDirection = AD_DOWN;
   gm_mgArrowUp.mg_boxOnScreen = BoxArrow(AD_UP);
   gm_mgArrowDn.mg_boxOnScreen = BoxArrow(AD_DOWN);
-  gm_mgArrowUp.mg_pmgRight = gm_mgArrowUp.mg_pmgDown =
-    &gm_mgManualLevel[0];
-  gm_mgArrowDn.mg_pmgRight = gm_mgArrowDn.mg_pmgUp =
-    &gm_mgManualLevel[LEVELS_ON_SCREEN - 1];
+  gm_mgArrowUp.mg_pmgRight = gm_mgArrowUp.mg_pmgDown = &gm_mgManualLevel[0];
+  gm_mgArrowDn.mg_pmgRight = gm_mgArrowDn.mg_pmgUp = &gm_mgManualLevel[LEVELS_ON_SCREEN - 1];
 
   gm_ctListVisible = LEVELS_ON_SCREEN;
   gm_pmgArrowUp = &gm_mgArrowUp;
@@ -56,10 +51,9 @@ void CLevelsMenu::Initialize_t(void)
   gm_pmgListBottom = &gm_mgManualLevel[LEVELS_ON_SCREEN - 1];
 }
 
-void CLevelsMenu::FillListItems(void)
-{
+void CLevelsMenu::FillListItems(void) {
   // disable all items first
-  for (INDEX i = 0; i<LEVELS_ON_SCREEN; i++) {
+  for (INDEX i = 0; i < LEVELS_ON_SCREEN; i++) {
     gm_mgManualLevel[i].mg_bEnabled = FALSE;
     gm_mgManualLevel[i].mg_strText = TRANS("<empty>");
     gm_mgManualLevel[i].mg_iInList = -2;
@@ -72,9 +66,7 @@ void CLevelsMenu::FillListItems(void)
   FOREACHINLIST(CLevelInfo, li_lnNode, _lhFilteredLevels, itli) {
     CLevelInfo &li = *itli;
     INDEX iInMenu = iLabel - gm_iListOffset;
-    if ((iLabel >= gm_iListOffset) &&
-      (iLabel<(gm_iListOffset + LEVELS_ON_SCREEN)))
-    {
+    if ((iLabel >= gm_iListOffset) && (iLabel < (gm_iListOffset + LEVELS_ON_SCREEN))) {
       bHasFirst |= (iLabel == 0);
       bHasLast |= (iLabel == ctLabels - 1);
       gm_mgManualLevel[iInMenu].mg_strText = li.li_strName;
@@ -86,12 +78,11 @@ void CLevelsMenu::FillListItems(void)
   }
 
   // enable/disable up/down arrows
-  gm_mgArrowUp.mg_bEnabled = !bHasFirst && ctLabels>0;
-  gm_mgArrowDn.mg_bEnabled = !bHasLast  && ctLabels>0;
+  gm_mgArrowUp.mg_bEnabled = !bHasFirst && ctLabels > 0;
+  gm_mgArrowDn.mg_bEnabled = !bHasLast && ctLabels > 0;
 }
 
-void CLevelsMenu::StartMenu(void)
-{
+void CLevelsMenu::StartMenu(void) {
   // set default parameters for the list
   gm_iListOffset = 0;
   gm_ctListTotal = _lhFilteredLevels.Count();

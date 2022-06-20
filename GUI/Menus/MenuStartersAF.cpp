@@ -13,7 +13,7 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
-/* This file contains additional functions called from starters. */
+// This file contains additional functions called from starters.
 
 #include "StdH.h"
 #include <Engine/Build.h>
@@ -32,9 +32,7 @@ extern CTFileName _fnmModSelected;
 extern CTString _strModURLSelected;
 extern CTString _strModServerSelected;
 
-
-BOOL LSLoadSinglePlayer(const CTFileName &fnm)
-{
+BOOL LSLoadSinglePlayer(const CTFileName &fnm) {
   _pGame->gm_StartSplitScreenCfg = CGame::SSC_PLAY1;
 
   _pGame->gm_aiStartLocalPlayers[0] = _pGame->gm_iSinglePlayer;
@@ -45,56 +43,50 @@ BOOL LSLoadSinglePlayer(const CTFileName &fnm)
   if (_pGame->LoadGame(fnm)) {
     StopMenus();
     _gmRunningGameMode = GM_SINGLE_PLAYER;
-  }
-  else {
+  } else {
     _gmRunningGameMode = GM_NONE;
   }
   return TRUE;
 }
 
-BOOL LSLoadNetwork(const CTFileName &fnm)
-{
+BOOL LSLoadNetwork(const CTFileName &fnm) {
   // call local players menu
   _fnGameToLoad = fnm;
   StartSelectPlayersMenuFromNetworkLoad();
   return TRUE;
 }
 
-BOOL LSLoadSplitScreen(const CTFileName &fnm)
-{
+BOOL LSLoadSplitScreen(const CTFileName &fnm) {
   // call local players menu
   _fnGameToLoad = fnm;
   StartSelectPlayersMenuFromSplitScreenLoad();
   return TRUE;
 }
 
-void StartDemoPlay(void)
-{
+void StartDemoPlay(void) {
   _pGame->gm_StartSplitScreenCfg = CGame::SSC_OBSERVER;
   // play the demo
   _pGame->gm_strNetworkProvider = "Local";
-  if (_pGame->StartDemoPlay(_fnDemoToPlay))
-  {
+  if (_pGame->StartDemoPlay(_fnDemoToPlay)) {
     // exit menu and pull up the console
     StopMenus();
-    if (_pGame->gm_csConsoleState != CS_OFF) _pGame->gm_csConsoleState = CS_TURNINGOFF;
+    if (_pGame->gm_csConsoleState != CS_OFF) {
+      _pGame->gm_csConsoleState = CS_TURNINGOFF;
+    }
     _gmRunningGameMode = GM_DEMO;
-  }
-  else {
+  } else {
     _gmRunningGameMode = GM_NONE;
   }
 }
 
-extern BOOL LSLoadDemo(const CTFileName &fnm)
-{
+extern BOOL LSLoadDemo(const CTFileName &fnm) {
   // call local players menu
   _fnDemoToPlay = fnm;
   StartDemoPlay();
   return TRUE;
 }
 
-BOOL LSLoadPlayerModel(const CTFileName &fnm)
-{
+BOOL LSLoadPlayerModel(const CTFileName &fnm) {
   // get base filename
   CTString strBaseName = fnm.FileName();
   // set it for current player
@@ -108,14 +100,12 @@ BOOL LSLoadPlayerModel(const CTFileName &fnm)
   return TRUE;
 }
 
-BOOL LSLoadControls(const CTFileName &fnm)
-{
+BOOL LSLoadControls(const CTFileName &fnm) {
   try {
     ControlsMenuOn();
     _pGame->gm_ctrlControlsExtra.Load_t(fnm);
     ControlsMenuOff();
-  }
-  catch (char *strError) {
+  } catch (char *strError) {
     CPrintF("%s", strError);
   }
 
@@ -124,8 +114,7 @@ BOOL LSLoadControls(const CTFileName &fnm)
   return TRUE;
 }
 
-BOOL LSLoadAddon(const CTFileName &fnm)
-{
+BOOL LSLoadAddon(const CTFileName &fnm) {
   extern INDEX _iAddonExecState;
   extern CTFileName _fnmAddonToExec;
   _iAddonExecState = 1;
@@ -133,16 +122,14 @@ BOOL LSLoadAddon(const CTFileName &fnm)
   return TRUE;
 }
 
-BOOL LSLoadMod(const CTFileName &fnm)
-{
+BOOL LSLoadMod(const CTFileName &fnm) {
   _fnmModSelected = fnm;
   extern void ModConfirm(void);
   ModConfirm();
   return TRUE;
 }
 
-BOOL LSLoadCustom(const CTFileName &fnm)
-{
+BOOL LSLoadCustom(const CTFileName &fnm) {
   _pGUIM->gmVarMenu.gm_mgTitle.mg_strText = TRANS("ADVANCED OPTIONS");
   //  LoadStringVar(fnm.NoExt()+".des", mgVarTitle.mg_strText);
   //  mgVarTitle.mg_strText.OnlyFirstLine();
@@ -152,11 +139,10 @@ BOOL LSLoadCustom(const CTFileName &fnm)
   return TRUE;
 }
 
-BOOL LSLoadNetSettings(const CTFileName &fnm)
-{
+BOOL LSLoadNetSettings(const CTFileName &fnm) {
   sam_strNetworkSettings = fnm;
   CTString strCmd;
-  strCmd.PrintF("include \"%s\"", (const char*)sam_strNetworkSettings);
+  strCmd.PrintF("include \"%s\"", (const char *)sam_strNetworkSettings);
   _pShell->Execute(strCmd);
 
   void MenuGoToParent(void);
@@ -165,31 +151,26 @@ BOOL LSLoadNetSettings(const CTFileName &fnm)
 }
 
 // same function for saving in singleplay, network and splitscreen
-BOOL LSSaveAnyGame(const CTFileName &fnm)
-{
+BOOL LSSaveAnyGame(const CTFileName &fnm) {
   if (_pGame->SaveGame(fnm)) {
     StopMenus();
     return TRUE;
-  }
-  else {
+  } else {
     return FALSE;
   }
 }
 
-BOOL LSSaveDemo(const CTFileName &fnm)
-{
+BOOL LSSaveDemo(const CTFileName &fnm) {
   // save the demo
   if (_pGame->StartDemoRec(fnm)) {
     StopMenus();
     return TRUE;
-  }
-  else {
+  } else {
     return FALSE;
   }
 }
 
-void StartNetworkLoadGame(void)
-{
+void StartNetworkLoadGame(void) {
   //  _pGame->gm_MenuSplitScreenCfg = (enum CGame::SplitScreenCfg) mgSplitScreenCfg.mg_iSelected;
   _pGame->gm_StartSplitScreenCfg = _pGame->gm_MenuSplitScreenCfg;
 
@@ -199,18 +180,15 @@ void StartNetworkLoadGame(void)
   _pGame->gm_aiStartLocalPlayers[3] = _pGame->gm_aiMenuLocalPlayers[3];
 
   _pGame->gm_strNetworkProvider = "TCP/IP Server";
-  if (_pGame->LoadGame(_fnGameToLoad))
-  {
+  if (_pGame->LoadGame(_fnGameToLoad)) {
     StopMenus();
     _gmRunningGameMode = GM_NETWORK;
-  }
-  else {
+  } else {
     _gmRunningGameMode = GM_NONE;
   }
 }
 
-void StartSplitScreenGameLoad(void)
-{
+void StartSplitScreenGameLoad(void) {
   //  _pGame->gm_MenuSplitScreenCfg = (enum CGame::SplitScreenCfg) mgSplitScreenCfg.mg_iSelected;
   _pGame->gm_StartSplitScreenCfg = _pGame->gm_MenuSplitScreenCfg;
 
@@ -223,8 +201,7 @@ void StartSplitScreenGameLoad(void)
   if (_pGame->LoadGame(_fnGameToLoad)) {
     StopMenus();
     _gmRunningGameMode = GM_SPLIT_SCREEN;
-  }
-  else {
+  } else {
     _gmRunningGameMode = GM_NONE;
   }
 }

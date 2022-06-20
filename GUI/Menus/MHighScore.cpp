@@ -18,9 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 #include "MHighScore.h"
 
-
-void CHighScoreMenu::Initialize_t(void)
-{
+void CHighScoreMenu::Initialize_t(void) {
   gm_mgHScore.mg_boxOnScreen = FLOATaabbox2D(FLOAT2D(0, 0), FLOAT2D(1, 0.5));
   gm_lhGadgets.AddTail(gm_mgHScore.mg_lnNode);
 
@@ -29,8 +27,7 @@ void CHighScoreMenu::Initialize_t(void)
   gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
 }
 
-void CHighScoreMenu::StartMenu(void)
-{
+void CHighScoreMenu::StartMenu(void) {
   gm_pgmParentMenu = pgmCurrentMenu;
   CGameMenu::StartMenu();
 }

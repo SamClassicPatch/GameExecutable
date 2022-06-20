@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -21,25 +21,20 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern void RefreshSoundFormat(void);
 
-
-void CAudioOptionsMenu::Initialize_t(void)
-{
+void CAudioOptionsMenu::Initialize_t(void) {
   // intialize Audio options menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("AUDIO");
   gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
 
-  TRIGGER_MG(gm_mgAudioAutoTrigger, 0,
-    gm_mgApply, gm_mgFrequencyTrigger, TRANS("AUTO-ADJUST"), astrNoYes);
+  TRIGGER_MG(gm_mgAudioAutoTrigger, 0, gm_mgApply, gm_mgFrequencyTrigger, TRANS("AUTO-ADJUST"), astrNoYes);
   gm_mgAudioAutoTrigger.mg_strTip = TRANS("adjust quality to fit your system");
 
-  TRIGGER_MG(gm_mgFrequencyTrigger, 1,
-    gm_mgAudioAutoTrigger, gm_mgAudioAPITrigger, TRANS("FREQUENCY"), astrFrequencyRadioTexts);
+  TRIGGER_MG(gm_mgFrequencyTrigger, 1, gm_mgAudioAutoTrigger, gm_mgAudioAPITrigger, TRANS("FREQUENCY"), astrFrequencyRadioTexts);
   gm_mgFrequencyTrigger.mg_strTip = TRANS("select sound quality or turn sound off");
   gm_mgFrequencyTrigger.mg_pOnTriggerChange = NULL;
 
-  TRIGGER_MG(gm_mgAudioAPITrigger, 2,
-    gm_mgFrequencyTrigger, gm_mgWaveVolume, TRANS("SOUND SYSTEM"), astrSoundAPIRadioTexts);
+  TRIGGER_MG(gm_mgAudioAPITrigger, 2, gm_mgFrequencyTrigger, gm_mgWaveVolume, TRANS("SOUND SYSTEM"), astrSoundAPIRadioTexts);
   gm_mgAudioAPITrigger.mg_strTip = TRANS("choose sound system (API) to use");
   gm_mgAudioAPITrigger.mg_pOnTriggerChange = NULL;
 
@@ -71,8 +66,7 @@ void CAudioOptionsMenu::Initialize_t(void)
   gm_mgApply.mg_pActivatedFunction = NULL;
 }
 
-void CAudioOptionsMenu::StartMenu(void)
-{
+void CAudioOptionsMenu::StartMenu(void) {
   RefreshSoundFormat();
   CGameMenu::StartMenu();
 }

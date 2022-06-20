@@ -22,24 +22,20 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern void UpdateSplitLevel(INDEX iDummy);
 
-
-void CSplitStartMenu::Initialize_t(void)
-{
+void CSplitStartMenu::Initialize_t(void) {
   // intialize split screen menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("START SPLIT SCREEN");
   gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
 
   // game type trigger
-  TRIGGER_MG(gm_mgGameType, 0,
-    gm_mgStart, gm_mgDifficulty, TRANS("Game type:"), astrGameTypeRadioTexts);
+  TRIGGER_MG(gm_mgGameType, 0, gm_mgStart, gm_mgDifficulty, TRANS("Game type:"), astrGameTypeRadioTexts);
   gm_mgGameType.mg_ctTexts = ctGameTypeRadioTexts;
   gm_mgGameType.mg_strTip = TRANS("choose type of multiplayer game");
   gm_mgGameType.mg_pOnTriggerChange = &UpdateSplitLevel;
 
   // difficulty trigger
-  TRIGGER_MG(gm_mgDifficulty, 1,
-    gm_mgGameType, gm_mgLevel, TRANS("Difficulty:"), astrDifficultyRadioTexts);
+  TRIGGER_MG(gm_mgDifficulty, 1, gm_mgGameType, gm_mgLevel, TRANS("Difficulty:"), astrDifficultyRadioTexts);
   gm_mgDifficulty.mg_strTip = TRANS("choose difficulty level");
 
   // level name
@@ -75,8 +71,7 @@ void CSplitStartMenu::Initialize_t(void)
   gm_mgStart.mg_pActivatedFunction = NULL;
 }
 
-void CSplitStartMenu::StartMenu(void)
-{
+void CSplitStartMenu::StartMenu(void) {
   extern INDEX sam_bMentalActivated;
   gm_mgDifficulty.mg_ctTexts = sam_bMentalActivated ? 6 : 5;
 
@@ -92,8 +87,7 @@ void CSplitStartMenu::StartMenu(void)
   CGameMenu::StartMenu();
 }
 
-void CSplitStartMenu::EndMenu(void)
-{
+void CSplitStartMenu::EndMenu(void) {
   _pShell->SetINDEX("gam_iStartDifficulty", gm_mgDifficulty.mg_iSelected - 1);
   _pShell->SetINDEX("gam_iStartMode", gm_mgGameType.mg_iSelected);
 

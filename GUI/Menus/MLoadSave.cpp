@@ -19,9 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MLoadSave.h"
 
-
-void CLoadSaveMenu::Initialize_t(void)
-{
+void CLoadSaveMenu::Initialize_t(void) {
   gm_pgmNextMenu = NULL;
 
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
@@ -34,8 +32,7 @@ void CLoadSaveMenu::Initialize_t(void)
   gm_mgNotes.mg_bLabel = TRUE;
   gm_lhGadgets.AddTail(gm_mgNotes.mg_lnNode);
 
-  for (INDEX iLabel = 0; iLabel<SAVELOAD_BUTTONS_CT; iLabel++)
-  {
+  for (INDEX iLabel = 0; iLabel < SAVELOAD_BUTTONS_CT; iLabel++) {
     INDEX iPrev = (SAVELOAD_BUTTONS_CT + iLabel - 1) % SAVELOAD_BUTTONS_CT;
     INDEX iNext = (iLabel + 1) % SAVELOAD_BUTTONS_CT;
     // initialize label gadgets
@@ -63,8 +60,7 @@ void CLoadSaveMenu::Initialize_t(void)
   gm_pmgListBottom = &gm_amgButton[SAVELOAD_BUTTONS_CT - 1];
 }
 
-void CLoadSaveMenu::StartMenu(void)
-{
+void CLoadSaveMenu::StartMenu(void) {
   gm_bNoEscape = FALSE;
 
   // delete all file infos
@@ -78,7 +74,7 @@ void CLoadSaveMenu::StartMenu(void)
   gm_iLastFile = -1;
 
   // for each file in the directory
-  for (INDEX i = 0; i<afnmDir.Count(); i++) {
+  for (INDEX i = 0; i < afnmDir.Count(); i++) {
     CTFileName fnm = afnmDir[i];
 
     // if it can be parsed
@@ -95,20 +91,20 @@ void CLoadSaveMenu::StartMenu(void)
 
   // sort if needed
   switch (gm_iSortType) {
-  default: ASSERT(FALSE);
-  case LSSORT_NONE: break;
-  case LSSORT_NAMEUP:
-    gm_lhFileInfos.Sort(qsort_CompareFileInfos_NameUp, offsetof(CFileInfo, fi_lnNode));
-    break;
-  case LSSORT_NAMEDN:
-    gm_lhFileInfos.Sort(qsort_CompareFileInfos_NameDn, offsetof(CFileInfo, fi_lnNode));
-    break;
-  case LSSORT_FILEUP:
-    gm_lhFileInfos.Sort(qsort_CompareFileInfos_FileUp, offsetof(CFileInfo, fi_lnNode));
-    break;
-  case LSSORT_FILEDN:
-    gm_lhFileInfos.Sort(qsort_CompareFileInfos_FileDn, offsetof(CFileInfo, fi_lnNode));
-    break;
+    default: ASSERT(FALSE);
+    case LSSORT_NONE: break;
+    case LSSORT_NAMEUP:
+      gm_lhFileInfos.Sort(qsort_CompareFileInfos_NameUp, offsetof(CFileInfo, fi_lnNode));
+      break;
+    case LSSORT_NAMEDN:
+      gm_lhFileInfos.Sort(qsort_CompareFileInfos_NameDn, offsetof(CFileInfo, fi_lnNode));
+      break;
+    case LSSORT_FILEUP:
+      gm_lhFileInfos.Sort(qsort_CompareFileInfos_FileUp, offsetof(CFileInfo, fi_lnNode));
+      break;
+    case LSSORT_FILEDN:
+      gm_lhFileInfos.Sort(qsort_CompareFileInfos_FileDn, offsetof(CFileInfo, fi_lnNode));
+      break;
   }
 
   // if saving
@@ -144,8 +140,7 @@ void CLoadSaveMenu::StartMenu(void)
   CGameMenu::StartMenu();
 }
 
-void CLoadSaveMenu::EndMenu(void)
-{
+void CLoadSaveMenu::EndMenu(void) {
   // delete all file infos
   FORDELETELIST(CFileInfo, fi_lnNode, gm_lhFileInfos, itfi) {
     delete &itfi.Current();
@@ -154,10 +149,9 @@ void CLoadSaveMenu::EndMenu(void)
   CGameMenu::EndMenu();
 }
 
-void CLoadSaveMenu::FillListItems(void)
-{
+void CLoadSaveMenu::FillListItems(void) {
   // disable all items first
-  for (INDEX i = 0; i<SAVELOAD_BUTTONS_CT; i++) {
+  for (INDEX i = 0; i < SAVELOAD_BUTTONS_CT; i++) {
     gm_amgButton[i].mg_bEnabled = FALSE;
     gm_amgButton[i].mg_strText = TRANS("<empty>");
     gm_amgButton[i].mg_strTip = "";
@@ -171,9 +165,7 @@ void CLoadSaveMenu::FillListItems(void)
   FOREACHINLIST(CFileInfo, fi_lnNode, gm_lhFileInfos, itfi) {
     CFileInfo &fi = *itfi;
     INDEX iInMenu = iLabel - gm_iListOffset;
-    if ((iLabel >= gm_iListOffset) &&
-      (iLabel<(gm_iListOffset + SAVELOAD_BUTTONS_CT)))
-    {
+    if ((iLabel >= gm_iListOffset) && (iLabel < (gm_iListOffset + SAVELOAD_BUTTONS_CT))) {
       bHasFirst |= (iLabel == 0);
       bHasLast |= (iLabel == ctLabels - 1);
       gm_amgButton[iInMenu].mg_iInList = iLabel;
@@ -184,15 +176,12 @@ void CLoadSaveMenu::FillListItems(void)
       if (gm_bSave) {
         if (!FileExistsForWriting(gm_amgButton[iInMenu].mg_fnm)) {
           gm_amgButton[iInMenu].mg_strTip = TRANS("Enter - save in new slot");
-        }
-        else {
+        } else {
           gm_amgButton[iInMenu].mg_strTip = TRANS("Enter - save here, F2 - rename, Del - delete");
         }
-      }
-      else if (gm_bManage) {
+      } else if (gm_bManage) {
         gm_amgButton[iInMenu].mg_strTip = TRANS("Enter - load this, F2 - rename, Del - delete");
-      }
-      else {
+      } else {
         gm_amgButton[iInMenu].mg_strTip = TRANS("Enter - load this");
       }
     }
@@ -200,13 +189,12 @@ void CLoadSaveMenu::FillListItems(void)
   }
 
   // enable/disable up/down arrows
-  gm_mgArrowUp.mg_bEnabled = !bHasFirst && ctLabels>0;
-  gm_mgArrowDn.mg_bEnabled = !bHasLast  && ctLabels>0;
+  gm_mgArrowUp.mg_bEnabled = !bHasFirst && ctLabels > 0;
+  gm_mgArrowDn.mg_bEnabled = !bHasLast && ctLabels > 0;
 }
 
 // called to get info of a file from directory, or to skip it
-BOOL CLoadSaveMenu::ParseFile(const CTFileName &fnm, CTString &strName)
-{
+BOOL CLoadSaveMenu::ParseFile(const CTFileName &fnm, CTString &strName) {
   if (fnm.FileExt() != gm_fnmExt) {
     return FALSE;
   }
@@ -228,7 +216,7 @@ BOOL CLoadSaveMenu::ParseFile(const CTFileName &fnm, CTString &strName)
   }
 
   INDEX iFile = -1;
-  fnm.FileName().ScanF((const char*)(gm_fnmBaseName + "%d"), &iFile);
+  fnm.FileName().ScanF((const char *)(gm_fnmBaseName + "%d"), &iFile);
 
   gm_iLastFile = Max(gm_iLastFile, iFile);
 

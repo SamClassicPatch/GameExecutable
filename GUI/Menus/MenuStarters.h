@@ -16,9 +16,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_MENU_STARTERS_H
 #define SE_INCL_MENU_STARTERS_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
-
 
 void StartVideoOptionsMenu(void);
 void StartAudioOptionsMenu(void);
@@ -78,4 +77,4 @@ void StartNetworkSettingsMenu(void);
 void StartSinglePlayerMenu(void);
 void DisabledFunction(void);
 
-#endif  /* include-once check. */
+#endif /* include-once check. */

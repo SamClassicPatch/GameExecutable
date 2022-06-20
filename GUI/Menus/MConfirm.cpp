@@ -1,4 +1,4 @@
-/* Copyright (c) 2002-2012 Croteam Ltd. 
+/* Copyright (c) 2002-2012 Croteam Ltd.
 This program is free software; you can redistribute it and/or modify
 it under the terms of version 2 of the GNU General Public License as published by
 the Free Software Foundation
@@ -18,8 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 #include "MConfirm.h"
 
-void CConfirmMenu::Initialize_t(void)
-{
+void CConfirmMenu::Initialize_t(void) {
   gm_bPopup = TRUE;
 
   gm_mgConfirmLabel.mg_strText = "";
@@ -32,8 +31,7 @@ void CConfirmMenu::Initialize_t(void)
   gm_lhGadgets.AddTail(gm_mgConfirmYes.mg_lnNode);
   gm_mgConfirmYes.mg_boxOnScreen = BoxPopupYesLarge();
   gm_mgConfirmYes.mg_pActivatedFunction = NULL;
-  gm_mgConfirmYes.mg_pmgLeft =
-    gm_mgConfirmYes.mg_pmgRight = &gm_mgConfirmNo;
+  gm_mgConfirmYes.mg_pmgLeft = gm_mgConfirmYes.mg_pmgRight = &gm_mgConfirmNo;
   gm_mgConfirmYes.mg_iCenterI = 1;
   gm_mgConfirmYes.mg_bfsFontSize = BFS_LARGE;
 
@@ -41,8 +39,7 @@ void CConfirmMenu::Initialize_t(void)
   gm_lhGadgets.AddTail(gm_mgConfirmNo.mg_lnNode);
   gm_mgConfirmNo.mg_boxOnScreen = BoxPopupNoLarge();
   gm_mgConfirmNo.mg_pActivatedFunction = NULL;
-  gm_mgConfirmNo.mg_pmgLeft =
-    gm_mgConfirmNo.mg_pmgRight = &gm_mgConfirmYes;
+  gm_mgConfirmNo.mg_pmgLeft = gm_mgConfirmNo.mg_pmgRight = &gm_mgConfirmYes;
   gm_mgConfirmNo.mg_iCenterI = -1;
   gm_mgConfirmNo.mg_bfsFontSize = BFS_LARGE;
 
@@ -50,8 +47,7 @@ void CConfirmMenu::Initialize_t(void)
   _pConfimedNo = NULL;
 }
 
-void CConfirmMenu::BeLarge(void)
-{
+void CConfirmMenu::BeLarge(void) {
   gm_mgConfirmLabel.mg_bfsFontSize = BFS_LARGE;
   gm_mgConfirmYes.mg_bfsFontSize = BFS_LARGE;
   gm_mgConfirmNo.mg_bfsFontSize = BFS_LARGE;
@@ -61,8 +57,7 @@ void CConfirmMenu::BeLarge(void)
   gm_mgConfirmNo.mg_boxOnScreen = BoxPopupNoLarge();
 }
 
-void CConfirmMenu::BeSmall(void)
-{
+void CConfirmMenu::BeSmall(void) {
   gm_mgConfirmLabel.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgConfirmYes.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgConfirmNo.mg_bfsFontSize = BFS_MEDIUM;
@@ -73,8 +68,7 @@ void CConfirmMenu::BeSmall(void)
 }
 
 // return TRUE if handled
-BOOL CConfirmMenu::OnKeyDown(int iVKey)
-{
+BOOL CConfirmMenu::OnKeyDown(int iVKey) {
   if ((iVKey == VK_ESCAPE || iVKey == VK_RBUTTON) && gm_mgConfirmNo.mg_pActivatedFunction != NULL) {
     gm_mgConfirmNo.OnActivate();
     return TRUE;

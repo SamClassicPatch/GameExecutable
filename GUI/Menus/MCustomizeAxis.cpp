@@ -19,9 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MCustomizeAxis.h"
 
-
-void CCustomizeAxisMenu::Initialize_t(void)
-{
+void CCustomizeAxisMenu::Initialize_t(void) {
   // intialize axis menu
   gm_mgTitle.mg_strText = TRANS("CUSTOMIZE AXIS");
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
@@ -40,7 +38,7 @@ void CCustomizeAxisMenu::Initialize_t(void)
   gm_mgActionTrigger.mg_pOnTriggerChange = NULL;
 
   // for all available axis type controlers
-  for (INDEX iControler = 0; iControler<AXIS_ACTIONS_CT; iControler++) {
+  for (INDEX iControler = 0; iControler < AXIS_ACTIONS_CT; iControler++) {
     gm_mgActionTrigger.mg_astrTexts[iControler] = TranslateConst(CTString(_pGame->gm_astrAxisNames[iControler]), 0);
   }
   gm_mgActionTrigger.mg_iSelected = 3;
@@ -49,7 +47,7 @@ void CCustomizeAxisMenu::Initialize_t(void)
   gm_mgMountedTrigger.mg_astrTexts = new CTString[ctAxis];
   gm_mgMountedTrigger.mg_ctTexts = ctAxis;
   // for all axis actions that can be mounted
-  for (INDEX iAxis = 0; iAxis<ctAxis; iAxis++) {
+  for (INDEX iAxis = 0; iAxis < ctAxis; iAxis++) {
     gm_mgMountedTrigger.mg_astrTexts[iAxis] = _pInput->GetAxisTransName(iAxis);
   }
 
@@ -75,14 +73,12 @@ void CCustomizeAxisMenu::Initialize_t(void)
   gm_mgSmoothTrigger.mg_strTip = TRANS("turn this on to filter readings on this axis");
 }
 
-CCustomizeAxisMenu::~CCustomizeAxisMenu(void)
-{
+CCustomizeAxisMenu::~CCustomizeAxisMenu(void) {
   delete[] gm_mgActionTrigger.mg_astrTexts;
   delete[] gm_mgMountedTrigger.mg_astrTexts;
 }
 
-void CCustomizeAxisMenu::ObtainActionSettings(void)
-{
+void CCustomizeAxisMenu::ObtainActionSettings(void) {
   ControlsMenuOn();
   CControls &ctrls = _pGame->gm_ctrlControlsExtra;
   INDEX iSelectedAction = gm_mgActionTrigger.mg_iSelected;
@@ -111,17 +107,16 @@ void CCustomizeAxisMenu::ObtainActionSettings(void)
   gm_mgSmoothTrigger.ApplyCurrentSelection();
 }
 
-void CCustomizeAxisMenu::ApplyActionSettings(void)
-{
+void CCustomizeAxisMenu::ApplyActionSettings(void) {
   CControls &ctrls = _pGame->gm_ctrlControlsExtra;
   INDEX iSelectedAction = gm_mgActionTrigger.mg_iSelected;
   INDEX iMountedAxis = gm_mgMountedTrigger.mg_iSelected;
   FLOAT fSensitivity =
     FLOAT(gm_mgSensitivity.mg_iCurPos - gm_mgSensitivity.mg_iMinPos) /
-    FLOAT(gm_mgSensitivity.mg_iMaxPos - gm_mgSensitivity.mg_iMinPos)*100.0f;
+    FLOAT(gm_mgSensitivity.mg_iMaxPos - gm_mgSensitivity.mg_iMinPos) * 100.0f;
   FLOAT fDeadZone =
     FLOAT(gm_mgDeadzone.mg_iCurPos - gm_mgDeadzone.mg_iMinPos) /
-    FLOAT(gm_mgDeadzone.mg_iMaxPos - gm_mgDeadzone.mg_iMinPos)*100.0f;
+    FLOAT(gm_mgDeadzone.mg_iMaxPos - gm_mgDeadzone.mg_iMinPos) * 100.0f;
 
   BOOL bInvert = gm_mgInvertTrigger.mg_iSelected != 0;
   BOOL bRelative = gm_mgRelativeTrigger.mg_iSelected != 0;
@@ -142,15 +137,13 @@ void CCustomizeAxisMenu::ApplyActionSettings(void)
   ControlsMenuOff();
 }
 
-void CCustomizeAxisMenu::StartMenu(void)
-{
+void CCustomizeAxisMenu::StartMenu(void) {
   ObtainActionSettings();
 
   CGameMenu::StartMenu();
 }
 
-void CCustomizeAxisMenu::EndMenu(void)
-{
+void CCustomizeAxisMenu::EndMenu(void) {
   ApplyActionSettings();
   CGameMenu::EndMenu();
 }

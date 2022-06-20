@@ -19,9 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MMain.h"
 
-
-void CMainMenu::Initialize_t(void)
-{
+void CMainMenu::Initialize_t(void) {
   // intialize main menu
   /*
   gm_mgTitle.mg_strText = "SERIOUS SAM - BETA";  // nothing to see here, kazuya
@@ -120,8 +118,7 @@ void CMainMenu::Initialize_t(void)
   gm_mgQuit.mg_pActivatedFunction = NULL;
 }
 
-void CMainMenu::StartMenu(void)
-{
+void CMainMenu::StartMenu(void) {
   gm_mgSingle.mg_bEnabled = IsMenuEnabled("Single Player");
   gm_mgNetwork.mg_bEnabled = IsMenuEnabled("Network");
   gm_mgSplitScreen.mg_bEnabled = IsMenuEnabled("Split Screen");

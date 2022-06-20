@@ -20,7 +20,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MPlayerProfile.h"
 #include "GUI/Menus/MenuManager.h"
 
-#define ADD_SELECT_PLAYER_MG( index, mg, mgprev, mgnext, me)\
+#define ADD_SELECT_PLAYER_MG(index, mg, mgprev, mgnext, me) \
   mg.mg_iIndex = index; \
   mg.mg_bfsFontSize = BFS_MEDIUM; \
   mg.mg_boxOnScreen = BoxNoUp(index); \
@@ -34,13 +34,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   mg.mg_strTip = TRANS("select new currently active player"); \
   gm_lhGadgets.AddTail(mg.mg_lnNode);
 
-extern BOOL  _bPlayerMenuFromSinglePlayer;
+extern BOOL _bPlayerMenuFromSinglePlayer;
 extern CTString _strLastPlayerAppearance;
 extern void PPOnPlayerSelect(void);
 
-
-void CPlayerProfileMenu::Initialize_t(void)
-{
+void CPlayerProfileMenu::Initialize_t(void) {
   // intialize player and controls menu
   _bPlayerMenuFromSinglePlayer = FALSE;
   gm_mgProfileTitle.mg_boxOnScreen = BoxTitle();
@@ -167,22 +165,18 @@ void CPlayerProfileMenu::Initialize_t(void)
   gm_lhGadgets.AddTail(gm_mgModel.mg_lnNode);
 }
 
-INDEX CPlayerProfileMenu::ComboFromPlayer(INDEX iPlayer)
-{
+INDEX CPlayerProfileMenu::ComboFromPlayer(INDEX iPlayer) {
   return iPlayer;
 }
 
-INDEX CPlayerProfileMenu::PlayerFromCombo(INDEX iCombo)
-{
+INDEX CPlayerProfileMenu::PlayerFromCombo(INDEX iCombo) {
   return iCombo;
 }
 
-void CPlayerProfileMenu::SelectPlayer(INDEX iPlayer)
-{
+void CPlayerProfileMenu::SelectPlayer(INDEX iPlayer) {
   CPlayerCharacter &pc = _pGame->gm_apcPlayers[iPlayer];
 
-  for (INDEX iPl = 0; iPl<8; iPl++)
-  {
+  for (INDEX iPl = 0; iPl < 8; iPl++) {
     gm_mgNumber[iPl].mg_bHighlighted = FALSE;
   }
 
@@ -190,7 +184,7 @@ void CPlayerProfileMenu::SelectPlayer(INDEX iPlayer)
 
   iPlayer = Clamp(iPlayer, INDEX(0), INDEX(7));
 
-  if (_iLocalPlayer >= 0 && _iLocalPlayer<4) {
+  if (_iLocalPlayer >= 0 && _iLocalPlayer < 4) {
     _pGame->gm_aiMenuLocalPlayers[_iLocalPlayer] = iPlayer;
   } else {
     _pGame->gm_iSinglePlayer = iPlayer;
@@ -208,29 +202,29 @@ void CPlayerProfileMenu::SelectPlayer(INDEX iPlayer)
   gm_mgWeaponSelect.mg_iSelected = pps->ps_iWeaponAutoSelect;
   gm_mgWeaponSelect.ApplyCurrentSelection();
 
-  gm_mgWeaponHide.mg_iSelected = (pps->ps_ulFlags&PSF_HIDEWEAPON) ? 1 : 0;
+  gm_mgWeaponHide.mg_iSelected = (pps->ps_ulFlags & PSF_HIDEWEAPON) ? 1 : 0;
   gm_mgWeaponHide.ApplyCurrentSelection();
 
-  gm_mg3rdPerson.mg_iSelected = (pps->ps_ulFlags&PSF_PREFER3RDPERSON) ? 1 : 0;
+  gm_mg3rdPerson.mg_iSelected = (pps->ps_ulFlags & PSF_PREFER3RDPERSON) ? 1 : 0;
   gm_mg3rdPerson.ApplyCurrentSelection();
 
-  gm_mgQuotes.mg_iSelected = (pps->ps_ulFlags&PSF_NOQUOTES) ? 0 : 1;
+  gm_mgQuotes.mg_iSelected = (pps->ps_ulFlags & PSF_NOQUOTES) ? 0 : 1;
   gm_mgQuotes.ApplyCurrentSelection();
 
-  gm_mgAutoSave.mg_iSelected = (pps->ps_ulFlags&PSF_AUTOSAVE) ? 1 : 0;
+  gm_mgAutoSave.mg_iSelected = (pps->ps_ulFlags & PSF_AUTOSAVE) ? 1 : 0;
   gm_mgAutoSave.ApplyCurrentSelection();
 
-  gm_mgCompDoubleClick.mg_iSelected = (pps->ps_ulFlags&PSF_COMPSINGLECLICK) ? 0 : 1;
+  gm_mgCompDoubleClick.mg_iSelected = (pps->ps_ulFlags & PSF_COMPSINGLECLICK) ? 0 : 1;
   gm_mgCompDoubleClick.ApplyCurrentSelection();
 
-  gm_mgViewBobbing.mg_iSelected = (pps->ps_ulFlags&PSF_NOBOBBING) ? 0 : 1;
+  gm_mgViewBobbing.mg_iSelected = (pps->ps_ulFlags & PSF_NOBOBBING) ? 0 : 1;
   gm_mgViewBobbing.ApplyCurrentSelection();
 
-  gm_mgSharpTurning.mg_iSelected = (pps->ps_ulFlags&PSF_SHARPTURNING) ? 1 : 0;
+  gm_mgSharpTurning.mg_iSelected = (pps->ps_ulFlags & PSF_SHARPTURNING) ? 1 : 0;
   gm_mgSharpTurning.ApplyCurrentSelection();
 
   // get function that will set player appearance
-  CShellSymbol *pss = _pShell->GetSymbol("SetPlayerAppearance", /*bDeclaredOnly=*/ TRUE);
+  CShellSymbol *pss = _pShell->GetSymbol("SetPlayerAppearance", /*bDeclaredOnly=*/TRUE);
   // if none
   if (pss == NULL) {
     // no model
@@ -238,7 +232,7 @@ void CPlayerProfileMenu::SelectPlayer(INDEX iPlayer)
     // if there is some
   } else {
     // set the model
-    BOOL(*pFunc)(CModelObject *, CPlayerCharacter *, CTString &, BOOL) =
+    BOOL (*pFunc)(CModelObject *, CPlayerCharacter *, CTString &, BOOL) =
       (BOOL(*)(CModelObject *, CPlayerCharacter *, CTString &, BOOL))pss->ss_pvValue;
     CTString strName;
     BOOL bSet;
@@ -246,8 +240,7 @@ void CPlayerProfileMenu::SelectPlayer(INDEX iPlayer)
       bSet = pFunc(&gm_mgModel.mg_moModel, &pc, strName, TRUE);
       gm_mgModel.mg_strTip = TRANS("change model for this player");
       gm_mgModel.mg_bEnabled = TRUE;
-    }
-    else {
+    } else {
       // cannot change player appearance in single player mode
       bSet = pFunc(&gm_mgModel.mg_moModel, NULL, strName, TRUE);
       gm_mgModel.mg_strTip = TRANS("cannot change model for single-player game");
@@ -263,27 +256,25 @@ void CPlayerProfileMenu::SelectPlayer(INDEX iPlayer)
     try {
       gm_mgModel.mg_moFloor.SetData_t(CTFILENAME("Models\\Computer\\Floor.mdl"));
       gm_mgModel.mg_moFloor.mo_toTexture.SetData_t(CTFILENAME("Models\\Computer\\Floor.tex"));
-    }
-    catch (char *strError) {
+    } catch (char *strError) {
       (void)strError;
     }
   }
 }
 
-void CPlayerProfileMenu::StartMenu(void)
-{
+void CPlayerProfileMenu::StartMenu(void) {
   _pGUIM->gmPlayerProfile.gm_pmgSelectedByDefault = &gm_mgNameField;
 
   if (_gmRunningGameMode == GM_NONE || _gmRunningGameMode == GM_DEMO) {
-    for (INDEX i = 0; i<8; i++) {
+    for (INDEX i = 0; i < 8; i++) {
       gm_mgNumber[i].mg_bEnabled = TRUE;
     }
   } else {
-    for (INDEX i = 0; i<8; i++) {
+    for (INDEX i = 0; i < 8; i++) {
       gm_mgNumber[i].mg_bEnabled = FALSE;
     }
     INDEX iFirstEnabled = 0;
-    {for (INDEX ilp = 0; ilp<4; ilp++) {
+    {for (INDEX ilp = 0; ilp < 4; ilp++) {
       CLocalPlayer &lp = _pGame->gm_lpLocalPlayers[ilp];
       if (lp.lp_bActive) {
         gm_mgNumber[lp.lp_iPlayer].mg_bEnabled = TRUE;
@@ -293,15 +284,16 @@ void CPlayerProfileMenu::StartMenu(void)
       }
     }}
     // backup to first player in case current player is disabled
-    if (!gm_mgNumber[*gm_piCurrentPlayer].mg_bEnabled) *gm_piCurrentPlayer = iFirstEnabled;
+    if (!gm_mgNumber[*gm_piCurrentPlayer].mg_bEnabled) {
+      *gm_piCurrentPlayer = iFirstEnabled;
+    }
   }
   // done
   SelectPlayer(*gm_piCurrentPlayer);
   CGameMenu::StartMenu();
 }
 
-void CPlayerProfileMenu::EndMenu(void)
-{
+void CPlayerProfileMenu::EndMenu(void) {
   _pGame->SavePlayersAndControls();
   CGameMenu::EndMenu();
 }

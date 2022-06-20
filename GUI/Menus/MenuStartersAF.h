@@ -16,9 +16,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_MENU_STARTERSAF_H
 #define SE_INCL_MENU_STARTERSAF_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
-
 
 BOOL LSLoadSinglePlayer(const CTFileName &fnm);
 BOOL LSLoadNetwork(const CTFileName &fnm);
@@ -36,4 +35,4 @@ void StartDemoPlay(void);
 void StartNetworkLoadGame(void);
 void StartSplitScreenGameLoad(void);
 
-#endif  /* include-once check. */
+#endif /* include-once check. */

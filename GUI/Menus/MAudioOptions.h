@@ -16,7 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef SE_INCL_GAME_MENU_AUDIOOPTIONS_H
 #define SE_INCL_GAME_MENU_AUDIOOPTIONS_H
 #ifdef PRAGMA_ONCE
-  #pragma once
+#pragma once
 #endif
 
 #include "GameMenu.h"
@@ -25,19 +25,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "GUI/Components/MGTrigger.h"
 #include "GUI/Components/MGTitle.h"
 
-
 class CAudioOptionsMenu : public CGameMenu {
-public:
-  CMGTitle gm_mgTitle;
-  CMGTrigger gm_mgAudioAutoTrigger;
-  CMGTrigger gm_mgAudioAPITrigger;
-  CMGTrigger gm_mgFrequencyTrigger;
-  CMGSlider gm_mgWaveVolume;
-  CMGSlider gm_mgMPEGVolume;
-  CMGButton gm_mgApply;
+  public:
+    CMGTitle gm_mgTitle;
+    CMGTrigger gm_mgAudioAutoTrigger;
+    CMGTrigger gm_mgAudioAPITrigger;
+    CMGTrigger gm_mgFrequencyTrigger;
+    CMGSlider gm_mgWaveVolume;
+    CMGSlider gm_mgMPEGVolume;
+    CMGButton gm_mgApply;
 
-  void StartMenu(void);
-  void Initialize_t(void);
+    void StartMenu(void);
+    void Initialize_t(void);
 };
 
-#endif  /* include-once check. */
+#endif /* include-once check. */

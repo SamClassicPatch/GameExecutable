@@ -22,19 +22,18 @@ CTString _strServerFilter[7];
 CMGButton mgServerColumn[7];
 CMGEdit mgServerFilter[7];
 
-void CServersMenu::Initialize_t(void)
-{
+void CServersMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("CHOOSE SERVER");
   gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
 
   gm_mgList.mg_boxOnScreen = FLOATaabbox2D(FLOAT2D(0, 0), FLOAT2D(1, 1));
-  gm_mgList.mg_pmgLeft = &gm_mgList;  // make sure it can get focus
+  gm_mgList.mg_pmgLeft = &gm_mgList; // make sure it can get focus
   gm_mgList.mg_bEnabled = TRUE;
   gm_lhGadgets.AddTail(gm_mgList.mg_lnNode);
 
   ASSERT(ARRAYCOUNT(mgServerColumn) == ARRAYCOUNT(mgServerFilter));
-  for (INDEX i = 0; i<ARRAYCOUNT(mgServerFilter); i++) {
+  for (INDEX i = 0; i < ARRAYCOUNT(mgServerFilter); i++) {
     mgServerColumn[i].mg_strText = "";
     mgServerColumn[i].mg_boxOnScreen = BoxPlayerEdit(5.0);
     mgServerColumn[i].mg_bfsFontSize = BFS_SMALL;
@@ -93,16 +92,14 @@ void CServersMenu::Initialize_t(void)
   mgServerFilter[6].mg_strTip = TRANS("filter by version");
 }
 
-void CServersMenu::StartMenu(void)
-{
+void CServersMenu::StartMenu(void) {
   extern void RefreshServerList(void);
   RefreshServerList();
 
   CGameMenu::StartMenu();
 }
 
-void CServersMenu::Think(void)
-{
+void CServersMenu::Think(void) {
   if (!_pNetwork->ga_bEnumerationChange) {
     return;
   }
