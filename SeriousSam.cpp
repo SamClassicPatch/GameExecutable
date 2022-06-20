@@ -112,8 +112,8 @@ extern CTextureObject *_ptoLogoCT = NULL;
 extern CTextureObject *_ptoLogoODI = NULL;
 extern CTextureObject *_ptoLogoEAX = NULL;
 
-extern CTString sam_strVersion = "1.10";
-extern CTString sam_strModName = TRANS("-   O P E N   S O U R C E   -");
+extern CTString sam_strVersion = "1.07";
+extern CTString sam_strModName = TRANS("-   T H E   S E C O N D   E N C O U N T E R   -");
 
 extern CTString sam_strFirstLevel = "Levels\\LevelsMP\\1_0_InTheLastEpisode.wld";
 extern CTString sam_strIntroLevel = "Levels\\LevelsMP\\Intro.wld";
