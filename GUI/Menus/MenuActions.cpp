@@ -639,6 +639,10 @@ static void FillResolutionsList(void) {
 
   gmCurrent.gm_mgResolutionsTrigger.mg_astrTexts = _astrResolutionTexts;
   gmCurrent.gm_mgResolutionsTrigger.mg_ctTexts = _ctResolutions;
+
+  // [Cecil] Aspect ratio list
+  gmCurrent.gm_mgAspectRatiosTrigger.mg_astrTexts = (CTString *)_astrAspectRatios;
+  gmCurrent.gm_mgAspectRatiosTrigger.mg_ctTexts = CT_ASPECTRATIOS;
 }
 
 static void FillAdaptersList(void) {
@@ -725,6 +729,7 @@ extern void UpdateVideoOptionsButtons(INDEX iSelected) {
   // apply adapter and resolutions
   gmCurrent.gm_mgDisplayAdaptersTrigger.ApplyCurrentSelection();
   gmCurrent.gm_mgResolutionsTrigger.ApplyCurrentSelection();
+  gmCurrent.gm_mgAspectRatiosTrigger.ApplyCurrentSelection(); // [Cecil]
 }
 
 extern void InitVideoOptionsButtons(void) {
@@ -749,6 +754,7 @@ extern void InitVideoOptionsButtons(void) {
   gmCurrent.gm_mgDisplayAPITrigger.ApplyCurrentSelection();
   gmCurrent.gm_mgDisplayAdaptersTrigger.ApplyCurrentSelection();
   gmCurrent.gm_mgResolutionsTrigger.ApplyCurrentSelection();
+  gmCurrent.gm_mgAspectRatiosTrigger.ApplyCurrentSelection(); // [Cecil]
   gmCurrent.gm_mgBitsPerPixelTrigger.ApplyCurrentSelection();
 }
 
@@ -833,6 +839,7 @@ void InitActionsForVideoOptionsMenu() {
   gmCurrent.gm_mgDisplayAdaptersTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
   gmCurrent.gm_mgFullScreenTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
   gmCurrent.gm_mgResolutionsTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
+  gmCurrent.gm_mgAspectRatiosTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons; // [Cecil]
   gmCurrent.gm_mgBitsPerPixelTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
   gmCurrent.gm_mgVideoRendering.mg_pActivatedFunction = &StartRenderingOptionsMenu;
   gmCurrent.gm_mgApply.mg_pActivatedFunction = &ApplyVideoOptions;

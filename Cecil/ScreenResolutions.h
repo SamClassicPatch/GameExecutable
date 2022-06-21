@@ -95,3 +95,30 @@ static const PIX2D _avpix21_9[CT_RES_EXTRA_WIDE] = {
 
 // [Cecil] All resolutions
 #define CT_RESOLUTIONS (CT_RES_SQUARE + CT_RES_STANDARD + CT_RES_WIDE + CT_RES_EXTRA_WIDE)
+
+// [Cecil] All aspect ratios
+#define CT_ASPECTRATIOS 4
+
+// [Cecil] Aspect ratio names
+static const CTString _astrAspectRatios[CT_ASPECTRATIOS] = {
+  "4:3",
+  "16:9",
+  "16:10",
+  "21:9",
+};
+
+// [Cecil] Aspect ratio lists
+static const PIX2D *_aAspectRatios[CT_ASPECTRATIOS] = {
+  (PIX2D *)&_avpix4_3,
+  (PIX2D *)&_avpix16_9,
+  (PIX2D *)&_avpix16_10,
+  (PIX2D *)&_avpix21_9,
+};
+
+// [Cecil] Aspect ratio resolutions
+static const INDEX _actAspectRatioRes[CT_ASPECTRATIOS] = {
+  CT_RES_SQUARE,
+  CT_RES_STANDARD,
+  CT_RES_WIDE,
+  CT_RES_EXTRA_WIDE,
+};
