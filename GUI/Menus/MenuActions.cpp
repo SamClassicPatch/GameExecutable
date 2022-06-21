@@ -578,15 +578,22 @@ static void FillResolutionsList(void) {
     _ctResolutions = CT_RESOLUTIONS; // [Cecil] Macro is faster
     _astrResolutionTexts = new CTString[_ctResolutions];
     _admResolutionModes = new CDisplayMode[_ctResolutions];
-    INDEX iRes = 0;
-    for (; iRes < _ctResolutions; iRes++) {
-      if (_avpixResolutions[iRes](1) > _vpixScreenRes(1)
-       || _avpixResolutions[iRes](2) > _vpixScreenRes(2)) {
-        break;
+
+    INDEX ctRes = 0;
+
+    for (INDEX iRes = 0; iRes < _ctResolutions; iRes++) {
+      const PIX2D &vpix = _avpixResolutions[iRes];
+
+      if (vpix(1) > _vpixScreenRes(1)
+       || vpix(2) > _vpixScreenRes(2)) {
+        continue; // [Cecil] Skip resolutions bigger than the screen
       }
-      SetResolutionInList(iRes, _avpixResolutions[iRes](1), _avpixResolutions[iRes](2));
+
+      // [Cecil] Use resolution counter as index and advance it with new resolution
+      SetResolutionInList(ctRes++, vpix(1), vpix(2));
     }
-    _ctResolutions = iRes;
+
+    _ctResolutions = ctRes;
 
   // if fullscreen
   } else {
