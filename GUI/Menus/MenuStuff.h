@@ -51,7 +51,7 @@ extern CTString astrSoundAPIRadioTexts[3];
 // [Cecil] Available resolutions
 #define CT_RESOLUTIONS 20
 
-extern PIX apixWidths[CT_RESOLUTIONS][2];
+extern PIX2D _avpixResolutions[CT_RESOLUTIONS];
 
 ULONG GetSpawnFlagsForGameType(INDEX iGameType);
 BOOL IsMenuEnabled(const CTString &strMenuName);

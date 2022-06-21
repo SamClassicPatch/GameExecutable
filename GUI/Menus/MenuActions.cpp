@@ -575,16 +575,16 @@ static void FillResolutionsList(void) {
   // if window
   if (gmCurrent.gm_mgFullScreenTrigger.mg_iSelected == 0) {
     // always has fixed resolutions, but not greater than desktop
-    _ctResolutions = ARRAYCOUNT(apixWidths);
+    _ctResolutions = CT_RESOLUTIONS; // [Cecil] Macro is faster
     _astrResolutionTexts = new CTString[_ctResolutions];
     _admResolutionModes = new CDisplayMode[_ctResolutions];
     INDEX iRes = 0;
     for (; iRes < _ctResolutions; iRes++) {
-      if (apixWidths[iRes][0] > _vpixScreenRes(1)
-       || apixWidths[iRes][1] > _vpixScreenRes(2)) {
+      if (_avpixResolutions[iRes](1) > _vpixScreenRes(1)
+       || _avpixResolutions[iRes](2) > _vpixScreenRes(2)) {
         break;
       }
-      SetResolutionInList(iRes, apixWidths[iRes][0], apixWidths[iRes][1]);
+      SetResolutionInList(iRes, _avpixResolutions[iRes](1), _avpixResolutions[iRes](2));
     }
     _ctResolutions = iRes;
 
