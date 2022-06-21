@@ -1,8 +1,10 @@
 # Custom Serious Sam Executable
 
+This project is used to build your own custom Serious Sam Classic executable files and includes a number of modern enhancements that aren't present in the original code.
+
 Original source code of the executable is taken from the `SeriousSam` project from [Serious Engine 1.10](https://github.com/Croteam-official/Serious-Engine).
 
-This project is based purely on Serious Engine 1 SDK (v1.05 or v1.07) and this repository should reside alongside the `Engine` folder (just like `EntitiesMP`, `GameMP` etc.).
+This project is based on **Serious Engine 1 SDK** (v1.05 or v1.07) and this repository should reside alongside the `Engine` folder (just like `EntitiesMP`, `GameMP` etc.).
 
 A VS2013+ compatible version can be found at https://github.com/DreamyCecil/SeriousSam_SDK107
 
@@ -14,11 +16,11 @@ Full guide: https://github.com/DreamyCecil/SeriousSam_SDK107#building
 
 ## Notes
 
-By default, engine libraries are taken from the game's `Bin` directory. If you wish to change that (for example take libraries from the sources directory), manually add new paths to libraries (**Project properties** -> **VC++ Directories** -> **Include Directories**).
+By default, engine libraries are taken from the game's `Bin` directory. If you wish to change that (for example, take libraries from the sources directory), manually add new paths to libraries (**Project properties** -> **VC++ Directories** -> **Include Directories**).
 
-Once the project is compiled, a custom executable (`SeriousSam_Patch.exe` by default) is automatically placed into the `Bin` directory two levels above the project directory (e.g `C:/SeriousSam/Bin` if the sources are in `C:/SeriousSam/Sources/SamExePatch`).
+Once the project is compiled, a custom executable (`SeriousSam_Custom.exe` by default) is automatically placed into the `Bin` directory two levels above the project directory (e.g. `C:/SeriousSam/Bin` if the sources are in `C:/SeriousSam/Sources/SamExePatch`).
 
-To change the path where to copy the executable (if you wish to put sources separately from the game), consider changing the path in the custom build step (**Project properties** -> **Build Events** -> **Post-Build Event** -> **Command Line**).
+To change the path where to copy the executable (if you wish to put sources separately from the game), consider changing the path in the post-build event (**Project properties** -> **Build Events** -> **Post-Build Event** -> **Command Line**).
 
 ## License
 
