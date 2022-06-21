@@ -192,6 +192,7 @@
     <ClCompile Include="LCDDrawing.cpp" />
     <ClCompile Include="LevelInfo.cpp" />
     <ClCompile Include="MainWindow.cpp" />
+    <ClInclude Include="Cecil\ScreenResolutions.h" />
     <ClInclude Include="GUI\Components\MenuGadget.h" />
     <ClInclude Include="GUI\Components\MGArrow.h" />
     <ClInclude Include="GUI\Components\MGButton.h" />

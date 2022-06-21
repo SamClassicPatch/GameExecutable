@@ -31,6 +31,9 @@
     <Filter Include="Source Files\GUI\Gadgets">
       <UniqueIdentifier>{47ffb7e3-433b-480c-a22a-849524a5bd1e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Cecil headers">
+      <UniqueIdentifier>{e9fb39d6-0a6e-4126-b704-a0d41f0449eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CmdLine.cpp">
@@ -397,6 +400,9 @@
     </ClInclude>
     <ClInclude Include="GUI\Menus\MenuActions.h">
       <Filter>Header Files\GUI headers\Menus headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Cecil\ScreenResolutions.h">
+      <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

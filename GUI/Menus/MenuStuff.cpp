@@ -37,29 +37,6 @@ extern CTString astrWeapon[] = {
   RADIOTRANS("Only if stronger"),
 };
 
-extern PIX2D _avpixResolutions[CT_RESOLUTIONS] = {
-  PIX2D(320,  240),
-  PIX2D(400,  300),
-  PIX2D(512,  384),
-  PIX2D(640,  240),
-  PIX2D(640,  480),
-  PIX2D(720,  540),
-  PIX2D(800,  300),
-  PIX2D(800,  600),
-  PIX2D(960,  720),
-  PIX2D(1024, 384),
-  PIX2D(1024, 768),
-  PIX2D(1152, 864),
-  PIX2D(1280, 480),
-  PIX2D(1280, 960),
-  PIX2D(1600, 600),
-  PIX2D(1600, 1200),
-  PIX2D(1920, 720),
-  PIX2D(1920, 1440),
-  PIX2D(2048, 786),
-  PIX2D(2048, 1536),
-};
-
 extern CTString astrCrosshair[] = {
   "",
   "Textures\\Interface\\Crosshairs\\Crosshair1.tex",
