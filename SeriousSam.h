@@ -27,6 +27,9 @@ extern INDEX sam_iGfxAPI;
 extern INDEX sam_iVideoSetup; // 0 == speed, 1 == normal, 2 == quality, 3 == custom
 extern BOOL sam_bAutoAdjustAudio;
 
+// [Cecil] Computer screen resolution
+extern PIX2D _vpixScreenRes;
+
 extern void StartNewMode(enum GfxAPIType eAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ,
                          enum DisplayDepth eColorDepth, BOOL bFullScreenMode);
 struct KeyData {

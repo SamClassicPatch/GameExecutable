@@ -578,10 +578,10 @@ static void FillResolutionsList(void) {
     _ctResolutions = ARRAYCOUNT(apixWidths);
     _astrResolutionTexts = new CTString[_ctResolutions];
     _admResolutionModes = new CDisplayMode[_ctResolutions];
-    extern PIX _pixDesktopWidth;
     INDEX iRes = 0;
     for (; iRes < _ctResolutions; iRes++) {
-      if (apixWidths[iRes][0] > _pixDesktopWidth) {
+      if (apixWidths[iRes][0] > _vpixScreenRes(1)
+       || apixWidths[iRes][1] > _vpixScreenRes(2)) {
         break;
       }
       SetResolutionInList(iRes, apixWidths[iRes][0], apixWidths[iRes][1]);

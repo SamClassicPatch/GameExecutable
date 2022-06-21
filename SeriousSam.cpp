@@ -43,7 +43,9 @@ extern BOOL bMenuRendering = FALSE;
 
 extern BOOL _bDefiningKey;
 static BOOL _bReconsiderInput = FALSE;
-extern PIX _pixDesktopWidth = 0; // desktop width when started (for some tests)
+
+// [Cecil] Computer screen resolution
+extern PIX2D _vpixScreenRes = PIX2D(0, 0);
 
 static INDEX sam_iMaxFPSActive = 500;
 static INDEX sam_iMaxFPSInactive = 10;
@@ -416,8 +418,9 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _hInstance = hInstance;
   ShowSplashScreen(hInstance);
 
-  // remember desktop width
-  _pixDesktopWidth = ::GetSystemMetrics(SM_CXSCREEN);
+  // [Cecil] Get screen resolution
+  _vpixScreenRes = PIX2D(::GetSystemMetrics(SM_CXSCREEN),
+                         ::GetSystemMetrics(SM_CYSCREEN));
 
   // prepare main window
   MainWindow_Init();

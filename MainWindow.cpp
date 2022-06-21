@@ -180,8 +180,8 @@ void ResetMainWindowNormal(void) {
 
   const PIX pixWidth  = _pixLastSizeI + (rWindow.right - rWindow.left) - (rClient.right - rClient.left);
   const PIX pixHeight = _pixLastSizeJ + (rWindow.bottom - rWindow.top) - (rClient.bottom - rClient.top);
-  const PIX pixPosX   = (::GetSystemMetrics(SM_CXSCREEN) - pixWidth) / 2;
-  const PIX pixPosY   = (::GetSystemMetrics(SM_CYSCREEN) - pixHeight) / 2;
+  const PIX pixPosX   = (_vpixScreenRes(1) - pixWidth) / 2;
+  const PIX pixPosY   = (_vpixScreenRes(2) - pixHeight) / 2;
 
   // set new window size and show it
   SetWindowPos(_hwndMain, NULL, pixPosX, pixPosY, pixWidth, pixHeight, SWP_NOZORDER);
