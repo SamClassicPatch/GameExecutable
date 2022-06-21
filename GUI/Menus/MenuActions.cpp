@@ -94,6 +94,19 @@ static void SizeToResolution(PIX pixSizeI, PIX pixSizeJ, INDEX &iRes) {
   iRes = 0;
 }
 
+// [Cecil] Set all resolutions of some aspect ration in list
+static void SetAspectRatioResolutions(const PIX2D *avpixAspectRatio, const INDEX ctResolutions, INDEX &ctResCounter) {
+  for (INDEX iRes = 0; iRes < ctResolutions; iRes++) {
+    const PIX2D &vpix = avpixAspectRatio[iRes];
+
+    if (vpix(1) > _vpixScreenRes(1) || vpix(2) > _vpixScreenRes(2)) {
+      continue; // [Cecil] Skip resolutions bigger than the screen
+    }
+
+    SetResolutionInList(ctResCounter++, vpix(1), vpix(2));
+  }
+};
+
 // ------------------------ CConfirmMenu implementation
 extern CTFileName _fnmModToLoad;
 extern CTString _strModServerJoin;
@@ -582,35 +595,46 @@ static void FillResolutionsList(void) {
     _astrResolutionTexts = new CTString[_ctResolutions];
     _admResolutionModes = new CDisplayMode[_ctResolutions];
 
+    // [Cecil] Add all resolutions from all aspect ratio lists
     INDEX ctRes = 0;
 
-    for (INDEX iRes = 0; iRes < _ctResolutions; iRes++) {
-      const PIX2D &vpix = _avpixResolutions[iRes];
-
-      if (vpix(1) > _vpixScreenRes(1)
-       || vpix(2) > _vpixScreenRes(2)) {
-        continue; // [Cecil] Skip resolutions bigger than the screen
-      }
-
-      // [Cecil] Use resolution counter as index and advance it with new resolution
-      SetResolutionInList(ctRes++, vpix(1), vpix(2));
-    }
+    SetAspectRatioResolutions(_avpix4_3, CT_RES_SQUARE, ctRes);
+    SetAspectRatioResolutions(_avpix16_9, CT_RES_STANDARD, ctRes);
+    SetAspectRatioResolutions(_avpix16_10, CT_RES_WIDE, ctRes);
+    SetAspectRatioResolutions(_avpix21_9, CT_RES_EXTRA_WIDE, ctRes);
 
     _ctResolutions = ctRes;
 
   // if fullscreen
   } else {
+    // [Cecil] Resolutions from the engine
+    INDEX ctEngineRes = 0;
+
     // get resolutions list from engine
-    CDisplayMode *pdm = _pGfx->EnumDisplayModes(_ctResolutions,
+    CDisplayMode *pdm = _pGfx->EnumDisplayModes(ctEngineRes,
       SwitchToAPI(gmCurrent.gm_mgDisplayAPITrigger.mg_iSelected), gmCurrent.gm_mgDisplayAdaptersTrigger.mg_iSelected);
+
+    // [Cecil] Add non-square resolutions
+    const INDEX ctWideRes = CT_RESOLUTIONS - CT_RES_SQUARE;
+
     // allocate that much
-    _astrResolutionTexts = new CTString[_ctResolutions];
-    _admResolutionModes = new CDisplayMode[_ctResolutions];
+    _astrResolutionTexts = new CTString[ctEngineRes + ctWideRes];
+    _admResolutionModes = new CDisplayMode[ctEngineRes + ctWideRes];
+
     // for each resolution
-    for (INDEX iRes = 0; iRes < _ctResolutions; iRes++) {
+    for (INDEX iRes = 0; iRes < ctEngineRes; iRes++) {
       // add it to list
       SetResolutionInList(iRes, pdm[iRes].dm_pixSizeI, pdm[iRes].dm_pixSizeJ);
     }
+
+    // [Cecil] Add all resolutions from wide aspect ratio lists
+    INDEX ctRes = ctEngineRes;
+
+    SetAspectRatioResolutions(_avpix16_9, CT_RES_STANDARD, ctRes);
+    SetAspectRatioResolutions(_avpix16_10, CT_RES_WIDE, ctRes);
+    SetAspectRatioResolutions(_avpix21_9, CT_RES_EXTRA_WIDE, ctRes);
+
+    _ctResolutions = ctRes;
   }
 
   gmCurrent.gm_mgResolutionsTrigger.mg_astrTexts = _astrResolutionTexts;
