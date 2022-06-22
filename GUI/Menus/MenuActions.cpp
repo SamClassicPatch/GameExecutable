@@ -95,9 +95,11 @@ static void SizeToResolution(PIX pixSizeI, PIX pixSizeJ, INDEX &iRes) {
 }
 
 // [Cecil] Set all resolutions of some aspect ration in list
-static void SetAspectRatioResolutions(const PIX2D *avpixAspectRatio, const INDEX ctResolutions, INDEX &ctResCounter) {
+static void SetAspectRatioResolutions(const CAspectRatio &arAspectRatio, INDEX &ctResCounter) {
+  const INDEX ctResolutions = arAspectRatio.Count();
+
   for (INDEX iRes = 0; iRes < ctResolutions; iRes++) {
-    const PIX2D &vpix = avpixAspectRatio[iRes];
+    const PIX2D &vpix = arAspectRatio[iRes];
 
     if (vpix(1) > _vpixScreenRes(1) || vpix(2) > _vpixScreenRes(2)) {
       continue; // [Cecil] Skip resolutions bigger than the screen
@@ -591,17 +593,17 @@ static void FillResolutionsList(void) {
   // if window
   if (gmCurrent.gm_mgFullScreenTrigger.mg_iSelected == 0) {
     // always has fixed resolutions, but not greater than desktop
-    _ctResolutions = CT_RESOLUTIONS; // [Cecil] Macro is faster
+    _ctResolutions = CountAllResolutions();
     _astrResolutionTexts = new CTString[_ctResolutions];
     _admResolutionModes = new CDisplayMode[_ctResolutions];
 
     // [Cecil] Add all resolutions from all aspect ratio lists
     INDEX ctRes = 0;
 
-    SetAspectRatioResolutions(_avpix4_3, CT_RES_SQUARE, ctRes);
-    SetAspectRatioResolutions(_avpix16_9, CT_RES_STANDARD, ctRes);
-    SetAspectRatioResolutions(_avpix16_10, CT_RES_WIDE, ctRes);
-    SetAspectRatioResolutions(_avpix21_9, CT_RES_EXTRA_WIDE, ctRes);
+    SetAspectRatioResolutions(_ar4_3,   ctRes);
+    SetAspectRatioResolutions(_ar16_9,  ctRes);
+    SetAspectRatioResolutions(_ar16_10, ctRes);
+    SetAspectRatioResolutions(_ar21_9,  ctRes);
 
     _ctResolutions = ctRes;
 
@@ -615,7 +617,7 @@ static void FillResolutionsList(void) {
       SwitchToAPI(gmCurrent.gm_mgDisplayAPITrigger.mg_iSelected), gmCurrent.gm_mgDisplayAdaptersTrigger.mg_iSelected);
 
     // [Cecil] Add non-square resolutions
-    const INDEX ctWideRes = CT_RESOLUTIONS - CT_RES_SQUARE;
+    const INDEX ctWideRes = CountAllResolutions() - _ar4_3.Count();
 
     // allocate that much
     _astrResolutionTexts = new CTString[ctEngineRes + ctWideRes];
@@ -630,9 +632,9 @@ static void FillResolutionsList(void) {
     // [Cecil] Add all resolutions from wide aspect ratio lists
     INDEX ctRes = ctEngineRes;
 
-    SetAspectRatioResolutions(_avpix16_9, CT_RES_STANDARD, ctRes);
-    SetAspectRatioResolutions(_avpix16_10, CT_RES_WIDE, ctRes);
-    SetAspectRatioResolutions(_avpix21_9, CT_RES_EXTRA_WIDE, ctRes);
+    SetAspectRatioResolutions(_ar16_9,  ctRes);
+    SetAspectRatioResolutions(_ar16_10, ctRes);
+    SetAspectRatioResolutions(_ar21_9,  ctRes);
 
     _ctResolutions = ctRes;
   }
@@ -832,6 +834,9 @@ static void RevertVideoSettings(void) {
 }
 
 void InitActionsForVideoOptionsMenu() {
+  // [Cecil] Prepare arrays with window resolutions
+  PrepareVideoResolutions();
+
   CVideoOptionsMenu &gmCurrent = _pGUIM->gmVideoOptionsMenu;
 
   gmCurrent.gm_mgDisplayPrefsTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;

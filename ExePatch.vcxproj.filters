@@ -34,6 +34,9 @@
     <Filter Include="Header Files\Cecil headers">
       <UniqueIdentifier>{e9fb39d6-0a6e-4126-b704-a0d41f0449eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Cecil">
+      <UniqueIdentifier>{f3b4b78b-e168-48da-928c-031f95f47855}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CmdLine.cpp">
@@ -209,6 +212,9 @@
     </ClCompile>
     <ClCompile Include="GUI\Menus\MenuActions.cpp">
       <Filter>Source Files\GUI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="Cecil\ScreenResolutions.cpp">
+      <Filter>Source Files\Cecil</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
