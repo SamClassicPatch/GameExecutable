@@ -26,7 +26,7 @@ class CVideoOptionsMenu : public CGameMenu {
     CMGTitle gm_mgTitle;
     CMGTrigger gm_mgDisplayAPITrigger;
     CMGTrigger gm_mgDisplayAdaptersTrigger;
-    CMGTrigger gm_mgFullScreenTrigger;
+    CMGTrigger gm_mgWindowModeTrigger;
     CMGTrigger gm_mgResolutionsTrigger;
     CMGTrigger gm_mgAspectRatiosTrigger; // [Cecil] Aspect ratio list
     CMGTrigger gm_mgDisplayPrefsTrigger;

@@ -604,7 +604,7 @@ static void FillResolutionsList(void) {
   const CAspectRatio &ar = *_aAspectRatios[iAspectRatio];
 
   // [Cecil] If 4:3 in fullscreen
-  if (iAspectRatio == 0 && gmCurrent.gm_mgFullScreenTrigger.mg_iSelected == 1) {
+  if (iAspectRatio == 0 && gmCurrent.gm_mgWindowModeTrigger.mg_iSelected == 1) {
     // Get resolutions from the engine
     INDEX ctEngineRes = 0;
 
@@ -693,17 +693,17 @@ extern void UpdateVideoOptionsButtons(INDEX iSelected) {
   gmCurrent.gm_mgApply.mg_bEnabled = _bVideoOptionsChanged;
 
   // determine which should be visible
-  gmCurrent.gm_mgFullScreenTrigger.mg_bEnabled = TRUE;
+  gmCurrent.gm_mgWindowModeTrigger.mg_bEnabled = TRUE;
 
   if (da.da_ulFlags & DAF_FULLSCREENONLY) {
-    gmCurrent.gm_mgFullScreenTrigger.mg_bEnabled = FALSE;
-    gmCurrent.gm_mgFullScreenTrigger.mg_iSelected = 1;
-    gmCurrent.gm_mgFullScreenTrigger.ApplyCurrentSelection();
+    gmCurrent.gm_mgWindowModeTrigger.mg_bEnabled = FALSE;
+    gmCurrent.gm_mgWindowModeTrigger.mg_iSelected = 1;
+    gmCurrent.gm_mgWindowModeTrigger.ApplyCurrentSelection();
   }
 
   gmCurrent.gm_mgBitsPerPixelTrigger.mg_bEnabled = TRUE;
 
-  if (gmCurrent.gm_mgFullScreenTrigger.mg_iSelected == 0) {
+  if (gmCurrent.gm_mgWindowModeTrigger.mg_iSelected == 0) {
     gmCurrent.gm_mgBitsPerPixelTrigger.mg_bEnabled = FALSE;
     gmCurrent.gm_mgBitsPerPixelTrigger.mg_iSelected = DepthToSwitch(DD_DEFAULT);
     gmCurrent.gm_mgBitsPerPixelTrigger.ApplyCurrentSelection();
@@ -732,9 +732,9 @@ extern void InitVideoOptionsButtons(void) {
   CVideoOptionsMenu &gmCurrent = _pGUIM->gmVideoOptionsMenu;
 
   if (sam_bFullScreenActive) {
-    gmCurrent.gm_mgFullScreenTrigger.mg_iSelected = 1;
+    gmCurrent.gm_mgWindowModeTrigger.mg_iSelected = 1;
   } else {
-    gmCurrent.gm_mgFullScreenTrigger.mg_iSelected = 0;
+    gmCurrent.gm_mgWindowModeTrigger.mg_iSelected = 0;
   }
 
   gmCurrent.gm_mgDisplayAPITrigger.mg_iSelected = APIToSwitch((GfxAPIType)(INDEX)sam_iGfxAPI);
@@ -750,7 +750,7 @@ extern void InitVideoOptionsButtons(void) {
 
   gmCurrent.gm_mgDisplayPrefsTrigger.mg_iSelected = Clamp(int(sam_iVideoSetup), 0, 3);
 
-  gmCurrent.gm_mgFullScreenTrigger.ApplyCurrentSelection();
+  gmCurrent.gm_mgWindowModeTrigger.ApplyCurrentSelection();
   gmCurrent.gm_mgDisplayPrefsTrigger.ApplyCurrentSelection();
   gmCurrent.gm_mgDisplayAPITrigger.ApplyCurrentSelection();
   gmCurrent.gm_mgDisplayAdaptersTrigger.ApplyCurrentSelection();
@@ -771,7 +771,7 @@ static void ApplyVideoOptions(void) {
   sam_old_iGfxAPI = sam_iGfxAPI;
   sam_old_iVideoSetup = sam_iVideoSetup;
 
-  BOOL bFullScreenMode = gmCurrent.gm_mgFullScreenTrigger.mg_iSelected == 1;
+  BOOL bFullScreenMode = gmCurrent.gm_mgWindowModeTrigger.mg_iSelected == 1;
   PIX2D vpixWindowSize;
   ResolutionToSize(gmCurrent.gm_mgResolutionsTrigger.mg_iSelected, vpixWindowSize);
   enum GfxAPIType gat = SwitchToAPI(gmCurrent.gm_mgDisplayAPITrigger.mg_iSelected);
@@ -841,7 +841,7 @@ void InitActionsForVideoOptionsMenu() {
   gmCurrent.gm_mgDisplayPrefsTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
   gmCurrent.gm_mgDisplayAPITrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
   gmCurrent.gm_mgDisplayAdaptersTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
-  gmCurrent.gm_mgFullScreenTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
+  gmCurrent.gm_mgWindowModeTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
   gmCurrent.gm_mgResolutionsTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;
   gmCurrent.gm_mgAspectRatiosTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons; // [Cecil]
   gmCurrent.gm_mgBitsPerPixelTrigger.mg_pOnTriggerChange = &UpdateVideoOptionsButtons;

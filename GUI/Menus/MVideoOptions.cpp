@@ -41,18 +41,18 @@ void CVideoOptionsMenu::Initialize_t(void) {
   gm_mgResolutionsTrigger.mg_strTip = TRANS("select video mode resolution");
 
   // [Cecil] Aspect ratio list
-  TRIGGER_MG(gm_mgAspectRatiosTrigger, 4, gm_mgResolutionsTrigger, gm_mgFullScreenTrigger, TRANS("ASPECT RATIO"), _astrAspectRatios);
+  TRIGGER_MG(gm_mgAspectRatiosTrigger, 4, gm_mgResolutionsTrigger, gm_mgWindowModeTrigger, TRANS("ASPECT RATIO"), _astrAspectRatios);
   gm_mgAspectRatiosTrigger.mg_strTip = TRANS("select video mode aspect ratio");
 
-  TRIGGER_MG(gm_mgFullScreenTrigger, 5, gm_mgAspectRatiosTrigger, gm_mgBitsPerPixelTrigger, TRANS("FULL SCREEN"), astrNoYes);
-  gm_mgFullScreenTrigger.mg_strTip = TRANS("make game run in a window or in full screen");
-  TRIGGER_MG(gm_mgBitsPerPixelTrigger, 6, gm_mgFullScreenTrigger, gm_mgVideoRendering, TRANS("BITS PER PIXEL"), astrBitsPerPixelRadioTexts);
+  TRIGGER_MG(gm_mgWindowModeTrigger, 5, gm_mgAspectRatiosTrigger, gm_mgBitsPerPixelTrigger, TRANS("FULL SCREEN"), astrNoYes);
+  gm_mgWindowModeTrigger.mg_strTip = TRANS("make game run in a window or in full screen");
+  TRIGGER_MG(gm_mgBitsPerPixelTrigger, 6, gm_mgWindowModeTrigger, gm_mgVideoRendering, TRANS("BITS PER PIXEL"), astrBitsPerPixelRadioTexts);
   gm_mgBitsPerPixelTrigger.mg_strTip = TRANS("select number of colors used for display");
 
   gm_mgDisplayPrefsTrigger.mg_pOnTriggerChange = NULL;
   gm_mgDisplayAPITrigger.mg_pOnTriggerChange = NULL;
   gm_mgDisplayAdaptersTrigger.mg_pOnTriggerChange = NULL;
-  gm_mgFullScreenTrigger.mg_pOnTriggerChange = NULL;
+  gm_mgWindowModeTrigger.mg_pOnTriggerChange = NULL;
   gm_mgResolutionsTrigger.mg_pOnTriggerChange = NULL;
   gm_mgAspectRatiosTrigger.mg_pOnTriggerChange = NULL; // [Cecil]
   gm_mgBitsPerPixelTrigger.mg_pOnTriggerChange = NULL;
