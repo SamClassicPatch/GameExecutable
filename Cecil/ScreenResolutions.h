@@ -31,7 +31,7 @@ INDEX CountAllResolutions(void);
 #define CT_ASPECTRATIOS 4
 
 // Aspect ratio names
-static const CTString _astrAspectRatios[CT_ASPECTRATIOS] = {
+static CTString _astrAspectRatios[CT_ASPECTRATIOS] = {
   "4:3",
   "16:9",
   "16:10",
@@ -45,3 +45,6 @@ static const CAspectRatio *_aAspectRatios[CT_ASPECTRATIOS] = {
   &_ar16_10,
   &_ar21_9,
 };
+
+// Find aspect ratio for this size
+void SizeToAspectRatio(const PIX2D &vpixSize, INDEX &iAspectRatio);

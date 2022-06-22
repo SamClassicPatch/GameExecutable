@@ -107,3 +107,23 @@ INDEX CountAllResolutions(void) {
 
   return ctRes;
 };
+
+// Find aspect ratio for this size
+void SizeToAspectRatio(const PIX2D &vpixSize, INDEX &iAspectRatio) {
+  for (iAspectRatio = 0; iAspectRatio < CT_ASPECTRATIOS; iAspectRatio++) {
+    const INDEX ctRes = _aAspectRatios[iAspectRatio]->Count();
+
+    for (INDEX iRes = 0; iRes < ctRes; iRes++) {
+      const PIX2D &vpixRes = (*_aAspectRatios[iAspectRatio])[iRes];
+
+      // Matching resolution
+      if (vpixRes == vpixSize) {
+        return;
+      }
+    }
+  }
+
+  // Couldn't determine the aspect ratio
+  ASSERTALWAYS("Window size does not exist under any aspect ratio!");
+  iAspectRatio = 0;
+};

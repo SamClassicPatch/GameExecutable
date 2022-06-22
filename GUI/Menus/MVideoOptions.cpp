@@ -19,6 +19,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MVideoOptions.h"
 
+// [Cecil] Screen resolution lists
+#include "Cecil/ScreenResolutions.h"
+
 extern void InitVideoOptionsButtons();
 extern void UpdateVideoOptionsButtons(INDEX iSelected);
 
@@ -38,7 +41,7 @@ void CVideoOptionsMenu::Initialize_t(void) {
   gm_mgResolutionsTrigger.mg_strTip = TRANS("select video mode resolution");
 
   // [Cecil] Aspect ratio list
-  TRIGGER_MG(gm_mgAspectRatiosTrigger, 4, gm_mgResolutionsTrigger, gm_mgFullScreenTrigger, TRANS("ASPECT RATIO"), astrNoYes);
+  TRIGGER_MG(gm_mgAspectRatiosTrigger, 4, gm_mgResolutionsTrigger, gm_mgFullScreenTrigger, TRANS("ASPECT RATIO"), _astrAspectRatios);
   gm_mgAspectRatiosTrigger.mg_strTip = TRANS("select video mode aspect ratio");
 
   TRIGGER_MG(gm_mgFullScreenTrigger, 5, gm_mgAspectRatiosTrigger, gm_mgBitsPerPixelTrigger, TRANS("FULL SCREEN"), astrNoYes);
