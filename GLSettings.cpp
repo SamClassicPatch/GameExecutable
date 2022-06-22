@@ -41,23 +41,21 @@ BOOL CSettingsEntry::Matches(const CTString &strRenderer) const {
 }
 
 const char *RenderingPreferencesDescription(int iMode) {
-  // [Cecil] TODO: Replace with an array
-  if (iMode == 0) {
-    return TRANS("speed");
+  // [Cecil] Replaced with an array
+  static const CTString astrModes[] = {
+    TRANS("speed"),
+    TRANS("normal"),
+    TRANS("quality"),
+    TRANS("custom"),
+  };
 
-  } else if (iMode == 1) {
-    return TRANS("normal");
+  ASSERT(iMode >= 0 && iMode <= 3);
 
-  } else if (iMode == 2) {
-    return TRANS("quality");
-
-  } else if (iMode == 3) {
-    return TRANS("custom");
-
-  } else {
-    ASSERT(FALSE);
-    return TRANS("normal");
+  if (iMode < 0 || iMode > 3) {
+    iMode = 0;
   }
+
+  return astrModes[iMode];
 }
 
 void InitGLSettings(void) {
