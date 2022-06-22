@@ -216,6 +216,9 @@
     <ClCompile Include="Cecil\ScreenResolutions.cpp">
       <Filter>Source Files\Cecil</Filter>
     </ClCompile>
+    <ClCompile Include="Cecil\WindowModes.cpp">
+      <Filter>Source Files\Cecil</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdLine.h">
@@ -408,6 +411,9 @@
       <Filter>Header Files\GUI headers\Menus headers</Filter>
     </ClInclude>
     <ClInclude Include="Cecil\ScreenResolutions.h">
+      <Filter>Header Files\Cecil headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Cecil\WindowModes.h">
       <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>
   </ItemGroup>

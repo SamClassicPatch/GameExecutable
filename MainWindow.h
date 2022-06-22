@@ -16,6 +16,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 extern BOOL _bWindowChanging; // ignores window messages while this is set
 extern HWND _hwndMain;
 
+// [Cecil] Current window title as extern
+extern char _achWindowTitle[256];
+
+// [Cecil] For window reposition as extern
+extern PIX _pixLastSizeI, _pixLastSizeJ;
+
 // init/end main window management
 void MainWindow_Init(void);
 void MainWindow_End(void);

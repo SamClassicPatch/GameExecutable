@@ -26,6 +26,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // [Cecil] Screen resolution lists
 #include "Cecil/ScreenResolutions.h"
 
+// [Cecil] Window modes
+#include "Cecil/WindowModes.h"
+
 ENGINE_API extern INDEX snd_iFormat;
 extern BOOL _bMouseUsedLast;
 
@@ -579,7 +582,7 @@ void InitActionsForOptionsMenu() {
 }
 
 // ------------------------ CVideoOptionsMenu implementation
-static INDEX sam_old_bFullScreenActive;
+static INDEX sam_old_iWindowMode; // [Cecil] Different window modes
 static INDEX sam_old_iScreenSizeI;
 static INDEX sam_old_iScreenSizeJ;
 static INDEX sam_old_iDisplayDepth;
@@ -603,8 +606,8 @@ static void FillResolutionsList(void) {
   const INDEX iAspectRatio = gmCurrent.gm_mgAspectRatiosTrigger.mg_iSelected;
   const CAspectRatio &ar = *_aAspectRatios[iAspectRatio];
 
-  // [Cecil] If 4:3 in fullscreen
-  if (iAspectRatio == 0 && gmCurrent.gm_mgWindowModeTrigger.mg_iSelected == 1) {
+  // [Cecil] If 4:3 in borderless or fullscreen
+  if (iAspectRatio == 0 && gmCurrent.gm_mgWindowModeTrigger.mg_iSelected != E_WM_WINDOWED) {
     // Get resolutions from the engine
     INDEX ctEngineRes = 0;
 
@@ -697,13 +700,14 @@ extern void UpdateVideoOptionsButtons(INDEX iSelected) {
 
   if (da.da_ulFlags & DAF_FULLSCREENONLY) {
     gmCurrent.gm_mgWindowModeTrigger.mg_bEnabled = FALSE;
-    gmCurrent.gm_mgWindowModeTrigger.mg_iSelected = 1;
+    gmCurrent.gm_mgWindowModeTrigger.mg_iSelected = E_WM_FULLSCREEN;
     gmCurrent.gm_mgWindowModeTrigger.ApplyCurrentSelection();
   }
 
   gmCurrent.gm_mgBitsPerPixelTrigger.mg_bEnabled = TRUE;
 
-  if (gmCurrent.gm_mgWindowModeTrigger.mg_iSelected == 0) {
+  // [Cecil] If not fullscreen
+  if (gmCurrent.gm_mgWindowModeTrigger.mg_iSelected != E_WM_FULLSCREEN) {
     gmCurrent.gm_mgBitsPerPixelTrigger.mg_bEnabled = FALSE;
     gmCurrent.gm_mgBitsPerPixelTrigger.mg_iSelected = DepthToSwitch(DD_DEFAULT);
     gmCurrent.gm_mgBitsPerPixelTrigger.ApplyCurrentSelection();
@@ -731,11 +735,9 @@ extern void UpdateVideoOptionsButtons(INDEX iSelected) {
 extern void InitVideoOptionsButtons(void) {
   CVideoOptionsMenu &gmCurrent = _pGUIM->gmVideoOptionsMenu;
 
-  if (sam_bFullScreenActive) {
-    gmCurrent.gm_mgWindowModeTrigger.mg_iSelected = 1;
-  } else {
-    gmCurrent.gm_mgWindowModeTrigger.mg_iSelected = 0;
-  }
+  // [Cecil] Limit to existing window modes
+  INDEX iWindowMode = Clamp(sam_iWindowMode, (INDEX)E_WM_WINDOWED, (INDEX)E_WM_FULLSCREEN);
+  gmCurrent.gm_mgWindowModeTrigger.mg_iSelected = iWindowMode;
 
   gmCurrent.gm_mgDisplayAPITrigger.mg_iSelected = APIToSwitch((GfxAPIType)(INDEX)sam_iGfxAPI);
   gmCurrent.gm_mgDisplayAdaptersTrigger.mg_iSelected = sam_iDisplayAdapter;
@@ -763,7 +765,7 @@ static void ApplyVideoOptions(void) {
   CVideoOptionsMenu &gmCurrent = _pGUIM->gmVideoOptionsMenu;
 
   // Remember old video settings
-  sam_old_bFullScreenActive = sam_bFullScreenActive;
+  sam_old_iWindowMode = sam_iWindowMode;
   sam_old_iScreenSizeI = sam_iScreenSizeI;
   sam_old_iScreenSizeJ = sam_iScreenSizeJ;
   sam_old_iDisplayDepth = sam_iDisplayDepth;
@@ -771,7 +773,8 @@ static void ApplyVideoOptions(void) {
   sam_old_iGfxAPI = sam_iGfxAPI;
   sam_old_iVideoSetup = sam_iVideoSetup;
 
-  BOOL bFullScreenMode = gmCurrent.gm_mgWindowModeTrigger.mg_iSelected == 1;
+  // [Cecil] Different window modes
+  INDEX iWindowMode = gmCurrent.gm_mgWindowModeTrigger.mg_iSelected;
   PIX2D vpixWindowSize;
   ResolutionToSize(gmCurrent.gm_mgResolutionsTrigger.mg_iSelected, vpixWindowSize);
   enum GfxAPIType gat = SwitchToAPI(gmCurrent.gm_mgDisplayAPITrigger.mg_iSelected);
@@ -789,33 +792,33 @@ static void ApplyVideoOptions(void) {
   CDisplayAdapter &da = _pGfx->gl_gaAPI[gat].ga_adaAdapter[iAdapter];
 
   if (da.da_ulFlags & DAF_FULLSCREENONLY) {
-    bFullScreenMode = TRUE;
+    iWindowMode = E_WM_FULLSCREEN;
   }
   if (da.da_ulFlags & DAF_16BITONLY) {
     dd = DD_16BIT;
   }
 
   // force window to always be in default colors
-  if (!bFullScreenMode) {
+  if (iWindowMode != E_WM_FULLSCREEN) {
     dd = DD_DEFAULT;
   }
 
   // (try to) set mode
-  StartNewMode(gat, iAdapter, vpixWindowSize(1), vpixWindowSize(2), dd, bFullScreenMode);
+  StartNewMode(gat, iAdapter, vpixWindowSize(1), vpixWindowSize(2), dd, iWindowMode);
 
   // refresh buttons
   InitVideoOptionsButtons();
   UpdateVideoOptionsButtons(-1);
 
   // ask user to keep or restore
-  if (bFullScreenMode) {
+  if (iWindowMode == E_WM_FULLSCREEN) {
     VideoConfirm();
   }
 }
 
 static void RevertVideoSettings(void) {
   // restore previous variables
-  sam_bFullScreenActive = sam_old_bFullScreenActive;
+  sam_iWindowMode = sam_old_iWindowMode;
   sam_iScreenSizeI = sam_old_iScreenSizeI;
   sam_iScreenSizeJ = sam_old_iScreenSizeJ;
   sam_iDisplayDepth = sam_old_iDisplayDepth;

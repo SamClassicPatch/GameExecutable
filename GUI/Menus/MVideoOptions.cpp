@@ -22,6 +22,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // [Cecil] Screen resolution lists
 #include "Cecil/ScreenResolutions.h"
 
+// [Cecil] Window modes
+#include "Cecil/WindowModes.h"
+
 extern void InitVideoOptionsButtons();
 extern void UpdateVideoOptionsButtons(INDEX iSelected);
 
@@ -44,8 +47,10 @@ void CVideoOptionsMenu::Initialize_t(void) {
   TRIGGER_MG(gm_mgAspectRatiosTrigger, 4, gm_mgResolutionsTrigger, gm_mgWindowModeTrigger, TRANS("ASPECT RATIO"), _astrAspectRatios);
   gm_mgAspectRatiosTrigger.mg_strTip = TRANS("select video mode aspect ratio");
 
-  TRIGGER_MG(gm_mgWindowModeTrigger, 5, gm_mgAspectRatiosTrigger, gm_mgBitsPerPixelTrigger, TRANS("FULL SCREEN"), astrNoYes);
+  // [Cecil] Changed fullscreen switch to window modes
+  TRIGGER_MG(gm_mgWindowModeTrigger, 5, gm_mgResolutionsTrigger, gm_mgBitsPerPixelTrigger, TRANS("WINDOW MODE"), _astrWindowModes);
   gm_mgWindowModeTrigger.mg_strTip = TRANS("make game run in a window or in full screen");
+
   TRIGGER_MG(gm_mgBitsPerPixelTrigger, 6, gm_mgWindowModeTrigger, gm_mgVideoRendering, TRANS("BITS PER PIXEL"), astrBitsPerPixelRadioTexts);
   gm_mgBitsPerPixelTrigger.mg_strTip = TRANS("select number of colors used for display");
 

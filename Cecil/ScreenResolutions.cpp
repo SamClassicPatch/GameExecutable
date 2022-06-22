@@ -16,6 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 
 #include "Cecil/ScreenResolutions.h"
+#include "Cecil/WindowModes.h"
 
 // Initialize aspect ratio arrays
 CAspectRatio _ar4_3;
@@ -93,6 +94,11 @@ void PrepareVideoResolutions(void) {
   _ar21_9.Push() = PIX2D(2560, 1080);
   _ar21_9.Push() = PIX2D(3440, 1440);
   _ar21_9.Push() = PIX2D(5120, 2160);
+
+  // Set translated window mode names
+  _astrWindowModes[0] = TRANS("Window");
+  _astrWindowModes[1] = TRANS("Borderless");
+  _astrWindowModes[2] = TRANS("Fullscreen");
 
   bPrepared = TRUE;
 };

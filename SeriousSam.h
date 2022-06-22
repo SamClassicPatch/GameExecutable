@@ -18,7 +18,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 extern HINSTANCE _hInstance;
 extern BOOL _bRunning, _bQuitScreen;
 
-extern INDEX sam_bFullScreenActive;
+extern INDEX sam_iWindowMode; // [Cecil] Different window modes
 extern INDEX sam_iScreenSizeI;
 extern INDEX sam_iScreenSizeJ;
 extern INDEX sam_iDisplayDepth;
@@ -30,8 +30,10 @@ extern BOOL sam_bAutoAdjustAudio;
 // [Cecil] Computer screen resolution
 extern PIX2D _vpixScreenRes;
 
+// [Cecil] Different window modes
 extern void StartNewMode(enum GfxAPIType eAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ,
-                         enum DisplayDepth eColorDepth, BOOL bFullScreenMode);
+                         enum DisplayDepth eColorDepth, INDEX iWindowMode);
+
 struct KeyData {
   char *kd_strASCII;
 };

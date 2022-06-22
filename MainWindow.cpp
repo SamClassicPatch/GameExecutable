@@ -19,13 +19,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern BOOL _bWindowChanging = FALSE; // ignores window messages while this is set
 extern HWND _hwndMain = NULL;
-static char achWindowTitle[256]; // current window title
+char _achWindowTitle[256]; // current window title
 
 static HBITMAP _hbmSplash = NULL;
 static BITMAP _bmSplash;
 
 // For window reposition function
-static PIX _pixLastSizeI, _pixLastSizeJ;
+PIX _pixLastSizeI, _pixLastSizeJ;
 
 // Window procedure active while window changes are occuring
 LRESULT WindowProc_WindowChanging(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -213,8 +213,8 @@ void OpenMainWindowNormal(PIX pixSizeI, PIX pixSizeJ) {
   SE_UpdateWindowHandle(_hwndMain);
 
   // set window title
-  sprintf(achWindowTitle, TRANS("Serious Sam (Window %dx%d)"), pixSizeI, pixSizeJ);
-  SetWindowTextA(_hwndMain, achWindowTitle);
+  sprintf(_achWindowTitle, TRANS("Serious Sam (Window %dx%d)"), pixSizeI, pixSizeJ);
+  SetWindowTextA(_hwndMain, _achWindowTitle);
 
   _pixLastSizeI = pixSizeI;
   _pixLastSizeJ = pixSizeJ;
@@ -247,9 +247,9 @@ void OpenMainWindowFullScreen(PIX pixSizeI, PIX pixSizeJ) {
   SE_UpdateWindowHandle(_hwndMain);
 
   // set window title and show it
-  sprintf(achWindowTitle, TRANS("Serious Sam (FullScreen %dx%d)"), pixSizeI, pixSizeJ);
+  sprintf(_achWindowTitle, TRANS("Serious Sam (FullScreen %dx%d)"), pixSizeI, pixSizeJ);
 
-  SetWindowTextA(_hwndMain, achWindowTitle);
+  SetWindowTextA(_hwndMain, _achWindowTitle);
   ShowWindow(_hwndMain, SW_SHOWNORMAL);
 }
 
@@ -284,7 +284,7 @@ void OpenMainWindowInvisible(void) {
   SE_UpdateWindowHandle(_hwndMain);
 
   // set window title
-  sprintf(achWindowTitle, "Serious Sam");
+  sprintf(_achWindowTitle, "Serious Sam");
 
-  SetWindowTextA(_hwndMain, achWindowTitle);
+  SetWindowTextA(_hwndMain, _achWindowTitle);
 }

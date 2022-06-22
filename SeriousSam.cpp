@@ -33,6 +33,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "CmdLine.h"
 #include "Credits.h"
 
+// [Cecil] Window modes
+#include "Cecil/WindowModes.h"
+
 extern CGame *_pGame = NULL;
 
 // Application state variables
@@ -54,7 +57,7 @@ extern INDEX sam_bWideScreen = FALSE;
 extern FLOAT sam_fPlayerOffset = 0.0f;
 
 // Display mode settings
-extern INDEX sam_bFullScreenActive = FALSE;
+extern INDEX sam_iWindowMode = 0; // [Cecil] Different window modes
 extern INDEX sam_iScreenSizeI = 1024; // current size of the window
 extern INDEX sam_iScreenSizeJ = 768;  // current size of the window
 extern INDEX sam_iDisplayDepth = 0; // 0 = default, 1 = 16bit, 2 = 32bit
@@ -149,7 +152,7 @@ static void ApplyRenderingPreferences(void) {
 
 extern void ApplyVideoMode(void) {
   StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,
-               (enum DisplayDepth)sam_iDisplayDepth, sam_bFullScreenActive);
+               (enum DisplayDepth)sam_iDisplayDepth, sam_iWindowMode);
 }
 
 static void BenchMark(void) {
@@ -456,7 +459,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
 
   // declare shell symbols
   _pShell->DeclareSymbol("user void PlayDemo(CTString);", &PlayDemo);
-  _pShell->DeclareSymbol("persistent INDEX sam_bFullScreen;",   &sam_bFullScreenActive);
+  _pShell->DeclareSymbol("persistent INDEX sam_iWindowMode;",   &sam_iWindowMode); // [Cecil] Window modes
   _pShell->DeclareSymbol("persistent INDEX sam_iScreenSizeI;",  &sam_iScreenSizeI);
   _pShell->DeclareSymbol("persistent INDEX sam_iScreenSizeJ;",  &sam_iScreenSizeJ);
   _pShell->DeclareSymbol("persistent INDEX sam_iDisplayDepth;", &sam_iDisplayDepth);
@@ -554,7 +557,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
 
   // apply application mode
   StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,
-               (enum DisplayDepth)sam_iDisplayDepth, sam_bFullScreenActive);
+               (enum DisplayDepth)sam_iDisplayDepth, sam_iWindowMode);
 
   // set default mode reporting
   if (sam_bFirstStarted) {
@@ -958,8 +961,8 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
               _pNetwork->TogglePause();
             }
 
-            // if in full screen
-            if (sam_bFullScreenActive) {
+            // [Cecil] If fullscreen
+            if (sam_iWindowMode == E_WM_FULLSCREEN) {
               // reset display mode and minimize window
               _pGfx->ResetDisplayMode();
               ShowWindow(_hwndMain, SW_MINIMIZE);
@@ -980,12 +983,12 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
             _bWindowChanging = TRUE;
             _bReconsiderInput = TRUE;
 
-            // if in full screen
-            if (sam_bFullScreenActive) {
+            // [Cecil] If fullscreen
+            if (sam_iWindowMode == E_WM_FULLSCREEN) {
               ShowWindow(_hwndMain, SW_SHOWNORMAL);
               // set the display mode once again
               StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,
-                           (enum DisplayDepth)sam_iDisplayDepth, sam_bFullScreenActive);
+                           (enum DisplayDepth)sam_iDisplayDepth, sam_iWindowMode);
             // if not in full screen
             } else {
               // restore window
@@ -1012,8 +1015,9 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
       // toggle full-screen on alt-enter
       if (msg.message == WM_SYSKEYDOWN && msg.wParam == VK_RETURN && !IsIconic(_hwndMain)) {
+        // [Cecil] Switch between windowed and fullscreen
         StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,
-                     (enum DisplayDepth)sam_iDisplayDepth, !sam_bFullScreenActive);
+                     (enum DisplayDepth)sam_iDisplayDepth, (sam_iWindowMode != E_WM_FULLSCREEN ? E_WM_FULLSCREEN : E_WM_WINDOWED));
       }
 
       // if application should stop
@@ -1030,8 +1034,8 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
        || (msg.message == WM_ACTIVATEAPP && !msg.wParam)) {
         // if application is running and in full screen mode
         if (!_bWindowChanging && _bRunning) {
-          // minimize if in full screen
-          if (sam_bFullScreenActive) {
+          // [Cecil] Minimize if in fullscreen
+          if (sam_iWindowMode == E_WM_FULLSCREEN) {
             PostMessage(NULL, WM_SYSCOMMAND, SC_MINIMIZE, 0);
 
           // just disable input if not in full screen
@@ -1405,14 +1409,17 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   return iResult;
 }
 
+// [Cecil] Replaced 'bFullScreenMode' with 'eWindowMode'
 // Try to start a new display mode
 BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ,
-                         enum DisplayDepth eColorDepth, BOOL bFullScreenMode) {
+                         enum DisplayDepth eColorDepth, EWindowModes eWindowMode) {
   CDisplayMode dmTmp;
   dmTmp.dm_ddDepth = eColorDepth;
 
-  CPrintF(TRANS("  Starting display mode: %dx%dx%s (%s)\n"), pixSizeI, pixSizeJ, dmTmp.DepthString(),
-          bFullScreenMode ? TRANS("fullscreen") : TRANS("window"));
+  // [Cecil] Window mode name
+  CTString strWindowMode = _astrWindowModes[eWindowMode];
+
+  CPrintF(TRANS("  Starting display mode: %dx%dx%s (%s)\n"), pixSizeI, pixSizeJ, dmTmp.DepthString(), strWindowMode);
 
   // mark to start ignoring window size/position messages until settled down
   _bWindowChanging = TRUE;
@@ -1432,38 +1439,38 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
   // try to set new display mode
   BOOL bSuccess;
 
-  if (bFullScreenMode) {
-#ifdef SE1_D3D
-    if (eGfxAPI == GAT_D3D) {
-      OpenMainWindowFullScreen(pixSizeI, pixSizeJ);
-    }
-#endif // SE1_D3D
+  // [Cecil] Fullscreen mode
+  const BOOL bFullscreen = (eWindowMode == E_WM_FULLSCREEN);
 
-    bSuccess = _pGfx->SetDisplayMode(eGfxAPI, iAdapter, pixSizeI, pixSizeJ, eColorDepth);
-
-    if (bSuccess && eGfxAPI == GAT_OGL) {
-      OpenMainWindowFullScreen(pixSizeI, pixSizeJ);
-    }
-
-  } else {
-#ifdef SE1_D3D
-    if (eGfxAPI == GAT_D3D) {
-      OpenMainWindowNormal(pixSizeI, pixSizeJ);
-    }
-#endif // SE1_D3D
-
-    bSuccess = _pGfx->ResetDisplayMode(eGfxAPI);
-
-    if (bSuccess && eGfxAPI == GAT_OGL) {
-      OpenMainWindowNormal(pixSizeI, pixSizeJ);
-    }
+  // [Cecil] Main window opening methods per type
+  void (*apWindowMethods[3])(PIX, PIX) = {
+    &OpenMainWindowNormal,     // Windowed/normal
+    &OpenMainWindowBorderless, // Borderless
+    &OpenMainWindowFullScreen, // Fullscreen
+  };
 
 #ifdef SE1_D3D
-    if (bSuccess && eGfxAPI == GAT_D3D) {
-      ResetMainWindowNormal();
-    }
-#endif // SE1_D3D
+  if (eGfxAPI == GAT_D3D) {
+    (apWindowMethods[eWindowMode])(pixSizeI, pixSizeJ);
   }
+#endif
+
+  if (bFullscreen) {
+    bSuccess = _pGfx->SetDisplayMode(eGfxAPI, iAdapter, pixSizeI, pixSizeJ, eColorDepth);
+  } else {
+    bSuccess = _pGfx->ResetDisplayMode(eGfxAPI);
+  }
+
+  if (bSuccess && eGfxAPI == GAT_OGL) {
+    (apWindowMethods[eWindowMode])(pixSizeI, pixSizeJ);
+  }
+  
+#ifdef SE1_D3D
+  // [Cecil] Reset for non-fullscreen modes
+  if (bSuccess && !bFullscreen && eGfxAPI == GAT_D3D) {
+    ResetMainWindowNormal();
+  }
+#endif
 
   // if new mode was set
   if (bSuccess) {
@@ -1534,7 +1541,7 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
     }
 
     // remember new settings
-    sam_bFullScreenActive = bFullScreenMode;
+    sam_iWindowMode = eWindowMode; // [Cecil]
     sam_iScreenSizeI = pixSizeI;
     sam_iScreenSizeJ = pixSizeJ;
     sam_iDisplayDepth = eColorDepth;
@@ -1568,13 +1575,13 @@ const INDEX aDefaultModes[][3] = {
 };
 const INDEX ctDefaultModes = ARRAYCOUNT(aDefaultModes);
 
-// Start new display mode
+// [Cecil] Different window modes
 void StartNewMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ,
-                  enum DisplayDepth eColorDepth, BOOL bFullScreenMode) {
+                  enum DisplayDepth eColorDepth, INDEX iWindowMode) {
   CPrintF(TRANS("\n* START NEW DISPLAY MODE ...\n"));
 
   // try to set the mode
-  BOOL bSuccess = TryToSetDisplayMode(eGfxAPI, iAdapter, pixSizeI, pixSizeJ, eColorDepth, bFullScreenMode);
+  BOOL bSuccess = TryToSetDisplayMode(eGfxAPI, iAdapter, pixSizeI, pixSizeJ, eColorDepth, (EWindowModes)iWindowMode);
 
   // if failed
   if (!bSuccess) {
@@ -1584,7 +1591,7 @@ void StartNewMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pix
 
     pixSizeI = 640;
     pixSizeJ = 480;
-    bFullScreenMode = TRUE;
+    iWindowMode = E_WM_WINDOWED; // [Cecil] Changed from fullscreen to windowed
 
     // try to revert to one of recovery modes
     for (INDEX iMode = 0; iMode < ctDefaultModes; iMode++) {
@@ -1593,7 +1600,7 @@ void StartNewMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pix
       iAdapter = aDefaultModes[iMode][2];
 
       CPrintF(TRANS("\nTrying recovery mode %d...\n"), iMode);
-      bSuccess = TryToSetDisplayMode(eGfxAPI, iAdapter, pixSizeI, pixSizeJ, eColorDepth, bFullScreenMode);
+      bSuccess = TryToSetDisplayMode(eGfxAPI, iAdapter, pixSizeI, pixSizeJ, eColorDepth, (EWindowModes)iWindowMode);
 
       if (bSuccess) {
         break;
