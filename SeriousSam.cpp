@@ -1350,7 +1350,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
   return TRUE;
 }
 
-/*void CheckModReload(void) {
+/*static void CheckModReload(void) {
   if (_fnmModToLoad != "") {
     // [Cecil] Use executable filename
     CTString strCommand = _fnmApplicationExe.FileDir() + _fnmApplicationExe.FileName() + ".exe";
@@ -1375,7 +1375,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
   }
 }*/
 
-void CheckTeaser(void) {
+static void CheckTeaser(void) {
   CTFileName fnmTeaser = _fnmApplicationExe.FileDir() + CTString("AfterSam.exe");
 
   if (fopen(fnmTeaser, "r") != NULL) {
@@ -1384,7 +1384,7 @@ void CheckTeaser(void) {
   }
 }
 
-void CheckBrowser(void) {
+static void CheckBrowser(void) {
   if (_strURLToVisit != "") {
     RunBrowser(_strURLToVisit);
   }
@@ -1398,8 +1398,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   } CTSTREAM_END;
 
   //CheckModReload();
+  //CheckTeaser();
 
-  CheckTeaser();
   CheckBrowser();
 
   return iResult;
