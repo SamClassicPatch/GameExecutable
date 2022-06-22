@@ -32,6 +32,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MenuStarters.h"
 
+// [Cecil] Extra functionality
+#include "Cecil/CecilExtensions.h"
+
 // macros for translating radio button text arrays
 #define TRANSLATERADIOARRAY(array) TranslateRadioTexts(array, ARRAYCOUNT(array))
 
@@ -660,11 +663,18 @@ BOOL DoMenu(CDrawPort *pdp) {
     // clear screen with background texture
     LCDPrepare(1.0f);
     LCDSetDrawport(&dpMenu);
-    // do not allow game to show through
-    dpMenu.Fill(C_BLACK|255);
-    LCDRenderClouds1();
-    LCDRenderGrid();
-    LCDRenderClouds2();
+
+    // [Cecil] Show the game a bit in the background
+    if (sam_bBackgroundGameRender && _gmRunningGameMode != GM_NONE) {
+      dpMenu.Fill(C_BLACK | 127);
+
+    } else {
+      // do not allow game to show through
+      dpMenu.Fill(C_BLACK | 255);
+      LCDRenderClouds1();
+      LCDRenderGrid();
+      LCDRenderClouds2();
+    }
 
     FLOAT fScaleW = (FLOAT)pixW / 640.0f;
     FLOAT fScaleH = (FLOAT)pixH / 480.0f;

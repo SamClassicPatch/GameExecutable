@@ -36,6 +36,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // [Cecil] Window modes
 #include "Cecil/WindowModes.h"
 
+// [Cecil] Extra functionality
+#include "Cecil/CecilExtensions.h"
+
 extern CGame *_pGame = NULL;
 
 // Application state variables
@@ -454,6 +457,9 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
     FatalError("%s", strError);
   }
 
+  // [Cecil] Custom initialization
+  CECIL_Init();
+
   // always disable all warnings when in serious sam
   _pShell->Execute("con_bNoWarnings=1;");
 
@@ -764,10 +770,13 @@ void DoGame(void) {
 
   // redraw the view
   if (!IsIconic(_hwndMain) && pdp != NULL && pdp->Lock()) {
-    if (_gmRunningGameMode != GM_NONE && !bMenuActive) {
+    // [Cecil] Keep rendering the game in the background while in menu
+    BOOL bRenderGame = (!bMenuActive || sam_bBackgroundGameRender);
+
+    if (_gmRunningGameMode != GM_NONE && bRenderGame) {
       // handle pretouching of textures and shadowmaps
       pdp->Unlock();
-      _pGame->GameRedrawView(pdp, (_pGame->gm_csConsoleState != CS_OFF || bMenuActive) ? 0 : GRV_SHOWEXTRAS);
+      _pGame->GameRedrawView(pdp, (_pGame->gm_csConsoleState != CS_OFF) ? 0 : GRV_SHOWEXTRAS);
 
       pdp->Lock();
       _pGame->ComputerRender(pdp);
