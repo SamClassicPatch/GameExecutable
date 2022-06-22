@@ -1325,7 +1325,8 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     ZeroMemory(&cif, sizeof(STARTUPINFOA));
     PROCESS_INFORMATION pi;
 
-    strcpy(strCmd, "SeriousSam.exe");
+    // [Cecil] Use executable filename
+    strcpy(strCmd, _fnmApplicationExe.FileName() + ".exe");
     strcpy(strParam, " +game ");
     strcat(strParam, _fnmModToLoad.FileName());
 
@@ -1351,7 +1352,8 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
 /*void CheckModReload(void) {
   if (_fnmModToLoad != "") {
-    CTString strCommand = _fnmApplicationExe.FileDir() + "SeriousSam.exe";
+    // [Cecil] Use executable filename
+    CTString strCommand = _fnmApplicationExe.FileDir() + _fnmApplicationExe.FileName() + ".exe";
     //+mod " + _fnmModToLoad.FileName() + "\"";
 
     CTString strMod = _fnmModToLoad.FileName();
