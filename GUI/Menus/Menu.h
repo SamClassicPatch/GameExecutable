@@ -35,7 +35,9 @@ void StartMenus(char *str = "");
 void StopMenus(BOOL bGoToRoot = TRUE);
 BOOL IsMenusInRoot(void);
 void ChangeToMenu(class CGameMenu *pgmNew);
-extern void PlayMenuSound(CSoundData *psd);
+
+// [Cecil] Flag for playing over other sounds
+extern void PlayMenuSound(CSoundData *psd, BOOL bOverOtherSounds = TRUE);
 
 #define KEYS_ON_SCREEN    14
 #define LEVELS_ON_SCREEN  16

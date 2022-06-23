@@ -65,7 +65,7 @@ BOOL CMenuGadget::OnChar(MSG msg) {
 void CMenuGadget::OnSetFocus(void) {
   mg_bFocused = TRUE;
   if (!IsSeparator()) {
-    PlayMenuSound(_psdSelect);
+    PlayMenuSound(_psdSelect, FALSE); // [Cecil] Don't play over other sounds
     IFeel_PlayEffect("Menu_select");
   }
 }

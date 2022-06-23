@@ -115,8 +115,9 @@ CMGButton mgBack;
 // -------- console variable adjustment menu
 extern BOOL _bVarChanged = FALSE;
 
-extern void PlayMenuSound(CSoundData *psd) {
-  if (_psoMenuSound != NULL && !_psoMenuSound->IsPlaying()) {
+// [Cecil] Flag for playing over other sounds
+extern void PlayMenuSound(CSoundData *psd, BOOL bOverOtherSounds) {
+  if (bOverOtherSounds || (_psoMenuSound != NULL && !_psoMenuSound->IsPlaying())) {
     _psoMenuSound->Play(psd, SOF_NONGAME);
   }
 }
