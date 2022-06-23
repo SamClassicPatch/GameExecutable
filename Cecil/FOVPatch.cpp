@@ -29,7 +29,6 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &p
     CPerspectiveProjection3D &ppr = *((CPerspectiveProjection3D *)(CProjection3D *)prProjection);
 
     FLOAT &fNewFOV = ppr.ppr_FOVWidth;
-    FLOAT2D &vRatio = ppr.ppr_PerspectiveRatios;
 
     // Set custom FOV
     if (sam_fCustomFOV > 0.0f) {
@@ -48,11 +47,14 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &p
       // 4:3 resolution = 1.0 ratio; 16:9 = 1.333 etc.
       FLOAT fSquareRatio = fAspectRatio / (4.0f / 3.0f);
 
-      // Take current FOV and apply square ratio to it
+      // Take current FOV angle and apply square ratio to it
       FLOAT fVerticalAngle = Tan(fNewFOV / 2.0f) * fSquareRatio;
 
       // 90 FOV on 16:9 resolution will become 106.26...
       fNewFOV = 2.0f * ATan(fVerticalAngle);
+
+      // Don't let FOV be invalid
+      fNewFOV = Clamp(fNewFOV, 1.0f, 170.0f);
     }
   }
 
