@@ -679,7 +679,7 @@ void PrintDisplayModeInfo(void) {
   dm.dm_pixSizeJ = slDPHeight;
 
   // determine proper text scale for statistics display
-  FLOAT fTextScale = (FLOAT)slDPWidth / 640.0f;
+  FLOAT fTextScale = (FLOAT)slDPHeight / 480.0f; // [Cecil] Use height instead of width
 
   // get resolution
   CTString strRes;
@@ -851,7 +851,9 @@ void RenderStarfield(CDrawPort *pdp, FLOAT fStrength) {
 
   PIX pixSizeI = pdp->GetWidth();
   PIX pixSizeJ = pdp->GetHeight();
-  FLOAT fStretch = pixSizeI / 640.0f;
+
+  // [Cecil] Use height instead of width
+  FLOAT fStretch = HEIGHT_MULTIPLIER(pdp);
   fStretch *= FLOAT(ptd->GetPixWidth()) / ptd->GetWidth();
 
   PIXaabbox2D boxScreen(PIX2D(0, 0), PIX2D(pixSizeI, pixSizeJ));

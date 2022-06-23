@@ -18,6 +18,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 #include "ArrowDir.h"
 
+// [Cecil] Extra functionality
+#include "Cecil/CecilExtensions.h"
+
 static const FLOAT _fBigStartJ = 0.25f;
 static const FLOAT _fBigSizeJ = 0.066f;
 static const FLOAT _fMediumSizeJ = 0.04f;
@@ -241,21 +244,27 @@ FLOATaabbox2D PixBoxToFloatBox(const CDrawPort *pdp, const PIXaabbox2D &boxP) {
 extern CFontData _fdTitle;
 void SetFontTitle(CDrawPort *pdp) {
   pdp->SetFont(&_fdTitle);
-  pdp->SetTextScaling(1.25f * pdp->GetWidth() / 640 * pdp->dp_fWideAdjustment);
+
+  // [Cecil] Use height instead of width for text scaling
+  pdp->SetTextScaling(1.25f * HEIGHT_MULTIPLIER(pdp) * pdp->dp_fWideAdjustment);
   pdp->SetTextAspect(1.0f);
 }
 
 extern CFontData _fdBig;
 void SetFontBig(CDrawPort *pdp) {
   pdp->SetFont(&_fdBig);
-  pdp->SetTextScaling(1.0f * pdp->GetWidth() / 640 * pdp->dp_fWideAdjustment);
+  
+  // [Cecil] Use height instead of width for text scaling
+  pdp->SetTextScaling(1.0f * HEIGHT_MULTIPLIER(pdp) * pdp->dp_fWideAdjustment);
   pdp->SetTextAspect(1.0f);
 }
 
 extern CFontData _fdMedium;
 void SetFontMedium(CDrawPort *pdp) {
   pdp->SetFont(&_fdMedium);
-  pdp->SetTextScaling(1.0f * pdp->GetWidth() / 640 * pdp->dp_fWideAdjustment);
+  
+  // [Cecil] Use height instead of width for text scaling
+  pdp->SetTextScaling(1.0f * HEIGHT_MULTIPLIER(pdp) * pdp->dp_fWideAdjustment);
   pdp->SetTextAspect(0.75f);
 }
 

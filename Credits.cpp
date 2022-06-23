@@ -150,7 +150,10 @@ FLOAT Credits_Render(CDrawPort *pdp) {
 
   pixW = dpWide.GetWidth();
   pixH = dpWide.GetHeight();
-  fResolutionScaling = (FLOAT)pixW / 640.0f;
+
+  // [Cecil] Use height instead of width
+  fResolutionScaling = (FLOAT)pixH / 480.0f;
+
   dpWide.SetFont(_pfdDisplayFont);
   pixLineHeight = floor(20 * fResolutionScaling);
 
