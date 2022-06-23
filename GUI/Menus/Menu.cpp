@@ -676,34 +676,36 @@ BOOL DoMenu(CDrawPort *pdp) {
       LCDRenderClouds2();
     }
 
-    FLOAT fScaleW = (FLOAT)pixW / 640.0f;
-    FLOAT fScaleH = (FLOAT)pixH / 480.0f;
+    // [Cecil] Use the same scale for width and height
+    const FLOAT fScale = (FLOAT)pixH / 480.0f;
+
+    // [Cecil] Proper right side position
+    const PIX pixR = 480 * ((FLOAT)pixW / (FLOAT)pixH);
+
     PIX pixI0, pixJ0, pixI1, pixJ1;
     // put logo(s) to main menu (if logos exist)
     if (pgmCurrentMenu == &_pGUIM->gmMainMenu) {
       if (_ptoLogoODI != NULL) {
         CTextureData &td = (CTextureData &)*_ptoLogoODI->GetData();
-        #define LOGOSIZE 50
-        const PIX pixLogoWidth = LOGOSIZE * dpMenu.dp_fWideAdjustment;
-        const PIX pixLogoHeight = LOGOSIZE * td.GetHeight() / td.GetWidth();
-        pixI0 = (640 - pixLogoWidth - 16) * fScaleW;
-        pixJ0 = (480 - pixLogoHeight - 16) * fScaleH;
-        pixI1 = pixI0 + pixLogoWidth * fScaleW;
-        pixJ1 = pixJ0 + pixLogoHeight * fScaleH;
+        const INDEX iSize = 50;
+        const PIX pixLogoWidth = iSize * dpMenu.dp_fWideAdjustment;
+        const PIX pixLogoHeight = iSize * td.GetHeight() / td.GetWidth();
+        pixI0 = (pixR - pixLogoWidth - 16) * fScale;
+        pixJ0 = (480 - pixLogoHeight - 16) * fScale;
+        pixI1 = pixI0 + pixLogoWidth * fScale;
+        pixJ1 = pixJ0 + pixLogoHeight * fScale;
         dpMenu.PutTexture(_ptoLogoODI, PIXaabbox2D(PIX2D(pixI0, pixJ0), PIX2D(pixI1, pixJ1)));
-        #undef LOGOSIZE
       }
       if (_ptoLogoCT != NULL) {
         CTextureData &td = (CTextureData &)*_ptoLogoCT->GetData();
-        #define LOGOSIZE 50
-        const PIX pixLogoWidth = LOGOSIZE * dpMenu.dp_fWideAdjustment;
-        const PIX pixLogoHeight = LOGOSIZE * td.GetHeight() / td.GetWidth();
-        pixI0 = 12 * fScaleW;
-        pixJ0 = (480 - pixLogoHeight - 16) * fScaleH;
-        pixI1 = pixI0 + pixLogoWidth * fScaleW;
-        pixJ1 = pixJ0 + pixLogoHeight * fScaleH;
+        const INDEX iSize = 50;
+        const PIX pixLogoWidth = iSize * dpMenu.dp_fWideAdjustment;
+        const PIX pixLogoHeight = iSize * td.GetHeight() / td.GetWidth();
+        pixI0 = 12 * fScale;
+        pixJ0 = (480 - pixLogoHeight - 16) * fScale;
+        pixI1 = pixI0 + pixLogoWidth * fScale;
+        pixJ1 = pixJ0 + pixLogoHeight * fScale;
         dpMenu.PutTexture(_ptoLogoCT, PIXaabbox2D(PIX2D(pixI0, pixJ0), PIX2D(pixI1, pixJ1)));
-        #undef LOGOSIZE
       }
 
       {
@@ -723,10 +725,10 @@ BOOL DoMenu(CDrawPort *pdp) {
         const INDEX iSize = 95;
         const PIX pixLogoWidth = iSize * dpMenu.dp_fWideAdjustment;
         const PIX pixLogoHeight = iSize * td.GetHeight() / td.GetWidth();
-        pixI0 = (640 - pixLogoWidth - 35) * fScaleW;
-        pixJ0 = (480 - pixLogoHeight - 7) * fScaleH;
-        pixI1 = pixI0 + pixLogoWidth * fScaleW;
-        pixJ1 = pixJ0 + pixLogoHeight * fScaleH;
+        pixI0 = (pixR - pixLogoWidth - 35) * fScale;
+        pixJ0 = (480 - pixLogoHeight - 7) * fScale;
+        pixI1 = pixI0 + pixLogoWidth * fScale;
+        pixJ1 = pixJ0 + pixLogoHeight * fScale;
         dpMenu.PutTexture(_ptoLogoEAX, PIXaabbox2D(PIX2D(pixI0, pixJ0), PIX2D(pixI1, pixJ1)));
       }
     }
@@ -735,19 +737,19 @@ BOOL DoMenu(CDrawPort *pdp) {
 #define THUMBH 96
     // if there is a thumbnail
     if (_bThumbnailOn) {
-      const FLOAT fThumbScaleW = fScaleW * dpMenu.dp_fWideAdjustment;
-      PIX pixOfs = 8 * fScaleW;
-      pixI0 = 8 * fScaleW;
-      pixJ0 = (240 - THUMBW / 2) * fScaleH;
+      const FLOAT fThumbScaleW = fScale * dpMenu.dp_fWideAdjustment;
+      PIX pixOfs = 8 * fScale;
+      pixI0 = 8 * fScale;
+      pixJ0 = (240 - THUMBW / 2) * fScale;
       pixI1 = pixI0 + THUMBW * fThumbScaleW;
-      pixJ1 = pixJ0 + THUMBH * fScaleH;
+      pixJ1 = pixJ0 + THUMBH * fScale;
       if (_toThumbnail.GetData() != NULL) { // show thumbnail with shadow and border
-        dpMenu.Fill(pixI0 + pixOfs, pixJ0 + pixOfs, THUMBW * fThumbScaleW, THUMBH * fScaleH, C_BLACK | 128);
+        dpMenu.Fill(pixI0 + pixOfs, pixJ0 + pixOfs, THUMBW * fThumbScaleW, THUMBH * fScale, C_BLACK | 128);
         dpMenu.PutTexture(&_toThumbnail, PIXaabbox2D(PIX2D(pixI0, pixJ0), PIX2D(pixI1, pixJ1)), C_WHITE | 255);
-        dpMenu.DrawBorder(pixI0, pixJ0, THUMBW * fThumbScaleW, THUMBH * fScaleH, LCDGetColor(C_mdGREEN | 255, "thumbnail border"));
+        dpMenu.DrawBorder(pixI0, pixJ0, THUMBW * fThumbScaleW, THUMBH * fScale, LCDGetColor(C_mdGREEN | 255, "thumbnail border"));
       } else {
         dpMenu.SetFont(_pfdDisplayFont);
-        dpMenu.SetTextScaling(fScaleW);
+        dpMenu.SetTextScaling(fScale);
         dpMenu.SetTextAspect(1.0f);
         dpMenu.PutTextCXY(TRANS("no thumbnail"), (pixI0 + pixI1) / 2, (pixJ0 + pixJ1) / 2, LCDGetColor(C_GREEN | 255, "no thumbnail"));
       }
