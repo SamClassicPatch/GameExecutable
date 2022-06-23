@@ -145,6 +145,7 @@
     <ClCompile Include="Cecil\Patches.cpp" />
     <ClCompile Include="Cecil\ScreenResolutions.cpp" />
     <ClCompile Include="Cecil\WindowModes.cpp" />
+    <ClCompile Include="Cecil\WorldEntities.cpp" />
     <ClCompile Include="CmdLine.cpp" />
     <ClCompile Include="Credits.cpp" />
     <ClCompile Include="GLSettings.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="Cecil\Patches.h" />
     <ClInclude Include="Cecil\ScreenResolutions.h" />
     <ClInclude Include="Cecil\WindowModes.h" />
+    <ClInclude Include="Cecil\WorldEntities.h" />
     <ClInclude Include="GUI\Components\MenuGadget.h" />
     <ClInclude Include="GUI\Components\MGArrow.h" />
     <ClInclude Include="GUI\Components\MGButton.h" />
