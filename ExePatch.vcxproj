@@ -140,6 +140,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cecil\CecilExtensions.cpp" />
+    <ClCompile Include="Cecil\FOVPatch.cpp" />
+    <ClCompile Include="Cecil\Patcher\patcher.cpp" />
     <ClCompile Include="Cecil\ScreenResolutions.cpp" />
     <ClCompile Include="Cecil\WindowModes.cpp" />
     <ClCompile Include="CmdLine.cpp" />
@@ -196,6 +198,8 @@
     <ClCompile Include="LevelInfo.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClInclude Include="Cecil\CecilExtensions.h" />
+    <ClInclude Include="Cecil\Patcher\patcher.h" />
+    <ClInclude Include="Cecil\Patcher\patcher_defines.h" />
     <ClInclude Include="Cecil\ScreenResolutions.h" />
     <ClInclude Include="Cecil\WindowModes.h" />
     <ClInclude Include="GUI\Components\MenuGadget.h" />

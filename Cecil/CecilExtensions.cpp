@@ -20,6 +20,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // Render game in the background while in menu
 INDEX sam_bBackgroundGameRender = TRUE;
 
+// FOV patch
+INDEX sam_bUseVerticalFOV = TRUE;
+FLOAT sam_fCustomFOV = -1.0f;
+
 // Custom command registy
 static CDynamicContainer<CShellSymbol> _cCustomSymbols;
 
@@ -73,12 +77,25 @@ static void CECIL_RegisterCommand(void *pCommand) {
 
 // Custom initialization
 void CECIL_Init(void) {
+  // Function patches
+  CPrintF("Intercepting Engine functions:\n");
+
+  extern void CECIL_ApplyFOVPatch(void);
+  CECIL_ApplyFOVPatch();
+
+  CPrintF("  done!\n");
+
   // Command registry
   _pShell->DeclareSymbol("void CECIL_RegisterCommand(INDEX);", &CECIL_RegisterCommand);
 
   // Custom symbols
   {
+    // Render game in the background while in menu
     _pShell->DeclareSymbol("user INDEX sam_bBackgroundGameRender post:CECIL_RegisterCommand;", &sam_bBackgroundGameRender);
+
+    // FOV patch
+    _pShell->DeclareSymbol("user INDEX sam_bUseVerticalFOV post:CECIL_RegisterCommand;", &sam_bUseVerticalFOV);
+    _pShell->DeclareSymbol("user FLOAT sam_fCustomFOV      post:CECIL_RegisterCommand;", &sam_fCustomFOV);
   }
 
   // Restore custom symbol values

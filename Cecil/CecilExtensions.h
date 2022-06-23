@@ -16,5 +16,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // Render game in the background while in menu
 extern INDEX sam_bBackgroundGameRender;
 
+// FOV patch
+extern INDEX sam_bUseVerticalFOV;
+extern FLOAT sam_fCustomFOV;
+
 // Custom initialization
 void CECIL_Init(void);
