@@ -19,10 +19,18 @@ extern CListHead _lhFilteredLevels;
 
 class CLevelInfo {
   public:
+    // [Cecil] Different level formats
+    enum ELevelFormat {
+      E_LF_SE100,
+      E_LF_SE150,
+      E_LF_SSR,
+    };
+
     CListNode li_lnNode;
     CTFileName li_fnLevel;
     CTString li_strName;
     ULONG li_ulSpawnFlags;
+    ELevelFormat li_eFormat; // [Cecil] Level format type
 
     CLevelInfo(void);
     CLevelInfo(const CLevelInfo &li);

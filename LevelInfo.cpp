@@ -26,18 +26,21 @@ CLevelInfo::CLevelInfo(void) {
   li_fnLevel = CTString("Levels\\Default.wld");
   li_strName = TRANS("<invalid level>");
   li_ulSpawnFlags = 0x0;
+  li_eFormat = E_LF_SE100; // [Cecil]
 }
 
 CLevelInfo::CLevelInfo(const CLevelInfo &li) {
-  li_fnLevel = li.li_fnLevel;
-  li_strName = li.li_strName;
+  li_fnLevel      = li.li_fnLevel;
+  li_strName      = li.li_strName;
   li_ulSpawnFlags = li.li_ulSpawnFlags;
+  li_eFormat      = li.li_eFormat; // [Cecil]
 }
 
 void CLevelInfo::operator=(const CLevelInfo &li) {
-  li_fnLevel = li.li_fnLevel;
-  li_strName = li.li_strName;
+  li_fnLevel      = li.li_fnLevel;
+  li_strName      = li.li_strName;
   li_ulSpawnFlags = li.li_ulSpawnFlags;
+  li_eFormat      = li.li_eFormat; // [Cecil]
 }
 
 // Get level info for given filename
@@ -53,6 +56,11 @@ BOOL GetLevelInfo(CLevelInfo &li, const CTFileName &fnm) {
     INDEX iDummy;
     strm >> iDummy; // the version number
 
+    // [Cecil] Levels from other games
+    if (iDummy != 10000) {
+      li.li_eFormat = CLevelInfo::E_LF_SE150;
+    }
+
     strm.ExpectID_t("WRLD"); // 'world'
     strm.ExpectID_t("WLIF"); // 'world info'
 
@@ -60,11 +68,25 @@ BOOL GetLevelInfo(CLevelInfo &li, const CTFileName &fnm) {
       strm.ExpectID_t("DTRS"); // 'world info'
     }
 
+    // [Cecil] Prevent game from crashing from parsing SSR levels
+    if (strm.PeekID_t() == CChunkID("LDRB")) {
+      CTString strDummy;
+      strm.ExpectID_t("LDRB");
+      strm >> strDummy;
+      li.li_eFormat = CLevelInfo::E_LF_SSR;
+    }
+
     // read the name
     strm >> li.li_strName;
 
     // read the flags
     strm >> li.li_ulSpawnFlags;
+
+    // [Cecil] Prevent game from crashing from parsing SSR levels
+    if (strm.PeekID_t() == CChunkID("SpGM")) {
+      strm.ExpectID_t("SpGM");
+      li.li_eFormat = CLevelInfo::E_LF_SSR;
+    }
 
     // translate name
     li.li_strName = TranslateConst(li.li_strName, 0);
