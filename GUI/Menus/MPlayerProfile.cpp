@@ -69,7 +69,7 @@ void CPlayerProfileMenu::Initialize_t(void) {
 
   // setup of player name button is done on start menu
   gm_mgNameField.mg_strText = "<???>";
-  gm_mgNameField.mg_ctMaxStringLen = 25;
+  gm_mgNameField.mg_ctMaxStringLen = 255; // [Cecil] 25 -> 255
   gm_mgNameField.mg_boxOnScreen = BoxPlayerEdit(1.25);
   gm_mgNameField.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgNameField.mg_iCenterI = -1;
@@ -87,7 +87,7 @@ void CPlayerProfileMenu::Initialize_t(void) {
 
   // setup of player name button is done on start menu
   gm_mgTeam.mg_strText = "<???>";
-  gm_mgTeam.mg_ctMaxStringLen = 25;
+  gm_mgTeam.mg_ctMaxStringLen = 255; // [Cecil] 25 -> 255
   gm_mgTeam.mg_boxOnScreen = BoxPlayerEdit(2.25f);
   gm_mgTeam.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgTeam.mg_iCenterI = -1;
