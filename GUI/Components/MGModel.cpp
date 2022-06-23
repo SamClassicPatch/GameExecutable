@@ -19,6 +19,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <GameMP/LCDDrawing.h>
 #include "MGModel.h"
 
+// [Cecil] Extra functionality
+#include "Cecil/CecilExtensions.h"
+
 extern INDEX sam_bWideScreen;
 
 CMGModel::CMGModel(void) {
@@ -49,7 +52,12 @@ void CMGModel::Render(CDrawPort *pdp) {
   // prepare projection
   CRenderModel rmRenderModel;
   CPerspectiveProjection3D pr;
-  pr.FOVL() = sam_bWideScreen ? 45.0f : 30.0f;
+
+  // [Cecil] Adjust FOV
+  FLOAT fFOV = sam_bWideScreen ? 45.0f : 30.0f;
+  AdjustFOV(*pdp, fFOV);
+
+  pr.FOVL() = fFOV;
   pr.ScreenBBoxL() = FLOATaabbox2D(FLOAT2D(0.0f, 0.0f), FLOAT2D((float)dpModel.GetWidth(), (float)dpModel.GetHeight()));
   pr.AspectRatioL() = 1.0f;
   pr.FrontClipDistanceL() = 0.3f;
