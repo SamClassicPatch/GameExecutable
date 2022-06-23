@@ -621,6 +621,10 @@ void RenderMouseCursor(CDrawPort *pdp) {
 }
 
 BOOL DoMenu(CDrawPort *pdp) {
+  // [Cecil] Keep trying to disable GameSpy until it falls through
+  extern void CECIL_DisableGameSpy(void);
+  CECIL_DisableGameSpy();
+
   pdp->Unlock();
   CDrawPort dpMenu(pdp, TRUE);
   dpMenu.Lock();

@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Cecil\CecilExtensions.cpp" />
     <ClCompile Include="Cecil\FOVPatch.cpp" />
+    <ClCompile Include="Cecil\MasterServerPatch.cpp" />
     <ClCompile Include="Cecil\Patcher\patcher.cpp" />
     <ClCompile Include="Cecil\Patches.cpp" />
     <ClCompile Include="Cecil\ScreenBlendPatch.cpp" />
