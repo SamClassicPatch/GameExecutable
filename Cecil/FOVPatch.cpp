@@ -41,8 +41,7 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &p
     // Wider FOV for wider resolutions (preserve vertical FOV instead of horizontal)
     if (sam_bUseVerticalFOV) {
       // Get aspect ratio of the current resolution
-      extern CDrawPort *pdp;
-      FLOAT fAspectRatio = (FLOAT)pdp->GetWidth() / (FLOAT)pdp->GetHeight();
+      FLOAT fAspectRatio = (FLOAT)dpDrawport.GetWidth() / (FLOAT)dpDrawport.GetHeight();
 
       // 4:3 resolution = 1.0 ratio; 16:9 = 1.333 etc.
       FLOAT fSquareRatio = fAspectRatio / (4.0f / 3.0f);
