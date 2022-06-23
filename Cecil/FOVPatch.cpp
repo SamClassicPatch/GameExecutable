@@ -16,7 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 
 #include "Cecil/CecilExtensions.h"
-#include "Cecil/Patcher/patcher.h"
+#include "Cecil/Patches.h"
 
 // Original function pointer
 static void (*pRenderView)(CWorld &, CEntity &, CAnyProjection3D &, CDrawPort &) = NULL;
@@ -66,7 +66,7 @@ extern void CECIL_ApplyFOVPatch(void) {
   CPrintF("  ::RenderView\n");
   pRenderView = &RenderView;
 
-  CPatch *pPatchSet = new CPatch(pRenderView, &P_RenderView, true, true);
+  NEW_PATCH(pPatchSet, pRenderView, &P_RenderView);
 
   if (!pPatchSet->ok()) {
     FatalError("Cannot set function patch for RenderView()!");

@@ -234,6 +234,9 @@
     <ClCompile Include="Cecil\Patcher\patcher.cpp">
       <Filter>Source Files\Patcher</Filter>
     </ClCompile>
+    <ClCompile Include="Cecil\Patches.cpp">
+      <Filter>Source Files\Cecil</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdLine.h">
@@ -439,6 +442,9 @@
     </ClInclude>
     <ClInclude Include="Cecil\Patcher\patcher_defines.h">
       <Filter>Header Files\Patcher headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Cecil\Patches.h">
+      <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

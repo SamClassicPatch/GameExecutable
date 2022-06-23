@@ -78,12 +78,17 @@ static void CECIL_RegisterCommand(void *pCommand) {
 // Custom initialization
 void CECIL_Init(void) {
   // Function patches
-  CPrintF("Intercepting Engine functions:\n");
+  extern void CECIL_InitPatches(void);
+  CECIL_InitPatches();
 
-  extern void CECIL_ApplyFOVPatch(void);
-  CECIL_ApplyFOVPatch();
+  {
+    CPrintF("Intercepting Engine functions:\n");
 
-  CPrintF("  done!\n");
+    extern void CECIL_ApplyFOVPatch(void);
+    CECIL_ApplyFOVPatch();
+
+    CPrintF("  done!\n");
+  }
 
   // Command registry
   _pShell->DeclareSymbol("void CECIL_RegisterCommand(INDEX);", &CECIL_RegisterCommand);
