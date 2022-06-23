@@ -22,6 +22,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 extern CSoundData *_psdPress;
 
 void CMGLevelButton::OnActivate(void) {
+  // [Cecil] Cannot select disabled levels
+  if (!mg_bEnabled) return;
+
   PlayMenuSound(_psdPress);
   IFeel_PlayEffect("Menu_press");
   _pGame->gam_strCustomLevel = mg_fnmLevel;

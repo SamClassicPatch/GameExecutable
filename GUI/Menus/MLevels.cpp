@@ -73,7 +73,23 @@ void CLevelsMenu::FillListItems(void) {
       gm_mgManualLevel[iInMenu].mg_fnmLevel = li.li_fnLevel;
       gm_mgManualLevel[iInMenu].mg_bEnabled = TRUE;
       gm_mgManualLevel[iInMenu].mg_iInList = iLabel;
+
+      // [Cecil] Levels from other games cannot be played
+      if (li.li_eFormat != CLevelInfo::E_LF_SE100) {
+        CTString strFormat = "1.50";
+
+        if (li.li_eFormat == CLevelInfo::E_LF_SSR) {
+          strFormat = "SSR";
+        }
+        
+        CTString strTip;
+        strTip.PrintF(TRANS("This is a level in the %s format, it cannot be played!"), strFormat);
+
+        gm_mgManualLevel[iInMenu].mg_strTip = strTip;
+        gm_mgManualLevel[iInMenu].mg_bEnabled = FALSE;
+      }
     }
+
     iLabel++;
   }
 
