@@ -15,7 +15,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include "CecilExtensions.h"
+#include "Cecil/CecilExtensions.h"
 
 // Render game in the background while in menu
 INDEX sam_bBackgroundGameRender = TRUE;
@@ -23,6 +23,9 @@ INDEX sam_bBackgroundGameRender = TRUE;
 // FOV patch
 INDEX sam_bUseVerticalFOV = TRUE;
 FLOAT sam_fCustomFOV = -1.0f;
+
+// Red screen on damage
+INDEX sam_bRedScreenOnDamage = TRUE;
 
 // Custom command registy
 static CDynamicContainer<CShellSymbol> _cCustomSymbols;
@@ -85,7 +88,9 @@ void CECIL_Init(void) {
     CPrintF("Intercepting Engine functions:\n");
 
     extern void CECIL_ApplyFOVPatch(void);
+    extern void CECIL_ApplyScreenBlendPatch(void);
     CECIL_ApplyFOVPatch();
+    CECIL_ApplyScreenBlendPatch();
 
     CPrintF("  done!\n");
   }
@@ -101,6 +106,9 @@ void CECIL_Init(void) {
     // FOV patch
     _pShell->DeclareSymbol("user INDEX sam_bUseVerticalFOV post:CECIL_RegisterCommand;", &sam_bUseVerticalFOV);
     _pShell->DeclareSymbol("user FLOAT sam_fCustomFOV      post:CECIL_RegisterCommand;", &sam_fCustomFOV);
+
+    // Red screen on damage
+    _pShell->DeclareSymbol("user INDEX sam_bRedScreenOnDamage post:CECIL_RegisterCommand;", &sam_bRedScreenOnDamage);
   }
 
   // Restore custom symbol values

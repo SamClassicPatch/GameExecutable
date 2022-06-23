@@ -20,5 +20,8 @@ extern INDEX sam_bBackgroundGameRender;
 extern INDEX sam_bUseVerticalFOV;
 extern FLOAT sam_fCustomFOV;
 
+// Red screen on damage
+extern INDEX sam_bRedScreenOnDamage;
+
 // Custom initialization
 void CECIL_Init(void);

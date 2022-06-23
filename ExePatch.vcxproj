@@ -143,6 +143,7 @@
     <ClCompile Include="Cecil\FOVPatch.cpp" />
     <ClCompile Include="Cecil\Patcher\patcher.cpp" />
     <ClCompile Include="Cecil\Patches.cpp" />
+    <ClCompile Include="Cecil\ScreenBlendPatch.cpp" />
     <ClCompile Include="Cecil\ScreenResolutions.cpp" />
     <ClCompile Include="Cecil\WindowModes.cpp" />
     <ClCompile Include="Cecil\WorldEntities.cpp" />

@@ -21,7 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // Patch storage
 CDynamicContainer<CPatch> _cPatches;
 
-void CECIL_InitPatches(void) {
+extern void CECIL_InitPatches(void) {
   // Add patch registry into symbols
   CShellSymbol &ssNew = *_pShell->sh_assSymbols.New(1);
 
