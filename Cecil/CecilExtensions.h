@@ -26,5 +26,8 @@ extern INDEX sam_bRedScreenOnDamage;
 // Get scaling multiplier based on screen height
 #define HEIGHT_MULTIPLIER(DrawPort) ((FLOAT)DrawPort->GetHeight() / 480.0f)
 
+// Adjust horizontal FOV according to wider aspect ratios
+void AdjustFOV(const CDrawPort &dp, FLOAT &fFOV);
+
 // Custom initialization
 void CECIL_Init(void);

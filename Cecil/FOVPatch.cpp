@@ -38,19 +38,9 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &p
     // Don't let FOV be invalid
     fNewFOV = Clamp(fNewFOV, 60.0f, 110.0f);
 
-    // Wider FOV for wider resolutions (preserve vertical FOV instead of horizontal)
+    // Adjust FOV for wider resolutions (preserve vertical FOV instead of horizontal)
     if (sam_bUseVerticalFOV) {
-      // Get aspect ratio of the current resolution
-      FLOAT fAspectRatio = (FLOAT)dpDrawport.GetWidth() / (FLOAT)dpDrawport.GetHeight();
-
-      // 4:3 resolution = 1.0 ratio; 16:9 = 1.333 etc.
-      FLOAT fSquareRatio = fAspectRatio / (4.0f / 3.0f);
-
-      // Take current FOV angle and apply square ratio to it
-      FLOAT fVerticalAngle = Tan(fNewFOV / 2.0f) * fSquareRatio;
-
-      // 90 FOV on 16:9 resolution will become 106.26...
-      fNewFOV = 2.0f * ATan(fVerticalAngle);
+      AdjustFOV(dpDrawport, fNewFOV);
 
       // Don't let FOV be invalid
       fNewFOV = Clamp(fNewFOV, 1.0f, 170.0f);

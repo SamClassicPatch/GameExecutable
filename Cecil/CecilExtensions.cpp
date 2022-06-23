@@ -27,6 +27,21 @@ FLOAT sam_fCustomFOV = -1.0f;
 // Red screen on damage
 INDEX sam_bRedScreenOnDamage = TRUE;
 
+// Adjust horizontal FOV according to wider aspect ratios
+void AdjustFOV(const CDrawPort &dp, FLOAT &fFOV) {
+  // Get aspect ratio of the current resolution
+  FLOAT fAspectRatio = (FLOAT)dp.GetWidth() / (FLOAT)dp.GetHeight();
+
+  // 4:3 resolution = 1.0 ratio; 16:9 = 1.333 etc.
+  FLOAT fSquareRatio = fAspectRatio / (4.0f / 3.0f);
+
+  // Take current FOV angle and apply square ratio to it
+  FLOAT fVerticalAngle = Tan(fFOV / 2.0f) * fSquareRatio;
+
+  // 90 FOV on 16:9 resolution will become 106.26...
+  fFOV = 2.0f * ATan(fVerticalAngle);
+};
+
 // Custom command registy
 static CDynamicContainer<CShellSymbol> _cCustomSymbols;
 
