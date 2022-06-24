@@ -1015,7 +1015,8 @@ static void SortByMod(void)     { SortByColumn(5); }
 static void SortByVer(void)     { SortByColumn(6); }
 
 extern void RefreshServerList(void) {
-  _pNetwork->EnumSessions(_pGUIM->gmServersMenu.m_bInternet);
+  // [Cecil] Own method
+  MS_EnumSessions(_pGUIM->gmServersMenu.m_bInternet);
 }
 
 void RefreshServerListManually(void) {

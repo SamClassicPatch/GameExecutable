@@ -749,6 +749,9 @@ void DoGame(void) {
 
   // if game is not started
   } else {
+    // [Cecil] Update master server
+    MS_EnumUpdate();
+
     // just handle broadcast messages
     _pNetwork->GameInactive();
   }
@@ -1454,7 +1457,7 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
   const BOOL bFullscreen = (eWindowMode == E_WM_FULLSCREEN);
 
   // [Cecil] Main window opening methods per type
-  void (*apWindowMethods[3])(PIX, PIX) = {
+  static void (*apWindowMethods[3])(PIX, PIX) = {
     &OpenMainWindowNormal,     // Windowed/normal
     &OpenMainWindowBorderless, // Borderless
     &OpenMainWindowFullScreen, // Fullscreen
