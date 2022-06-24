@@ -65,17 +65,8 @@ extern unsigned char *gsseckey(u_char *secure, u_char *key, int enctype);
 
 extern CTString _getCurrentGameTypeName();
 
-extern sockaddr_in _sinFrom;
-extern CHAR* _szBuffer;
-extern CHAR* _szIPPortBuffer;
-extern INT   _iIPPortBufferLen;
-extern CHAR* _szIPPortBufferLocal;
-extern INT   _iIPPortBufferLocalLen;
-
-extern BOOL _bServer;
-extern BOOL _bInitialized;
-extern BOOL _bActivated;
-extern BOOL _bActivatedLocal;
+// [Cecil] Use query data here
+using namespace QueryData;
 
 extern void _initializeWinsock(void);
 extern void _uninitWinsock();
@@ -84,8 +75,6 @@ extern void _sendPacket(const char* pubBuffer, INDEX iLen);
 extern void _sendPacketTo(const char* szBuffer, sockaddr_in* addsin);
 extern void _sendPacketTo(const char* pubBuffer, INDEX iLen, sockaddr_in* sin);
 extern void _setStatus(const CTString &strStatus);
-
-extern CDynamicStackArray<CServerRequest> ga_asrRequests;
 
 // Builds hearthbeat packet.
 void CLegacyQuery::BuildHearthbeatPacket(CTString &strPacket)

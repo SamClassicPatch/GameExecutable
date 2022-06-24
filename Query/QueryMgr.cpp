@@ -18,27 +18,34 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #pragma comment(lib, "wsock32.lib")
 
-WSADATA* _wsaData = NULL;
-SOCKET _socket = NULL;
+// [Cecil] Put under the namespace
+namespace QueryData {
+  WSADATA *_wsaData = NULL;
+  SOCKET _socket = NULL;
 
-sockaddr_in* _sin = NULL;
-sockaddr_in* _sinLocal = NULL;
-sockaddr_in _sinFrom;
+  sockaddr_in* _sin = NULL;
+  sockaddr_in* _sinLocal = NULL;
+  sockaddr_in _sinFrom;
 
-CHAR* _szBuffer = NULL;
-CHAR* _szIPPortBuffer = NULL;
-INT   _iIPPortBufferLen = 0;
-CHAR* _szIPPortBufferLocal = NULL;
-INT   _iIPPortBufferLocalLen = 0;
+  CHAR *_szBuffer = NULL;
+  CHAR *_szIPPortBuffer = NULL;
+  INT   _iIPPortBufferLen = 0;
+  CHAR *_szIPPortBufferLocal = NULL;
+  INT   _iIPPortBufferLocalLen = 0;
 
-BOOL _bServer = FALSE;
-BOOL _bInitialized = FALSE;
-BOOL _bActivated = FALSE;
-BOOL _bActivatedLocal = FALSE;
+  BOOL _bServer = FALSE;
+  BOOL _bInitialized = FALSE;
+  BOOL _bActivated = FALSE;
+  BOOL _bActivatedLocal = FALSE;
 
-TIME _tmLastHeartbeat = -1.0F;
+  CDynamicStackArray<CServerRequest> ga_asrRequests;
+};
 
-CDynamicStackArray<CServerRequest> ga_asrRequests;
+// [Cecil] Use query data here
+using namespace QueryData;
+
+// [Cecil] Made static
+static TIME _tmLastHeartbeat = -1.0f;
 
 extern CTString ms_strGameAgentMS = "master.333networks.com";
 extern CTString ms_strMSLegacy = "master.333networks.com";

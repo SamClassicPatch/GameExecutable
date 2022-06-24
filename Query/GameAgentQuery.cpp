@@ -17,13 +17,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern CTString _getCurrentGameTypeName();
 
-extern sockaddr_in _sinFrom;
-extern CHAR* _szBuffer;
-
-extern BOOL _bServer;
-extern BOOL _bInitialized;
-extern BOOL _bActivated;
-extern BOOL _bActivatedLocal;
+// [Cecil] Use query data here
+using namespace QueryData;
 
 extern void _sendPacket(const char* szBuffer);
 extern void _sendPacket(const char* pubBuffer, INDEX iLen);
@@ -31,8 +26,6 @@ extern void _sendPacketTo(const char* szBuffer, sockaddr_in* addsin);
 extern void _sendPacketTo(const char* pubBuffer, INDEX iLen, sockaddr_in* sin);
 extern void _setStatus(const CTString &strStatus);
 extern int _recvPacket();
-
-extern CDynamicStackArray<CServerRequest> ga_asrRequests;
 
 // Builds hearthbeat packet.
 void CGameAgentQuery::BuildHearthbeatPacket(CTString &strPacket, INDEX iChallenge)

@@ -117,4 +117,24 @@ class CServerRequest
     void Clear(void);
 };
 
+// [Cecil] Made query data available from anywhere
+namespace QueryData {
+  // Used by all
+  extern sockaddr_in _sinFrom;
+  extern CHAR* _szBuffer;
+
+  extern BOOL _bServer;
+  extern BOOL _bInitialized;
+  extern BOOL _bActivated;
+  extern BOOL _bActivatedLocal;
+
+  extern CDynamicStackArray<CServerRequest> ga_asrRequests;
+
+  // Used by MSLegacy
+  extern CHAR *_szIPPortBuffer;
+  extern INT   _iIPPortBufferLen;
+  extern CHAR *_szIPPortBufferLocal;
+  extern INT   _iIPPortBufferLocalLen;
+};
+
 #endif // include once check
