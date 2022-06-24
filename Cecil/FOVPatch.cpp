@@ -33,13 +33,10 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &p
     // Display projection FOV
     if (sam_bCheckFOV) CPrintF("View: %.2f\n", fNewFOV);
 
-    // Set custom FOV
-    if (sam_fCustomFOV > 0.0f) {
-      fNewFOV = sam_fCustomFOV;
+    // Set custom FOV if not zooming in
+    if (sam_fCustomFOV > 0.0f && fNewFOV > 80.0f) {
+      fNewFOV = Clamp(sam_fCustomFOV, 60.0f, 110.0f);
     }
-
-    // Don't let FOV be invalid
-    fNewFOV = Clamp(fNewFOV, 60.0f, 110.0f);
 
     // Display desired vertical FOV
     if (sam_bCheckFOV) CPrintF("VFOV: %.2f\n", fNewFOV);
