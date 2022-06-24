@@ -66,6 +66,10 @@ extern void MS_SendHeartbeat(INDEX iChallenge);
 extern void MS_EnumTrigger(BOOL bInternet);
 extern void MS_EnumUpdate(void);
 extern void MS_EnumCancel(void);
+
+// [Cecil] Replacement for CNetworkLibrary::EnumSessions
+extern void MS_EnumSessions(BOOL bInternet);
+
 //
 
 // GameAgent Master Server

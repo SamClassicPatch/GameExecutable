@@ -16,6 +16,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
+#include <Engine/Network/CommunicationInterface.h>
+
 #pragma comment(lib, "wsock32.lib")
 
 // [Cecil] Put under the namespace
@@ -452,3 +454,20 @@ extern void MS_EnumCancel(void)
     _uninitWinsock();
   }
 }
+
+// [Cecil] Replacement for CNetworkLibrary::EnumSessions
+void MS_EnumSessions(BOOL bInternet)
+{
+  // Clear old sessions
+  FORDELETELIST(CNetworkSession, ns_lnNode, _pNetwork->ga_lhEnumeratedSessions, itns) {
+    delete &*itns;
+  }
+
+  if (!_cmiComm.IsNetworkEnabled()) {
+    // Have to enumerate as server
+    _cmiComm.PrepareForUse(TRUE, FALSE);
+  }
+
+  // Enumerate sessions using new query manager
+  MS_EnumTrigger(bInternet);
+};
