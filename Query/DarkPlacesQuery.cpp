@@ -89,8 +89,6 @@ void CDarkPlacesQuery::ServerParsePacket(INDEX iLength)
     string += 4;
     iLength -= 4;
     
-    //CPrintF("Received DarkPlaces text command!\n");
-    
     // Short info.
     if (iLength >= 7 && !memcmp(data, "getinfo", 7))
     {
@@ -100,10 +98,9 @@ void CDarkPlacesQuery::ServerParsePacket(INDEX iLength)
 
       const char *challenge = NULL;
       
-			if (iLength > 8 && string[7] == ' ')
-				challenge = string + 8;
-
-      //CPrintF("Received 'getinfo' text command!\n");
+      if (iLength > 8 && string[7] == ' ') {
+        challenge = string + 8;
+      }
       
       CTString strPacket;
       
@@ -122,8 +119,9 @@ void CDarkPlacesQuery::ServerParsePacket(INDEX iLength)
 
       const char *challenge = NULL;
       
-			if (iLength > 10 && string[9] == ' ')
-				challenge = string + 10;
+      if (iLength > 10 && string[9] == ' ') {
+        challenge = string + 10;
+      }
       
       CTString strPacket;
 
@@ -154,7 +152,6 @@ void CDarkPlacesQuery::ServerParsePacket(INDEX iLength)
       CPrintF("Data[%d]: %s\n", iLength, data);
     }
   }
-  //CPrintF("Received: %s\n", &_szBuffer[0]);
 }
 
 // Parse server-list received from the Master Server.
@@ -308,31 +305,29 @@ void DarkPlaces_ClientParsePacket(INDEX iLength)
           case '\\': {
             //if (strKey != "gamemode") {
               if (bReadValue) {
-                //CPrintF("  %s = %s\n", strKey, strValue);
-                
                 // we're done reading the value, check which key it was
                 if (strKey == "gamename") {
-                    strGameName = strValue;
+                  strGameName = strValue;
                 } else if (strKey == "gameversion") {
-                    strVersion = strValue;
+                  strVersion = strValue;
                 } else if (strKey == "location") {
-                    strServerLocation = strValue;
+                  strServerLocation = strValue;
                 } else if (strKey == "hostname") {
-                    strSessionName = strValue;
+                  strSessionName = strValue;
                 } else if (strKey == "hostport") {
-                    strGamePort = strValue;
+                  strGamePort = strValue;
                 } else if (strKey == "qcstatus") {
-                    strGameMode = strValue;
+                  strGameMode = strValue;
                 } else if (strKey == "mapname") {
-                    strLevel = strValue;
+                  strLevel = strValue;
                 } else if (strKey == "modname") {
-                    strActiveMod = strValue;
+                  strActiveMod = strValue;
                 } else if (strKey == "clients") {
-                    strPlayers = strValue;
+                  strPlayers = strValue;
                 } else if (strKey == "bots") {
                 } else if (strKey == "protocol") {
                 } else if (strKey == "sv_maxclients") {
-                    strMaxPlayers = strValue;
+                  strMaxPlayers = strValue;
                 } else {
                   if (ms_bDarkPlacesDebug) {
                     CPrintF("Unknown DarkPlaces parameter key '%s'!\n", strKey);

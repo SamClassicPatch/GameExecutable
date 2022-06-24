@@ -335,7 +335,7 @@ void CLegacyQuery::EnumTrigger(BOOL bInternet)
             iDynsz += BUFFSZ;
             _szIPPortBuffer = (char*)realloc(_szIPPortBuffer, iDynsz);
             if (!_szIPPortBuffer) {
-              CPrintF("Error reallocation memory buffer!\n");
+                CPrintF("Error reallocation memory buffer!\n");
                 if (_szIPPortBuffer) free (_szIPPortBuffer);
                 CLEANMSSRUFF1;
                 return;
@@ -411,27 +411,27 @@ static void ParseStatusResponse(sockaddr_in &_sinClient, BOOL bIgnorePing)
           if (bReadValue) {
             // we're done reading the value, check which key it was
             if (strKey == "gamename") {
-                strGameName = strValue;
+              strGameName = strValue;
             } else if (strKey == "gamever") {
-                strVersion = strValue;
+              strVersion = strValue;
             } else if (strKey == "location") {
-                strServerLocation = strValue;
+              strServerLocation = strValue;
             } else if (strKey == "hostname") {
-                strSessionName = strValue;
+              strSessionName = strValue;
             } else if (strKey == "hostport") {
-                strGamePort = strValue;
+              strGamePort = strValue;
             } else if (strKey == "mapname") {
-                strLevel = strValue;
+              strLevel = strValue;
             } else if (strKey == "gametype") {
-                strGameType = strValue;
+              strGameType = strValue;
             } else if (strKey == "activemod") {
-                strActiveMod = strValue;
+              strActiveMod = strValue;
             } else if (strKey == "numplayers") {
-                strPlayers = strValue;
+              strPlayers = strValue;
             } else if (strKey == "maxplayers") {
-                strMaxPlayers = strValue;
+              strMaxPlayers = strValue;
             } else {
-                //CPrintF("Unknown GameAgent parameter key '%s'!", strKey);
+              //CPrintF("Unknown MSLegacy parameter key '%s'!", strKey);
             }
             // reset temporary holders
             strKey = "";
@@ -444,9 +444,9 @@ static void ParseStatusResponse(sockaddr_in &_sinClient, BOOL bIgnorePing)
       default: {
         // read into the value or into the key, depending where we are
         if (bReadValue) {
-            strValue.InsertChar(strValue.Length(), *pszPacket);
+          strValue.InsertChar(strValue.Length(), *pszPacket);
         } else {
-            strKey.InsertChar(strKey.Length(), *pszPacket);
+          strKey.InsertChar(strKey.Length(), *pszPacket);
         }
       } break;
     }
@@ -570,8 +570,8 @@ DWORD WINAPI _MS_Thread(LPVOID lpParam)
         sPch = strstr(_szBuffer, "\\gamename\\serioussamse\\");
 
         if (!sPch) {
-            CPrintF("Unknown query server response!\n");
-            return -1;
+          CPrintF("Unknown query server response!\n");
+          return -1;
         } else {
           ParseStatusResponse(_sinClient, FALSE);
         }

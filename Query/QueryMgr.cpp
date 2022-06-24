@@ -285,7 +285,7 @@ CServerRequest::CServerRequest(void)
   Clear();
 }
 
-CServerRequest::~CServerRequest(void) { }
+CServerRequest::~CServerRequest(void) {}
 
 void CServerRequest::Clear(void)
 {
@@ -441,7 +441,6 @@ extern void MS_EnumUpdate(void)
 extern void MS_EnumCancel(void)
 {
   if (_bInitialized) {
-    CPrintF("...MS_EnumCancel!\n");
     ga_asrRequests.Clear();
     _uninitWinsock();
   }
