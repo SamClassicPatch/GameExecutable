@@ -95,6 +95,9 @@ void CLegacyQuery::BuildHearthbeatPacket(CTString &strPacket)
 
 void CLegacyQuery::ServerParsePacket(INDEX iLength)
 {
+  // [Cecil] Moved here from MS_OnServerUpdate()
+  _szBuffer[iLength] = 0;
+
   unsigned char *data = (unsigned char*)&_szBuffer[0];
 
   char *sPch1 = NULL, *sPch2 = NULL, *sPch3 = NULL, *sPch4 = NULL, *sPch5;

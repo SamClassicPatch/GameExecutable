@@ -22,13 +22,32 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // [Cecil] Needed by every master server
 #include <Engine/CurrentVersion.h>
 
-extern CTString ms_strServer;
+extern CTString ms_strGameAgentMS;
 extern CTString ms_strMSLegacy;
 extern CTString ms_strDarkPlacesMS;
 extern CTString ms_strGameName;
-extern BOOL ms_bMSLegacy;
-extern BOOL ms_bDarkPlacesMS;
-extern BOOL ms_bDarkPlacesDebug;
+
+// [Cecil] Master server protocols
+enum EMasterServerProtocols {
+  E_MS_LEGACY     = 0, // Default
+  E_MS_DARKPLACES = 1, // Dark Places
+  E_MS_GAMEAGENT  = 2, // SE1.10
+
+  E_MS_MAX,
+};
+
+// [Cecil] Current master server protocol
+extern INDEX ms_iProtocol;
+
+// [Cecil] Get current protocol
+inline INDEX GetProtocol(void) {
+  if (ms_iProtocol < E_MS_LEGACY || ms_iProtocol >= E_MS_MAX) {
+    return E_MS_LEGACY;
+  }
+  return ms_iProtocol;
+};
+
+extern INDEX ms_bDarkPlacesDebug;
 
 // [Cecil] Get amount of server clients
 INDEX GetClientCount(void);

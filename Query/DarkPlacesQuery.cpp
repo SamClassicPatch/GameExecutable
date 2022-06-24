@@ -61,14 +61,15 @@ void DarkPlaces_BuildStatusResponse(const char* challenge, CTString &strPacket, 
   INDEX ctMaxPlayers = _pNetwork->ga_sesSessionState.ses_ctMaxPlayers;
   
   strPacket.PrintF("\xFF\xFF\xFF\xFF%s\x0A"
-            "\\gamename\\%s\\modname\\%s\\gameversion\\%d\\sv_maxclients\\%d"
+            "\\gamename\\%s\\modname\\%s\\gameversion\\%s\\sv_maxclients\\%d"
             "\\clients\\%d\\bots\\%d\\mapname\\%s\\hostname\\%s\\protocol\\%d"
             "%s%s"
             "%s%s"
             "%s%s"
             "%s",
             bFullStatus ? "statusResponse" : "infoResponse",
-            ms_strGameName, "", "$version", ctMaxPlayers,
+            // [Cecil] TEMP: "$version" -> _SE_VER_STRING
+            ms_strGameName, "", _SE_VER_STRING, ctMaxPlayers,
             GetClientCount(), 0, _pNetwork->ga_World.wo_strName, _pShell->GetString("gam_strSessionName"), DP_NET_PROTOCOL_VERSION,
             "\\qcstatus\\", strStatus,
             challenge ? "\\challenge\\" : "", challenge ? challenge : "",

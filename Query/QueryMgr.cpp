@@ -40,15 +40,16 @@ TIME _tmLastHeartbeat = -1.0F;
 
 CDynamicStackArray<CServerRequest> ga_asrRequests;
 
-extern CTString ms_strServer = "master.333networks.com";
+extern CTString ms_strGameAgentMS = "master.333networks.com";
 extern CTString ms_strMSLegacy = "master.333networks.com";
 extern CTString ms_strDarkPlacesMS = "192.168.1.4";
 
 extern CTString ms_strGameName = "serioussamse";
 
-extern BOOL ms_bMSLegacy = TRUE;
-extern BOOL ms_bDarkPlacesMS = FALSE;
-extern BOOL ms_bDarkPlacesDebug = FALSE;
+// [Cecil] Current master server protocol
+extern INDEX ms_iProtocol = E_MS_LEGACY;
+
+extern INDEX ms_bDarkPlacesDebug = FALSE;
 
 // [Cecil] Get amount of server clients
 INDEX GetClientCount(void) {
@@ -106,21 +107,23 @@ void _initializeWinsock(void)
     return;
   }
 
+  // [Cecil] Arranged in an array
+  static const CTString astrIPs[E_MS_MAX] = {
+    ms_strMSLegacy,
+    ms_strDarkPlacesMS,
+    ms_strGameAgentMS,
+  };
+
+  // [Cecil] Select IP first
+  const CTString &strMasterServerIP = astrIPs[GetProtocol()];
+
   // get the host IP
-  hostent* phe;
-  
-  if (ms_bDarkPlacesMS) {
-    phe = gethostbyname(ms_strDarkPlacesMS);
-  } else if (!ms_bMSLegacy) {
-    phe = gethostbyname(ms_strServer);
-  } else {
-    phe = gethostbyname(ms_strMSLegacy);
-  }
+  hostent* phe = gethostbyname(strMasterServerIP); // [Cecil] Get host
 
   // if we couldn't resolve the hostname
   if (phe == NULL) {
     // report and stop
-    CPrintF("Couldn't resolve GameAgent server %s.\n", ms_strServer);
+    CPrintF("Couldn't resolve the host server '%s'\n", strMasterServerIP);
     _uninitWinsock();
     return;
   }
@@ -129,15 +132,16 @@ void _initializeWinsock(void)
   _sin = new sockaddr_in;
   _sin->sin_family = AF_INET;
   _sin->sin_addr.s_addr = *(ULONG*)phe->h_addr_list[0];
+
+  // [Cecil] Arranged in an array
+  static const UWORD aiPorts[E_MS_MAX] = {
+    27900,
+    27950,
+    9005,
+  };
   
   // [SSE]
-  if (ms_bDarkPlacesMS) {
-    _sin->sin_port = htons(27950);
-  } else if (!ms_bMSLegacy) {
-    _sin->sin_port = htons(9005);
-  } else {
-    _sin->sin_port = htons(27900);
-  }
+  _sin->sin_port = htons(aiPorts[GetProtocol()]);
 
   // create the socket
   _socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -212,7 +216,7 @@ int _recvPacket()
 CTString _getGameModeName(INDEX iGameMode)
 {
   // get function that will provide us the info about gametype
-  CShellSymbol *pss = _pShell->GetSymbol("GetGameTypeNameSS", /*bDeclaredOnly=*/ TRUE);
+  CShellSymbol *pss = _pShell->GetSymbol("GetGameTypeName", /*bDeclaredOnly=*/ TRUE);
 
   if (pss == NULL) {
     return "";
@@ -225,7 +229,7 @@ CTString _getGameModeName(INDEX iGameMode)
 CTString _getGameModeShortName(INDEX iGameMode)
 {
   // get function that will provide us the info about gametype
-  CShellSymbol *pss = _pShell->GetSymbol("GetGameTypeShortNameSS", /*bDeclaredOnly=*/ TRUE);
+  CShellSymbol *pss = _pShell->GetSymbol("GetGameTypeShortName", /*bDeclaredOnly=*/ TRUE); // [Cecil] NOTE: SSE-specific!
 
   if (pss == NULL) {
     return "";
@@ -252,16 +256,18 @@ extern void MS_SendHeartbeat(INDEX iChallenge)
   CTString strPacket;
   
   // [SSE]
-  if (ms_bDarkPlacesMS) {
-    CDarkPlacesQuery::BuildHearthbeatPacket(strPacket);
+  switch (GetProtocol()) {
+    case E_MS_LEGACY:
+      CLegacyQuery::BuildHearthbeatPacket(strPacket);
+      break;
 
-  // GameAgent
-  } else if (!ms_bMSLegacy) {
-    CGameAgentQuery::BuildHearthbeatPacket(strPacket, iChallenge);
+    case E_MS_DARKPLACES:
+      CDarkPlacesQuery::BuildHearthbeatPacket(strPacket);
+      break;
 
-  // MSLegacy
-  } else {
-    CLegacyQuery::BuildHearthbeatPacket(strPacket);
+    case E_MS_GAMEAGENT:
+      CGameAgentQuery::BuildHearthbeatPacket(strPacket, iChallenge);
+      break;
   }
 
   _sendPacket(strPacket);
@@ -296,25 +302,25 @@ extern void MS_OnServerStart(void)
   _bInitialized = TRUE;
   
   // [SSE]
-  if (ms_bDarkPlacesMS) {
-    CTString strPacket;
-    strPacket.PrintF("\xFF\xFF\xFF\xFFheartbeat DarkPlaces\x0A");
-    
-    _sendPacket(strPacket);
-    
-    return;
-  }
-  //
+  switch (GetProtocol()) {
+    // [Cecil] Unused in SSE
+    /*case E_MS_LEGACY: {
+      CTString strPacket;
+      strPacket.PrintF("\\heartbeat\\%hu\\gamename\\serioussamse", (_pShell->GetINDEX("net_iPort") + 1));
 
-  // GameAgent
-  if (!ms_bMSLegacy) {
-    _sendPacket("q");
+      _sendPacket(strPacket);
+    } break;*/
+
+    case E_MS_DARKPLACES: {
+      CTString strPacket;
+      strPacket.PrintF("\xFF\xFF\xFF\xFFheartbeat DarkPlaces\x0A");
     
-  // MSLegacy
-  //} else {
-  //  CTString strPacket;
-  //  strPacket.PrintF("\\heartbeat\\%hu\\gamename\\serioussamse", (_pShell->GetINDEX("net_iPort") + 1));
-  //  _sendPacket(strPacket);
+      _sendPacket(strPacket);
+    } break;
+
+    case E_MS_GAMEAGENT: {
+      _sendPacket("q");
+    } break;
   }
 }
 
@@ -325,11 +331,14 @@ extern void MS_OnServerEnd(void)
     return;
   }
 
-  if (ms_bDarkPlacesMS) {
+  const INDEX iProtocol = GetProtocol();
+
+  if (iProtocol == E_MS_DARKPLACES) {
     MS_SendHeartbeat(0);
     MS_SendHeartbeat(0);
-    // TODO: Write here something
-  } else if (ms_bMSLegacy) {
+
+  // [Cecil] Anything but GameAgent
+  } else if (iProtocol != E_MS_GAMEAGENT) {
     CTString strPacket;
     strPacket.PrintF("\\heartbeat\\%hu\\gamename\\serioussamse\\statechanged", (_pShell->GetINDEX("net_iPort") + 1));
     _sendPacket(strPacket);
@@ -352,21 +361,22 @@ extern void MS_OnServerUpdate(void)
 
   if (iLength > 0)
   {
-    if (ms_bDarkPlacesMS) {
-      CDarkPlacesQuery::ServerParsePacket(iLength);
-    } else if (!ms_bMSLegacy) {
-      CGameAgentQuery::ServerParsePacket(iLength);
-    } else {
-      _szBuffer[iLength] = 0;
-      CLegacyQuery::ServerParsePacket(iLength);
-    }
- }
+    // [Cecil] Arranged in an array
+    static void (*apParsePacket[E_MS_MAX])(INDEX) = {
+      &CLegacyQuery::ServerParsePacket,
+      &CDarkPlacesQuery::ServerParsePacket,
+      &CGameAgentQuery::ServerParsePacket,
+    };
 
- // send a heartbeat every 150 seconds
- if (_pTimer->GetRealTimeTick() - _tmLastHeartbeat >= 150.0f) {
+    // [SSE]
+    (*apParsePacket[GetProtocol()])(iLength);
+  }
+
+  // send a heartbeat every 150 seconds
+  if (_pTimer->GetRealTimeTick() - _tmLastHeartbeat >= 150.0f) {
     MS_SendHeartbeat(0);
- }
-}
+  }
+};
 
 // Notify master server that the server state has changed.
 extern void MS_OnServerStateChanged(void)
@@ -375,14 +385,20 @@ extern void MS_OnServerStateChanged(void)
     return;
   }
 
-  if (ms_bDarkPlacesMS) {
-    // TODO: Write here something
-  } else if (!ms_bMSLegacy) {
-    _sendPacket("u");
-  } else {
-    CTString strPacket;
-    strPacket.PrintF("\\heartbeat\\%hu\\gamename\\serioussamse\\statechanged", (_pShell->GetINDEX("net_iPort") + 1));
-    _sendPacket(strPacket);
+  // [Cecil] Arranged in a switch-case
+  switch (GetProtocol()) {
+    case E_MS_LEGACY: {
+      CTString strPacket;
+      strPacket.PrintF("\\heartbeat\\%hu\\gamename\\serioussamse\\statechanged", (_pShell->GetINDEX("net_iPort") + 1));
+
+      _sendPacket(strPacket);
+    } break;
+
+    // Nothing for E_MS_DARKPLACES
+
+    case E_MS_GAMEAGENT: {
+      _sendPacket("u");
+    } break;
   }
 }
 
@@ -393,17 +409,14 @@ extern void MS_EnumTrigger(BOOL bInternet)
     return;
   }
   
-  if (ms_bDarkPlacesMS) {
-    CDarkPlacesQuery::EnumTrigger(bInternet);
-    return; 
-  }
-  
-  if (ms_bMSLegacy) {
-    CLegacyQuery::EnumTrigger(bInternet);
-    return;
-  }
-  
-  CGameAgentQuery::EnumTrigger(bInternet);
+  // [Cecil] Arranged in an array
+  static void (*apEnumTrigger[E_MS_MAX])(BOOL) = {
+    &CLegacyQuery::EnumTrigger,
+    &CDarkPlacesQuery::EnumTrigger,
+    &CGameAgentQuery::EnumTrigger,
+  };
+
+  (*apEnumTrigger[GetProtocol()])(bInternet);
 }
 
 // Client update for enumerations.
@@ -412,19 +425,16 @@ extern void MS_EnumUpdate(void)
   if ((_socket == NULL) || (!_bInitialized)) {
     return;
   }
+  
+  // [Cecil] Arranged in an array
+  static void (*apEnumUpdate[E_MS_MAX])(void) = {
+    &CLegacyQuery::EnumUpdate,
+    &CDarkPlacesQuery::EnumUpdate,
+    &CGameAgentQuery::EnumUpdate,
+  };
 
   // [SSE]
-  if (ms_bDarkPlacesMS) {
-    CDarkPlacesQuery::EnumUpdate();
-  
-  // GameAgent
-  } else if (!ms_bMSLegacy) {
-    CGameAgentQuery::EnumUpdate();
-
-  // MSLegacy
-  } else {
-    CLegacyQuery::EnumUpdate();
-  }
+  (*apEnumUpdate[GetProtocol()])();
 }
 
 // Cancel the master server serverlist enumeration.
