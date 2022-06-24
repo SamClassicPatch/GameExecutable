@@ -148,7 +148,7 @@ void CMGButton::Render(CDrawPort *pdp) {
   }
 
   // put cursor if editing
-  if (mg_bEditing && (((ULONG)(_pTimer->GetRealTimeTick()) * 2) & 1)) {
+  if (mg_bEditing && ULONG(_pTimer->GetRealTimeTick() * 2.0f) & 1) {
     PIX pixX = box.Min()(1) + GetCharOffset(pdp, iCursor);
     if (mg_strLabel != "") {
       pixX += box.Size()(1) * 0.55f;
