@@ -16,19 +16,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include <Core/Base/Shell.h>
-#include <Core/Base/Console.h>
-#include <Core/Base/CTString.h>
-
-#include <Engine/Engine.h>
-#include <Engine/CurrentVersion.h>
-#include <Engine/Entities/Entity.h>
-#include <Engine/Network/Server.h>
-#include <Engine/Network/Network.h>
-#include <Engine/Network/SessionState.h>
-
-#include <Engine/Query/QueryMgr.h>
-
 #define DP_NET_PROTOCOL_VERSION 3
 
 extern CTString _getCurrentGameTypeName();
@@ -59,7 +46,7 @@ void CDarkPlacesQuery::BuildHearthbeatPacket(CTString &strPacket)
 // Builds game status string.
 void DarkPlaces_BuildQCStatus(CTString &strStatus)
 {
-  INDEX ctFreeSlots = _pNetwork->ga_sesSessionState.ses_ctMaxPlayers - _pNetwork->ga_srvServer.GetClientCount();
+  INDEX ctFreeSlots = _pNetwork->ga_sesSessionState.ses_ctMaxPlayers - GetClientCount();
   
   strStatus.PrintF("%s:%s:P%d:S%d:F%d:M%s::score!!", _getCurrentGameTypeName(), "0.8.2", 0, ctFreeSlots, 0, ms_strGameName);
 }
@@ -82,7 +69,7 @@ void DarkPlaces_BuildStatusResponse(const char* challenge, CTString &strPacket, 
             "%s",
             bFullStatus ? "statusResponse" : "infoResponse",
             ms_strGameName, "", "$version", ctMaxPlayers,
-            _pNetwork->ga_srvServer.GetClientCount(), 0, _pNetwork->ga_World.wo_strName, _pShell->GetString("gam_strSessionName"), DP_NET_PROTOCOL_VERSION,
+            GetClientCount(), 0, _pNetwork->ga_World.wo_strName, _pShell->GetString("gam_strSessionName"), DP_NET_PROTOCOL_VERSION,
             "\\qcstatus\\", strStatus,
             challenge ? "\\challenge\\" : "", challenge ? challenge : "",
             "", "", // Crypto Key
@@ -101,13 +88,13 @@ void CDarkPlacesQuery::ServerParsePacket(INDEX iLength)
     string += 4;
     iLength -= 4;
     
-    //CDebugF("Received DarkPlaces text command!\n");
+    //CPrintF("Received DarkPlaces text command!\n");
     
     // Short info.
     if (iLength >= 7 && !memcmp(data, "getinfo", 7))
     {
       if (ms_bDarkPlacesDebug) {
-        CDebugF("Received 'getinfo' text command!\n");
+        CPrintF("Received 'getinfo' text command!\n");
       }
 
       const char *challenge = NULL;
@@ -115,7 +102,7 @@ void CDarkPlacesQuery::ServerParsePacket(INDEX iLength)
 			if (iLength > 8 && string[7] == ' ')
 				challenge = string + 8;
 
-      //CDebugF("Received 'getinfo' text command!\n");
+      //CPrintF("Received 'getinfo' text command!\n");
       
       CTString strPacket;
       
@@ -129,7 +116,7 @@ void CDarkPlacesQuery::ServerParsePacket(INDEX iLength)
     if (iLength >= 9 && !memcmp(string, "getstatus", 9))
     {
       if (ms_bDarkPlacesDebug) {
-        CDebugF("Received 'getstatus' text command!\n");
+        CPrintF("Received 'getstatus' text command!\n");
       }
 
       const char *challenge = NULL;
@@ -155,25 +142,25 @@ void CDarkPlacesQuery::ServerParsePacket(INDEX iLength)
       _sendPacketTo(strPacket, &_sinFrom);
       
       if (ms_bDarkPlacesDebug) {
-        CDebugF("Received 'getchallenge' text command!\n");
+        CPrintF("Received 'getchallenge' text command!\n");
       }
       
       return;
     }
     
     if (ms_bDarkPlacesDebug) {
-      CDebugF("Received unknown text command!\n");
-      CDebugF("Data[%d]: %s\n", iLength, data);
+      CPrintF("Received unknown text command!\n");
+      CPrintF("Data[%d]: %s\n", iLength, data);
     }
   }
-  //CDebugF("Received: %s\n", &_szBuffer[0]);
+  //CPrintF("Received: %s\n", &_szBuffer[0]);
 }
 
 // Parse server-list received from the Master Server.
 void DarkPlaces_ParseServerList(unsigned char *data, INDEX iLength, BOOL bExtended)
 {
   if (ms_bDarkPlacesDebug) {
-    CDebugF("Data Length: %d\n", iLength);
+    CPrintF("Data Length: %d\n", iLength);
   }
   
   while (iLength >= 7)
@@ -189,7 +176,7 @@ void DarkPlaces_ParseServerList(unsigned char *data, INDEX iLength, BOOL bExtend
         strIP.PrintF("%u.%u.%u.%u", data[1], data[2], data[3], data[4]);
     
         if (ms_bDarkPlacesDebug) {
-          CDebugF("%s:%hu\n", strIP, uPort);
+          CPrintF("%s:%hu\n", strIP, uPort);
         }
         
         sockaddr_in sinServer;
@@ -220,7 +207,7 @@ void DarkPlaces_ParseServerList(unsigned char *data, INDEX iLength, BOOL bExtend
     // Unknown Data.
     } else {
       if (ms_bDarkPlacesDebug) {
-        CDebugF("Error! Unknown data while parsing server list!\n");
+        CPrintF("Error! Unknown data while parsing server list!\n");
       }
       break;
     }
@@ -243,7 +230,7 @@ void DarkPlaces_ClientParsePacket(INDEX iLength)
     if (iLength >= 19 && !memcmp(string, "getserversResponse\\", 19))
     {
       if (ms_bDarkPlacesDebug) {
-        CDebugF("Received 'getserversResponse\\'!\n");
+        CPrintF("Received 'getserversResponse\\'!\n");
       }
 
       data += 18;
@@ -259,7 +246,7 @@ void DarkPlaces_ClientParsePacket(INDEX iLength)
     if (iLength >= 21 && !memcmp(string, "getserversExtResponse", 21))
     {
       if (ms_bDarkPlacesDebug) {
-        CDebugF("Received 'getserversExtResponse'!\n");
+        CPrintF("Received 'getserversExtResponse'!\n");
       }
 
       data += 21;
@@ -275,7 +262,7 @@ void DarkPlaces_ClientParsePacket(INDEX iLength)
     if (iLength >= 15 && !memcmp(string, "statusResponse\x0A", 15))
     {
       if (ms_bDarkPlacesDebug) {
-        CDebugF("Received 'statusResponse'!\n");
+        CPrintF("Received 'statusResponse'!\n");
       }
       
       data += 15;
@@ -283,7 +270,7 @@ void DarkPlaces_ClientParsePacket(INDEX iLength)
       iLength -= 15;
 
       if (ms_bDarkPlacesDebug) {
-        CDebugF("Data[%d]: %s\n", iLength, data);
+        CPrintF("Data[%d]: %s\n", iLength, data);
       }  
 
       CNetworkSession &ns = *new CNetworkSession;
@@ -320,7 +307,7 @@ void DarkPlaces_ClientParsePacket(INDEX iLength)
           case '\\': {
             //if (strKey != "gamemode") {
               if (bReadValue) {
-                //CDebugF("  %s = %s\n", strKey, strValue);
+                //CPrintF("  %s = %s\n", strKey, strValue);
                 
                 // we're done reading the value, check which key it was
                 if (strKey == "gamename") {
@@ -347,7 +334,7 @@ void DarkPlaces_ClientParsePacket(INDEX iLength)
                     strMaxPlayers = strValue;
                 } else {
                   if (ms_bDarkPlacesDebug) {
-                    CErrorF("Unknown DarkPlaces parameter key '%s'!\n", strKey);
+                    CPrintF("Unknown DarkPlaces parameter key '%s'!\n", strKey);
                   }
                 }
                 // reset temporary holders
@@ -402,8 +389,8 @@ void DarkPlaces_ClientParsePacket(INDEX iLength)
     }
 
     if (ms_bDarkPlacesDebug) {
-      CDebugF("Received unknown text command!\n");
-      CDebugF("Data[%d]: %s\n", iLength, data);
+      CPrintF("Received unknown text command!\n");
+      CPrintF("Data[%d]: %s\n", iLength, data);
     }
   }
 }

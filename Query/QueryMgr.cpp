@@ -16,19 +16,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include <Core/Base/Shell.h>
-#include <Core/Base/Console.h>
-#include <Core/Base/CTString.h>
-
-#include <Engine/Engine.h>
-#include <Engine/CurrentVersion.h>
-#include <Engine/Entities/Entity.h>
-#include <Engine/Network/Server.h>
-#include <Engine/Network/Network.h>
-#include <Engine/Network/SessionState.h>
-
-#include <Engine/Query/QueryMgr.h>
-
 #pragma comment(lib, "wsock32.lib")
 
 WSADATA* _wsaData = NULL;
@@ -63,6 +50,38 @@ extern BOOL ms_bMSLegacy = TRUE;
 extern BOOL ms_bDarkPlacesMS = FALSE;
 extern BOOL ms_bDarkPlacesDebug = FALSE;
 
+// [Cecil] Get amount of server clients
+INDEX GetClientCount(void) {
+  CServer &srv = _pNetwork->ga_srvServer;
+  INDEX ctClients = 0;
+
+  for (INDEX iSession = 0; iSession < srv.srv_assoSessions.Count(); iSession++) {
+    CSessionSocket &sso = srv.srv_assoSessions[iSession];
+
+    if (iSession > 0 && !sso.sso_bActive) {
+      continue;
+    }
+
+    ctClients++;
+  }
+
+  return ctClients;
+};
+
+// [Cecil] Get number of active server players
+INDEX GetPlayerCount(void) {
+  CServer &srv = _pNetwork->ga_srvServer;
+  INDEX ctPlayers = 0;
+
+  FOREACHINSTATICARRAY(srv.srv_aplbPlayers, CPlayerBuffer, itplb) {
+    if (itplb->IsActive()) {
+      ctPlayers++;
+    }
+  }
+
+  return ctPlayers;
+};
+
 void _uninitWinsock();
 
 void _initializeWinsock(void)
@@ -82,7 +101,7 @@ void _initializeWinsock(void)
 
   // start WSA
   if (WSAStartup(MAKEWORD(2, 2), _wsaData) != 0) {
-    CErrorF("Error initializing winsock!\n");
+    CPrintF("Error initializing winsock!\n");
     _uninitWinsock();
     return;
   }
@@ -101,7 +120,7 @@ void _initializeWinsock(void)
   // if we couldn't resolve the hostname
   if (phe == NULL) {
     // report and stop
-    CErrorF("Couldn't resolve GameAgent server %s.\n", ms_strServer);
+    CPrintF("Couldn't resolve GameAgent server %s.\n", ms_strServer);
     _uninitWinsock();
     return;
   }
@@ -134,7 +153,7 @@ void _initializeWinsock(void)
     int optval = 1;
     if (setsockopt(_socket, SOL_SOCKET, SO_BROADCAST, (char *)&optval, sizeof(optval)) != 0)
     {
-      CErrorF("Error while allowing UDP broadcast receiving for socket.");
+      CPrintF("Error while allowing UDP broadcast receiving for socket.");
       _uninitWinsock();
       return;
     }
@@ -146,7 +165,7 @@ void _initializeWinsock(void)
   // set the socket to be nonblocking
   DWORD dwNonBlocking = 1;
   if (ioctlsocket(_socket, FIONBIO, &dwNonBlocking) != 0) {
-    CErrorF("Error setting socket to nonblocking!\n");
+    CPrintF("Error setting socket to nonblocking!\n");
     _uninitWinsock();
     return;
   }
@@ -412,7 +431,7 @@ extern void MS_EnumUpdate(void)
 extern void MS_EnumCancel(void)
 {
   if (_bInitialized) {
-    CErrorF("...MS_EnumCancel!\n");
+    CPrintF("...MS_EnumCancel!\n");
     ga_asrRequests.Clear();
     _uninitWinsock();
   }

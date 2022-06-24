@@ -15,19 +15,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include <Core/Base/Shell.h>
-#include <Core/Base/Console.h>
-#include <Core/Base/CTString.h>
-
-#include <Engine/Engine.h>
-#include <Engine/CurrentVersion.h>
-#include <Engine/Entities/Entity.h>
-#include <Engine/Network/Server.h>
-#include <Engine/Network/Network.h>
-#include <Engine/Network/SessionState.h>
-
-#include <Engine/Query/QueryMgr.h>
-
 #define MSPORT      28900
 #define BUFFSZ      8192
 #define BUFFSZSTR   4096
@@ -119,7 +106,7 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
 
   sPch5 = strstr(_szBuffer, "\\secure\\"); // [SSE] [ZCaliptium] Validation Fix.
   
-  //CDebugF("Data[%d]: %s\n", iLength, _szBuffer);
+  //CPrintF("Data[%d]: %s\n", iLength, _szBuffer);
 
   // status request
   if (sPch1) {
@@ -140,7 +127,7 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
       _pShell->GetINDEX("net_iPort"),
       _pNetwork->ga_World.wo_strName,
       _getCurrentGameTypeName(),
-      _pNetwork->ga_srvServer.GetPlayerCount(),
+      GetPlayerCount(),
       _pNetwork->ga_sesSessionState.ses_ctMaxPlayers,
       _pShell->GetINDEX("gam_bFriendlyFire"),
       _pShell->GetINDEX("gam_bWeaponsStay"),
@@ -151,13 +138,15 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
       _pShell->GetINDEX("gam_bInfiniteAmmo"),
       _pShell->GetINDEX("gam_bRespawnInPlace"));
 
-      for (INDEX i=0; i<_pNetwork->ga_srvServer.GetPlayerCount(); i++)
+      for (INDEX i=0; i<GetPlayerCount(); i++)
       {
         CPlayerBuffer &plb = _pNetwork->ga_srvServer.srv_aplbPlayers[i];
         CPlayerTarget &plt = _pNetwork->ga_sesSessionState.ses_apltPlayers[i];
         if (plt.plt_bActive) {
           CTString strPlayer;
-          plt.GetMSLegacyPlayerInf(plb.plb_Index, strPlayer);
+
+          // [Cecil] 'GetMSLegacyPlayerInf' -> 'plt_penPlayerEntity->GetGameSpyPlayerInfo'
+          plt.plt_penPlayerEntity->GetGameSpyPlayerInfo(plb.plb_Index, strPlayer);
 
           // if we don't have enough space left for the next player
           if (strlen(strPacket) + strlen(strPlayer) > 2048) {
@@ -181,7 +170,7 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
       _pShell->GetINDEX("net_iPort"),
       _pNetwork->ga_World.wo_strName,
       _getCurrentGameTypeName(),
-      _pNetwork->ga_srvServer.GetPlayerCount(),
+      GetPlayerCount(),
       _pNetwork->ga_sesSessionState.ses_ctMaxPlayers);
     _sendPacketTo(strPacket, &_sinFrom);
 
@@ -208,12 +197,14 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
     CTString strPacket;
     strPacket = "";
 
-    for (INDEX i=0; i<_pNetwork->ga_srvServer.GetPlayerCount(); i++) {
+    for (INDEX i=0; i<GetPlayerCount(); i++) {
       CPlayerBuffer &plb = _pNetwork->ga_srvServer.srv_aplbPlayers[i];
       CPlayerTarget &plt = _pNetwork->ga_sesSessionState.ses_apltPlayers[i];
       if (plt.plt_bActive) {
         CTString strPlayer;
-        plt.GetMSLegacyPlayerInf(plb.plb_Index, strPlayer);
+
+        // [Cecil] 'GetMSLegacyPlayerInf' -> 'plt_penPlayerEntity->GetGameSpyPlayerInfo'
+        plt.plt_penPlayerEntity->GetGameSpyPlayerInfo(plb.plb_Index, strPlayer);
 
         // if we don't have enough space left for the next player
         if (strlen(strPacket) + strlen(strPlayer) > 2048) {
@@ -231,14 +222,14 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
   
   // [SSE] [ZCaliptium] '/validate/' - Validation request.
   } else if (sPch5) {
-    //CDebugF("Received 'validate' request from MS.\n");
+    //CPrintF("Received 'validate' request from MS.\n");
     data += 8;
     
-    //CDebugF("SecureKey: %s\n", data);
+    //CPrintF("SecureKey: %s\n", data);
     
     u_char  ucGamekey[]          = {SERIOUSSAMKEY};
     //u_char  ucReckey[]          = {"XUCXHC"};
-    //CDebugF("SecureKey: %s\n", ucReckey);
+    //CPrintF("SecureKey: %s\n", ucReckey);
     unsigned char *pValidateKey = NULL;
     pValidateKey = gsseckey((u_char*)data, ucGamekey, 0);
     
@@ -247,8 +238,8 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
     _sendPacketTo(strPacket, &_sinFrom);
 
   } else {
-    CErrorF("Unknown query server command!\n");
-    CErrorF("%s\n", _szBuffer);
+    CPrintF("Unknown query server command!\n");
+    CPrintF("%s\n", _szBuffer);
     return;
   }
 }

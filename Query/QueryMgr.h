@@ -19,6 +19,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   #pragma once
 #endif
 
+// [Cecil] Needed by every master server
+#include <Engine/CurrentVersion.h>
+
 extern CTString ms_strServer;
 extern CTString ms_strMSLegacy;
 extern CTString ms_strDarkPlacesMS;
@@ -26,6 +29,12 @@ extern CTString ms_strGameName;
 extern BOOL ms_bMSLegacy;
 extern BOOL ms_bDarkPlacesMS;
 extern BOOL ms_bDarkPlacesDebug;
+
+// [Cecil] Get amount of server clients
+INDEX GetClientCount(void);
+
+// [Cecil] Get number of active server players
+INDEX GetPlayerCount(void);
 
 extern void MS_OnServerStart(void);
 extern void MS_OnServerEnd(void);
@@ -79,7 +88,7 @@ class CServerRequest
   public:
     ULONG sr_ulAddress;
     USHORT sr_iPort;
-    long long sr_tmRequestTime;
+    __int64 sr_tmRequestTime; // [Cecil] 'long long' -> '__int64'
 
   public:
     CServerRequest(void);

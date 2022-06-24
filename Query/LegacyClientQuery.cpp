@@ -15,16 +15,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include <Core/Base/Shell.h>
-#include <Core/Base/Console.h>
-#include <Core/Base/CTString.h>
-
-#include <Engine/Engine.h>
-#include <Engine/CurrentVersion.h>
-#include <Engine/Network/Network.h>
-
-#include <Engine/Query/QueryMgr.h>
-
 #define MSPORT      28900
 #define BUFFSZ      8192
 #define BUFFSZSTR   4096
@@ -37,7 +27,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
                             WSACleanup();
 
 #define CHK_BUFFSTRLEN if ((iLen < 0) || (iLen > BUFFSZSTR)) { \
-                        CErrorF("\n" \
+                        CPrintF("\n" \
                             "Error: the used buffer is smaller than how much needed (%d < %d)\n" \
                             "\n", iLen, BUFFSZSTR); \
                             if (cMsstring) free (cMsstring); \
@@ -112,7 +102,7 @@ static void _LocalSearch()
   // start WSA
   _wsaRequested = MAKEWORD( 2, 2 );
   if (WSAStartup(_wsaRequested, &wsaData) != 0) {
-    CErrorF("Error initializing winsock!\n");
+    CPrintF("Error initializing winsock!\n");
     if (_szIPPortBufferLocal != NULL) {
       delete[] _szIPPortBufferLocal;
     }
@@ -141,7 +131,7 @@ static void _LocalSearch()
         addr.s_addr = *(u_long *) _phHostinfo->h_addr_list[_iCount];
         _uIP = htonl(addr.s_addr);
        
-        CDebugF("%lu\n", _uIP);
+        CPrintF("%lu\n", _uIP);
         
         for (UINT uPort = 25601; uPort < 25622; ++uPort){
           _uPort = htons(uPort);
@@ -212,7 +202,7 @@ void CLegacyQuery::EnumTrigger(BOOL bInternet)
 
     WSADATA wsadata;
     if (WSAStartup(MAKEWORD(2,2), &wsadata) != 0) {
-        CErrorF("Error initializing winsock!\n");
+        CPrintF("Error initializing winsock!\n");
         return;
     }
 
@@ -224,12 +214,12 @@ void CLegacyQuery::EnumTrigger(BOOL bInternet)
 
     _sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (_sock < 0) {
-        CErrorF("Error creating TCP socket!\n");
+        CPrintF("Error creating TCP socket!\n");
         WSACleanup();
         return;
     }
     if (connect(_sock, (struct sockaddr *)&peer, sizeof(peer)) < 0) {
-        CErrorF("Error connecting to TCP socket!\n");
+        CPrintF("Error connecting to TCP socket!\n");
         CLEANMSSRUFF1;
         return;
     }
@@ -238,7 +228,7 @@ void CLegacyQuery::EnumTrigger(BOOL bInternet)
 
     cResponse = (char*) malloc(BUFFSZSTR + 1);
     if (!cResponse) {
-        CErrorF("Error initializing memory buffer!\n");
+        CPrintF("Error initializing memory buffer!\n");
         CLEANMSSRUFF1;
         return;
     }
@@ -249,7 +239,7 @@ void CLegacyQuery::EnumTrigger(BOOL bInternet)
     iLen = 0;
     iErr = recv(_sock, (char*)cResponse + iLen, BUFFSZSTR - iLen, 0);
     if (iErr < 0) {
-        CErrorF("Error reading from TCP socket!\n");
+        CPrintF("Error reading from TCP socket!\n");
         CLEANMSSRUFF2;
         return;
     }
@@ -261,7 +251,7 @@ void CLegacyQuery::EnumTrigger(BOOL bInternet)
 
     ucSec = (u_char*) malloc(BUFFSZSTR + 1);
     if (!ucSec) {
-        CErrorF("Error initializing memory buffer!\n");
+        CPrintF("Error initializing memory buffer!\n");
         CLEANMSSRUFF2;
         return;
     }
@@ -272,7 +262,7 @@ void CLegacyQuery::EnumTrigger(BOOL bInternet)
 
     cSec = strstr(cResponse, "\\secure\\");
     if (!cSec) {
-        CErrorF("Not valid master server response!\n");
+        CPrintF("Not valid master server response!\n");
         CLEANMSSRUFF2;
         return;
     } else {
@@ -291,7 +281,7 @@ void CLegacyQuery::EnumTrigger(BOOL bInternet)
 
     cMsstring = (char*) malloc(BUFFSZSTR + 1);
     if (!cMsstring) {
-        CErrorF("Not valid master server response!\n");
+        CPrintF("Not valid master server response!\n");
         CLEANMSSRUFF1;
         return;
     }
@@ -314,7 +304,7 @@ void CLegacyQuery::EnumTrigger(BOOL bInternet)
     /* The string sent to master server */
 
     if (send(_sock,cMsstring, iLen, 0) < 0){
-        CErrorF("Error reading from TCP socket!\n");
+        CPrintF("Error reading from TCP socket!\n");
         if (cMsstring) free (cMsstring);
         CLEANMSSRUFF1;
         return;
@@ -330,7 +320,7 @@ void CLegacyQuery::EnumTrigger(BOOL bInternet)
 
     _szIPPortBuffer = (char*) malloc(BUFFSZ + 1);
     if (!_szIPPortBuffer) {
-        CErrorF("Error reading from TCP socket!\n");
+        CPrintF("Error reading from TCP socket!\n");
         CLEANMSSRUFF1;
         return;
     }
@@ -345,7 +335,7 @@ void CLegacyQuery::EnumTrigger(BOOL bInternet)
             iDynsz += BUFFSZ;
             _szIPPortBuffer = (char*)realloc(_szIPPortBuffer, iDynsz);
             if (!_szIPPortBuffer) {
-              CErrorF("Error reallocation memory buffer!\n");
+              CPrintF("Error reallocation memory buffer!\n");
                 if (_szIPPortBuffer) free (_szIPPortBuffer);
                 CLEANMSSRUFF1;
                 return;
@@ -441,7 +431,7 @@ static void ParseStatusResponse(sockaddr_in &_sinClient, BOOL bIgnorePing)
             } else if (strKey == "maxplayers") {
                 strMaxPlayers = strValue;
             } else {
-                //CErrorF("Unknown GameAgent parameter key '%s'!", strKey);
+                //CPrintF("Unknown GameAgent parameter key '%s'!", strKey);
             }
             // reset temporary holders
             strKey = "";
@@ -474,7 +464,7 @@ static void ParseStatusResponse(sockaddr_in &_sinClient, BOOL bIgnorePing)
       strGameName = strActiveMod;
   }
 
-  long long tmPing = -1;
+  __int64 tmPing = -1; // [Cecil] 'long long' -> '__int64'
   // find the request in the request array
   for (INDEX i=0; i<ga_asrRequests.Count(); i++) {
       CServerRequest &req = ga_asrRequests[i];
@@ -580,7 +570,7 @@ DWORD WINAPI _MS_Thread(LPVOID lpParam)
         sPch = strstr(_szBuffer, "\\gamename\\serioussamse\\");
 
         if (!sPch) {
-            CErrorF("Unknown query server response!\n");
+            CPrintF("Unknown query server response!\n");
             return -1;
         } else {
           ParseStatusResponse(_sinClient, FALSE);
@@ -704,7 +694,7 @@ DWORD WINAPI _LocalNet_Thread(LPVOID lpParam)
 
     int _iN = select(_sockudp + 1, &readfds_udp, NULL, NULL, &timeout_udp);
     
-    CDebugF("Received %d answers.\n", _iN);
+    CPrintF("Received %d answers.\n", _iN);
 
     if (_iN > 0)
     {
@@ -720,7 +710,7 @@ DWORD WINAPI _LocalNet_Thread(LPVOID lpParam)
         sPch = strstr(_szBuffer, "\\gamename\\serioussamse\\");
 
         if (!sPch) {
-          CErrorF("Unknown query server response!\n");
+          CPrintF("Unknown query server response!\n");
 
           if (_szIPPortBufferLocal != NULL) {
             delete[] _szIPPortBufferLocal;

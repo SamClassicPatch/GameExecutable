@@ -15,19 +15,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include <Core/Base/Shell.h>
-#include <Core/Base/Console.h>
-#include <Core/Base/CTString.h>
-
-#include <Engine/Engine.h>
-#include <Engine/CurrentVersion.h>
-#include <Engine/Entities/Entity.h>
-#include <Engine/Network/Server.h>
-#include <Engine/Network/Network.h>
-#include <Engine/Network/SessionState.h>
-
-#include <Engine/Query/QueryMgr.h>
-
 extern CTString _getCurrentGameTypeName();
 
 extern sockaddr_in _sinFrom;
@@ -52,7 +39,7 @@ void CGameAgentQuery::BuildHearthbeatPacket(CTString &strPacket, INDEX iChalleng
 {
   strPacket.PrintF("0;challenge;%d;players;%d;maxplayers;%d;level;%s;gametype;%s;version;%s;product;%s",
       iChallenge,
-      _pNetwork->ga_srvServer.GetPlayerCount(),
+      GetPlayerCount(),
       _pNetwork->ga_sesSessionState.ses_ctMaxPlayers,
       _pNetwork->ga_World.wo_strName,
       _getCurrentGameTypeName(),
@@ -78,7 +65,7 @@ void CGameAgentQuery::ServerParsePacket(INDEX iLength)
       // send the status response
       CTString strPacket;
       strPacket.PrintF("0;players;%d;maxplayers;%d;level;%s;gametype;%s;version;%s;gamename;%s;sessionname;%s",
-        _pNetwork->ga_srvServer.GetPlayerCount(),
+        GetPlayerCount(),
         _pNetwork->ga_sesSessionState.ses_ctMaxPlayers,
         _pNetwork->ga_World.wo_strName,
         _getCurrentGameTypeName(),
@@ -93,13 +80,15 @@ void CGameAgentQuery::ServerParsePacket(INDEX iLength)
     {
       // send the player status response
       CTString strPacket;
-      strPacket.PrintF("\x01players\x02%d\x03", _pNetwork->ga_srvServer.GetPlayerCount());
-      for (INDEX i=0; i<_pNetwork->ga_srvServer.GetPlayerCount(); i++) {
+      strPacket.PrintF("\x01players\x02%d\x03", GetPlayerCount());
+      for (INDEX i=0; i<GetPlayerCount(); i++) {
         CPlayerBuffer &plb = _pNetwork->ga_srvServer.srv_aplbPlayers[i];
         CPlayerTarget &plt = _pNetwork->ga_sesSessionState.ses_apltPlayers[i];
         if (plt.plt_bActive) {
           CTString strPlayer;
-          plt.GetGameAgentPlayerInfo(plb.plb_Index, strPlayer);
+
+          // [Cecil] 'GetGameAgentPlayerInfo' -> 'plt_penPlayerEntity->GetGameSpyPlayerInfo'
+          plt.plt_penPlayerEntity->GetGameSpyPlayerInfo(plb.plb_Index, strPlayer);
 
           // if we don't have enough space left for the next player
           if (strlen(strPacket) + strlen(strPlayer) > 2048) {
@@ -121,7 +110,7 @@ void CGameAgentQuery::ServerParsePacket(INDEX iLength)
     {
       // just send back 1 byte and the amount of players in the server (this could be useful in some cases for external scripts)
       CTString strPacket;
-      strPacket.PrintF("\x04%d", _pNetwork->ga_srvServer.GetPlayerCount());
+      strPacket.PrintF("\x04%d", GetPlayerCount());
       _sendPacketTo(strPacket, &_sinFrom);
       break;
     }
@@ -221,7 +210,7 @@ static void ClientParsePacket(INDEX iLength)
                 } else if (strKey == "gamename") {
                   strGameName = strValue;
                 } else {
-                  CErrorF("Unknown GameAgent parameter key '%s'!", strKey);
+                  CPrintF("Unknown GameAgent parameter key '%s'!", strKey);
                 }
     
                 // reset temporary holders
@@ -256,7 +245,7 @@ static void ClientParsePacket(INDEX iLength)
       CNetworkSession &ns = *new CNetworkSession;
       _pNetwork->ga_lhEnumeratedSessions.AddTail(ns.ns_lnNode);
   
-      long long tmPing = -1;
+      __int64 tmPing = -1; // [Cecil] 'long long' -> '__int64'
 
       // find the request in the request array
       for (INDEX i = 0; i < ga_asrRequests.Count(); i++)
@@ -288,7 +277,7 @@ static void ClientParsePacket(INDEX iLength)
     } break;
     
     default: {
-      CErrorF("Unknown enum packet ID %x!\n", _szBuffer[0]);
+      CPrintF("Unknown enum packet ID %x!\n", _szBuffer[0]);
     } break;
   }
 }
