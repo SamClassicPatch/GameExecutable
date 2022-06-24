@@ -124,6 +124,22 @@ void CECIL_Init(void) {
 
     // Red screen on damage
     _pShell->DeclareSymbol("user INDEX sam_bRedScreenOnDamage post:CECIL_RegisterCommand;", &sam_bRedScreenOnDamage);
+
+    // Query manager
+    _pShell->DeclareSymbol("user CTString ms_strGameAgentMS  post:CECIL_RegisterCommand;", &ms_strGameAgentMS);
+    _pShell->DeclareSymbol("user CTString ms_strMSLegacy     post:CECIL_RegisterCommand;", &ms_strMSLegacy);
+    _pShell->DeclareSymbol("user CTString ms_strDarkPlacesMS post:CECIL_RegisterCommand;", &ms_strDarkPlacesMS);
+    _pShell->DeclareSymbol("user CTString ms_strGameName     post:CECIL_RegisterCommand;", &ms_strGameName);
+    _pShell->DeclareSymbol("user INDEX ms_iProtocol          post:CECIL_RegisterCommand;", &ms_iProtocol);
+    _pShell->DeclareSymbol("user INDEX ms_bDarkPlacesDebug   post:CECIL_RegisterCommand;", &ms_bDarkPlacesDebug);
+
+    // Master server protocol types
+    static const INDEX iMSLegacy   = E_MS_LEGACY;
+    static const INDEX iDarkPlaces = E_MS_DARKPLACES;
+    static const INDEX iGameAgent  = E_MS_GAMEAGENT;
+    _pShell->DeclareSymbol("const INDEX MS_LEGACY;",     (void *)&iMSLegacy);
+    _pShell->DeclareSymbol("const INDEX MS_DARKPLACES;", (void *)&iDarkPlaces);
+    _pShell->DeclareSymbol("const INDEX MS_GAMEAGENT;",  (void *)&iGameAgent);
   }
 
   // Restore custom symbol values
