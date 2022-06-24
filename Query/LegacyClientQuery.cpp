@@ -120,7 +120,7 @@ static void _LocalSearch()
         addr.s_addr = *(u_long *) _phHostinfo->h_addr_list[_iCount];
         _uIP = htonl(addr.s_addr);
        
-        CPrintF("%lu\n", _uIP);
+        //CPrintF("%lu\n", _uIP);
         
         for (UINT uPort = 25601; uPort < 25622; ++uPort){
           _uPort = htons(uPort);
@@ -420,7 +420,7 @@ static void ParseStatusResponse(sockaddr_in &_sinClient, BOOL bIgnorePing)
             } else if (strKey == "maxplayers") {
               strMaxPlayers = strValue;
             } else {
-              //CPrintF("Unknown MSLegacy parameter key '%s'!", strKey);
+              //CPrintF("Unknown MSLegacy parameter key '%s'!\n", strKey);
             }
             // reset temporary holders
             strKey = "";
@@ -683,7 +683,7 @@ DWORD WINAPI _LocalNet_Thread(LPVOID lpParam)
 
     int _iN = select(_sockudp + 1, &readfds_udp, NULL, NULL, &timeout_udp);
     
-    CPrintF("Received %d answers.\n", _iN);
+    //CPrintF("Received %d answers.\n", _iN);
 
     if (_iN > 0)
     {

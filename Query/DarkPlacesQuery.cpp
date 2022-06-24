@@ -41,7 +41,7 @@ void DarkPlaces_BuildQCStatus(CTString &strStatus)
 {
   INDEX ctFreeSlots = _pNetwork->ga_sesSessionState.ses_ctMaxPlayers - GetClientCount();
   
-  strStatus.PrintF("%s:%s:P%d:S%d:F%d:M%s::score!!", _getCurrentGameTypeName(), "0.8.2", 0, ctFreeSlots, 0, ms_strGameName);
+  strStatus.PrintF("%s:%s:P%d:S%d:F%d:M%s::score!!", _getCurrentGameTypeName(), "0.8.2", 0, ctFreeSlots, 0, _pShell->GetString("sam_strGameName"));
 }
 
 // Builds status string.
@@ -61,8 +61,8 @@ void DarkPlaces_BuildStatusResponse(const char* challenge, CTString &strPacket, 
             "%s%s"
             "%s",
             bFullStatus ? "statusResponse" : "infoResponse",
-            // [Cecil] TEMP: "$version" -> _SE_VER_STRING
-            ms_strGameName, "", _SE_VER_STRING, ctMaxPlayers,
+            // [Cecil] "$version" -> _SE_VER_STRING
+            _pShell->GetString("sam_strGameName"), "", _SE_VER_STRING, ctMaxPlayers,
             GetClientCount(), 0, _pNetwork->ga_World.wo_strName, _pShell->GetString("gam_strSessionName"), DP_NET_PROTOCOL_VERSION,
             "\\qcstatus\\", strStatus,
             challenge ? "\\challenge\\" : "", challenge ? challenge : "",
@@ -395,7 +395,7 @@ void CDarkPlacesQuery::EnumTrigger(BOOL bInternet)
   _bInitialized = TRUE;
   
   CTString strPacket;
-  strPacket.PrintF("\xFF\xFF\xFF\xFFgetservers %s %u empty full", ms_strGameName, DP_NET_PROTOCOL_VERSION);
+  strPacket.PrintF("\xFF\xFF\xFF\xFFgetservers %s %u empty full", _pShell->GetString("sam_strGameName"), DP_NET_PROTOCOL_VERSION);
   _sendPacket(strPacket); // Send enumeration packet to masterserver.
 
   _setStatus(".");

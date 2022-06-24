@@ -25,7 +25,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 extern CTString ms_strGameAgentMS;
 extern CTString ms_strMSLegacy;
 extern CTString ms_strDarkPlacesMS;
-extern CTString ms_strGameName;
 
 // [Cecil] Master server protocols
 enum EMasterServerProtocols {

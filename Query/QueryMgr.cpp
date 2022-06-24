@@ -53,8 +53,6 @@ extern CTString ms_strGameAgentMS = "master.333networks.com";
 extern CTString ms_strMSLegacy = "master.333networks.com";
 extern CTString ms_strDarkPlacesMS = "192.168.1.4";
 
-extern CTString ms_strGameName = "serioussamse";
-
 // [Cecil] Current master server protocol
 extern INDEX ms_iProtocol = E_MS_LEGACY;
 

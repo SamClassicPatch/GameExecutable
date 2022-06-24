@@ -129,7 +129,6 @@ void CECIL_Init(void) {
     _pShell->DeclareSymbol("user CTString ms_strGameAgentMS  post:CECIL_RegisterCommand;", &ms_strGameAgentMS);
     _pShell->DeclareSymbol("user CTString ms_strMSLegacy     post:CECIL_RegisterCommand;", &ms_strMSLegacy);
     _pShell->DeclareSymbol("user CTString ms_strDarkPlacesMS post:CECIL_RegisterCommand;", &ms_strDarkPlacesMS);
-    _pShell->DeclareSymbol("user CTString ms_strGameName     post:CECIL_RegisterCommand;", &ms_strGameName);
     _pShell->DeclareSymbol("user INDEX ms_iProtocol          post:CECIL_RegisterCommand;", &ms_iProtocol);
     _pShell->DeclareSymbol("user INDEX ms_bDarkPlacesDebug   post:CECIL_RegisterCommand;", &ms_bDarkPlacesDebug);
 
