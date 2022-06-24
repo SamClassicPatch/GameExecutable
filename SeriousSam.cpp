@@ -777,6 +777,11 @@ void DoGame(void) {
     BOOL bRenderGame = (!bMenuActive || sam_bBackgroundGameRender);
 
     if (_gmRunningGameMode != GM_NONE && bRenderGame) {
+      // [Cecil] Don't wait for server while playing demos (removes "Waiting for server to continue" message)
+      if (_pNetwork->IsPlayingDemo()) {
+        _pNetwork->ga_sesSessionState.ses_bWaitingForServer = FALSE;
+      }
+
       // handle pretouching of textures and shadowmaps
       pdp->Unlock();
       _pGame->GameRedrawView(pdp, (_pGame->gm_csConsoleState != CS_OFF) ? 0 : GRV_SHOWEXTRAS);
