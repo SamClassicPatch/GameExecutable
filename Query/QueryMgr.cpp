@@ -56,7 +56,8 @@ extern CTString ms_strDarkPlacesMS = "192.168.1.4";
 // [Cecil] Current master server protocol
 extern INDEX ms_iProtocol = E_MS_LEGACY;
 
-extern INDEX ms_bDarkPlacesDebug = FALSE;
+// [Cecil] Debug output for query
+extern INDEX ms_bDebugOutput = FALSE;
 
 // [Cecil] Get amount of server clients
 INDEX GetClientCount(void) {
@@ -279,6 +280,10 @@ extern void MS_SendHeartbeat(INDEX iChallenge)
 
   _sendPacket(strPacket);
   _tmLastHeartbeat = _pTimer->GetRealTimeTick();
+
+  if (ms_bDebugOutput) {
+    CPrintF("Sending heartbeat:\n%s\n", strPacket);
+  }
 }
 
 extern void _setStatus(const CTString &strStatus)
@@ -316,6 +321,10 @@ extern void MS_OnServerStart(void)
       strPacket.PrintF("\\heartbeat\\%hu\\gamename\\serioussamse", (_pShell->GetINDEX("net_iPort") + 1));
 
       _sendPacket(strPacket);
+
+      if (ms_bDebugOutput) {
+        CPrintF("Server start:\n%s\n", strPacket);
+      }
     } break;*/
 
     case E_MS_DARKPLACES: {
@@ -349,6 +358,10 @@ extern void MS_OnServerEnd(void)
     CTString strPacket;
     strPacket.PrintF("\\heartbeat\\%hu\\gamename\\serioussamse\\statechanged", (_pShell->GetINDEX("net_iPort") + 1));
     _sendPacket(strPacket);
+
+    if (ms_bDebugOutput) {
+      CPrintF("Server end:\n%s\n", strPacket);
+    }
   }
 
   _uninitWinsock();
@@ -368,6 +381,10 @@ extern void MS_OnServerUpdate(void)
 
   if (iLength > 0)
   {
+    if (ms_bDebugOutput) {
+      CPrintF("Received packet, length: %d\n", iLength);
+    }
+
     // [Cecil] Arranged in an array
     static void (*apParsePacket[E_MS_MAX])(INDEX) = {
       &CLegacyQuery::ServerParsePacket,
@@ -399,6 +416,10 @@ extern void MS_OnServerStateChanged(void)
       strPacket.PrintF("\\heartbeat\\%hu\\gamename\\serioussamse\\statechanged", (_pShell->GetINDEX("net_iPort") + 1));
 
       _sendPacket(strPacket);
+
+      if (ms_bDebugOutput) {
+        CPrintF("Sending state change:\n%s\n", strPacket);
+      }
     } break;
 
     // Nothing for E_MS_DARKPLACES

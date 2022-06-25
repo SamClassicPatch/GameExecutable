@@ -46,7 +46,8 @@ inline INDEX GetProtocol(void) {
   return ms_iProtocol;
 };
 
-extern INDEX ms_bDarkPlacesDebug;
+// [Cecil] Debug output for query
+extern INDEX ms_bDebugOutput;
 
 // [Cecil] Get amount of server clients
 INDEX GetClientCount(void);

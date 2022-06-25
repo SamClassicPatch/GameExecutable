@@ -144,7 +144,7 @@ void CECIL_Init(void) {
     _pShell->DeclareSymbol("user CTString ms_strMSLegacy     post:CECIL_RegisterCommand;", &ms_strMSLegacy);
     _pShell->DeclareSymbol("user CTString ms_strDarkPlacesMS post:CECIL_RegisterCommand;", &ms_strDarkPlacesMS);
     _pShell->DeclareSymbol("user INDEX ms_iProtocol          post:CECIL_RegisterCommand;", &ms_iProtocol);
-    _pShell->DeclareSymbol("user INDEX ms_bDarkPlacesDebug   post:CECIL_RegisterCommand;", &ms_bDarkPlacesDebug);
+    _pShell->DeclareSymbol("user INDEX ms_bDebugOutput       post:CECIL_RegisterCommand;", &ms_bDebugOutput);
 
     // Master server protocol types
     static const INDEX iMSLegacy   = E_MS_LEGACY;

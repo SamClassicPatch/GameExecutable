@@ -98,7 +98,9 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
 
   sPch5 = strstr(_szBuffer, "\\secure\\"); // [SSE] [ZCaliptium] Validation Fix.
   
-  //CPrintF("Data[%d]: %s\n", iLength, _szBuffer);
+  if (ms_bDebugOutput) {
+    CPrintF("Received data[%d]:\n%s\n", iLength, _szBuffer);
+  }
 
   // status request
   if (sPch1) {
@@ -153,6 +155,10 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
     strPacket += "\\final\\\\queryid\\333.1";
     _sendPacketTo(strPacket, &_sinFrom);
 
+    if (ms_bDebugOutput) {
+      CPrintF("Sending status answer:\n%s\n", strPacket);
+    }
+
   // info request
   } else if (sPch2){
 
@@ -165,6 +171,10 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
       GetPlayerCount(),
       _pNetwork->ga_sesSessionState.ses_ctMaxPlayers);
     _sendPacketTo(strPacket, &_sinFrom);
+
+    if (ms_bDebugOutput) {
+      CPrintF("Sending info answer:\n%s\n", strPacket);
+    }
 
   // basis request
   } else if (sPch3){
@@ -181,6 +191,10 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
       //_pShell->GetString("net_strLocalHost"));
       strLocation);
     _sendPacketTo(strPacket, &_sinFrom);
+
+    if (ms_bDebugOutput) {
+      CPrintF("Sending basic answer:\n%s\n", strPacket);
+    }
 
   // players request
   } else if (sPch4){
@@ -211,6 +225,10 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
 
     strPacket += "\\final\\\\queryid\\6.1";
     _sendPacketTo(strPacket, &_sinFrom);
+
+    if (ms_bDebugOutput) {
+      CPrintF("Sending players answer:\n%s\n", strPacket);
+    }
   
   // [SSE] [ZCaliptium] '/validate/' - Validation request.
   } else if (sPch5) {
@@ -228,6 +246,10 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
     CTString strPacket;
     strPacket.PrintF("\\validate\\%s\\final\\%s\\queryid\\2.1", pValidateKey, "");
     _sendPacketTo(strPacket, &_sinFrom);
+
+    if (ms_bDebugOutput) {
+      CPrintF("Sending validation answer:\n%s\n", strPacket);
+    }
 
   } else {
     CPrintF("Unknown query server command!\n");
