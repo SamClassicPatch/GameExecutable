@@ -12,9 +12,9 @@
 #define DEFINE_T_CLASSES_LIST_4  DEFINE_T_CLASSES_LIST_3,  class TArg4
 #define DEFINE_T_CLASSES_LIST_5  DEFINE_T_CLASSES_LIST_4,  class TArg5
 #define DEFINE_T_CLASSES_LIST_6  DEFINE_T_CLASSES_LIST_5,  class TArg6
-/*#define DEFINE_T_CLASSES_LIST_7  DEFINE_T_CLASSES_LIST_6,  class TArg7
+#define DEFINE_T_CLASSES_LIST_7  DEFINE_T_CLASSES_LIST_6,  class TArg7
 #define DEFINE_T_CLASSES_LIST_8  DEFINE_T_CLASSES_LIST_7,  class TArg8
-#define DEFINE_T_CLASSES_LIST_9  DEFINE_T_CLASSES_LIST_8,  class TArg9
+/*#define DEFINE_T_CLASSES_LIST_9  DEFINE_T_CLASSES_LIST_8,  class TArg9
 #define DEFINE_T_CLASSES_LIST_10 DEFINE_T_CLASSES_LIST_9,  class TArg10
 #define DEFINE_T_CLASSES_LIST_11 DEFINE_T_CLASSES_LIST_10, class TArg11
 #define DEFINE_T_CLASSES_LIST_12 DEFINE_T_CLASSES_LIST_11, class TArg12
@@ -64,9 +64,9 @@
 #define DEFINE_T_ARGS_N_4  DEFINE_T_ARGS_N_3,   TArg4
 #define DEFINE_T_ARGS_N_5  DEFINE_T_ARGS_N_4,   TArg5
 #define DEFINE_T_ARGS_N_6  DEFINE_T_ARGS_N_5,   TArg6
-/*#define DEFINE_T_ARGS_N_7  DEFINE_T_ARGS_N_6,   TArg7
+#define DEFINE_T_ARGS_N_7  DEFINE_T_ARGS_N_6,   TArg7
 #define DEFINE_T_ARGS_N_8  DEFINE_T_ARGS_N_7,   TArg8
-#define DEFINE_T_ARGS_N_9  DEFINE_T_ARGS_N_8,   TArg9
+/*#define DEFINE_T_ARGS_N_9  DEFINE_T_ARGS_N_8,   TArg9
 #define DEFINE_T_ARGS_N_10 DEFINE_T_ARGS_N_9,   TArg10
 #define DEFINE_T_ARGS_N_11 DEFINE_T_ARGS_N_10,  TArg11
 #define DEFINE_T_ARGS_N_12 DEFINE_T_ARGS_N_11,  TArg12
@@ -111,12 +111,12 @@
 
 
 
-#define DEFINE_2_N_ARGS_FUNCTIONS(N) TReturnVal (TClassSource::*&pfn_source)(DEFINE_T_ARGS_N_##N), TReturnVal (TClassTarget::*pfn_target) (DEFINE_T_ARGS_N_##N)
+#define DEFINE_2_N_ARGS_FUNCTIONS(N, _Const) TReturnVal (TClassSource::*&pfn_source)(DEFINE_T_ARGS_N_##N) _Const, TReturnVal (TClassTarget::*pfn_target) (DEFINE_T_ARGS_N_##N) _Const
 #define DEFINE_TEMPLATE(N) template<class TClassSource, class TClassTarget, class TReturnVal DEFINE_T_CLASSES_LIST_##N>
 
 
-#define DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(N) DEFINE_TEMPLATE(N)       \
-  explicit CPatch(DEFINE_2_N_ARGS_FUNCTIONS(N),                           \
+#define DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(N, _Const) DEFINE_TEMPLATE(N)       \
+  explicit CPatch(DEFINE_2_N_ARGS_FUNCTIONS(N, _Const),                           \
     bool patch_now = true, bool set_forever = false)                    \
                 : m_valid(false)                            \
                 , m_patched(false)                          \
@@ -127,14 +127,27 @@
     HookClassFunctions(pfn_source, pfn_target, patch_now, set_forever); \
   }
 
-  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(0)
-  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(1)
-  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(2)
-  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(3)
-  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(4)
-  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(5)
-  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(6)
-  //DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(7)
+  // [Cecil] Don't care, didn't ask + you're a warning
+  #pragma warning(disable: 4003)
+
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(0,)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(1,)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(2,)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(3,)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(4,)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(5,)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(6,)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(7,)
+
+  // [Cecil] Define with 'const'
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(0, const)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(1, const)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(2, const)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(3, const)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(4, const)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(5, const)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(6, const)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(7, const)
   
 
 ////////////////// experimental, don't use //////////////////////////////////////
