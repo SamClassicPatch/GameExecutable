@@ -22,7 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 static void (*pRenderView)(CWorld &, CEntity &, CAnyProjection3D &, CDrawPort &) = NULL;
 
 // Patched function
-static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &prProjection, CDrawPort &dpDrawport)
+static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &prProjection, CDrawPort &dp)
 {
   // Change FOV for the player view
   if (prProjection.IsPerspective() && (IsDerivedFromClass(&enViewer, "PlayerEntity") || IsOfClass(&enViewer, "Player View"))) {
@@ -37,7 +37,7 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &p
 
       // Vertical FOV
       FLOAT fVFOV = fNewFOV;
-      AdjustVFOV(dpDrawport, fVFOV);
+      AdjustVFOV(FLOAT2D(dp.GetWidth(), dp.GetHeight()), fVFOV);
 
       CPrintF("View VFOV: %.2f\n", fVFOV);
     }
@@ -49,7 +49,7 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &p
 
     // Adjust FOV for wider resolutions (preserve vertical FOV instead of horizontal)
     if (sam_bUseVerticalFOV) {
-      AdjustHFOV(dpDrawport, fNewFOV);
+      AdjustHFOV(FLOAT2D(dp.GetWidth(), dp.GetHeight()), fNewFOV);
 
       // Don't let FOV be invalid
       fNewFOV = Clamp(fNewFOV, 1.0f, 170.0f);
@@ -62,7 +62,7 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &p
 
       // Vertical FOV
       FLOAT fVFOV = fNewFOV;
-      AdjustVFOV(dpDrawport, fVFOV);
+      AdjustVFOV(FLOAT2D(dp.GetWidth(), dp.GetHeight()), fVFOV);
 
       CPrintF("New VFOV:  %.2f\n", fVFOV);
     }
@@ -71,7 +71,7 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &p
   }
 
   // Proceed to the original function
-  (*pRenderView)(woWorld, enViewer, prProjection, dpDrawport);
+  (*pRenderView)(woWorld, enViewer, prProjection, dp);
 };
 
 extern void CECIL_ApplyFOVPatch(void) {

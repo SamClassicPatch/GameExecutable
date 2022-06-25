@@ -55,7 +55,7 @@ void CMGModel::Render(CDrawPort *pdp) {
 
   // [Cecil] Adjust FOV
   FLOAT fFOV = sam_bWideScreen ? 45.0f : 30.0f;
-  AdjustHFOV(*pdp, fFOV);
+  AdjustHFOV(FLOAT2D(pdp->GetWidth(), pdp->GetHeight()), fFOV);
 
   pr.FOVL() = fFOV;
   pr.ScreenBBoxL() = FLOATaabbox2D(FLOAT2D(0.0f, 0.0f), FLOAT2D((float)dpModel.GetWidth(), (float)dpModel.GetHeight()));

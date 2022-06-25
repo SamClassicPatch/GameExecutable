@@ -29,9 +29,9 @@ INDEX sam_bCheckFOV = FALSE;
 INDEX sam_bRedScreenOnDamage = TRUE;
 
 // Calculate horizontal FOV according to the aspect ratio
-void AdjustHFOV(const CDrawPort &dp, FLOAT &fHFOV) {
+void AdjustHFOV(const FLOAT2D &vScreen, FLOAT &fHFOV) {
   // Get aspect ratio of the current resolution
-  FLOAT fAspectRatio = (FLOAT)dp.GetWidth() / (FLOAT)dp.GetHeight();
+  FLOAT fAspectRatio = vScreen(1) / vScreen(2);
 
   // 4:3 resolution = 1.0 ratio; 16:9 = 1.333 etc.
   FLOAT fSquareRatio = fAspectRatio * (3.0f / 4.0f);
@@ -44,9 +44,9 @@ void AdjustHFOV(const CDrawPort &dp, FLOAT &fHFOV) {
 };
 
 // Calculate vertical FOV from horizontal FOV according to the aspect ratio
-void AdjustVFOV(const CDrawPort &dp, FLOAT &fHFOV) {
-  // Get aspect ratio of the current resolution
-  FLOAT fInverseAspectRatio = (FLOAT)dp.GetHeight() / (FLOAT)dp.GetWidth();
+void AdjustVFOV(const FLOAT2D &vScreen, FLOAT &fHFOV) {
+  // Get inverted aspect ratio of the current resolution
+  FLOAT fInverseAspectRatio = vScreen(2) / vScreen(1);
 
   // Take current FOV angle and apply aspect ratio to it
   FLOAT fVerticalAngle = Tan(fHFOV * 0.5f) * fInverseAspectRatio;

@@ -28,10 +28,10 @@ extern INDEX sam_bRedScreenOnDamage;
 #define HEIGHT_MULTIPLIER(DrawPort) ((FLOAT)DrawPort->GetHeight() / 480.0f)
 
 // Calculate horizontal FOV according to the aspect ratio
-void AdjustHFOV(const CDrawPort &dp, FLOAT &fHFOV);
+void AdjustHFOV(const FLOAT2D &vScreen, FLOAT &fHFOV);
 
 // Calculate vertical FOV from horizontal FOV according to the aspect ratio
-void AdjustVFOV(const CDrawPort &dp, FLOAT &fVFOV);
+void AdjustVFOV(const FLOAT2D &vScreen, FLOAT &fHFOV);
 
 // Custom initialization
 void CECIL_Init(void);
