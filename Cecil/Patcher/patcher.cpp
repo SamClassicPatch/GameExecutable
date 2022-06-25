@@ -105,6 +105,19 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
       PATCHER_OUT("mov\n");
       instruction_len = 3;
       instruction_found = true;
+
+    } else if (!memcmp(reinterpret_cast<char*>(addr), "\xF6\x46", 2)) // test byte ptr [esi+...]
+    {
+      PATCHER_OUT("test byte ptr [esi+...] \n");
+      instruction_len = 4;
+      instruction_found = true;
+
+    } else if (*reinterpret_cast<char*>(addr) == (char)0xD9  // fld
+            || *reinterpret_cast<char*>(addr) == (char)0xD8) // fmul
+    {
+      PATCHER_OUT("fld / fadd / fmul \n");
+      instruction_len = 6;
+      instruction_found = true;
     }
 
     read_len += instruction_len;
@@ -118,7 +131,10 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
     }
   } while(instruction_found);
   
-  PATCHER_OUT("Not found instruction! \n\n");
+  #if SE1_PATCHER_DEBUG_OUTPUT
+    CTString strNotFound(0, "Invalid instruction! (0x%X) \n\n", *reinterpret_cast<long *>(addr));
+    PATCHER_OUT(strNotFound);
+  #endif
   
   return false;
 }
