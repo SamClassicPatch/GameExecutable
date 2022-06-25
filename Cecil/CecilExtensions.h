@@ -19,6 +19,7 @@ extern INDEX sam_bBackgroundGameRender;
 // FOV patch
 extern INDEX sam_bUseVerticalFOV;
 extern FLOAT sam_fCustomFOV;
+extern INDEX sam_bFixMipDistance;
 extern INDEX sam_bCheckFOV;
 
 // Red screen on damage

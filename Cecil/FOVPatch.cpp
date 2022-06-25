@@ -79,13 +79,15 @@ class CProjectionPatch : public CPerspectiveProjection3D {
     FLOAT P_MipFactorDist(FLOAT fDistance) const {
       ASSERT(pr_Prepared);
       
-      // Get inverted aspect ratio of the current resolution
-      extern CDrawPort *pdp;
-      FLOAT fInverseAspectRatio = (FLOAT)pdp->GetHeight() / (FLOAT)pdp->GetWidth();
+      if (sam_bFixMipDistance) {
+        // Get inverted aspect ratio of the current resolution
+        extern CDrawPort *pdp;
+        FLOAT fInverseAspectRatio = (FLOAT)pdp->GetHeight() / (FLOAT)pdp->GetWidth();
 
-      // Make engine think that the objects are closer for wider resolutions
-      // Also decrease distance for wider FOV (i.e. rely on VFOV instead of HFOV)
-      fDistance *= fInverseAspectRatio * (4.0f / 3.0f);
+        // Make engine think that the objects are closer for wider resolutions
+        // Also decrease distance for wider FOV (i.e. rely on VFOV instead of HFOV)
+        fDistance *= fInverseAspectRatio * (4.0f / 3.0f);
+      }
 
       return Log2((FLOAT)Abs(1024.0f * fDistance * ppr_fMipRatio));
     };
@@ -96,8 +98,10 @@ class CProjectionPatch : public CPerspectiveProjection3D {
       FLOAT fFOV = ppr_FOVWidth;
 
       // Cancel 4:3 aspect ratio from the FOV
-      extern CDrawPort *pdp;
-      AdjustHFOV(FLOAT2D(3, 4), fFOV);
+      if (sam_bFixMipDistance) {
+        extern CDrawPort *pdp;
+        AdjustHFOV(FLOAT2D(3, 4), fFOV);
+      }
 
       return -pr_TranslationVector(3) * TanFast(fFOV * 0.5f);
     };
