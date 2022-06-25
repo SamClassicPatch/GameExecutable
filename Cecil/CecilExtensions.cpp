@@ -28,19 +28,31 @@ INDEX sam_bCheckFOV = FALSE;
 // Red screen on damage
 INDEX sam_bRedScreenOnDamage = TRUE;
 
-// Adjust horizontal FOV according to wider aspect ratios
-void AdjustFOV(const CDrawPort &dp, FLOAT &fFOV) {
+// Calculate horizontal FOV according to the aspect ratio
+void AdjustHFOV(const CDrawPort &dp, FLOAT &fHFOV) {
   // Get aspect ratio of the current resolution
   FLOAT fAspectRatio = (FLOAT)dp.GetWidth() / (FLOAT)dp.GetHeight();
 
   // 4:3 resolution = 1.0 ratio; 16:9 = 1.333 etc.
-  FLOAT fSquareRatio = fAspectRatio / (4.0f / 3.0f);
+  FLOAT fSquareRatio = fAspectRatio * (3.0f / 4.0f);
 
   // Take current FOV angle and apply square ratio to it
-  FLOAT fVerticalAngle = Tan(fFOV / 2.0f) * fSquareRatio;
+  FLOAT fVerticalAngle = Tan(fHFOV * 0.5f) * fSquareRatio;
 
   // 90 FOV on 16:9 resolution will become 106.26...
-  fFOV = 2.0f * ATan(fVerticalAngle);
+  fHFOV = 2.0f * ATan(fVerticalAngle);
+};
+
+// Calculate vertical FOV from horizontal FOV according to the aspect ratio
+void AdjustVFOV(const CDrawPort &dp, FLOAT &fHFOV) {
+  // Get aspect ratio of the current resolution
+  FLOAT fInverseAspectRatio = (FLOAT)dp.GetHeight() / (FLOAT)dp.GetWidth();
+
+  // Take current FOV angle and apply aspect ratio to it
+  FLOAT fVerticalAngle = Tan(fHFOV * 0.5f) * fInverseAspectRatio;
+
+  // 90 FOV on 4:3 or 106.26 FOV on 16:9 will become 73.74...
+  fHFOV = 2.0f * ATan(fVerticalAngle);
 };
 
 // Custom command registy

@@ -30,27 +30,42 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &p
 
     FLOAT &fNewFOV = ppr.ppr_FOVWidth;
 
-    // Display projection FOV
-    if (sam_bCheckFOV) CPrintF("View: %.2f\n", fNewFOV);
+    // Display view FOVs
+    if (sam_bCheckFOV) {
+      // Horizontal FOV
+      CPrintF("View HFOV: %.2f\n", fNewFOV);
+
+      // Vertical FOV
+      FLOAT fVFOV = fNewFOV;
+      AdjustVFOV(dpDrawport, fVFOV);
+
+      CPrintF("View VFOV: %.2f\n", fVFOV);
+    }
 
     // Set custom FOV if not zooming in
     if (sam_fCustomFOV > 0.0f && fNewFOV > 80.0f) {
       fNewFOV = Clamp(sam_fCustomFOV, 60.0f, 110.0f);
     }
 
-    // Display desired vertical FOV
-    if (sam_bCheckFOV) CPrintF("VFOV: %.2f\n", fNewFOV);
-
     // Adjust FOV for wider resolutions (preserve vertical FOV instead of horizontal)
     if (sam_bUseVerticalFOV) {
-      AdjustFOV(dpDrawport, fNewFOV);
+      AdjustHFOV(dpDrawport, fNewFOV);
 
       // Don't let FOV be invalid
       fNewFOV = Clamp(fNewFOV, 1.0f, 170.0f);
     }
 
-    // Display patched horizontal FOV
-    if (sam_bCheckFOV) CPrintF("HFOV: %.2f\n", fNewFOV);
+    // Display proper FOVs
+    if (sam_bCheckFOV) {
+      // Horizontal FOV
+      CPrintF("New HFOV:  %.2f\n", fNewFOV);
+
+      // Vertical FOV
+      FLOAT fVFOV = fNewFOV;
+      AdjustVFOV(dpDrawport, fVFOV);
+
+      CPrintF("New VFOV:  %.2f\n", fVFOV);
+    }
     
     sam_bCheckFOV = FALSE;
   }
