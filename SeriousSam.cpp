@@ -39,6 +39,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // [Cecil] Extra functionality
 #include "Cecil/CecilExtensions.h"
 
+// [Cecil] Sound data
+#include <Engine/Sound/SoundData.h>
+
 extern CGame *_pGame = NULL;
 
 // Application state variables
@@ -785,6 +788,19 @@ void DoGame(void) {
       // handle pretouching of textures and shadowmaps
       pdp->Unlock();
       _pGame->GameRedrawView(pdp, (_pGame->gm_csConsoleState != CS_OFF) ? 0 : GRV_SHOWEXTRAS);
+
+      // [Cecil] Remove in-game sounds if rendering the game in the menu
+      if (bMenuActive) {
+        FOREACHINLIST(CSoundData, sd_Node, _pSound->sl_ClhAwareList, itCsdSoundData) {
+          FORDELETELIST(CSoundObject, so_Node, itCsdSoundData->sd_ClhLinkList, itCsoSoundObject) {
+            CSoundObject &so = *itCsoSoundObject;
+
+            if (!(so.so_slFlags & SOF_NONGAME)) {
+              so.so_Node.Remove();
+            }
+          }
+        }
+      }
 
       pdp->Lock();
       _pGame->ComputerRender(pdp);
