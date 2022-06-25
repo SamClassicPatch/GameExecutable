@@ -74,7 +74,54 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &p
   (*pRenderView)(woWorld, enViewer, prProjection, dp);
 };
 
+class CProjectionPatch : public CPerspectiveProjection3D {
+  public:
+    FLOAT P_MipFactorDist(FLOAT fDistance) const {
+      ASSERT(pr_Prepared);
+      
+      // Get inverted aspect ratio of the current resolution
+      extern CDrawPort *pdp;
+      FLOAT fInverseAspectRatio = (FLOAT)pdp->GetHeight() / (FLOAT)pdp->GetWidth();
+
+      // Make engine think that the objects are closer for wider resolutions
+      // Also decrease distance for wider FOV (i.e. rely on VFOV instead of HFOV)
+      fDistance *= fInverseAspectRatio * (4.0f / 3.0f);
+
+      return Log2((FLOAT)Abs(1024.0f * fDistance * ppr_fMipRatio));
+    };
+
+    FLOAT P_MipFactor(void) const {
+      ASSERT(pr_Prepared);
+
+      FLOAT fFOV = ppr_FOVWidth;
+
+      // Cancel 4:3 aspect ratio from the FOV
+      extern CDrawPort *pdp;
+      AdjustHFOV(FLOAT2D(3, 4), fFOV);
+
+      return -pr_TranslationVector(3) * TanFast(fFOV * 0.5f);
+    };
+};
+
 extern void CECIL_ApplyFOVPatch(void) {
   pRenderView = &RenderView;
   NEW_PATCH(pRenderView, &P_RenderView, "::RenderView(...)");
+
+  // Workaround for casting raw addresses into function pointers
+  union {
+    ULONG ulAddress;
+    FLOAT (CPerspectiveProjection3D::*pFunc)(void) const;
+  } factor;
+
+  factor.ulAddress = 0x60100500; // Beginning of CPerspectiveProjection3D::MipFactor()
+  NEW_PATCH(factor.pFunc, &CProjectionPatch::P_MipFactor, "CPerspectiveProjection3D::MipFactor()");
+  
+  // Workaround for casting raw addresses into function pointers
+  union {
+    ULONG ulAddress;
+    FLOAT (CPerspectiveProjection3D::*pFunc)(FLOAT) const;
+  } dist;
+
+  dist.ulAddress = 0x601004D0; // Beginning of CPerspectiveProjection3D::MipFactor(FLOAT)
+  NEW_PATCH(dist.pFunc, &CProjectionPatch::P_MipFactorDist, "CPerspectiveProjection3D::MipFactor(FLOAT)");
 };
