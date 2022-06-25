@@ -213,12 +213,7 @@ FLOATaabbox2D BoxLeftColumn(FLOAT fRow) {
 }
 
 FLOATaabbox2D BoxPlayerModel(void) {
-  extern INDEX sam_bWideScreen;
-  if (!sam_bWideScreen) {
-    return FLOATaabbox2D(FLOAT2D(0.68f, 0.235f), FLOAT2D(0.965f, 0.78f));
-  } else {
-    return FLOATaabbox2D(FLOAT2D(0.68f, 0.235f), FLOAT2D(0.68f + (0.965f - 0.68f) * 9.0f / 12.0f, 0.78f));
-  }
+  return FLOATaabbox2D(FLOAT2D(0.68f, 0.235f), FLOAT2D(0.965f, 0.78f));
 }
 
 FLOATaabbox2D BoxPlayerModelName(void) {
@@ -246,7 +241,7 @@ void SetFontTitle(CDrawPort *pdp) {
   pdp->SetFont(&_fdTitle);
 
   // [Cecil] Use height instead of width for text scaling
-  pdp->SetTextScaling(1.25f * HEIGHT_MULTIPLIER(pdp) * pdp->dp_fWideAdjustment);
+  pdp->SetTextScaling(1.25f * HEIGHT_MULTIPLIER(pdp));
   pdp->SetTextAspect(1.0f);
 }
 
@@ -255,7 +250,7 @@ void SetFontBig(CDrawPort *pdp) {
   pdp->SetFont(&_fdBig);
   
   // [Cecil] Use height instead of width for text scaling
-  pdp->SetTextScaling(1.0f * HEIGHT_MULTIPLIER(pdp) * pdp->dp_fWideAdjustment);
+  pdp->SetTextScaling(1.0f * HEIGHT_MULTIPLIER(pdp));
   pdp->SetTextAspect(1.0f);
 }
 
@@ -264,7 +259,7 @@ void SetFontMedium(CDrawPort *pdp) {
   pdp->SetFont(&_fdMedium);
   
   // [Cecil] Use height instead of width for text scaling
-  pdp->SetTextScaling(1.0f * HEIGHT_MULTIPLIER(pdp) * pdp->dp_fWideAdjustment);
+  pdp->SetTextScaling(1.0f * HEIGHT_MULTIPLIER(pdp));
   pdp->SetTextAspect(0.75f);
 }
 

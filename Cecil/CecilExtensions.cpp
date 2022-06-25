@@ -17,8 +17,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Cecil/CecilExtensions.h"
 
-// Render game in the background while in menu
+// General
 INDEX sam_bBackgroundGameRender = TRUE;
+INDEX sam_bAdjustForAspectRatio = TRUE;
 
 // FOV patch
 INDEX sam_bUseVerticalFOV = TRUE;
@@ -129,8 +130,9 @@ void CECIL_Init(void) {
 
   // Custom symbols
   {
-    // Render game in the background while in menu
+    // General
     _pShell->DeclareSymbol("user INDEX sam_bBackgroundGameRender post:CECIL_RegisterCommand;", &sam_bBackgroundGameRender);
+    _pShell->DeclareSymbol("user INDEX sam_bAdjustForAspectRatio post:CECIL_RegisterCommand;", &sam_bAdjustForAspectRatio);
 
     // FOV patch
     _pShell->DeclareSymbol("user INDEX sam_bUseVerticalFOV post:CECIL_RegisterCommand;", &sam_bUseVerticalFOV);

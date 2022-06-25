@@ -22,8 +22,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // [Cecil] Extra functionality
 #include "Cecil/CecilExtensions.h"
 
-extern INDEX sam_bWideScreen;
-
 CMGModel::CMGModel(void) {
   mg_fFloorY = 0;
 }
@@ -54,7 +52,7 @@ void CMGModel::Render(CDrawPort *pdp) {
   CPerspectiveProjection3D pr;
 
   // [Cecil] Adjust FOV
-  FLOAT fFOV = sam_bWideScreen ? 45.0f : 30.0f;
+  FLOAT fFOV = 30.0f;
   AdjustHFOV(FLOAT2D(pdp->GetWidth(), pdp->GetHeight()), fFOV);
 
   pr.FOVL() = fFOV;

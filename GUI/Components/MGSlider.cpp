@@ -21,7 +21,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern PIX _pixCursorPosI;
 extern PIX _pixCursorPosJ;
-extern INDEX sam_bWideScreen;
 
 CMGSlider::CMGSlider() {
   mg_iMinPos = 0;
@@ -84,8 +83,7 @@ PIXaabbox2D CMGSlider::GetSliderBox(void) {
   PIX pixJ = box.Min()(2);
   PIX pixJSize = box.Size()(2) * 0.95f;
   PIX pixISizeR = box.Size()(1) * 0.45f;
-  if (sam_bWideScreen)
-    pixJSize++;
+
   return PIXaabbox2D(PIX2D(pixIR + 1, pixJ + 1), PIX2D(pixIR + pixISizeR - 2, pixJ + pixJSize - 2));
 }
 
@@ -100,8 +98,6 @@ void CMGSlider::Render(CDrawPort *pdp) {
   PIX pixJ = box.Min()(2);
   PIX pixJSize = box.Size()(2) * 0.95f;
   PIX pixISizeR = box.Size()(1) * 0.45f;
-  if (sam_bWideScreen)
-    pixJSize++;
 
   // print text left of slider
   pdp->PutTextR(mg_strText, pixIL, pixJ, col);

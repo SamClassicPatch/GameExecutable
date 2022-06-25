@@ -140,8 +140,7 @@ FLOAT Credits_Render(CDrawPort *pdp) {
     return 0;
   }
 
-  CDrawPort dpWide;
-  pdp->MakeWideScreen(&dpWide);
+  CDrawPort dpWide(pdp, TRUE);
 
   pdp->Unlock();
   dpWide.Lock();

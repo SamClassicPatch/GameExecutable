@@ -517,12 +517,7 @@ void MenuUpdateMouseFocus(void) {
   POINT pt;
   GetCursorPos(&pt);
   ScreenToClient(_hwndMain, &pt);
-  extern INDEX sam_bWideScreen;
-  extern CDrawPort *pdp;
-  if (sam_bWideScreen) {
-    const PIX pixHeight = pdp->GetHeight();
-    pt.y -= (pixHeight / 0.75f - pixHeight) / 2;
-  }
+
   _pixCursorPosI += pt.x - _pixCursorExternPosI;
   _pixCursorPosJ = _pixCursorExternPosJ;
   _pixCursorExternPosI = pt.x;
@@ -693,7 +688,7 @@ BOOL DoMenu(CDrawPort *pdp) {
       if (_ptoLogoODI != NULL) {
         CTextureData &td = (CTextureData &)*_ptoLogoODI->GetData();
         const INDEX iSize = 50;
-        const PIX pixLogoWidth = iSize * dpMenu.dp_fWideAdjustment;
+        const PIX pixLogoWidth = iSize;
         const PIX pixLogoHeight = iSize * td.GetHeight() / td.GetWidth();
         pixI0 = (pixR - pixLogoWidth - 16) * fScale;
         pixJ0 = (480 - pixLogoHeight - 16) * fScale;
@@ -704,7 +699,7 @@ BOOL DoMenu(CDrawPort *pdp) {
       if (_ptoLogoCT != NULL) {
         CTextureData &td = (CTextureData &)*_ptoLogoCT->GetData();
         const INDEX iSize = 50;
-        const PIX pixLogoWidth = iSize * dpMenu.dp_fWideAdjustment;
+        const PIX pixLogoWidth = iSize;
         const PIX pixLogoHeight = iSize * td.GetHeight() / td.GetWidth();
         pixI0 = 12 * fScale;
         pixJ0 = (480 - pixLogoHeight - 16) * fScale;
@@ -728,7 +723,7 @@ BOOL DoMenu(CDrawPort *pdp) {
       if (_ptoLogoEAX != NULL) {
         CTextureData &td = (CTextureData &)*_ptoLogoEAX->GetData();
         const INDEX iSize = 95;
-        const PIX pixLogoWidth = iSize * dpMenu.dp_fWideAdjustment;
+        const PIX pixLogoWidth = iSize;
         const PIX pixLogoHeight = iSize * td.GetHeight() / td.GetWidth();
         pixI0 = (pixR - pixLogoWidth - 35) * fScale;
         pixJ0 = (480 - pixLogoHeight - 7) * fScale;
@@ -742,7 +737,7 @@ BOOL DoMenu(CDrawPort *pdp) {
 #define THUMBH 96
     // if there is a thumbnail
     if (_bThumbnailOn) {
-      const FLOAT fThumbScaleW = fScale * dpMenu.dp_fWideAdjustment;
+      const FLOAT fThumbScaleW = fScale;
       PIX pixOfs = 8 * fScale;
       pixI0 = 8 * fScale;
       pixJ0 = (240 - THUMBW / 2) * fScale;

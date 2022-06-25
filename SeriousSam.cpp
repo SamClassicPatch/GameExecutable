@@ -59,7 +59,7 @@ extern PIX2D _vpixScreenRes = PIX2D(0, 0);
 static INDEX sam_iMaxFPSActive = 500;
 static INDEX sam_iMaxFPSInactive = 10;
 static INDEX sam_bPauseOnMinimize = TRUE; // auto-pause when window has been minimized
-extern INDEX sam_bWideScreen = FALSE;
+static INDEX sam_bWideScreen = FALSE; // [Cecil] Dummy; replaced with 'sam_bAdjustForAspectRatio'
 extern FLOAT sam_fPlayerOffset = 0.0f;
 
 // Display mode settings
@@ -138,7 +138,6 @@ ENGINE_API extern INDEX snd_iFormat;
 // Main window canvas
 CDrawPort *pdp;
 CDrawPort *pdpNormal;
-CDrawPort *pdpWideScreen;
 CViewPort *pvpViewPort;
 HINSTANCE _hInstance;
 
@@ -839,17 +838,6 @@ void DoGame(void) {
     // done with all
     pdp->Unlock();
 
-    // clear upper and lower parts of screen if in wide screen mode
-    if (pdp == pdpWideScreen && pdpNormal->Lock()) {
-      const PIX pixWidth = pdpWideScreen->GetWidth();
-      const PIX pixHeight = (pdpNormal->GetHeight() - pdpWideScreen->GetHeight()) / 2;
-      const PIX pixJOfs = pixHeight + pdpWideScreen->GetHeight() - 1;
-
-      pdpNormal->Fill(0, 0, pixWidth, pixHeight, C_BLACK | CT_OPAQUE);
-      pdpNormal->Fill(0, pixJOfs, pixWidth, pixHeight, C_BLACK | CT_OPAQUE);
-      pdpNormal->Unlock();
-    }
-
     // show
     pvpViewPort->SwapBuffers();
   }
@@ -888,21 +876,19 @@ void RenderStarfield(CDrawPort *pdp, FLOAT fStrength) {
 
 FLOAT RenderQuitScreen(CDrawPort *pdp, CViewPort *pvp) {
   CDrawPort dpQuit(pdp, TRUE);
-  CDrawPort dpWide;
-  dpQuit.MakeWideScreen(&dpWide);
 
   // redraw the view
-  if (!dpWide.Lock()) {
+  if (!dpQuit.Lock()) {
     return 0;
   }
 
-  dpWide.Fill(C_BLACK | CT_OPAQUE);
-  RenderStarfield(&dpWide, _fLastVolume);
+  dpQuit.Fill(C_BLACK | CT_OPAQUE);
+  RenderStarfield(&dpQuit, _fLastVolume);
 
-  FLOAT fVolume = Credits_Render(&dpWide);
+  FLOAT fVolume = Credits_Render(&dpQuit);
   _fLastVolume = fVolume;
 
-  dpWide.Unlock();
+  dpQuit.Unlock();
   pvp->SwapBuffers();
 
   return fVolume;
@@ -1530,17 +1516,10 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
       pdp->Unlock();
       pvpViewPort->SwapBuffers();
     }
-
-    // lets try some wide screen screaming :)
-    const PIX pixYBegAdj = pdp->GetHeight() * 21 / 24;
-    const PIX pixYEndAdj = pdp->GetHeight() * 3 / 24;
-    const PIX pixXEnd    = pdp->GetWidth();
-
-    pdpWideScreen = new CDrawPort(pdp, PIXaabbox2D(PIX2D(0, pixYBegAdj), PIX2D(pixXEnd, pixYEndAdj)));
-    pdpWideScreen->dp_fWideAdjustment = 9.0f / 12.0f;
-
-    if (sam_bWideScreen) {
-      pdp = pdpWideScreen;
+    
+    // [Cecil] Set wide adjustment based on current aspect ratio
+    if (sam_bAdjustForAspectRatio) {
+      pdp->dp_fWideAdjustment = ((FLOAT)pdp->GetHeight() / (FLOAT)pdp->GetWidth()) * (4.0f / 3.0f);
     }
 
     // initial screen fill and swap, just to get context running
