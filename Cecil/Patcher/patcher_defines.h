@@ -116,26 +116,26 @@
 
 
 #define DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(N) DEFINE_TEMPLATE(N)       \
-	explicit CPatch(DEFINE_2_N_ARGS_FUNCTIONS(N),                           \
-		bool patch_now = true, bool set_forever = false)                    \
-								: m_valid(false)                            \
-								, m_patched(false)                          \
-								, m_set_forever(set_forever)                \
-								, m_PatchInstructionSet(0)                  \
-								, m_RestorePatchSet(0)                      \
-	{                                                                       \
-		HookClassFunctions(pfn_source, pfn_target, patch_now, set_forever); \
-	}
+  explicit CPatch(DEFINE_2_N_ARGS_FUNCTIONS(N),                           \
+    bool patch_now = true, bool set_forever = false)                    \
+                : m_valid(false)                            \
+                , m_patched(false)                          \
+                , m_set_forever(set_forever)                \
+                , m_PatchInstructionSet(0)                  \
+                , m_RestorePatchSet(0)                      \
+  {                                                                       \
+    HookClassFunctions(pfn_source, pfn_target, patch_now, set_forever); \
+  }
 
-	DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(0)
-	DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(1)
-	DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(2)
-	DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(3)
-	DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(4)
-	DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(5)
-	DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(6)
-	//DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(7)
-	
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(0)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(1)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(2)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(3)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(4)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(5)
+  DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(6)
+  //DEFINE_CPATCH_CTOR_FUNCTION_WITH_N_ARGS(7)
+  
 
 ////////////////// experimental, don't use //////////////////////////////////////
 #define DEFINE_T_CLASSES_LIST_MN(M, N) DEFINE_T_CLASSES_LIST_##(M), TArg##N
