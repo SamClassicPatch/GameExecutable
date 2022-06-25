@@ -75,12 +75,6 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &p
 };
 
 extern void CECIL_ApplyFOVPatch(void) {
-  CPrintF("  ::RenderView\n");
   pRenderView = &RenderView;
-
-  NEW_PATCH(pPatchSet, pRenderView, &P_RenderView);
-
-  if (!pPatchSet->ok()) {
-    FatalError("Cannot set function patch for RenderView()!");
-  }
+  NEW_PATCH(pRenderView, &P_RenderView, "::RenderView(...)");
 };

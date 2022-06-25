@@ -54,12 +54,6 @@ class CDrawPortPatch : public CDrawPort {
 };
 
 extern void CECIL_ApplyScreenBlendPatch(void) {
-  CPrintF("  CDrawPort::BlendScreen\n");
   pBlendScreen = &CDrawPort::BlendScreen;
-
-  NEW_PATCH(pPatchSet, pBlendScreen, &CDrawPortPatch::P_BlendScreen);
-
-  if (!pPatchSet->ok()) {
-    FatalError("Cannot set function patch for CDrawPort::BlendScreen()!");
-  }
+  NEW_PATCH(pBlendScreen, &CDrawPortPatch::P_BlendScreen, "CDrawPort::BlendScreen()");
 };

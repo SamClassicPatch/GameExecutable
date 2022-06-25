@@ -19,7 +19,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 extern CDynamicContainer<CPatch> _cPatches;
 
 // Create a new function patch
-#define NEW_PATCH(PatchPtr, OldFunc, NewFunc) \
-  CPatch *PatchPtr = new CPatch(OldFunc, NewFunc, true, true); \
+#define NEW_PATCH(OldFunc, NewFunc, FuncName) { \
+  CPutString("  " FuncName "\n"); \
+  CPatch *pPatch = new CPatch(OldFunc, NewFunc, true, true); \
   /* Add to the patch registry if patched */ \
-  { if (PatchPtr->ok()) _cPatches.Add(PatchPtr); }
+  if (pPatch->ok()) _cPatches.Add(pPatch); \
+  else FatalError("Cannot set function patch for " FuncName "!\nAddress: 0x%p", OldFunc); \
+}
