@@ -234,19 +234,6 @@ CTString _getGameModeName(INDEX iGameMode)
   return pFunc(iGameMode);
 }
 
-CTString _getGameModeShortName(INDEX iGameMode)
-{
-  // get function that will provide us the info about gametype
-  CShellSymbol *pss = _pShell->GetSymbol("GetGameTypeShortName", /*bDeclaredOnly=*/ TRUE); // [Cecil] NOTE: SSE-specific!
-
-  if (pss == NULL) {
-    return "";
-  }
-
-  CTString (*pFunc)(INDEX) = (CTString (*)(INDEX))pss->ss_pvValue;
-  return pFunc(iGameMode);
-}
-
 extern CTString _getCurrentGameTypeName()
 {
   CShellSymbol *pss = _pShell->GetSymbol("GetCurrentGameTypeName", /*bDeclaredOnly=*/ TRUE);
