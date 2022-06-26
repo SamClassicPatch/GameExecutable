@@ -60,35 +60,41 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
 
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8B\x46", 2))    
     {
-      PATCHER_OUT("MOV ECX, [EBP + arg_0] \n");
+      PATCHER_OUT("mov ecx, [ebp + arg_0] \n");
       instruction_len = 3;
       instruction_found = true;
 
-    } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8B\x4D", 2))    // MOV ECX, [EBP + arg_0]
+    } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8B\x4D", 2)) // mov ecx, [ebp + arg_0]
     {
-      PATCHER_OUT("MOV ECX, [EBP + arg_0] \n");
+      PATCHER_OUT("mov ecx, [ebp + arg_0] \n");
       instruction_len = 3;
       instruction_found = true;
 
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8B\x75", 2))
     {
-      PATCHER_OUT("mov esi, [ebp+arg_0] \n");
+      PATCHER_OUT("mov esi, [ebp + arg_0] \n");
       instruction_len = 3;
       instruction_found = true;
 
-    } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8D\x45", 2)) // lea     eax, [ebp+...]
+    } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8B\x45", 2))
     {
-      PATCHER_OUT("lea     eax, [ebp+...] \n");
+      PATCHER_OUT("mov eax, [ebp + arg_0] \n");
       instruction_len = 3;
       instruction_found = true;
 
-    } else if (!memcmp(reinterpret_cast<char*>(addr), "\x64\xA1", 2)) // MOV EAX, large FS
+    } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8D\x45", 2)) // lea eax, [ebp+...]
     {
-      PATCHER_OUT("MOV EAX, large FS \n");
+      PATCHER_OUT("lea eax, [ebp+...] \n");
+      instruction_len = 3;
+      instruction_found = true;
+
+    } else if (!memcmp(reinterpret_cast<char*>(addr), "\x64\xA1", 2)) // mov eax, large FS
+    {
+      PATCHER_OUT("mov eax, large FS \n");
       instruction_len = 6;
       instruction_found = true;
 
-    } else if ((*reinterpret_cast<char*>(addr) >= (char)0x50) && (*reinterpret_cast<char*>(addr) < (char)0x58)) // PUSH
+    } else if ((*reinterpret_cast<char*>(addr) >= (char)0x50) && (*reinterpret_cast<char*>(addr) < (char)0x58)) // push
     {
       PATCHER_OUT("push xxx\n");
       instruction_len = 1;
