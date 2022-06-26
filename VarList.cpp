@@ -118,7 +118,13 @@ void ParseCFG_t(CTStream &strm) {
       CheckPVS_t(pvs);
       strLine.TrimSpacesLeft();
       strLine.TrimSpacesRight();
-      pvs->vs_strVar = strLine;
+
+      // [Cecil] Replace old wide screen command
+      if (strLine == "sam_bWideScreen") {
+        pvs->vs_strVar = "sam_bAdjustForAspectRatio";
+      } else {
+        pvs->vs_strVar = strLine;
+      }
 
     } else if (strLine.RemovePrefix("Filter:")) {
       CheckPVS_t(pvs);
