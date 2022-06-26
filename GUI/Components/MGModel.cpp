@@ -51,11 +51,7 @@ void CMGModel::Render(CDrawPort *pdp) {
   CRenderModel rmRenderModel;
   CPerspectiveProjection3D pr;
 
-  // [Cecil] Adjust FOV
-  FLOAT fFOV = 30.0f;
-  AdjustHFOV(FLOAT2D(pdp->GetWidth(), pdp->GetHeight()), fFOV);
-
-  pr.FOVL() = fFOV;
+  pr.FOVL() = 30.0f; // [Cecil] Adjusted in BeginModelRenderingView()
   pr.ScreenBBoxL() = FLOATaabbox2D(FLOAT2D(0.0f, 0.0f), FLOAT2D((float)dpModel.GetWidth(), (float)dpModel.GetHeight()));
   pr.AspectRatioL() = 1.0f;
   pr.FrontClipDistanceL() = 0.3f;

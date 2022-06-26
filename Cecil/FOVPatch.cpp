@@ -22,11 +22,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 static void (*pRenderView)(CWorld &, CEntity &, CAnyProjection3D &, CDrawPort &) = NULL;
 
 // Patched function
-static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &prProjection, CDrawPort &dp)
+static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &apr, CDrawPort &dp)
 {
   // Change FOV for the player view
-  if (prProjection.IsPerspective() && (IsDerivedFromClass(&enViewer, "PlayerEntity") || IsOfClass(&enViewer, "Player View"))) {
-    CPerspectiveProjection3D &ppr = *((CPerspectiveProjection3D *)(CProjection3D *)prProjection);
+  if (apr.IsPerspective() && (IsDerivedFromClass(&enViewer, "PlayerEntity") || IsOfClass(&enViewer, "Player View"))) {
+    CPerspectiveProjection3D &ppr = *((CPerspectiveProjection3D *)(CProjection3D *)apr);
 
     FLOAT &fNewFOV = ppr.ppr_FOVWidth;
 
@@ -71,7 +71,76 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &p
   }
 
   // Proceed to the original function
-  (*pRenderView)(woWorld, enViewer, prProjection, dp);
+  (*pRenderView)(woWorld, enViewer, apr, dp);
+};
+
+// Original function pointer
+static void (*pModelRender)(CAnyProjection3D &, CDrawPort *) = NULL;
+
+// Patched function
+static void P_BeginModelRenderingView(CAnyProjection3D &apr, CDrawPort *pdp) {
+  if (sam_bFixViewmodelFOV) {
+    BOOL bFixFOV = TRUE;
+
+    // Don't fix FOV for computer models
+    if (_pGame->gm_csComputerState != CS_OFF && _pGame->gm_csComputerState != CS_ONINBACKGROUND) {
+      bFixFOV = FALSE;
+
+    } else {
+      // Create thread context
+      CONTEXT context;
+      ZeroMemory(&context, sizeof(CONTEXT));
+      context.ContextFlags = CONTEXT_CONTROL;
+
+      // Retrieve call stack
+      __asm {
+      Label:
+        mov [context.Ebp], ebp
+        mov [context.Esp], esp
+        mov eax, [Label]
+        mov [context.Eip], eax
+      }
+
+      DWORD ulCallAddress = context.Eip;
+
+      PDWORD pFrame = (PDWORD)context.Ebp;
+      PDWORD pPrevFrame = NULL;
+
+      // Iterate through the last 10 calls from here
+      for (INDEX iDepth = 0; iDepth < 10; iDepth++)
+      {
+        // Calling from CRenderer::RenderModels()
+        if (ulCallAddress == 0x601AF17E) {
+          bFixFOV = FALSE;
+          break;
+        }
+
+        // Get next call address
+        ulCallAddress = pFrame[1];
+
+        // Advance the frame
+        pPrevFrame = pFrame;
+        pFrame = (PDWORD)pFrame[0];
+
+        if ((DWORD)pFrame & 3) break;
+        if (pFrame <= pPrevFrame) break;
+
+        if (IsBadWritePtr(pFrame, sizeof(PVOID) * 2)) break;
+      }
+    }
+
+    // If need to fix FOV for the perspective projection
+    if (bFixFOV && apr.IsPerspective()) {
+      CPerspectiveProjection3D &ppr = *((CPerspectiveProjection3D *)(CProjection3D *)apr);
+
+      // Adjust projection FOV according to the aspect ratio
+      extern CDrawPort *pdp;
+      AdjustHFOV(FLOAT2D(pdp->GetWidth(), pdp->GetHeight()), ppr.FOVL());
+    }
+  }
+
+  // Proceed to the original function
+  (*pModelRender)(apr, pdp);
 };
 
 class CProjectionPatch : public CPerspectiveProjection3D {
@@ -110,6 +179,9 @@ class CProjectionPatch : public CPerspectiveProjection3D {
 extern void CECIL_ApplyFOVPatch(void) {
   pRenderView = &RenderView;
   NEW_PATCH(pRenderView, &P_RenderView, "::RenderView(...)");
+
+  pModelRender = &BeginModelRenderingView;
+  NEW_PATCH(pModelRender, &P_BeginModelRenderingView, "::BeginModelRenderingView(...)");
 
   // Workaround for casting raw addresses into function pointers
   union {
