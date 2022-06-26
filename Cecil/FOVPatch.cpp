@@ -28,6 +28,11 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &a
   if (apr.IsPerspective() && (IsDerivedFromClass(&enViewer, "PlayerEntity") || IsOfClass(&enViewer, "Player View"))) {
     CPerspectiveProjection3D &ppr = *((CPerspectiveProjection3D *)(CProjection3D *)apr);
 
+    FLOAT2D vScreen(dp.GetWidth(), dp.GetHeight());
+
+    // Adjust clip distance according to the aspect ratio
+    ppr.FrontClipDistanceL() *= (vScreen(2) / vScreen(1)) * (4.0f / 3.0f);
+
     FLOAT &fNewFOV = ppr.ppr_FOVWidth;
 
     // Display view FOVs
@@ -37,7 +42,7 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &a
 
       // Vertical FOV
       FLOAT fVFOV = fNewFOV;
-      AdjustVFOV(FLOAT2D(dp.GetWidth(), dp.GetHeight()), fVFOV);
+      AdjustVFOV(vScreen, fVFOV);
 
       CPrintF("View VFOV: %.2f\n", fVFOV);
     }
@@ -49,7 +54,7 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &a
 
     // Adjust FOV for wider resolutions (preserve vertical FOV instead of horizontal)
     if (sam_bUseVerticalFOV) {
-      AdjustHFOV(FLOAT2D(dp.GetWidth(), dp.GetHeight()), fNewFOV);
+      AdjustHFOV(vScreen, fNewFOV);
 
       // Don't let FOV be invalid
       fNewFOV = Clamp(fNewFOV, 1.0f, 170.0f);
@@ -62,7 +67,7 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &a
 
       // Vertical FOV
       FLOAT fVFOV = fNewFOV;
-      AdjustVFOV(FLOAT2D(dp.GetWidth(), dp.GetHeight()), fVFOV);
+      AdjustVFOV(vScreen, fVFOV);
 
       CPrintF("New VFOV:  %.2f\n", fVFOV);
     }
