@@ -84,7 +84,8 @@ static void (*pModelRender)(CAnyProjection3D &, CDrawPort *) = NULL;
 
 // Patched function
 static void P_BeginModelRenderingView(CAnyProjection3D &apr, CDrawPort *pdp) {
-  if (sam_bFixViewmodelFOV) {
+  // Only fix for perspective projections
+  if (sam_bFixViewmodelFOV && apr.IsPerspective()) {
     BOOL bFixFOV = TRUE;
 
     // Don't fix FOV for computer models
@@ -134,8 +135,8 @@ static void P_BeginModelRenderingView(CAnyProjection3D &apr, CDrawPort *pdp) {
       }
     }
 
-    // If need to fix FOV for the perspective projection
-    if (bFixFOV && apr.IsPerspective()) {
+    // Need to fix the FOV
+    if (bFixFOV) {
       CPerspectiveProjection3D &ppr = *((CPerspectiveProjection3D *)(CProjection3D *)apr);
 
       // Adjust projection FOV according to the aspect ratio
