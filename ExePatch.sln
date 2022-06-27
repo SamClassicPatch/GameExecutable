@@ -8,11 +8,17 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_TSE107|x86 = Debug_TSE107|x86
+		Release_TFE105|x86 = Release_TFE105|x86
+		Release_TSE105|x86 = Release_TSE105|x86
 		Release_TSE107|x86 = Release_TSE107|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{F0E01B8A-1C93-85CB-693E-B9CA24A27168}.Debug_TSE107|x86.ActiveCfg = Debug_TSE107|Win32
 		{F0E01B8A-1C93-85CB-693E-B9CA24A27168}.Debug_TSE107|x86.Build.0 = Debug_TSE107|Win32
+		{F0E01B8A-1C93-85CB-693E-B9CA24A27168}.Release_TFE105|x86.ActiveCfg = Release_TFE105|Win32
+		{F0E01B8A-1C93-85CB-693E-B9CA24A27168}.Release_TFE105|x86.Build.0 = Release_TFE105|Win32
+		{F0E01B8A-1C93-85CB-693E-B9CA24A27168}.Release_TSE105|x86.ActiveCfg = Release_TSE105|Win32
+		{F0E01B8A-1C93-85CB-693E-B9CA24A27168}.Release_TSE105|x86.Build.0 = Release_TSE105|Win32
 		{F0E01B8A-1C93-85CB-693E-B9CA24A27168}.Release_TSE107|x86.ActiveCfg = Release_TSE107|Win32
 		{F0E01B8A-1C93-85CB-693E-B9CA24A27168}.Release_TSE107|x86.Build.0 = Release_TSE107|Win32
 	EndGlobalSection

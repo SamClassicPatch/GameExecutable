@@ -8,4 +8,12 @@
     <LocalDebuggerCommand>$(ProjectDir)..\..\Bin\$(TargetFileName)</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'">
+    <LocalDebuggerCommand>$(ProjectDir)..\..\Bin\$(TargetFileName)</LocalDebuggerCommand>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'">
+    <LocalDebuggerCommand>$(ProjectDir)..\..\Bin\$(TargetFileName)</LocalDebuggerCommand>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>

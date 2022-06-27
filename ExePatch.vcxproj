@@ -5,6 +5,14 @@
       <Configuration>Debug_TSE107</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_TFE105|Win32">
+      <Configuration>Release_TFE105</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_TSE105|Win32">
+      <Configuration>Release_TSE105</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release_TSE107|Win32">
       <Configuration>Release_TSE107</Configuration>
       <Platform>Win32</Platform>
@@ -22,6 +30,14 @@
     <UseOfMfc>false</UseOfMfc>
     <PlatformToolset>v60</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'" Label="Configuration">
+    <UseOfMfc>false</UseOfMfc>
+    <PlatformToolset>v60</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'" Label="Configuration">
+    <UseOfMfc>false</UseOfMfc>
+    <PlatformToolset>v60</PlatformToolset>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TSE107|Win32'" Label="Configuration">
     <UseOfMfc>false</UseOfMfc>
     <PlatformToolset>v60</PlatformToolset>
@@ -30,6 +46,14 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE107|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
   </ImportGroup>
@@ -58,6 +82,26 @@
     <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
     <TargetName>SeriousSam_Custom</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(ProjectDir)Includes/;$(ProjectDir)Includes/Engine105/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)Includes/Engine105/;$(LibraryPath)</LibraryPath>
+    <GenerateManifest>true</GenerateManifest>
+    <EmbedManifest>true</EmbedManifest>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
+    <TargetName>SeriousSam_Custom</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(ProjectDir)Includes/;$(ProjectDir)Includes/Engine105FE/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)Includes/Engine105FE/;$(LibraryPath)</LibraryPath>
+    <GenerateManifest>true</GenerateManifest>
+    <EmbedManifest>true</EmbedManifest>
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
+    <TargetName>SeriousSam_Custom</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TSE107|Win32'">
     <ClCompile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -70,6 +114,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>StdH.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4996;4333</DisableSpecificWarnings>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -108,6 +153,88 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <StringPooling>true</StringPooling>
       <PreprocessorDefinitions>SE1_D3D;SE1_VER=107;WIN32;NDEBUG;_WINDOWS;_WINDLL;_AFXDLL;_USRDLL;DIRECT3D_VERSION=0x0800;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>StdH.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4996;4333</DisableSpecificWarnings>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\SeriousSam.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <RedirectOutputAndErrors>NUL</RedirectOutputAndErrors>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Bscmake>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <CustomBuildStep />
+    <PostBuildEvent>
+      <Message>Copying $(TargetName)$(TargetExt) to $(ProjectDir)..\..\Bin</Message>
+      <Command>copy $(OutDir)$(TargetName)$(TargetExt) $(ProjectDir)..\..\Bin\ &gt;nul </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <StringPooling>true</StringPooling>
+      <PreprocessorDefinitions>SE1_D3D;SE1_VER=105;WIN32;NDEBUG;_WINDOWS;_WINDLL;_AFXDLL;_USRDLL;DIRECT3D_VERSION=0x0800;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>StdH.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4996;4333</DisableSpecificWarnings>
+    </ClCompile>
+    <Midl>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>.\Release\SeriousSam.tlb</TypeLibraryName>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <RedirectOutputAndErrors>NUL</RedirectOutputAndErrors>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Bscmake>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <CustomBuildStep />
+    <PostBuildEvent>
+      <Message>Copying $(TargetName)$(TargetExt) to $(ProjectDir)..\..\Bin</Message>
+      <Command>copy $(OutDir)$(TargetName)$(TargetExt) $(ProjectDir)..\..\Bin\ &gt;nul </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'">
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level3</WarningLevel>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <StringPooling>true</StringPooling>
+      <PreprocessorDefinitions>SE1_D3D;SE1_TFE;SE1_VER=105;WIN32;NDEBUG;_WINDOWS;_WINDLL;_AFXDLL;_USRDLL;DIRECT3D_VERSION=0x0800;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>StdH.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4996;4333</DisableSpecificWarnings>
@@ -271,7 +398,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_TSE107|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug_TSE107|Win32'">StdH.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_TSE107|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_TSE107|Win32'">StdH.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'">StdH.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'">StdH.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="VarList.cpp" />
   </ItemGroup>
