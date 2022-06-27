@@ -36,14 +36,14 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
       m_old_jmp = 5 + addr + *reinterpret_cast<long*>(addr + 1);
 
     } else if (*reinterpret_cast<char*>(addr) == (char)0x68 // push???
-     ||        *reinterpret_cast<char*>(addr) == (char)0xB8 // mov EAX, XX XX XX XX
+     ||        *reinterpret_cast<char*>(addr) == (char)0xB8 // mov eax, XX XX XX XX
      || !memcmp(reinterpret_cast<char*>(addr), "\xB8\x1E", 2))
     {
       PATCHER_OUT("2 \n");
       instruction_len = 5;
       instruction_found = true;
       
-    } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8B\x55", 2)) // MOV EDX, [EBP + arg_0]
+    } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8B\x55", 2)) // mov edx, [ebp + arg_0]
     {
       PATCHER_OUT("mov edx, [ebp+arg0]\n");
       instruction_len = 3;
@@ -51,7 +51,7 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
 
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8B\xFF", 2) 
             || !memcmp(reinterpret_cast<char*>(addr), "\x8B\xEC", 2)
-            || !memcmp(reinterpret_cast<char*>(addr), "\x8B\xF1", 2) // MOV
+            || !memcmp(reinterpret_cast<char*>(addr), "\x8B\xF1", 2) // mov
             ||        *reinterpret_cast<char*>(addr) == (char)0x6A)  // push XX
     {
       PATCHER_OUT("3 \n");
@@ -94,6 +94,12 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
       instruction_len = 6;
       instruction_found = true;
 
+    } else if (*reinterpret_cast<char*>(addr) == (char)0xA1) // mov eax, DWORD
+    {
+      PATCHER_OUT("mov eax, XX XX XX XX \n");
+      instruction_len = 5;
+      instruction_found = true;
+
     } else if ((*reinterpret_cast<char*>(addr) >= (char)0x50) && (*reinterpret_cast<char*>(addr) < (char)0x58)) // push
     {
       PATCHER_OUT("push xxx\n");
@@ -106,7 +112,7 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
       instruction_len = 3;
       instruction_found = true;
 
-    } else if (*reinterpret_cast<char*>(addr) == (char)0x89) // MOV
+    } else if (*reinterpret_cast<char*>(addr) == (char)0x89) // mov
     {
       PATCHER_OUT("mov\n");
       instruction_len = 3;
