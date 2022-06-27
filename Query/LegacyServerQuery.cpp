@@ -86,15 +86,13 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
 
   unsigned char *data = (unsigned char*)&_szBuffer[0];
 
-  char *sPch1 = NULL, *sPch2 = NULL, *sPch3 = NULL, *sPch4 = NULL, *sPch5;
+  char *sPch1 = NULL, *sPch2 = NULL, *sPch3 = NULL, *sPch4 = NULL;
 
   sPch1 = strstr(_szBuffer, "\\status\\");
   sPch2 = strstr(_szBuffer, "\\info\\");
   sPch3 = strstr(_szBuffer, "\\basic\\");
   sPch4 = strstr(_szBuffer, "\\players\\");
 
-  sPch5 = strstr(_szBuffer, "\\secure\\"); // [SSE] [ZCaliptium] Validation Fix.
-  
   if (ms_bDebugOutput) {
     CPrintF("Received data[%d]:\n%s\n", iLength, _szBuffer);
   }
@@ -227,27 +225,6 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
       CPrintF("Sending players answer:\n%s\n", strPacket);
     }
   
-  // [SSE] [ZCaliptium] '/validate/' - Validation request.
-  } else if (sPch5) {
-    //CPrintF("Received 'validate' request from MS.\n");
-    data += 8;
-    
-    //CPrintF("SecureKey: %s\n", data);
-    
-    u_char  ucGamekey[]          = {SERIOUSSAMKEY};
-    //u_char  ucReckey[]          = {"XUCXHC"};
-    //CPrintF("SecureKey: %s\n", ucReckey);
-    unsigned char *pValidateKey = NULL;
-    pValidateKey = gsseckey((u_char*)data, ucGamekey, 0);
-    
-    CTString strPacket;
-    strPacket.PrintF("\\validate\\%s\\final\\%s\\queryid\\2.1", pValidateKey, "");
-    _sendPacketTo(strPacket, &_sinFrom);
-
-    if (ms_bDebugOutput) {
-      CPrintF("Sending validation answer:\n%s\n", strPacket);
-    }
-
   } else {
     CPrintF("Unknown query server command!\n");
     CPrintF("%s\n", _szBuffer);
