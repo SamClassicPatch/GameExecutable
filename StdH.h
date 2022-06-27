@@ -16,22 +16,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Engine.h>
 #include <Engine/Templates/Stock_CTextureData.h>
 #include <Engine/Templates/Stock_CModelData.h>
-#include <GameMP/Game.h>
+#include <Game/Game.h>
 
-// rcg10042001 protect against Visual C-isms.
-#ifdef _MSC_VER
-#define DECL_DLL _declspec(dllimport)
-#endif
-
-#ifdef PLATFORM_UNIX
-#define DECL_DLL
-#endif
-
-#include <EntitiesMP/Global.h>
-#include <EntitiesMP/Common/Common.h>
-#include <EntitiesMP/Common/GameInterface.h>
-#include <EntitiesMP/Player.h>
-#undef DECL_DLL
+// [Cecil] Moved from many individual files
+#include <Engine/Base/KeyNames.h>
+#include <Engine/CurrentVersion.h>
+#include <Game/LCDDrawing.h>
 
 #include "SeriousSam.h"
 #include "GUI/Menus/Menu.h"

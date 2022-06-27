@@ -18,11 +18,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <process.h>
-#include <Engine/CurrentVersion.h>
-#include <GameMP/Game.h>
-
-#define DECL_DLL
-#include <EntitiesMP/Global.h>
 
 #include "resource.h"
 #include "SplashScreen.h"

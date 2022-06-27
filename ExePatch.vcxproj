@@ -40,8 +40,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)../;$(ProjectDir);$(ProjectDir)D3D8/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)../../Bin/Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)Includes/;$(ProjectDir)Includes/Engine107/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)Includes/Engine107/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
@@ -50,8 +50,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)../;$(ProjectDir);$(ProjectDir)D3D8/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)../../Bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)Includes/;$(ProjectDir)Includes/Engine107/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)Includes/Engine107/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
     <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
