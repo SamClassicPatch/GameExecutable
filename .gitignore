@@ -46,5 +46,5 @@ Debug/
 *.idb
 
 # Build directories
-Debug/*
-Release/*
+Debug_TSE107/*
+Release_TSE107/*
