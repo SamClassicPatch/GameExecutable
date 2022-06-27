@@ -118,7 +118,22 @@ extern CTextureObject *_ptoLogoCT = NULL;
 extern CTextureObject *_ptoLogoODI = NULL;
 extern CTextureObject *_ptoLogoEAX = NULL;
 
-extern CTString sam_strVersion = "1.07";
+// [Cecil] The First Encounter
+#ifdef SE1_TFE
+
+extern CTString sam_strVersion = "1.05";
+extern CTString sam_strModName = TRANS("-   T H E   F I R S T   E N C O U N T E R   -");
+
+extern CTString sam_strFirstLevel = "Levels\\01_Hatshepsut.wld";
+extern CTString sam_strIntroLevel = "Levels\\Intro.wld";
+extern CTString sam_strGameName = "serioussam";
+
+extern CTString sam_strTechTestLevel = "Levels\\TechTest.wld";
+extern CTString sam_strTrainingLevel = "Levels\\KarnakDemo.wld";
+
+#else
+
+extern CTString sam_strVersion = (SE1_VER == 105 ? "1.05" : "1.07"); // [Cecil] Different versions
 extern CTString sam_strModName = TRANS("-   T H E   S E C O N D   E N C O U N T E R   -");
 
 extern CTString sam_strFirstLevel = "Levels\\LevelsMP\\1_0_InTheLastEpisode.wld";
@@ -127,6 +142,8 @@ extern CTString sam_strGameName = "serioussamse";
 
 extern CTString sam_strTechTestLevel = "Levels\\LevelsMP\\TechTest.wld";
 extern CTString sam_strTrainingLevel = "Levels\\KarnakDemo.wld";
+
+#endif
 
 ENGINE_API extern INDEX snd_iFormat;
 

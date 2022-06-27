@@ -35,9 +35,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
                             WSACleanup(); \
                         }
 
-#define SERIOUSSAMKEY       "AKbna4\0"
-#define SERIOUSSAMSTR       "serioussamse"
-
 extern unsigned char *gsseckey(u_char *secure, u_char *key, int enctype);
 extern u_int resolv(char *host);
 
@@ -556,7 +553,7 @@ DWORD WINAPI _MS_Thread(LPVOID lpParam)
         // null terminate the buffer
         _szBuffer[iRet] = 0;
         char *sPch = NULL;
-        sPch = strstr(_szBuffer, "\\gamename\\serioussamse\\");
+        sPch = strstr(_szBuffer, "\\gamename\\" SERIOUSSAMSTR "\\");
 
         if (!sPch) {
           CPrintF("Unknown query server response!\n");
@@ -696,7 +693,7 @@ DWORD WINAPI _LocalNet_Thread(LPVOID lpParam)
         // null terminate the buffer
         _szBuffer[iRet] = 0;
         char *sPch = NULL;
-        sPch = strstr(_szBuffer, "\\gamename\\serioussamse\\");
+        sPch = strstr(_szBuffer, "\\gamename\\" SERIOUSSAMSTR "\\");
 
         if (!sPch) {
           CPrintF("Unknown query server response!\n");

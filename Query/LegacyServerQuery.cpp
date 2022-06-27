@@ -19,9 +19,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define BUFFSZ      8192
 #define BUFFSZSTR   4096
 
-#define SERIOUSSAMKEY       "AKbna4\0"
-#define SERIOUSSAMSTR       "serioussamse"
-
 extern unsigned char *gsseckey(u_char *secure, u_char *key, int enctype);
 
 #define PCKQUERY    "\\gamename\\%s" \

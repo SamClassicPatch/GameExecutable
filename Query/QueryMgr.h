@@ -19,9 +19,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   #pragma once
 #endif
 
-// [Cecil] Needed by every master server
-#include <Engine/CurrentVersion.h>
-
 extern CTString ms_strGameAgentMS;
 extern CTString ms_strMSLegacy;
 extern CTString ms_strDarkPlacesMS;
@@ -140,5 +137,13 @@ namespace QueryData {
   extern CHAR *_szIPPortBufferLocal;
   extern INT   _iIPPortBufferLocalLen;
 };
+
+// [Cecil] Moved out of Legacy query sources
+#define SERIOUSSAMKEY "AKbna4\0"
+#ifdef SE1_TFE
+  #define SERIOUSSAMSTR "serioussam"
+#else
+  #define SERIOUSSAMSTR "serioussamse"
+#endif
 
 #endif // include once check

@@ -16,7 +16,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include <Engine/Network/CommunicationInterface.h>
+// [Cecil] Compatibility with SE1.05
+#if SE1_VER == 105
+  #include <Engine/Network/Comm.h>
+  typedef Communication CCommunicationInterface;
+  #define _cmiComm comm
+#else
+  #include <Engine/Network/CommunicationInterface.h>
+#endif
 
 #pragma comment(lib, "wsock32.lib")
 
@@ -305,7 +312,7 @@ extern void MS_OnServerStart(void)
     // [Cecil] Unused in SSE
     /*case E_MS_LEGACY: {
       CTString strPacket;
-      strPacket.PrintF("\\heartbeat\\%hu\\gamename\\serioussamse", (_pShell->GetINDEX("net_iPort") + 1));
+      strPacket.PrintF("\\heartbeat\\%hu\\gamename\\%s", (_pShell->GetINDEX("net_iPort") + 1), SERIOUSSAMSTR);
 
       _sendPacket(strPacket);
 
@@ -343,7 +350,7 @@ extern void MS_OnServerEnd(void)
   // [Cecil] Anything but GameAgent
   } else if (iProtocol != E_MS_GAMEAGENT) {
     CTString strPacket;
-    strPacket.PrintF("\\heartbeat\\%hu\\gamename\\serioussamse\\statechanged", (_pShell->GetINDEX("net_iPort") + 1));
+    strPacket.PrintF("\\heartbeat\\%hu\\gamename\\%s\\statechanged", (_pShell->GetINDEX("net_iPort") + 1), SERIOUSSAMSTR);
     _sendPacket(strPacket);
 
     if (ms_bDebugOutput) {
@@ -400,7 +407,7 @@ extern void MS_OnServerStateChanged(void)
   switch (GetProtocol()) {
     case E_MS_LEGACY: {
       CTString strPacket;
-      strPacket.PrintF("\\heartbeat\\%hu\\gamename\\serioussamse\\statechanged", (_pShell->GetINDEX("net_iPort") + 1));
+      strPacket.PrintF("\\heartbeat\\%hu\\gamename\\%s\\statechanged", (_pShell->GetINDEX("net_iPort") + 1), SERIOUSSAMSTR);
 
       _sendPacket(strPacket);
 
