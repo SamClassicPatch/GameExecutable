@@ -68,9 +68,9 @@
     <LibraryPath>$(ProjectDir)Includes/Engine107/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
-    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)Bin\</OutDir>
     <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
-    <TargetName>SeriousSam_Custom</TargetName>
+    <TargetName>SeriousSam_TSE107D</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE107|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -78,9 +78,9 @@
     <LibraryPath>$(ProjectDir)Includes/Engine107/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
-    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)Bin\</OutDir>
     <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
-    <TargetName>SeriousSam_Custom</TargetName>
+    <TargetName>SeriousSam_TSE107</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -88,9 +88,9 @@
     <LibraryPath>$(ProjectDir)Includes/Engine105/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
-    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)Bin\</OutDir>
     <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
-    <TargetName>SeriousSam_Custom</TargetName>
+    <TargetName>SeriousSam_TSE105</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -98,9 +98,9 @@
     <LibraryPath>$(ProjectDir)Includes/Engine105FE/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
-    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)Bin\</OutDir>
     <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
-    <TargetName>SeriousSam_Custom</TargetName>
+    <TargetName>SeriousSam_TFE105</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TSE107|Win32'">
     <ClCompile>
