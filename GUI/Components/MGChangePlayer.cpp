@@ -28,7 +28,7 @@ void CMGChangePlayer::OnActivate(void) {
     _pGame->gm_aiMenuLocalPlayers[mg_iLocalPlayer] = 0;
 
   _pGUIM->gmPlayerProfile.gm_piCurrentPlayer = &_pGame->gm_aiMenuLocalPlayers[mg_iLocalPlayer];
-  _pGUIM->gmPlayerProfile.gm_pgmParentMenu = &_pGUIM->gmSelectPlayersMenu;
+  _pGUIM->gmPlayerProfile.SetParentMenu(&_pGUIM->gmSelectPlayersMenu);
 
   extern BOOL _bPlayerMenuFromSinglePlayer;
   _bPlayerMenuFromSinglePlayer = FALSE;
@@ -40,8 +40,11 @@ void CMGChangePlayer::SetPlayerText(void) {
   CPlayerCharacter &pc = _pGame->gm_apcPlayers[iPlayer];
 
   if (iPlayer < 0 || iPlayer > 7) {
-    mg_strText = "????";
+    SetText("????");
   } else {
-    mg_strText.PrintF(TRANS("Player %d: %s\n"), mg_iLocalPlayer + 1, pc.GetNameForPrinting());
+    CTString strPlayer;
+    strPlayer.PrintF(TRANS("Player %d: %s\n"), mg_iLocalPlayer + 1, pc.GetNameForPrinting());
+
+    SetText(strPlayer);
   }
 }

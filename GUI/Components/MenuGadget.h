@@ -21,15 +21,17 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "MenuPrinting.h"
 
+// [Cecil] Nodes
+#include "Cecil/Node.h"
+
 #define DOING_NOTHING 0
 #define PRESS_KEY_WAITING 1
 #define RELEASE_RETURN_WAITING 2
 
 #define EMPTYSLOTSTRING TRANS("<save a new one>")
 
-class CMenuGadget {
+class CMenuGadget : public CNode {
   public:
-    CListNode mg_lnNode;
     FLOATaabbox2D mg_boxOnScreen;
     BOOL mg_bVisible;
     BOOL mg_bEnabled;

@@ -24,8 +24,8 @@ extern void UpdateSplitLevel(INDEX iDummy);
 void CSplitStartMenu::Initialize_t(void) {
   // intialize split screen menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  gm_mgTitle.mg_strText = TRANS("START SPLIT SCREEN");
-  gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
+  gm_mgTitle.SetName(TRANS("START SPLIT SCREEN"));
+  AddChild(&gm_mgTitle);
 
   // game type trigger
   TRIGGER_MG(gm_mgGameType, 0, gm_mgStart, gm_mgDifficulty, TRANS("Game type:"), astrGameTypeRadioTexts);
@@ -38,8 +38,8 @@ void CSplitStartMenu::Initialize_t(void) {
   gm_mgDifficulty.mg_strTip = TRANS("choose difficulty level");
 
   // level name
-  gm_mgLevel.mg_strText = "";
-  gm_mgLevel.mg_strLabel = TRANS("Level:");
+  gm_mgLevel.SetText("");
+  gm_mgLevel.SetName(TRANS("Level:"));
   gm_mgLevel.mg_boxOnScreen = BoxMediumRow(2);
   gm_mgLevel.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgLevel.mg_iCenterI = -1;
@@ -47,10 +47,10 @@ void CSplitStartMenu::Initialize_t(void) {
   gm_mgLevel.mg_pmgDown = &gm_mgOptions;
   gm_mgLevel.mg_strTip = TRANS("choose the level to start");
   gm_mgLevel.mg_pActivatedFunction = NULL;
-  gm_lhGadgets.AddTail(gm_mgLevel.mg_lnNode);
+  AddChild(&gm_mgLevel);
 
   // options button
-  gm_mgOptions.mg_strText = TRANS("Game options");
+  gm_mgOptions.SetText(TRANS("Game options"));
   gm_mgOptions.mg_boxOnScreen = BoxMediumRow(3);
   gm_mgOptions.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgOptions.mg_iCenterI = 0;
@@ -58,15 +58,15 @@ void CSplitStartMenu::Initialize_t(void) {
   gm_mgOptions.mg_pmgDown = &gm_mgStart;
   gm_mgOptions.mg_strTip = TRANS("adjust game rules");
   gm_mgOptions.mg_pActivatedFunction = NULL;
-  gm_lhGadgets.AddTail(gm_mgOptions.mg_lnNode);
+  AddChild(&gm_mgOptions);
 
   // start button
   gm_mgStart.mg_bfsFontSize = BFS_LARGE;
   gm_mgStart.mg_boxOnScreen = BoxBigRow(4);
   gm_mgStart.mg_pmgUp = &gm_mgOptions;
   gm_mgStart.mg_pmgDown = &gm_mgGameType;
-  gm_mgStart.mg_strText = TRANS("START");
-  gm_lhGadgets.AddTail(gm_mgStart.mg_lnNode);
+  gm_mgStart.SetText(TRANS("START"));
+  AddChild(&gm_mgStart);
   gm_mgStart.mg_pActivatedFunction = NULL;
 }
 

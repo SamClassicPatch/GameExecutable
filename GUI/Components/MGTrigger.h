@@ -22,9 +22,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuGadget.h"
 
 class CMGTrigger : public CMenuGadget {
-  public:
+  // [Cecil] Private strings
+  private:
     CTString mg_strLabel;
     CTString mg_strValue;
+
+  public:
     CTString *mg_astrTexts;
     INDEX mg_ctTexts;
     INDEX mg_iSelected;
@@ -41,6 +44,26 @@ class CMGTrigger : public CMenuGadget {
     // return TRUE if handled
     BOOL OnKeyDown(int iVKey);
     void Render(CDrawPort *pdp);
+
+    // [Cecil] Get node name
+    virtual const CTString &GetName(void) const {
+      return mg_strLabel;
+    };
+    
+    // [Cecil] Set node name
+    virtual void SetName(const CTString &strNew) {
+      mg_strLabel = strNew;
+    };
+
+    // [Cecil] Get value
+    virtual const CTString &GetText(void) const {
+      return mg_strValue;
+    };
+    
+    // [Cecil] Set value
+    virtual void SetText(const CTString &strNew) {
+      mg_strValue = strNew;
+    };
 };
 
 #endif /* include-once check. */

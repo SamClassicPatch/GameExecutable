@@ -139,8 +139,8 @@ static void ExitConfirm(void) {
 
   gmCurrent._pConfimedYes = &ExitGame;
   gmCurrent._pConfimedNo = NULL;
-  gmCurrent.gm_mgConfirmLabel.mg_strText = TRANS("ARE YOU SERIOUS?");
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.gm_mgConfirmLabel.SetText(TRANS("ARE YOU SERIOUS?"));
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
 }
@@ -157,8 +157,8 @@ static void StopConfirm(void) {
 
   gmCurrent._pConfimedYes = &StopCurrentGame;
   gmCurrent._pConfimedNo = NULL;
-  gmCurrent.gm_mgConfirmLabel.mg_strText = TRANS("ARE YOU SERIOUS?");
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.gm_mgConfirmLabel.SetText(TRANS("ARE YOU SERIOUS?"));
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
 }
@@ -192,8 +192,8 @@ extern void ModConnectConfirm(void) {
   CPrintF(TRANS("Server is running a different MOD (%s).\nYou need to reload to connect.\n"), _fnmModSelected);
   gmCurrent._pConfimedYes = &ModConnect;
   gmCurrent._pConfimedNo = NULL;
-  gmCurrent.gm_mgConfirmLabel.mg_strText = TRANS("CHANGE THE MOD?");
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.gm_mgConfirmLabel.SetText(TRANS("CHANGE THE MOD?"));
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
 }
@@ -204,8 +204,8 @@ void SaveConfirm(void) {
   extern void OnFileSaveOK(void);
   gmCurrent._pConfimedYes = &OnFileSaveOK;
   gmCurrent._pConfimedNo = NULL;
-  gmCurrent.gm_mgConfirmLabel.mg_strText = TRANS("OVERWRITE?");
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.gm_mgConfirmLabel.SetText(TRANS("OVERWRITE?"));
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
 }
@@ -222,9 +222,12 @@ void ModNotInstalled(void) {
 
   gmCurrent._pConfimedYes = &ExitAndSpawnExplorer;
   gmCurrent._pConfimedNo = NULL;
-  gmCurrent.gm_mgConfirmLabel.mg_strText.PrintF(
-    TRANS("You don't have MOD '%s' installed.\nDo you want to visit its web site?"), (const char *)_fnmModSelected);
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+
+  CTString strNoMod;
+  strNoMod.PrintF(TRANS("You don't have MOD '%s' installed.\nDo you want to visit its web site?"), (const char *)_fnmModSelected);
+
+  gmCurrent.gm_mgConfirmLabel.SetText(strNoMod);
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeSmall();
   ChangeToMenu(&gmCurrent);
 }
@@ -234,8 +237,8 @@ extern void ModConfirm(void) {
 
   gmCurrent._pConfimedYes = &ModLoadYes;
   gmCurrent._pConfimedNo = NULL;
-  gmCurrent.gm_mgConfirmLabel.mg_strText = TRANS("LOAD THIS MOD?");
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmLoadSaveMenu;
+  gmCurrent.gm_mgConfirmLabel.SetText(TRANS("LOAD THIS MOD?"));
+  gmCurrent.SetParentMenu(&_pGUIM->gmLoadSaveMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
 }
@@ -253,8 +256,8 @@ void VideoConfirm(void) {
   gmCurrent._pConfimedYes = NULL;
   gmCurrent._pConfimedNo = RevertVideoSettings;
 
-  gmCurrent.gm_mgConfirmLabel.mg_strText = TRANS("KEEP THIS SETTING?");
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.gm_mgConfirmLabel.SetText(TRANS("KEEP THIS SETTING?"));
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
 }
@@ -346,13 +349,13 @@ extern CTString sam_strTrainingLevel;
 
 static void StartSinglePlayerGame_Normal(void);
 static void StartTechTest(void) {
-  _pGUIM->gmSinglePlayerNewMenu.gm_pgmParentMenu = &_pGUIM->gmSinglePlayerMenu;
+  _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
   _pGame->gam_strCustomLevel = sam_strTechTestLevel;
   StartSinglePlayerGame_Normal();
 }
 
 static void StartTraining(void) {
-  _pGUIM->gmSinglePlayerNewMenu.gm_pgmParentMenu = &_pGUIM->gmSinglePlayerMenu;
+  _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
   _pGame->gam_strCustomLevel = sam_strTrainingLevel;
   ChangeToMenu(&_pGUIM->gmSinglePlayerNewMenu);
 }
@@ -1058,7 +1061,7 @@ void InitActionsForNetworkJoinMenu() {
 extern void UpdateNetworkLevel(INDEX iDummy) {
   ValidateLevelForFlags(_pGame->gam_strCustomLevel,
     GetSpawnFlagsForGameType(_pGUIM->gmNetworkStartMenu.gm_mgGameType.mg_iSelected));
-  _pGUIM->gmNetworkStartMenu.gm_mgLevel.mg_strText = FindLevelByFileName(_pGame->gam_strCustomLevel).li_strName;
+  _pGUIM->gmNetworkStartMenu.gm_mgLevel.SetText(FindLevelByFileName(_pGame->gam_strCustomLevel).li_strName);
 }
 
 void InitActionsForNetworkStartMenu() {
@@ -1216,9 +1219,9 @@ extern void SelectPlayersFillMenu(void) {
   gmCurrent.gm_mgPlayer3Change.SetPlayerText();
 
   if (bHasPlayers && gmCurrent.gm_mgSplitScreenCfg.mg_iSelected >= 1) {
-    gmCurrent.gm_mgNotes.mg_strText = TRANS("Make sure you set different controls for each player!");
+    gmCurrent.gm_mgNotes.SetText(TRANS("Make sure you set different controls for each player!"));
   } else {
-    gmCurrent.gm_mgNotes.mg_strText = "";
+    gmCurrent.gm_mgNotes.SetText("");
   }
 }
 
@@ -1279,5 +1282,5 @@ extern void UpdateSplitLevel(INDEX iDummy) {
 
   ValidateLevelForFlags(_pGame->gam_strCustomLevel,
     GetSpawnFlagsForGameType(gmCurrent.gm_mgGameType.mg_iSelected));
-  gmCurrent.gm_mgLevel.mg_strText = FindLevelByFileName(_pGame->gam_strCustomLevel).li_strName;
+  gmCurrent.gm_mgLevel.SetText(FindLevelByFileName(_pGame->gam_strCustomLevel).li_strName);
 }

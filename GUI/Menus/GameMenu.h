@@ -19,10 +19,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #pragma once
 #endif
 
-class CGameMenu {
+// [Cecil] Nodes
+#include "Cecil/Node.h"
+
+class CGameMenu : public CNode {
   public:
-    CListHead gm_lhGadgets;
-    CGameMenu *gm_pgmParentMenu;
     BOOL gm_bPopup;
     const char *gm_strName; // menu name (for mod interface only)
     class CMenuGadget *gm_pmgSelectedByDefault;
@@ -46,6 +47,16 @@ class CGameMenu {
     virtual BOOL OnKeyDown(int iVKey);
     virtual BOOL OnChar(MSG msg);
     virtual void Think(void);
+
+    // [Cecil] Get parent menu
+    inline CGameMenu *GetParentMenu(void) {
+      return (CGameMenu *)GetParent();
+    };
+
+    // [Cecil] Set parent menu (as just a reference)
+    inline void SetParentMenu(CGameMenu *pgmParent) {
+      n_pParent = pgmParent;
+    };
 };
 
 #endif /* include-once check. */

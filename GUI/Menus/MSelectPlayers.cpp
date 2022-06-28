@@ -24,8 +24,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   gd.mg_pmgDown = dn; \
   gd.mg_pmgLeft = lf; \
   gd.mg_pmgRight = rt; \
-  gd.mg_strText = txt; \
-  gm_lhGadgets.AddTail(gd.mg_lnNode);
+  gd.SetText(txt); \
+  AddChild(&gd);
 
 extern CTString astrNoYes[2];
 extern CTString astrSplitScreenRadioTexts[4];
@@ -35,8 +35,8 @@ extern void SelectPlayersApplyMenu(void);
 void CSelectPlayersMenu::Initialize_t(void) {
   // intialize split screen menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  gm_mgTitle.mg_strText = TRANS("SELECT PLAYERS");
-  gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
+  gm_mgTitle.SetName(TRANS("SELECT PLAYERS"));
+  AddChild(&gm_mgTitle);
 
   TRIGGER_MG(gm_mgDedicated, 0, gm_mgStart, gm_mgObserver, TRANS("Dedicated:"), astrNoYes);
   gm_mgDedicated.mg_strTip = TRANS("select to start dedicated server");
@@ -63,21 +63,21 @@ void CSelectPlayersMenu::Initialize_t(void) {
     gm_mgPlayer1Change.mg_strTip =
     gm_mgPlayer2Change.mg_strTip =
     gm_mgPlayer3Change.mg_strTip = TRANS("select profile for this player");
-  gm_lhGadgets.AddTail(gm_mgPlayer0Change.mg_lnNode);
-  gm_lhGadgets.AddTail(gm_mgPlayer1Change.mg_lnNode);
-  gm_lhGadgets.AddTail(gm_mgPlayer2Change.mg_lnNode);
-  gm_lhGadgets.AddTail(gm_mgPlayer3Change.mg_lnNode);
+  AddChild(&gm_mgPlayer0Change);
+  AddChild(&gm_mgPlayer1Change);
+  AddChild(&gm_mgPlayer2Change);
+  AddChild(&gm_mgPlayer3Change);
 
   gm_mgNotes.mg_boxOnScreen = BoxMediumRow(9.0);
   gm_mgNotes.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgNotes.mg_iCenterI = -1;
   gm_mgNotes.mg_bEnabled = FALSE;
   gm_mgNotes.mg_bLabel = TRUE;
-  gm_lhGadgets.AddTail(gm_mgNotes.mg_lnNode);
-  gm_mgNotes.mg_strText = "";
+  AddChild(&gm_mgNotes);
+  gm_mgNotes.SetText("");
 
   /*  // options button
-  mgSplitOptions.mg_strText = TRANS("Game options");
+  mgSplitOptions.SetText(TRANS("Game options");
   mgSplitOptions.mg_boxOnScreen = BoxMediumRow(3);
   mgSplitOptions.mg_bfsFontSize = BFS_MEDIUM;
   mgSplitOptions.mg_iCenterI = 0;
@@ -85,15 +85,15 @@ void CSelectPlayersMenu::Initialize_t(void) {
   mgSplitOptions.mg_pmgDown = &mgSplitStartStart;
   mgSplitOptions.mg_strTip = TRANS("adjust game rules");
   mgSplitOptions.mg_pActivatedFunction = &StartGameOptionsFromSplitScreen;
-  gm_lhGadgets.AddTail( mgSplitOptions.mg_lnNode);*/
+  AddChild(& mgSplitOptions.mg_lnNode);*/
 
   /*  // start button
   mgSplitStartStart.mg_bfsFontSize = BFS_LARGE;
   mgSplitStartStart.mg_boxOnScreen = BoxBigRow(4);
   mgSplitStartStart.mg_pmgUp = &mgSplitOptions;
   mgSplitStartStart.mg_pmgDown = &mgSplitGameType;
-  mgSplitStartStart.mg_strText = TRANS("START");
-  gm_lhGadgets.AddTail( mgSplitStartStart.mg_lnNode);
+  mgSplitStartStart.SetText(TRANS("START");
+  AddChild(&mgSplitStartStart);
   mgSplitStartStart.mg_pActivatedFunction = &StartSelectPlayersMenuFromSplit;
   */
 

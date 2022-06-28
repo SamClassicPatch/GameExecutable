@@ -23,23 +23,23 @@ CMGEdit mgServerFilter[7];
 
 void CServersMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  gm_mgTitle.mg_strText = TRANS("CHOOSE SERVER");
-  gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
+  gm_mgTitle.SetName(TRANS("CHOOSE SERVER"));
+  AddChild(&gm_mgTitle);
 
   gm_mgList.mg_boxOnScreen = FLOATaabbox2D(FLOAT2D(0, 0), FLOAT2D(1, 1));
   gm_mgList.mg_pmgLeft = &gm_mgList; // make sure it can get focus
   gm_mgList.mg_bEnabled = TRUE;
-  gm_lhGadgets.AddTail(gm_mgList.mg_lnNode);
+  AddChild(&gm_mgList);
 
   ASSERT(ARRAYCOUNT(mgServerColumn) == ARRAYCOUNT(mgServerFilter));
   for (INDEX i = 0; i < ARRAYCOUNT(mgServerFilter); i++) {
-    mgServerColumn[i].mg_strText = "";
+    mgServerColumn[i].SetText("");
     mgServerColumn[i].mg_boxOnScreen = BoxPlayerEdit(5.0);
     mgServerColumn[i].mg_bfsFontSize = BFS_SMALL;
     mgServerColumn[i].mg_iCenterI = -1;
     mgServerColumn[i].mg_pmgUp = &gm_mgList;
     mgServerColumn[i].mg_pmgDown = &mgServerFilter[i];
-    gm_lhGadgets.AddTail(mgServerColumn[i].mg_lnNode);
+    AddChild(&mgServerColumn[i]);
 
     mgServerFilter[i].mg_ctMaxStringLen = 25;
     mgServerFilter[i].mg_boxOnScreen = BoxPlayerEdit(5.0);
@@ -47,27 +47,27 @@ void CServersMenu::Initialize_t(void) {
     mgServerFilter[i].mg_iCenterI = -1;
     mgServerFilter[i].mg_pmgUp = &mgServerColumn[i];
     mgServerFilter[i].mg_pmgDown = &gm_mgList;
-    gm_lhGadgets.AddTail(mgServerFilter[i].mg_lnNode);
+    AddChild(&mgServerFilter[i]);
     mgServerFilter[i].mg_pstrToChange = &_strServerFilter[i];
     mgServerFilter[i].SetText(*mgServerFilter[i].mg_pstrToChange);
   }
 
-  gm_mgRefresh.mg_strText = TRANS("REFRESH");
+  gm_mgRefresh.SetText(TRANS("REFRESH"));
   gm_mgRefresh.mg_boxOnScreen = BoxLeftColumn(15.0);
   gm_mgRefresh.mg_bfsFontSize = BFS_SMALL;
   gm_mgRefresh.mg_iCenterI = -1;
   gm_mgRefresh.mg_pmgDown = &gm_mgList;
   gm_mgRefresh.mg_pActivatedFunction = NULL;
-  gm_lhGadgets.AddTail(gm_mgRefresh.mg_lnNode);
+  AddChild(&gm_mgRefresh);
 
   CTString astrColumns[7];
-  mgServerColumn[0].mg_strText = TRANS("Server");
-  mgServerColumn[1].mg_strText = TRANS("Map");
-  mgServerColumn[2].mg_strText = TRANS("Ping");
-  mgServerColumn[3].mg_strText = TRANS("Players");
-  mgServerColumn[4].mg_strText = TRANS("Game");
-  mgServerColumn[5].mg_strText = TRANS("Mod");
-  mgServerColumn[6].mg_strText = TRANS("Ver");
+  mgServerColumn[0].SetText(TRANS("Server"));
+  mgServerColumn[1].SetText(TRANS("Map"));
+  mgServerColumn[2].SetText(TRANS("Ping"));
+  mgServerColumn[3].SetText(TRANS("Players"));
+  mgServerColumn[4].SetText(TRANS("Game"));
+  mgServerColumn[5].SetText(TRANS("Mod"));
+  mgServerColumn[6].SetText(TRANS("Ver"));
   mgServerColumn[0].mg_pActivatedFunction = NULL;
   mgServerColumn[1].mg_pActivatedFunction = NULL;
   mgServerColumn[2].mg_pActivatedFunction = NULL;

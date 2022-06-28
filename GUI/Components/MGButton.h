@@ -22,9 +22,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuGadget.h"
 
 class CMGButton : public CMenuGadget {
-  public:
+  // [Cecil] Private strings
+  private:
     CTString mg_strLabel; // for those that have labels separately from main text
     CTString mg_strText;
+
+  public:
     INDEX mg_iCenterI;
     enum ButtonFontSize mg_bfsFontSize;
     BOOL mg_bEditing;
@@ -38,10 +41,29 @@ class CMGButton : public CMenuGadget {
     void (*mg_pActivatedFunction)(void);
 
     CMGButton(void);
-    void SetText(CTString strNew);
     void OnActivate(void);
     void Render(CDrawPort *pdp);
     PIX GetCharOffset(CDrawPort *pdp, INDEX iCharNo);
+
+    // [Cecil] Get node name
+    virtual const CTString &GetName(void) const {
+      return mg_strLabel;
+    };
+    
+    // [Cecil] Set node name
+    virtual void SetName(const CTString &strNew) {
+      mg_strLabel = strNew;
+    };
+
+    // [Cecil] Get text
+    virtual const CTString &GetText(void) const {
+      return mg_strText;
+    };
+    
+    // [Cecil] Set text
+    virtual void SetText(const CTString &strNew) {
+      mg_strText = strNew;
+    };
 };
 
 #endif /* include-once check. */

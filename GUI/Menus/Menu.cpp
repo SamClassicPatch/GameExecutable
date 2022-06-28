@@ -100,7 +100,7 @@ static CTextureObject _toLogoMenuB;
   ltbmg.mg_astrTexts = astr; \
   ltbmg.mg_ctTexts = sizeof(astr) / sizeof(astr[0]); \
   ltbmg.mg_iSelected = 0; \
-  ltbmg.mg_strText = astr[ltbmg.mg_iSelected];
+  ltbmg.SetText(astr[ltbmg.mg_iSelected]);
 
 #define PLACEMENT(x, y, z) CPlacement3D(FLOAT3D(x, y, z), ANGLE3D(0.0f, 0.0f, 0.0f))
 
@@ -177,28 +177,28 @@ void StartMenus(char *str) {
   }
   if (CTString(str) == "load") {
     StartCurrentLoadMenu();
-    _pGUIM->gmLoadSaveMenu.gm_pgmParentMenu = NULL;
+    _pGUIM->gmLoadSaveMenu.SetParentMenu(NULL);
   }
   if (CTString(str) == "save") {
     StartCurrentSaveMenu();
-    _pGUIM->gmLoadSaveMenu.gm_pgmParentMenu = NULL;
+    _pGUIM->gmLoadSaveMenu.SetParentMenu(NULL);
     FixupBackButton(&_pGUIM->gmLoadSaveMenu);
   }
   if (CTString(str) == "controls") {
     void StartControlsMenuFromOptions(void);
     StartControlsMenuFromOptions();
-    _pGUIM->gmControls.gm_pgmParentMenu = NULL;
+    _pGUIM->gmControls.SetParentMenu(NULL);
     FixupBackButton(&_pGUIM->gmControls);
   }
   if (CTString(str) == "join") {
     void StartSelectPlayersMenuFromOpen(void);
     StartSelectPlayersMenuFromOpen();
-    _pGUIM->gmSelectPlayersMenu.gm_pgmParentMenu = &_pGUIM->gmMainMenu;
+    _pGUIM->gmSelectPlayersMenu.SetParentMenu(&_pGUIM->gmMainMenu);
     FixupBackButton(&_pGUIM->gmSelectPlayersMenu);
   }
   if (CTString(str) == "hiscore") {
     ChangeToMenu(&_pGUIM->gmHighScoreMenu);
-    _pGUIM->gmHighScoreMenu.gm_pgmParentMenu = &_pGUIM->gmMainMenu;
+    _pGUIM->gmHighScoreMenu.SetParentMenu(&_pGUIM->gmMainMenu);
     FixupBackButton(&_pGUIM->gmHighScoreMenu);
   }
   bMenuActive = TRUE;
@@ -283,37 +283,37 @@ void InitializeMenus(void) {
     _pGUIM->gmConfirmMenu.Initialize_t();
     _pGUIM->gmConfirmMenu.gm_strName = "Confirm";
     _pGUIM->gmConfirmMenu.gm_pmgSelectedByDefault = &_pGUIM->gmConfirmMenu.gm_mgConfirmYes;
-    _pGUIM->gmConfirmMenu.gm_pgmParentMenu = NULL;
+    _pGUIM->gmConfirmMenu.SetParentMenu(NULL);
     InitActionsForConfirmMenu();
 
     _pGUIM->gmMainMenu.Initialize_t();
     _pGUIM->gmMainMenu.gm_strName = "Main";
     _pGUIM->gmMainMenu.gm_pmgSelectedByDefault = &_pGUIM->gmMainMenu.gm_mgSingle;
-    _pGUIM->gmMainMenu.gm_pgmParentMenu = NULL;
+    _pGUIM->gmMainMenu.SetParentMenu(NULL);
     InitActionsForMainMenu();
 
     _pGUIM->gmInGameMenu.Initialize_t();
     _pGUIM->gmInGameMenu.gm_strName = "InGame";
     _pGUIM->gmInGameMenu.gm_pmgSelectedByDefault = &_pGUIM->gmInGameMenu.gm_mgQuickLoad;
-    _pGUIM->gmInGameMenu.gm_pgmParentMenu = NULL;
+    _pGUIM->gmInGameMenu.SetParentMenu(NULL);
     InitActionsForInGameMenu();
 
     _pGUIM->gmSinglePlayerMenu.Initialize_t();
     _pGUIM->gmSinglePlayerMenu.gm_strName = "SinglePlayer";
     _pGUIM->gmSinglePlayerMenu.gm_pmgSelectedByDefault = &_pGUIM->gmSinglePlayerMenu.gm_mgNewGame;
-    _pGUIM->gmSinglePlayerMenu.gm_pgmParentMenu = &_pGUIM->gmMainMenu;
+    _pGUIM->gmSinglePlayerMenu.SetParentMenu(&_pGUIM->gmMainMenu);
     InitActionsForSinglePlayerMenu();
 
     _pGUIM->gmSinglePlayerNewMenu.Initialize_t();
     _pGUIM->gmSinglePlayerNewMenu.gm_strName = "SinglePlayerNew";
     _pGUIM->gmSinglePlayerNewMenu.gm_pmgSelectedByDefault = &_pGUIM->gmSinglePlayerNewMenu.gm_mgMedium;
-    _pGUIM->gmSinglePlayerNewMenu.gm_pgmParentMenu = &_pGUIM->gmSinglePlayerMenu;
+    _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
     InitActionsForSinglePlayerNewMenu();
 
     _pGUIM->gmDisabledFunction.Initialize_t();
     _pGUIM->gmDisabledFunction.gm_strName = "DisabledFunction";
     _pGUIM->gmDisabledFunction.gm_pmgSelectedByDefault = &_pGUIM->gmDisabledFunction.gm_mgButton;
-    _pGUIM->gmDisabledFunction.gm_pgmParentMenu = NULL;
+    _pGUIM->gmDisabledFunction.SetParentMenu(NULL);
 
     _pGUIM->gmPlayerProfile.Initialize_t();
     _pGUIM->gmPlayerProfile.gm_strName = "PlayerProfile";
@@ -338,65 +338,65 @@ void InitializeMenus(void) {
     _pGUIM->gmCustomizeKeyboardMenu.Initialize_t();
     _pGUIM->gmCustomizeKeyboardMenu.gm_strName = "CustomizeKeyboard";
     _pGUIM->gmCustomizeKeyboardMenu.gm_pmgSelectedByDefault = &_pGUIM->gmCustomizeKeyboardMenu.gm_mgKey[0];
-    _pGUIM->gmCustomizeKeyboardMenu.gm_pgmParentMenu = &_pGUIM->gmControls;
+    _pGUIM->gmCustomizeKeyboardMenu.SetParentMenu(&_pGUIM->gmControls);
 
     _pGUIM->gmCustomizeAxisMenu.Initialize_t();
     _pGUIM->gmCustomizeAxisMenu.gm_strName = "CustomizeAxis";
     _pGUIM->gmCustomizeAxisMenu.gm_pmgSelectedByDefault = &_pGUIM->gmCustomizeAxisMenu.gm_mgActionTrigger;
-    _pGUIM->gmCustomizeAxisMenu.gm_pgmParentMenu = &_pGUIM->gmControls;
+    _pGUIM->gmCustomizeAxisMenu.SetParentMenu(&_pGUIM->gmControls);
     InitActionsForCustomizeAxisMenu();
 
     _pGUIM->gmOptionsMenu.Initialize_t();
     _pGUIM->gmOptionsMenu.gm_strName = "Options";
     _pGUIM->gmOptionsMenu.gm_pmgSelectedByDefault = &_pGUIM->gmOptionsMenu.gm_mgVideoOptions;
-    _pGUIM->gmOptionsMenu.gm_pgmParentMenu = &_pGUIM->gmMainMenu;
+    _pGUIM->gmOptionsMenu.SetParentMenu(&_pGUIM->gmMainMenu);
     InitActionsForOptionsMenu();
 
     _pGUIM->gmVideoOptionsMenu.Initialize_t();
     _pGUIM->gmVideoOptionsMenu.gm_strName = "VideoOptions";
     _pGUIM->gmVideoOptionsMenu.gm_pmgSelectedByDefault = &_pGUIM->gmVideoOptionsMenu.gm_mgDisplayAPITrigger;
-    _pGUIM->gmVideoOptionsMenu.gm_pgmParentMenu = &_pGUIM->gmOptionsMenu;
+    _pGUIM->gmVideoOptionsMenu.SetParentMenu(&_pGUIM->gmOptionsMenu);
     InitActionsForVideoOptionsMenu();
 
     _pGUIM->gmAudioOptionsMenu.Initialize_t();
     _pGUIM->gmAudioOptionsMenu.gm_strName = "AudioOptions";
     _pGUIM->gmAudioOptionsMenu.gm_pmgSelectedByDefault = &_pGUIM->gmAudioOptionsMenu.gm_mgFrequencyTrigger;
-    _pGUIM->gmAudioOptionsMenu.gm_pgmParentMenu = &_pGUIM->gmOptionsMenu;
+    _pGUIM->gmAudioOptionsMenu.SetParentMenu(&_pGUIM->gmOptionsMenu);
     InitActionsForAudioOptionsMenu();
 
     _pGUIM->gmLevelsMenu.Initialize_t();
     _pGUIM->gmLevelsMenu.gm_strName = "Levels";
     _pGUIM->gmLevelsMenu.gm_pmgSelectedByDefault = &_pGUIM->gmLevelsMenu.gm_mgManualLevel[0];
-    _pGUIM->gmLevelsMenu.gm_pgmParentMenu = &_pGUIM->gmSinglePlayerMenu;
+    _pGUIM->gmLevelsMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
 
     _pGUIM->gmVarMenu.Initialize_t();
     _pGUIM->gmVarMenu.gm_strName = "Var";
     _pGUIM->gmVarMenu.gm_pmgSelectedByDefault = &_pGUIM->gmVarMenu.gm_mgVar[0];
-    _pGUIM->gmVarMenu.gm_pgmParentMenu = &_pGUIM->gmNetworkStartMenu;
+    _pGUIM->gmVarMenu.SetParentMenu(&_pGUIM->gmNetworkStartMenu);
     InitActionsForVarMenu();
 
     _pGUIM->gmServersMenu.Initialize_t();
     _pGUIM->gmServersMenu.gm_strName = "Servers";
     _pGUIM->gmServersMenu.gm_pmgSelectedByDefault = &_pGUIM->gmServersMenu.gm_mgList;
-    _pGUIM->gmServersMenu.gm_pgmParentMenu = &_pGUIM->gmNetworkOpenMenu;
+    _pGUIM->gmServersMenu.SetParentMenu(&_pGUIM->gmNetworkOpenMenu);
     InitActionsForServersMenu();
 
     _pGUIM->gmNetworkMenu.Initialize_t();
     _pGUIM->gmNetworkMenu.gm_strName = "Network";
     _pGUIM->gmNetworkMenu.gm_pmgSelectedByDefault = &_pGUIM->gmNetworkMenu.gm_mgJoin;
-    _pGUIM->gmNetworkMenu.gm_pgmParentMenu = &_pGUIM->gmMainMenu;
+    _pGUIM->gmNetworkMenu.SetParentMenu(&_pGUIM->gmMainMenu);
     InitActionsForNetworkMenu();
 
     _pGUIM->gmNetworkStartMenu.Initialize_t();
     _pGUIM->gmNetworkStartMenu.gm_strName = "NetworkStart";
     _pGUIM->gmNetworkStartMenu.gm_pmgSelectedByDefault = &_pGUIM->gmNetworkStartMenu.gm_mgStart;
-    _pGUIM->gmNetworkStartMenu.gm_pgmParentMenu = &_pGUIM->gmNetworkMenu;
+    _pGUIM->gmNetworkStartMenu.SetParentMenu(&_pGUIM->gmNetworkMenu);
     InitActionsForNetworkStartMenu();
 
     _pGUIM->gmNetworkJoinMenu.Initialize_t();
     _pGUIM->gmNetworkJoinMenu.gm_strName = "NetworkJoin";
     _pGUIM->gmNetworkJoinMenu.gm_pmgSelectedByDefault = &_pGUIM->gmNetworkJoinMenu.gm_mgLAN;
-    _pGUIM->gmNetworkJoinMenu.gm_pgmParentMenu = &_pGUIM->gmNetworkMenu;
+    _pGUIM->gmNetworkJoinMenu.SetParentMenu(&_pGUIM->gmNetworkMenu);
     InitActionsForNetworkJoinMenu();
 
     _pGUIM->gmSelectPlayersMenu.gm_bAllowDedicated = FALSE;
@@ -409,19 +409,19 @@ void InitializeMenus(void) {
     _pGUIM->gmNetworkOpenMenu.Initialize_t();
     _pGUIM->gmNetworkOpenMenu.gm_strName = "NetworkOpen";
     _pGUIM->gmNetworkOpenMenu.gm_pmgSelectedByDefault = &_pGUIM->gmNetworkOpenMenu.gm_mgJoin;
-    _pGUIM->gmNetworkOpenMenu.gm_pgmParentMenu = &_pGUIM->gmNetworkJoinMenu;
+    _pGUIM->gmNetworkOpenMenu.SetParentMenu(&_pGUIM->gmNetworkJoinMenu);
     InitActionsForNetworkOpenMenu();
 
     _pGUIM->gmSplitScreenMenu.Initialize_t();
     _pGUIM->gmSplitScreenMenu.gm_strName = "SplitScreen";
     _pGUIM->gmSplitScreenMenu.gm_pmgSelectedByDefault = &_pGUIM->gmSplitScreenMenu.gm_mgStart;
-    _pGUIM->gmSplitScreenMenu.gm_pgmParentMenu = &_pGUIM->gmMainMenu;
+    _pGUIM->gmSplitScreenMenu.SetParentMenu(&_pGUIM->gmMainMenu);
     InitActionsForSplitScreenMenu();
 
     _pGUIM->gmSplitStartMenu.Initialize_t();
     _pGUIM->gmSplitStartMenu.gm_strName = "SplitStart";
     _pGUIM->gmSplitStartMenu.gm_pmgSelectedByDefault = &_pGUIM->gmSplitStartMenu.gm_mgStart;
-    _pGUIM->gmSplitStartMenu.gm_pgmParentMenu = &_pGUIM->gmSplitScreenMenu;
+    _pGUIM->gmSplitStartMenu.SetParentMenu(&_pGUIM->gmSplitScreenMenu);
     InitActionsForSplitStartMenu();
   } catch (char *strError) {
     FatalError(strError);
@@ -442,7 +442,7 @@ void DestroyMenus(void) {
 // go to parent menu if possible
 void MenuGoToParent(void) {
   // if there is no parent menu
-  if (pgmCurrentMenu->gm_pgmParentMenu == NULL) {
+  if (pgmCurrentMenu->GetParentMenu() == NULL) {
     // if in game
     if (_gmRunningGameMode != GM_NONE) {
       // exit menus
@@ -455,7 +455,7 @@ void MenuGoToParent(void) {
     // if there is some parent menu
   } else {
     // go to parent menu
-    ChangeToMenu(pgmCurrentMenu->gm_pgmParentMenu);
+    ChangeToMenu(pgmCurrentMenu->GetParentMenu());
   }
 }
 
@@ -529,7 +529,7 @@ void MenuUpdateMouseFocus(void) {
 
   CMenuGadget *pmgActive = NULL;
   // for all gadgets in menu
-  FOREACHINLIST(CMenuGadget, mg_lnNode, pgmCurrentMenu->gm_lhGadgets, itmg) {
+  FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetChildren(), itmg) {
     CMenuGadget &mg = *itmg;
     // if focused
     if (itmg->mg_bFocused) {
@@ -645,7 +645,7 @@ BOOL DoMenu(CDrawPort *pdp) {
   while (_tmMenuLastTickDone < tmTickNow) {
     _pTimer->SetCurrentTick(_tmMenuLastTickDone);
     // call think for all gadgets in menu
-    FOREACHINLIST(CMenuGadget, mg_lnNode, pgmCurrentMenu->gm_lhGadgets, itmg) {
+    FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetChildren(), itmg) {
       itmg->Think();
     }
     _tmMenuLastTickDone += _pTimer->TickQuantum;
@@ -760,14 +760,14 @@ BOOL DoMenu(CDrawPort *pdp) {
   // if this is popup menu
   if (pgmCurrentMenu->gm_bPopup) {
     // render parent menu first
-    if (pgmCurrentMenu->gm_pgmParentMenu != NULL) {
-      _pGame->MenuPreRenderMenu(pgmCurrentMenu->gm_pgmParentMenu->gm_strName);
-      FOREACHINLIST(CMenuGadget, mg_lnNode, pgmCurrentMenu->gm_pgmParentMenu->gm_lhGadgets, itmg) {
+    if (pgmCurrentMenu->GetParentMenu() != NULL) {
+      _pGame->MenuPreRenderMenu(pgmCurrentMenu->GetParentMenu()->gm_strName);
+      FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetParentMenu()->GetChildren(), itmg) {
         if (itmg->mg_bVisible) {
           itmg->Render(&dpMenu);
         }
       }
-      _pGame->MenuPostRenderMenu(pgmCurrentMenu->gm_pgmParentMenu->gm_strName);
+      _pGame->MenuPostRenderMenu(pgmCurrentMenu->GetParentMenu()->gm_strName);
     }
 
     // gray it out
@@ -794,7 +794,7 @@ BOOL DoMenu(CDrawPort *pdp) {
   BOOL bStilInMenus = FALSE;
   _pGame->MenuPreRenderMenu(pgmCurrentMenu->gm_strName);
   // for each menu gadget
-  FOREACHINLIST(CMenuGadget, mg_lnNode, pgmCurrentMenu->gm_lhGadgets, itmg) {
+  FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetChildren(), itmg) {
     // if gadget is visible
     if (itmg->mg_bVisible) {
       bStilInMenus = TRUE;
@@ -811,7 +811,7 @@ BOOL DoMenu(CDrawPort *pdp) {
   // if mouse was not active last
   if (!_bMouseUsedLast) {
     // find focused gadget
-    FOREACHINLIST(CMenuGadget, mg_lnNode, pgmCurrentMenu->gm_lhGadgets, itmg) {
+    FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetChildren(), itmg) {
       CMenuGadget &mg = *itmg;
       // if focused
       if (itmg->mg_bFocused) {
@@ -862,9 +862,8 @@ void MenuBack(void) {
 extern void FixupBackButton(CGameMenu *pgm) {
   BOOL bResume = FALSE;
 
-  if (mgBack.mg_lnNode.IsLinked()) {
-    mgBack.mg_lnNode.Remove();
-  }
+  // [Cecil] Unparent button
+  mgBack.SetParent(NULL);
 
   BOOL bHasBack = TRUE;
 
@@ -872,7 +871,7 @@ extern void FixupBackButton(CGameMenu *pgm) {
     bHasBack = FALSE;
   }
 
-  if (pgm->gm_pgmParentMenu == NULL) {
+  if (pgm->GetParentMenu() == NULL) {
     if (_gmRunningGameMode == GM_NONE) {
       bHasBack = FALSE;
     } else {
@@ -885,14 +884,14 @@ extern void FixupBackButton(CGameMenu *pgm) {
   }
 
   if (bResume) {
-    mgBack.mg_strText = TRANS("RESUME");
+    mgBack.SetText(TRANS("RESUME"));
     mgBack.mg_strTip = TRANS("return to game");
   } else {
     if (_bVarChanged) {
-      mgBack.mg_strText = TRANS("CANCEL");
+      mgBack.SetText(TRANS("CANCEL"));
       mgBack.mg_strTip = TRANS("cancel changes");
     } else {
-      mgBack.mg_strText = TRANS("BACK");
+      mgBack.SetText(TRANS("BACK"));
       mgBack.mg_strTip = TRANS("return to previous menu");
     }
   }
@@ -901,7 +900,7 @@ extern void FixupBackButton(CGameMenu *pgm) {
   mgBack.mg_bfsFontSize = BFS_LARGE;
   mgBack.mg_boxOnScreen = BoxBack();
   mgBack.mg_boxOnScreen = BoxLeftColumn(16.5f);
-  pgm->gm_lhGadgets.AddTail(mgBack.mg_lnNode);
+  pgm->AddChild(&mgBack);
 
   mgBack.mg_pmgLeft =
   mgBack.mg_pmgRight =
@@ -921,7 +920,7 @@ void ChangeToMenu(CGameMenu *pgmNewMenu) {
     if (!pgmNewMenu->gm_bPopup) {
       pgmCurrentMenu->EndMenu();
     } else {
-      FOREACHINLIST(CMenuGadget, mg_lnNode, pgmCurrentMenu->gm_lhGadgets, itmg) {
+      FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetChildren(), itmg) {
         itmg->OnKillFocus();
       }
     }

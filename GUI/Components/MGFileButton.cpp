@@ -25,10 +25,12 @@ CMGFileButton::CMGFileButton(void) {
 
 // refresh current text from description
 void CMGFileButton::RefreshText(void) {
-  mg_strText = mg_strDes;
-  mg_strText.OnlyFirstLine();
+  CTString strText = mg_strDes;
+  strText.OnlyFirstLine();
+  SetText(strText);
+
   mg_strInfo = mg_strDes;
-  mg_strInfo.RemovePrefix(mg_strText);
+  mg_strInfo.RemovePrefix(GetText());
   mg_strInfo.DeleteChar(0);
 }
 
@@ -77,7 +79,7 @@ void CMGFileButton::DoLoad(void) {
     return;
   }
   if (_pGUIM->gmLoadSaveMenu.gm_pgmNextMenu != NULL) {
-    _pGUIM->gmLoadSaveMenu.gm_pgmParentMenu = _pGUIM->gmLoadSaveMenu.gm_pgmNextMenu;
+    _pGUIM->gmLoadSaveMenu.SetParentMenu(_pGUIM->gmLoadSaveMenu.gm_pgmNextMenu);
   }
   // call loading function
   BOOL bSucceeded = _pGUIM->gmLoadSaveMenu.gm_pAfterFileChosen(mg_fnm);
@@ -106,10 +108,11 @@ void CMGFileButton::OnActivate(void) {
     // if saving
   } else {
     // switch to editing mode
-    BOOL bWasEmpty = mg_strText == EMPTYSLOTSTRING;
+    BOOL bWasEmpty = (GetText() == EMPTYSLOTSTRING);
     mg_strDes = _pGUIM->gmLoadSaveMenu.gm_strSaveDes;
     RefreshText();
-    _strOrgDescription = _strTmpDescription = mg_strText;
+    _strOrgDescription =
+    _strTmpDescription = GetText();
 
     if (bWasEmpty) {
       _strOrgDescription = EMPTYSLOTSTRING;
@@ -127,8 +130,8 @@ BOOL CMGFileButton::OnKeyDown(int iVKey) {
       if (iVKey == VK_F2) {
         if (FileExistsForWriting(mg_fnm)) {
           // switch to renaming mode
-          _strOrgDescription = mg_strText;
-          _strTmpDescription = mg_strText;
+          _strOrgDescription =
+          _strTmpDescription = GetText();
           mg_pstrToChange = &_strTmpDescription;
           StartEdit();
           mg_iState = FBS_RENAME;
@@ -202,7 +205,7 @@ void CMGFileButton::OnStringChanged(void) {
   }
 }
 void CMGFileButton::OnStringCanceled(void) {
-  mg_strText = _strOrgDescription;
+  SetText(_strOrgDescription);
 }
 
 void CMGFileButton::Render(CDrawPort *pdp) {

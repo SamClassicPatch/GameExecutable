@@ -35,7 +35,7 @@ void CCustomizeKeyboardMenu::FillListItems(void) {
     if ((iLabel >= gm_iListOffset) && (iLabel < (gm_iListOffset + gm_ctListVisible))) {
       bHasFirst |= (iLabel == 0);
       bHasLast |= (iLabel == ctLabels - 1);
-      gm_mgKey[iInMenu].mg_strLabel = TranslateConst(itAct->ba_strName, 0);
+      gm_mgKey[iInMenu].SetName(TranslateConst(itAct->ba_strName, 0));
       gm_mgKey[iInMenu].mg_iControlNumber = iLabel;
       gm_mgKey[iInMenu].SetBindingNames(FALSE);
       gm_mgKey[iInMenu].mg_strTip = TRANS("Enter - change binding, Backspace - unbind");
@@ -52,9 +52,9 @@ void CCustomizeKeyboardMenu::FillListItems(void) {
 
 void CCustomizeKeyboardMenu::Initialize_t(void) {
   // intialize Audio options menu
-  gm_mgTitle.mg_strText = TRANS("CUSTOMIZE BUTTONS");
+  gm_mgTitle.SetName(TRANS("CUSTOMIZE BUTTONS"));
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
+  AddChild(&gm_mgTitle);
 
 #define KL_START 3.0f
 #define KL_STEEP -1.45f
@@ -67,11 +67,11 @@ void CCustomizeKeyboardMenu::Initialize_t(void) {
     gm_mgKey[iLabel].mg_pmgUp = &gm_mgKey[iPrev];
     gm_mgKey[iLabel].mg_pmgDown = &gm_mgKey[iNext];
     gm_mgKey[iLabel].mg_bVisible = TRUE;
-    gm_lhGadgets.AddTail(gm_mgKey[iLabel].mg_lnNode);
+    AddChild(&gm_mgKey[iLabel]);
   }
   // arrows just exist
-  gm_lhGadgets.AddTail(gm_mgArrowDn.mg_lnNode);
-  gm_lhGadgets.AddTail(gm_mgArrowUp.mg_lnNode);
+  AddChild(&gm_mgArrowDn);
+  AddChild(&gm_mgArrowUp);
   gm_mgArrowDn.mg_adDirection = AD_DOWN;
   gm_mgArrowUp.mg_adDirection = AD_UP;
   gm_mgArrowDn.mg_boxOnScreen = BoxArrow(AD_DOWN);

@@ -18,7 +18,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "GameMenu.h"
 
 CGameMenu::CGameMenu(void) {
-  gm_pgmParentMenu = NULL;
   gm_pmgSelectedByDefault = NULL;
   gm_pmgArrowUp = NULL;
   gm_pmgArrowDn = NULL;
@@ -40,7 +39,7 @@ void CGameMenu::FillListItems(void) {
 
 void CGameMenu::KillAllFocuses(void) {
   // for each menu gadget in menu
-  FOREACHINLIST(CMenuGadget, mg_lnNode, gm_lhGadgets, itmg) {
+  FOREACHINLIST(CMenuGadget, n_lnInParent, GetChildren(), itmg) {
     itmg->mg_bFocused = FALSE;
   }
 }
@@ -109,7 +108,7 @@ void CGameMenu::ScrollList(INDEX iDir) {
   }
 
   // delete all focuses
-  FOREACHINLIST(CMenuGadget, mg_lnNode, pgmCurrentMenu->gm_lhGadgets, itmg) {
+  FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetChildren(), itmg) {
     itmg->OnKillFocus();
   }
 
@@ -151,7 +150,7 @@ BOOL CGameMenu::OnChar(MSG msg) {
   // find curently active gadget
   CMenuGadget *pmgActive = NULL;
   // for each menu gadget in menu
-  FOREACHINLIST(CMenuGadget, mg_lnNode, pgmCurrentMenu->gm_lhGadgets, itmg) {
+  FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetChildren(), itmg) {
     // if focused
     if (itmg->mg_bFocused) {
       // remember as active
@@ -180,7 +179,7 @@ BOOL CGameMenu::OnKeyDown(int iVKey) {
   // find curently active gadget
   CMenuGadget *pmgActive = NULL;
   // for each menu gadget in menu
-  FOREACHINLIST(CMenuGadget, mg_lnNode, pgmCurrentMenu->gm_lhGadgets, itmg) {
+  FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetChildren(), itmg) {
     // if focused
     if (itmg->mg_bFocused) {
       // remember as active
@@ -299,7 +298,7 @@ BOOL CGameMenu::OnKeyDown(int iVKey) {
 
 void CGameMenu::StartMenu(void) {
   // for each menu gadget in menu
-  FOREACHINLIST(CMenuGadget, mg_lnNode, gm_lhGadgets, itmg) {
+  FOREACHINLIST(CMenuGadget, n_lnInParent, GetChildren(), itmg) {
     itmg->mg_bFocused = FALSE;
     // call appear
     itmg->Appear();
@@ -316,7 +315,7 @@ void CGameMenu::StartMenu(void) {
     FillListItems();
 
     // for each menu gadget in menu
-    FOREACHINLIST(CMenuGadget, mg_lnNode, gm_lhGadgets, itmg) {
+    FOREACHINLIST(CMenuGadget, n_lnInParent, GetChildren(), itmg) {
       // if in list, but disabled
       if (itmg->mg_iInList == -2) {
         // hide it
@@ -338,7 +337,7 @@ void CGameMenu::StartMenu(void) {
 
 void CGameMenu::EndMenu(void) {
   // for each menu gadget in menu
-  FOREACHINLIST(CMenuGadget, mg_lnNode, gm_lhGadgets, itmg) {
+  FOREACHINLIST(CMenuGadget, n_lnInParent, GetChildren(), itmg) {
     // call disappear
     itmg->Disappear();
   }
