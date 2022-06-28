@@ -21,7 +21,7 @@ void CNetworkMenu::Initialize_t(void) {
   // intialize network menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("NETWORK");
-  gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgTitle.n_lnInParent);
 
   gm_mgJoin.mg_bfsFontSize = BFS_LARGE;
   gm_mgJoin.mg_boxOnScreen = BoxBigRow(1.0f);
@@ -29,7 +29,7 @@ void CNetworkMenu::Initialize_t(void) {
   gm_mgJoin.mg_pmgDown = &gm_mgStart;
   gm_mgJoin.mg_strText = TRANS("JOIN GAME");
   gm_mgJoin.mg_strTip = TRANS("join a network game");
-  gm_lhGadgets.AddTail(gm_mgJoin.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgJoin.n_lnInParent);
   gm_mgJoin.mg_pActivatedFunction = NULL;
 
   gm_mgStart.mg_bfsFontSize = BFS_LARGE;
@@ -38,7 +38,7 @@ void CNetworkMenu::Initialize_t(void) {
   gm_mgStart.mg_pmgDown = &gm_mgQuickLoad;
   gm_mgStart.mg_strText = TRANS("START SERVER");
   gm_mgStart.mg_strTip = TRANS("start a network game server");
-  gm_lhGadgets.AddTail(gm_mgStart.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgStart.n_lnInParent);
   gm_mgStart.mg_pActivatedFunction = NULL;
 
   gm_mgQuickLoad.mg_bfsFontSize = BFS_LARGE;
@@ -47,7 +47,7 @@ void CNetworkMenu::Initialize_t(void) {
   gm_mgQuickLoad.mg_pmgDown = &gm_mgLoad;
   gm_mgQuickLoad.mg_strText = TRANS("QUICK LOAD");
   gm_mgQuickLoad.mg_strTip = TRANS("load a quick-saved game (F9)");
-  gm_lhGadgets.AddTail(gm_mgQuickLoad.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgQuickLoad.n_lnInParent);
   gm_mgQuickLoad.mg_pActivatedFunction = NULL;
 
   gm_mgLoad.mg_bfsFontSize = BFS_LARGE;
@@ -56,7 +56,7 @@ void CNetworkMenu::Initialize_t(void) {
   gm_mgLoad.mg_pmgDown = &gm_mgJoin;
   gm_mgLoad.mg_strText = TRANS("LOAD");
   gm_mgLoad.mg_strTip = TRANS("start server and load a network game (server only)");
-  gm_lhGadgets.AddTail(gm_mgLoad.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgLoad.n_lnInParent);
   gm_mgLoad.mg_pActivatedFunction = NULL;
 }
 

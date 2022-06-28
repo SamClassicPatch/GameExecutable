@@ -24,12 +24,12 @@ CMGEdit mgServerFilter[7];
 void CServersMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("CHOOSE SERVER");
-  gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgTitle.n_lnInParent);
 
   gm_mgList.mg_boxOnScreen = FLOATaabbox2D(FLOAT2D(0, 0), FLOAT2D(1, 1));
   gm_mgList.mg_pmgLeft = &gm_mgList; // make sure it can get focus
   gm_mgList.mg_bEnabled = TRUE;
-  gm_lhGadgets.AddTail(gm_mgList.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgList.n_lnInParent);
 
   ASSERT(ARRAYCOUNT(mgServerColumn) == ARRAYCOUNT(mgServerFilter));
   for (INDEX i = 0; i < ARRAYCOUNT(mgServerFilter); i++) {
@@ -39,7 +39,7 @@ void CServersMenu::Initialize_t(void) {
     mgServerColumn[i].mg_iCenterI = -1;
     mgServerColumn[i].mg_pmgUp = &gm_mgList;
     mgServerColumn[i].mg_pmgDown = &mgServerFilter[i];
-    gm_lhGadgets.AddTail(mgServerColumn[i].mg_lnNode);
+    gm_lhGadgets.AddTail(mgServerColumn[i].n_lnInParent);
 
     mgServerFilter[i].mg_ctMaxStringLen = 25;
     mgServerFilter[i].mg_boxOnScreen = BoxPlayerEdit(5.0);
@@ -47,7 +47,7 @@ void CServersMenu::Initialize_t(void) {
     mgServerFilter[i].mg_iCenterI = -1;
     mgServerFilter[i].mg_pmgUp = &mgServerColumn[i];
     mgServerFilter[i].mg_pmgDown = &gm_mgList;
-    gm_lhGadgets.AddTail(mgServerFilter[i].mg_lnNode);
+    gm_lhGadgets.AddTail(mgServerFilter[i].n_lnInParent);
     mgServerFilter[i].mg_pstrToChange = &_strServerFilter[i];
     mgServerFilter[i].SetText(*mgServerFilter[i].mg_pstrToChange);
   }
@@ -58,7 +58,7 @@ void CServersMenu::Initialize_t(void) {
   gm_mgRefresh.mg_iCenterI = -1;
   gm_mgRefresh.mg_pmgDown = &gm_mgList;
   gm_mgRefresh.mg_pActivatedFunction = NULL;
-  gm_lhGadgets.AddTail(gm_mgRefresh.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgRefresh.n_lnInParent);
 
   CTString astrColumns[7];
   mgServerColumn[0].mg_strText = TRANS("Server");

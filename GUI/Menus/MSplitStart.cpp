@@ -25,7 +25,7 @@ void CSplitStartMenu::Initialize_t(void) {
   // intialize split screen menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("START SPLIT SCREEN");
-  gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgTitle.n_lnInParent);
 
   // game type trigger
   TRIGGER_MG(gm_mgGameType, 0, gm_mgStart, gm_mgDifficulty, TRANS("Game type:"), astrGameTypeRadioTexts);
@@ -47,7 +47,7 @@ void CSplitStartMenu::Initialize_t(void) {
   gm_mgLevel.mg_pmgDown = &gm_mgOptions;
   gm_mgLevel.mg_strTip = TRANS("choose the level to start");
   gm_mgLevel.mg_pActivatedFunction = NULL;
-  gm_lhGadgets.AddTail(gm_mgLevel.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgLevel.n_lnInParent);
 
   // options button
   gm_mgOptions.mg_strText = TRANS("Game options");
@@ -58,7 +58,7 @@ void CSplitStartMenu::Initialize_t(void) {
   gm_mgOptions.mg_pmgDown = &gm_mgStart;
   gm_mgOptions.mg_strTip = TRANS("adjust game rules");
   gm_mgOptions.mg_pActivatedFunction = NULL;
-  gm_lhGadgets.AddTail(gm_mgOptions.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgOptions.n_lnInParent);
 
   // start button
   gm_mgStart.mg_bfsFontSize = BFS_LARGE;
@@ -66,7 +66,7 @@ void CSplitStartMenu::Initialize_t(void) {
   gm_mgStart.mg_pmgUp = &gm_mgOptions;
   gm_mgStart.mg_pmgDown = &gm_mgGameType;
   gm_mgStart.mg_strText = TRANS("START");
-  gm_lhGadgets.AddTail(gm_mgStart.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgStart.n_lnInParent);
   gm_mgStart.mg_pActivatedFunction = NULL;
 }
 

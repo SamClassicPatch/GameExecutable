@@ -21,7 +21,7 @@ void COptionsMenu::Initialize_t(void) {
   // intialize options menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("OPTIONS");
-  gm_lhGadgets.AddTail(gm_mgTitle.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgTitle.n_lnInParent);
 
   gm_mgVideoOptions.mg_bfsFontSize = BFS_LARGE;
   gm_mgVideoOptions.mg_boxOnScreen = BoxBigRow(0.0f);
@@ -29,7 +29,7 @@ void COptionsMenu::Initialize_t(void) {
   gm_mgVideoOptions.mg_pmgDown = &gm_mgAudioOptions;
   gm_mgVideoOptions.mg_strText = TRANS("VIDEO OPTIONS");
   gm_mgVideoOptions.mg_strTip = TRANS("set video mode and driver");
-  gm_lhGadgets.AddTail(gm_mgVideoOptions.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgVideoOptions.n_lnInParent);
   gm_mgVideoOptions.mg_pActivatedFunction = NULL;
 
   gm_mgAudioOptions.mg_bfsFontSize = BFS_LARGE;
@@ -38,7 +38,7 @@ void COptionsMenu::Initialize_t(void) {
   gm_mgAudioOptions.mg_pmgDown = &gm_mgPlayerProfileOptions;
   gm_mgAudioOptions.mg_strText = TRANS("AUDIO OPTIONS");
   gm_mgAudioOptions.mg_strTip = TRANS("set audio quality and volume");
-  gm_lhGadgets.AddTail(gm_mgAudioOptions.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgAudioOptions.n_lnInParent);
   gm_mgAudioOptions.mg_pActivatedFunction = NULL;
 
   gm_mgPlayerProfileOptions.mg_bfsFontSize = BFS_LARGE;
@@ -47,7 +47,7 @@ void COptionsMenu::Initialize_t(void) {
   gm_mgPlayerProfileOptions.mg_pmgDown = &gm_mgNetworkOptions;
   gm_mgPlayerProfileOptions.mg_strText = TRANS("PLAYERS AND CONTROLS");
   gm_mgPlayerProfileOptions.mg_strTip = TRANS("change currently active player or adjust controls");
-  gm_lhGadgets.AddTail(gm_mgPlayerProfileOptions.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgPlayerProfileOptions.n_lnInParent);
   gm_mgPlayerProfileOptions.mg_pActivatedFunction = NULL;
 
   gm_mgNetworkOptions.mg_bfsFontSize = BFS_LARGE;
@@ -56,7 +56,7 @@ void COptionsMenu::Initialize_t(void) {
   gm_mgNetworkOptions.mg_pmgDown = &gm_mgCustomOptions;
   gm_mgNetworkOptions.mg_strText = TRANS("NETWORK CONNECTION");
   gm_mgNetworkOptions.mg_strTip = TRANS("choose your connection parameters");
-  gm_lhGadgets.AddTail(gm_mgNetworkOptions.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgNetworkOptions.n_lnInParent);
   gm_mgNetworkOptions.mg_pActivatedFunction = NULL;
 
   gm_mgCustomOptions.mg_bfsFontSize = BFS_LARGE;
@@ -65,7 +65,7 @@ void COptionsMenu::Initialize_t(void) {
   gm_mgCustomOptions.mg_pmgDown = &gm_mgAddonOptions;
   gm_mgCustomOptions.mg_strText = TRANS("ADVANCED OPTIONS");
   gm_mgCustomOptions.mg_strTip = TRANS("for advanced users only");
-  gm_lhGadgets.AddTail(gm_mgCustomOptions.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgCustomOptions.n_lnInParent);
   gm_mgCustomOptions.mg_pActivatedFunction = NULL;
 
   gm_mgAddonOptions.mg_bfsFontSize = BFS_LARGE;
@@ -74,6 +74,6 @@ void COptionsMenu::Initialize_t(void) {
   gm_mgAddonOptions.mg_pmgDown = &gm_mgVideoOptions;
   gm_mgAddonOptions.mg_strText = TRANS("EXECUTE ADDON");
   gm_mgAddonOptions.mg_strTip = TRANS("choose from list of addons to execute");
-  gm_lhGadgets.AddTail(gm_mgAddonOptions.mg_lnNode);
+  gm_lhGadgets.AddTail(gm_mgAddonOptions.n_lnInParent);
   gm_mgAddonOptions.mg_pActivatedFunction = NULL;
 }
