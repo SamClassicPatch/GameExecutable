@@ -24,7 +24,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   gd.mg_pmgDown = dn; \
   gd.mg_pmgLeft = lf; \
   gd.mg_pmgRight = rt; \
-  gd.mg_strText = txt; \
+  gd.SetText(txt); \
   AddChild(&gd);
 
 extern CTString astrNoYes[2];
@@ -35,7 +35,7 @@ extern void SelectPlayersApplyMenu(void);
 void CSelectPlayersMenu::Initialize_t(void) {
   // intialize split screen menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  gm_mgTitle.mg_strText = TRANS("SELECT PLAYERS");
+  gm_mgTitle.SetName(TRANS("SELECT PLAYERS"));
   AddChild(&gm_mgTitle);
 
   TRIGGER_MG(gm_mgDedicated, 0, gm_mgStart, gm_mgObserver, TRANS("Dedicated:"), astrNoYes);
@@ -74,10 +74,10 @@ void CSelectPlayersMenu::Initialize_t(void) {
   gm_mgNotes.mg_bEnabled = FALSE;
   gm_mgNotes.mg_bLabel = TRUE;
   AddChild(&gm_mgNotes);
-  gm_mgNotes.mg_strText = "";
+  gm_mgNotes.SetText("");
 
   /*  // options button
-  mgSplitOptions.mg_strText = TRANS("Game options");
+  mgSplitOptions.SetText(TRANS("Game options");
   mgSplitOptions.mg_boxOnScreen = BoxMediumRow(3);
   mgSplitOptions.mg_bfsFontSize = BFS_MEDIUM;
   mgSplitOptions.mg_iCenterI = 0;
@@ -92,7 +92,7 @@ void CSelectPlayersMenu::Initialize_t(void) {
   mgSplitStartStart.mg_boxOnScreen = BoxBigRow(4);
   mgSplitStartStart.mg_pmgUp = &mgSplitOptions;
   mgSplitStartStart.mg_pmgDown = &mgSplitGameType;
-  mgSplitStartStart.mg_strText = TRANS("START");
+  mgSplitStartStart.SetText(TRANS("START");
   AddChild(&mgSplitStartStart);
   mgSplitStartStart.mg_pActivatedFunction = &StartSelectPlayersMenuFromSplit;
   */

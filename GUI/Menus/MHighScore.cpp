@@ -21,7 +21,7 @@ void CHighScoreMenu::Initialize_t(void) {
   gm_mgHScore.mg_boxOnScreen = FLOATaabbox2D(FLOAT2D(0, 0), FLOAT2D(1, 0.5));
   AddChild(&gm_mgHScore);
 
-  gm_mgTitle.mg_strText = TRANS("HIGH SCORE TABLE");
+  gm_mgTitle.SetName(TRANS("HIGH SCORE TABLE"));
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   AddChild(&gm_mgTitle);
 }

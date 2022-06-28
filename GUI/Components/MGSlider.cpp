@@ -97,7 +97,7 @@ void CMGSlider::Render(CDrawPort *pdp) {
   PIX pixISizeR = box.Size()(1) * 0.45f;
 
   // print text left of slider
-  pdp->PutTextR(mg_strText, pixIL, pixJ, col);
+  pdp->PutTextR(GetText(), pixIL, pixJ, col);
 
   // draw box around slider
   LCDDrawBox(0, -1, PIXaabbox2D(PIX2D(pixIR + 1, pixJ), PIX2D(pixIR + pixISizeR - 2, pixJ + pixJSize - 2)),

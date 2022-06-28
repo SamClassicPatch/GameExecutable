@@ -20,7 +20,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 void CCustomizeAxisMenu::Initialize_t(void) {
   // intialize axis menu
-  gm_mgTitle.mg_strText = TRANS("CUSTOMIZE AXIS");
+  gm_mgTitle.SetName(TRANS("CUSTOMIZE AXIS"));
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   AddChild(&gm_mgTitle);
 
@@ -51,14 +51,14 @@ void CCustomizeAxisMenu::Initialize_t(void) {
   }
 
   gm_mgSensitivity.mg_boxOnScreen = BoxMediumRow(3);
-  gm_mgSensitivity.mg_strText = TRANS("SENSITIVITY");
+  gm_mgSensitivity.SetText(TRANS("SENSITIVITY"));
   gm_mgSensitivity.mg_pmgUp = &gm_mgMountedTrigger;
   gm_mgSensitivity.mg_pmgDown = &gm_mgDeadzone;
   AddChild(&gm_mgSensitivity);
   gm_mgSensitivity.mg_strTip = TRANS("set sensitivity for this axis");
 
   gm_mgDeadzone.mg_boxOnScreen = BoxMediumRow(4);
-  gm_mgDeadzone.mg_strText = TRANS("DEAD ZONE");
+  gm_mgDeadzone.SetText(TRANS("DEAD ZONE"));
   gm_mgDeadzone.mg_pmgUp = &gm_mgSensitivity;
   gm_mgDeadzone.mg_pmgDown = &gm_mgInvertTrigger;
   AddChild(&gm_mgDeadzone);

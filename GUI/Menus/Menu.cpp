@@ -100,7 +100,7 @@ static CTextureObject _toLogoMenuB;
   ltbmg.mg_astrTexts = astr; \
   ltbmg.mg_ctTexts = sizeof(astr) / sizeof(astr[0]); \
   ltbmg.mg_iSelected = 0; \
-  ltbmg.mg_strText = astr[ltbmg.mg_iSelected];
+  ltbmg.SetText(astr[ltbmg.mg_iSelected]);
 
 #define PLACEMENT(x, y, z) CPlacement3D(FLOAT3D(x, y, z), ANGLE3D(0.0f, 0.0f, 0.0f))
 
@@ -884,14 +884,14 @@ extern void FixupBackButton(CGameMenu *pgm) {
   }
 
   if (bResume) {
-    mgBack.mg_strText = TRANS("RESUME");
+    mgBack.SetText(TRANS("RESUME"));
     mgBack.mg_strTip = TRANS("return to game");
   } else {
     if (_bVarChanged) {
-      mgBack.mg_strText = TRANS("CANCEL");
+      mgBack.SetText(TRANS("CANCEL"));
       mgBack.mg_strTip = TRANS("cancel changes");
     } else {
-      mgBack.mg_strText = TRANS("BACK");
+      mgBack.SetText(TRANS("BACK"));
       mgBack.mg_strTip = TRANS("return to previous menu");
     }
   }

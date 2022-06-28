@@ -39,8 +39,7 @@ void CMGEdit::OnActivate(void) {
   ASSERT(mg_pstrToChange != NULL);
   PlayMenuSound(_psdPress);
   IFeel_PlayEffect("Menu_press");
-  SetText(mg_strText);
-  mg_iCursorPos = strlen(mg_strText);
+  mg_iCursorPos = strlen(GetText());
   mg_bEditing = TRUE;
   _bEditingString = TRUE;
 }
@@ -101,46 +100,52 @@ BOOL CMGEdit::OnKeyDown(int iVKey) {
     case VK_UP:
     case VK_DOWN:
     case VK_RETURN:
-    case VK_LBUTTON:
-      *mg_pstrToChange = mg_strText;
+    case VK_LBUTTON: {
+      *mg_pstrToChange = GetText();
       Clear();
       OnStringChanged();
-      break;
+    } break;
 
     case VK_ESCAPE:
-    case VK_RBUTTON:
-      mg_strText = *mg_pstrToChange;
+    case VK_RBUTTON: {
+      SetText(*mg_pstrToChange);
       Clear();
       OnStringCanceled();
-      break;
+    } break;
 
-    case VK_LEFT:
+    case VK_LEFT: {
       if (mg_iCursorPos > 0) {
         mg_iCursorPos--;
       }
-      break;
+    } break;
 
-    case VK_RIGHT:
-      if (mg_iCursorPos < strlen(mg_strText)) {
+    case VK_RIGHT: {
+      if (mg_iCursorPos < strlen(GetText())) {
         mg_iCursorPos++;
       }
-      break;
+    } break;
 
-    case VK_HOME:
+    case VK_HOME: {
       mg_iCursorPos = 0;
-      break;
+    } break;
 
-    case VK_END:
-      mg_iCursorPos = strlen(mg_strText);
-      break;
+    case VK_END: {
+      mg_iCursorPos = strlen(GetText());
+    } break;
 
-    case VK_BACK:
-      Key_BackDel(mg_strText, mg_iCursorPos, bShift, FALSE);
-      break;
+    case VK_BACK: {
+      CTString strText = GetText();
+      Key_BackDel(strText, mg_iCursorPos, bShift, FALSE);
 
-    case VK_DELETE:
-      Key_BackDel(mg_strText, mg_iCursorPos, bShift, TRUE);
-      break;
+      SetText(strText);
+    } break;
+
+    case VK_DELETE: {
+      CTString strText = GetText();
+      Key_BackDel(strText, mg_iCursorPos, bShift, TRUE);
+
+      SetText(strText);
+    } break;
 
     default: break; // ignore all other special keys
   }
@@ -157,12 +162,15 @@ BOOL CMGEdit::OnChar(MSG msg) {
     return CMenuGadget::OnChar(msg);
   }
   // only chars are allowed
-  const INDEX ctFullLen = mg_strText.Length();
-  const INDEX ctNakedLen = mg_strText.LengthNaked();
+  CTString strText = GetText(); // [Cecil]
+  const INDEX ctFullLen = strText.Length();
+  const INDEX ctNakedLen = strText.LengthNaked();
   mg_iCursorPos = Clamp(mg_iCursorPos, 0L, ctFullLen);
   int iVKey = msg.wParam;
   if (isprint(iVKey) && ctNakedLen <= mg_ctMaxStringLen) {
-    mg_strText.InsertChar(mg_iCursorPos, (char)iVKey);
+    strText.InsertChar(mg_iCursorPos, (char)iVKey);
+    SetText(strText);
+
     mg_iCursorPos++;
   }
   // key is handled
@@ -178,14 +186,14 @@ void CMGEdit::Render(CDrawPort *pdp) {
     mg_iTextMode = 1;
   }
 
-  if (mg_strText == "" && !mg_bEditing) {
+  if (GetText() == "" && !mg_bEditing) {
     if (mg_bfsFontSize == BFS_SMALL) {
-      mg_strText = "*";
+      SetText("*");
     } else {
-      mg_strText = TRANS("<none>");
+      SetText(TRANS("<none>"));
     }
     CMGButton::Render(pdp);
-    mg_strText = "";
+    SetText("");
   } else {
     CMGButton::Render(pdp);
   }

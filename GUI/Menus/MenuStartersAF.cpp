@@ -130,7 +130,7 @@ BOOL LSLoadMod(const CTFileName &fnm) {
 }
 
 BOOL LSLoadCustom(const CTFileName &fnm) {
-  _pGUIM->gmVarMenu.gm_mgTitle.mg_strText = TRANS("ADVANCED OPTIONS");
+  _pGUIM->gmVarMenu.gm_mgTitle.SetName(TRANS("ADVANCED OPTIONS"));
   //  LoadStringVar(fnm.NoExt()+".des", mgVarTitle.mg_strText);
   //  mgVarTitle.mg_strText.OnlyFirstLine();
   _pGUIM->gmVarMenu.gm_fnmMenuCFG = fnm;

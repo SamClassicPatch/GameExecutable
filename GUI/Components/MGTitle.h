@@ -25,6 +25,16 @@ class CMGTitle : public CMenuGadget {
   public:
     CTString mg_strText;
     void Render(CDrawPort *pdp);
+
+    // [Cecil] Get title
+    virtual const CTString &GetName(void) const {
+      return mg_strText;
+    };
+    
+    // [Cecil] Set title
+    virtual void SetName(const CTString &strNew) {
+      mg_strText = strNew;
+    };
 };
 
 #endif /* include-once check. */

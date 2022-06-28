@@ -26,9 +26,12 @@ class CMGKeyDefinition : public CMenuGadget {
     INDEX mg_iState;
     INDEX mg_iControlNumber;
 
+  // [Cecil] Private strings
+  private:
     CTString mg_strLabel;
     CTString mg_strBinding;
 
+  public:
     CMGKeyDefinition(void);
     void Appear(void);
     void Disappear(void);
@@ -40,6 +43,26 @@ class CMGKeyDefinition : public CMenuGadget {
     void SetBindingNames(BOOL bDefining);
     void DefineKey(INDEX iDik);
     void Render(CDrawPort *pdp);
+
+    // [Cecil] Get node name
+    virtual const CTString &GetName(void) const {
+      return mg_strLabel;
+    };
+    
+    // [Cecil] Set node name
+    virtual void SetName(const CTString &strNew) {
+      mg_strLabel = strNew;
+    };
+
+    // [Cecil] Get key binding
+    virtual const CTString &GetText(void) const {
+      return mg_strBinding;
+    };
+    
+    // [Cecil] Set key binding
+    virtual void SetText(const CTString &strNew) {
+      mg_strBinding = strNew;
+    };
 };
 
 #endif /* include-once check. */

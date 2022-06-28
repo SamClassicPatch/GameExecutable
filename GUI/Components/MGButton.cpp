@@ -35,10 +35,6 @@ CMGButton::CMGButton(void) {
   mg_bHighlighted = FALSE;
 }
 
-void CMGButton::SetText(CTString strNew) {
-  mg_strText = strNew;
-}
-
 void CMGButton::OnActivate(void) {
   if (mg_pActivatedFunction != NULL && mg_bEnabled) {
     PlayMenuSound(_psdPress);
@@ -105,7 +101,7 @@ void CMGButton::Render(CDrawPort *pdp) {
     PIX pixUp = box.Min()(2) - 3;
     PIX pixWidth = box.Size()(1) + 1;
     PIX pixHeight = box.Size()(2);
-    if (mg_strLabel != "") {
+    if (GetName() != "") {
       pixLeft = box.Min()(1) + box.Size()(1) * 0.55f;
       pixWidth = box.Size()(1) * 0.45f + 1;
     }
@@ -115,15 +111,15 @@ void CMGButton::Render(CDrawPort *pdp) {
   INDEX iCursor = mg_iCursorPos;
 
   // print text
-  if (mg_strLabel != "") {
+  if (GetName() != "") {
     PIX pixIL = box.Min()(1) + box.Size()(1) * 0.45f;
     PIX pixIR = box.Min()(1) + box.Size()(1) * 0.55f;
     PIX pixJ = box.Min()(2);
 
-    pdp->PutTextR(mg_strLabel, pixIL, pixJ, col);
-    pdp->PutText(mg_strText, pixIR, pixJ, col);
+    pdp->PutTextR(GetName(), pixIL, pixJ, col);
+    pdp->PutText(GetText(), pixIR, pixJ, col);
   } else {
-    CTString str = mg_strText;
+    CTString str = GetText();
     if (pdp->dp_FontData->fd_bFixedWidth) {
       str = str.Undecorated();
       INDEX iLen = str.Length();
@@ -147,7 +143,7 @@ void CMGButton::Render(CDrawPort *pdp) {
   // put cursor if editing
   if (mg_bEditing && ULONG(_pTimer->GetRealTimeTick() * 2.0f) & 1) {
     PIX pixX = box.Min()(1) + GetCharOffset(pdp, iCursor);
-    if (mg_strLabel != "") {
+    if (GetName() != "") {
       pixX += box.Size()(1) * 0.55f;
     }
 
@@ -163,9 +159,9 @@ PIX CMGButton::GetCharOffset(CDrawPort *pdp, INDEX iCharNo) {
   if (pdp->dp_FontData->fd_bFixedWidth) {
     return (pdp->dp_FontData->fd_pixCharWidth + pdp->dp_pixTextCharSpacing) * (iCharNo - 0.5f);
   }
-  CTString strCut(mg_strText);
-  strCut.TrimLeft(strlen(mg_strText) - iCharNo);
-  PIX pixFullWidth = pdp->GetTextWidth(mg_strText);
+  CTString strCut(GetText());
+  strCut.TrimLeft(strlen(GetText()) - iCharNo);
+  PIX pixFullWidth = pdp->GetTextWidth(GetText());
   PIX pixCutWidth = pdp->GetTextWidth(strCut);
   // !!!! not implemented for different centering
   return pixFullWidth - pixCutWidth;

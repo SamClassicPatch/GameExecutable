@@ -79,12 +79,12 @@ static void SetQuickLoadNotes(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
   if (_pShell->GetINDEX("gam_iQuickSaveSlots") <= 8) {
-    gmCurrent.gm_mgNotes.mg_strText = TRANS(
+    gmCurrent.gm_mgNotes.SetText(TRANS(
       "In-game QuickSave shortcuts:\n"
       "F6 - save a new QuickSave\n"
-      "F9 - load the last QuickSave\n");
+      "F9 - load the last QuickSave\n"));
   } else {
-    gmCurrent.gm_mgNotes.mg_strText = "";
+    gmCurrent.gm_mgNotes.SetText("");
   }
 }
 
@@ -103,7 +103,7 @@ void StartSinglePlayerNewMenu(void) {
 void StartVarGameOptions(void) {
   CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("GAME OPTIONS");
+  gmCurrent.gm_mgTitle.SetName(TRANS("GAME OPTIONS"));
   gmCurrent.gm_fnmMenuCFG = CTFILENAME("Scripts\\Menu\\GameOptions.cfg");
   ChangeToMenu(&gmCurrent);
 }
@@ -111,7 +111,7 @@ void StartVarGameOptions(void) {
 void StartSinglePlayerGameOptions(void) {
   CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("GAME OPTIONS");
+  gmCurrent.gm_mgTitle.SetName(TRANS("GAME OPTIONS"));
   gmCurrent.gm_fnmMenuCFG = CTFILENAME("Scripts\\Menu\\SPOptions.cfg");
   gmCurrent.gm_pgmParentMenu = &_pGUIM->gmSinglePlayerMenu;
   ChangeToMenu(&gmCurrent);
@@ -131,7 +131,7 @@ void StartGameOptionsFromSplitScreen(void) {
 void StartRenderingOptionsMenu(void) {
   CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("RENDERING OPTIONS");
+  gmCurrent.gm_mgTitle.SetName(TRANS("RENDERING OPTIONS"));
   gmCurrent.gm_fnmMenuCFG = CTFILENAME("Scripts\\Menu\\RenderingOptions.cfg");
   gmCurrent.gm_pgmParentMenu = &_pGUIM->gmVideoOptionsMenu;
   ChangeToMenu(&gmCurrent);
@@ -430,7 +430,7 @@ void StartSelectPlayersMenuFromServers(void) {
 void StartPlayerModelLoadMenu(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("CHOOSE MODEL");
+  gmCurrent.gm_mgTitle.SetName(TRANS("CHOOSE MODEL"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEUP;
   gmCurrent.gm_bSave = FALSE;
@@ -439,7 +439,7 @@ void StartPlayerModelLoadMenu(void) {
   gmCurrent.gm_fnmSelected = _strLastPlayerAppearance;
   gmCurrent.gm_fnmExt = CTString(".amc");
   gmCurrent.gm_pAfterFileChosen = &LSLoadPlayerModel;
-  gmCurrent.gm_mgNotes.mg_strText = "";
+  gmCurrent.gm_mgNotes.SetText("");
 
   gmCurrent.gm_pgmParentMenu = &_pGUIM->gmPlayerProfile;
   ChangeToMenu(&gmCurrent);
@@ -448,7 +448,7 @@ void StartPlayerModelLoadMenu(void) {
 void StartControlsLoadMenu(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("LOAD CONTROLS");
+  gmCurrent.gm_mgTitle.SetName(TRANS("LOAD CONTROLS"));
   gmCurrent.gm_bAllowThumbnails = FALSE;
   gmCurrent.gm_iSortType = LSSORT_FILEUP;
   gmCurrent.gm_bSave = FALSE;
@@ -457,7 +457,7 @@ void StartControlsLoadMenu(void) {
   gmCurrent.gm_fnmSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".ctl");
   gmCurrent.gm_pAfterFileChosen = &LSLoadControls;
-  gmCurrent.gm_mgNotes.mg_strText = "";
+  gmCurrent.gm_mgNotes.SetText("");
 
   gmCurrent.gm_pgmParentMenu = &_pGUIM->gmControls;
   ChangeToMenu(&gmCurrent);
@@ -466,7 +466,7 @@ void StartControlsLoadMenu(void) {
 void StartCustomLoadMenu(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("ADVANCED OPTIONS");
+  gmCurrent.gm_mgTitle.SetName(TRANS("ADVANCED OPTIONS"));
   gmCurrent.gm_bAllowThumbnails = FALSE;
   gmCurrent.gm_iSortType = LSSORT_NAMEUP;
   gmCurrent.gm_bSave = FALSE;
@@ -475,7 +475,7 @@ void StartCustomLoadMenu(void) {
   gmCurrent.gm_fnmSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".cfg");
   gmCurrent.gm_pAfterFileChosen = &LSLoadCustom;
-  gmCurrent.gm_mgNotes.mg_strText = "";
+  gmCurrent.gm_mgNotes.SetText("");
 
   gmCurrent.gm_pgmParentMenu = &_pGUIM->gmOptionsMenu;
   ChangeToMenu(&gmCurrent);
@@ -484,7 +484,7 @@ void StartCustomLoadMenu(void) {
 void StartAddonsLoadMenu(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("EXECUTE ADDON");
+  gmCurrent.gm_mgTitle.SetName(TRANS("EXECUTE ADDON"));
   gmCurrent.gm_bAllowThumbnails = FALSE;
   gmCurrent.gm_iSortType = LSSORT_NAMEUP;
   gmCurrent.gm_bSave = FALSE;
@@ -493,7 +493,7 @@ void StartAddonsLoadMenu(void) {
   gmCurrent.gm_fnmSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".ini");
   gmCurrent.gm_pAfterFileChosen = &LSLoadAddon;
-  gmCurrent.gm_mgNotes.mg_strText = "";
+  gmCurrent.gm_mgNotes.SetText("");
 
   gmCurrent.gm_pgmParentMenu = &_pGUIM->gmOptionsMenu;
   ChangeToMenu(&gmCurrent);
@@ -502,7 +502,7 @@ void StartAddonsLoadMenu(void) {
 void StartModsLoadMenu(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("CHOOSE MOD");
+  gmCurrent.gm_mgTitle.SetName(TRANS("CHOOSE MOD"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_NAMEUP;
   gmCurrent.gm_bSave = FALSE;
@@ -519,7 +519,7 @@ void StartModsLoadMenu(void) {
 void StartNetworkSettingsMenu(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("CONNECTION SETTINGS");
+  gmCurrent.gm_mgTitle.SetName(TRANS("CONNECTION SETTINGS"));
   gmCurrent.gm_bAllowThumbnails = FALSE;
   gmCurrent.gm_iSortType = LSSORT_FILEUP;
   gmCurrent.gm_bSave = FALSE;
@@ -530,14 +530,14 @@ void StartNetworkSettingsMenu(void) {
   gmCurrent.gm_pAfterFileChosen = &LSLoadNetSettings;
 
   if (sam_strNetworkSettings == "") {
-    gmCurrent.gm_mgNotes.mg_strText = TRANS(
+    gmCurrent.gm_mgNotes.SetText(TRANS(
       "Before joining a network game,\n"
       "you have to adjust your connection parameters.\n"
       "Choose one option from the list.\n"
       "If you have problems with connection, you can adjust\n"
-      "these parameters again from the Options menu.\n");
+      "these parameters again from the Options menu.\n"));
   } else {
-    gmCurrent.gm_mgNotes.mg_strText = "";
+    gmCurrent.gm_mgNotes.SetText("");
   }
 
   gmCurrent.gm_pgmParentMenu = &_pGUIM->gmOptionsMenu;
@@ -549,7 +549,7 @@ void StartSinglePlayerQuickLoadMenu(void) {
 
   _gmMenuGameMode = GM_SINGLE_PLAYER;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("QUICK LOAD");
+  gmCurrent.gm_mgTitle.SetName(TRANS("QUICK LOAD"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
@@ -569,7 +569,7 @@ void StartSinglePlayerLoadMenu(void) {
 
   _gmMenuGameMode = GM_SINGLE_PLAYER;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("LOAD");
+  gmCurrent.gm_mgTitle.SetName(TRANS("LOAD"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
@@ -578,7 +578,7 @@ void StartSinglePlayerLoadMenu(void) {
   gmCurrent.gm_fnmSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".sav");
   gmCurrent.gm_pAfterFileChosen = &LSLoadSinglePlayer;
-  gmCurrent.gm_mgNotes.mg_strText = "";
+  gmCurrent.gm_mgNotes.SetText("");
 
   gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
   ChangeToMenu(&gmCurrent);
@@ -599,7 +599,7 @@ void StartSinglePlayerSaveMenu(void) {
 
   _gmMenuGameMode = GM_SINGLE_PLAYER;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("SAVE");
+  gmCurrent.gm_mgTitle.SetName(TRANS("SAVE"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = TRUE;
@@ -609,7 +609,7 @@ void StartSinglePlayerSaveMenu(void) {
   gmCurrent.gm_fnmBaseName = CTString("SaveGame");
   gmCurrent.gm_fnmExt = CTString(".sav");
   gmCurrent.gm_pAfterFileChosen = &LSSaveAnyGame;
-  gmCurrent.gm_mgNotes.mg_strText = "";
+  gmCurrent.gm_mgNotes.SetText("");
   gmCurrent.gm_strSaveDes = _pGame->GetDefaultGameDescription(TRUE);
 
   gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
@@ -621,7 +621,7 @@ void StartDemoLoadMenu(void) {
 
   _gmMenuGameMode = GM_DEMO;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("PLAY DEMO");
+  gmCurrent.gm_mgTitle.SetName(TRANS("PLAY DEMO"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
@@ -630,7 +630,7 @@ void StartDemoLoadMenu(void) {
   gmCurrent.gm_fnmSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".dem");
   gmCurrent.gm_pAfterFileChosen = &LSLoadDemo;
-  gmCurrent.gm_mgNotes.mg_strText = "";
+  gmCurrent.gm_mgNotes.SetText("");
 
   gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
   ChangeToMenu(&gmCurrent);
@@ -645,7 +645,7 @@ void StartDemoSaveMenu(void) {
 
   _gmMenuGameMode = GM_DEMO;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("RECORD DEMO");
+  gmCurrent.gm_mgTitle.SetName(TRANS("RECORD DEMO"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEUP;
   gmCurrent.gm_bSave = TRUE;
@@ -655,7 +655,7 @@ void StartDemoSaveMenu(void) {
   gmCurrent.gm_fnmBaseName = CTString("Demo");
   gmCurrent.gm_fnmExt = CTString(".dem");
   gmCurrent.gm_pAfterFileChosen = &LSSaveDemo;
-  gmCurrent.gm_mgNotes.mg_strText = "";
+  gmCurrent.gm_mgNotes.SetText("");
   gmCurrent.gm_strSaveDes = _pGame->GetDefaultGameDescription(FALSE);
 
   gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
@@ -667,7 +667,7 @@ void StartNetworkQuickLoadMenu(void) {
 
   _gmMenuGameMode = GM_NETWORK;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("QUICK LOAD");
+  gmCurrent.gm_mgTitle.SetName(TRANS("QUICK LOAD"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
@@ -687,7 +687,7 @@ void StartNetworkLoadMenu(void) {
 
   _gmMenuGameMode = GM_NETWORK;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("LOAD");
+  gmCurrent.gm_mgTitle.SetName(TRANS("LOAD"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
@@ -696,7 +696,7 @@ void StartNetworkLoadMenu(void) {
   gmCurrent.gm_fnmSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".sav");
   gmCurrent.gm_pAfterFileChosen = &LSLoadNetwork;
-  gmCurrent.gm_mgNotes.mg_strText = "";
+  gmCurrent.gm_mgNotes.SetText("");
 
   gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
   ChangeToMenu(&gmCurrent);
@@ -711,7 +711,7 @@ void StartNetworkSaveMenu(void) {
 
   _gmMenuGameMode = GM_NETWORK;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("SAVE");
+  gmCurrent.gm_mgTitle.SetName(TRANS("SAVE"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = TRUE;
@@ -721,7 +721,7 @@ void StartNetworkSaveMenu(void) {
   gmCurrent.gm_fnmBaseName = CTString("SaveGame");
   gmCurrent.gm_fnmExt = CTString(".sav");
   gmCurrent.gm_pAfterFileChosen = &LSSaveAnyGame;
-  gmCurrent.gm_mgNotes.mg_strText = "";
+  gmCurrent.gm_mgNotes.SetText("");
   gmCurrent.gm_strSaveDes = _pGame->GetDefaultGameDescription(TRUE);
 
   gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
@@ -733,7 +733,7 @@ void StartSplitScreenQuickLoadMenu(void) {
 
   _gmMenuGameMode = GM_SPLIT_SCREEN;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("QUICK LOAD");
+  gmCurrent.gm_mgTitle.SetName(TRANS("QUICK LOAD"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
@@ -753,7 +753,7 @@ void StartSplitScreenLoadMenu(void) {
 
   _gmMenuGameMode = GM_SPLIT_SCREEN;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("LOAD");
+  gmCurrent.gm_mgTitle.SetName(TRANS("LOAD"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
@@ -762,7 +762,7 @@ void StartSplitScreenLoadMenu(void) {
   gmCurrent.gm_fnmSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".sav");
   gmCurrent.gm_pAfterFileChosen = &LSLoadSplitScreen;
-  gmCurrent.gm_mgNotes.mg_strText = "";
+  gmCurrent.gm_mgNotes.SetText("");
 
   gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
   ChangeToMenu(&gmCurrent);
@@ -777,7 +777,7 @@ void StartSplitScreenSaveMenu(void) {
 
   _gmMenuGameMode = GM_SPLIT_SCREEN;
 
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("SAVE");
+  gmCurrent.gm_mgTitle.SetName(TRANS("SAVE"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = TRUE;
@@ -787,7 +787,7 @@ void StartSplitScreenSaveMenu(void) {
   gmCurrent.gm_fnmBaseName = CTString("SaveGame");
   gmCurrent.gm_fnmExt = CTString(".sav");
   gmCurrent.gm_pAfterFileChosen = &LSSaveAnyGame;
-  gmCurrent.gm_mgNotes.mg_strText = "";
+  gmCurrent.gm_mgNotes.SetText("");
   gmCurrent.gm_strSaveDes = _pGame->GetDefaultGameDescription(TRUE);
 
   gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
@@ -799,7 +799,7 @@ void DisabledFunction(void) {
   CDisabledMenu &gmCurrent = _pGUIM->gmDisabledFunction;
 
   gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
-  gmCurrent.gm_mgButton.mg_strText = TRANS("The feature is not available in this version!");
-  gmCurrent.gm_mgTitle.mg_strText = TRANS("DISABLED");
+  gmCurrent.gm_mgButton.SetText(TRANS("The feature is not available in this version!"));
+  gmCurrent.gm_mgTitle.SetName(TRANS("DISABLED"));
   ChangeToMenu(&gmCurrent);
 }

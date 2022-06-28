@@ -22,7 +22,7 @@ extern BOOL _bVarChanged;
 
 void CVarMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  gm_mgTitle.mg_strText = "";
+  gm_mgTitle.SetName("");
   AddChild(&gm_mgTitle);
 
   for (INDEX iLabel = 0; iLabel < VARS_ON_SCREEN; iLabel++) {
@@ -44,7 +44,7 @@ void CVarMenu::Initialize_t(void) {
     gm_mgApply.mg_pmgRight =
     gm_mgApply.mg_pmgUp =
     gm_mgApply.mg_pmgDown = &gm_mgVar[0];
-  gm_mgApply.mg_strText = TRANS("APPLY");
+  gm_mgApply.SetText(TRANS("APPLY"));
   gm_mgApply.mg_strTip = TRANS("apply changes");
   AddChild(&gm_mgApply);
   gm_mgApply.mg_pActivatedFunction = NULL;

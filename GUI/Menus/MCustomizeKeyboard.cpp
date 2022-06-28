@@ -35,7 +35,7 @@ void CCustomizeKeyboardMenu::FillListItems(void) {
     if ((iLabel >= gm_iListOffset) && (iLabel < (gm_iListOffset + gm_ctListVisible))) {
       bHasFirst |= (iLabel == 0);
       bHasLast |= (iLabel == ctLabels - 1);
-      gm_mgKey[iInMenu].mg_strLabel = TranslateConst(itAct->ba_strName, 0);
+      gm_mgKey[iInMenu].SetName(TranslateConst(itAct->ba_strName, 0));
       gm_mgKey[iInMenu].mg_iControlNumber = iLabel;
       gm_mgKey[iInMenu].SetBindingNames(FALSE);
       gm_mgKey[iInMenu].mg_strTip = TRANS("Enter - change binding, Backspace - unbind");
@@ -52,7 +52,7 @@ void CCustomizeKeyboardMenu::FillListItems(void) {
 
 void CCustomizeKeyboardMenu::Initialize_t(void) {
   // intialize Audio options menu
-  gm_mgTitle.mg_strText = TRANS("CUSTOMIZE BUTTONS");
+  gm_mgTitle.SetName(TRANS("CUSTOMIZE BUTTONS"));
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   AddChild(&gm_mgTitle);
 

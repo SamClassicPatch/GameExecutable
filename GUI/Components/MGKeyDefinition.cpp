@@ -71,22 +71,22 @@ void CMGKeyDefinition::SetBindingNames(BOOL bDefining) {
         // if only first key is defined
         if (bKey1Bound && !bKey2Bound) {
           // put question mark for second key
-          mg_strBinding = strKey1 + TRANS(" or ") + "?";
+          SetText(strKey1 + TRANS(" or ") + "?");
         // otherwise
         } else {
           // put question mark only
-          mg_strBinding = "?";
+          SetText("?");
         }
         // if not defining
       } else {
         // if second key is defined
         if (bKey2Bound) {
           // add both
-          mg_strBinding = strKey1 + TRANS(" or ") + strKey2;
+          SetText(strKey1 + TRANS(" or ") + strKey2);
         // if second key is undefined
         } else {
           // display only first one
-          mg_strBinding = strKey1;
+          SetText(strKey1);
         }
       }
       return;
@@ -95,7 +95,7 @@ void CMGKeyDefinition::SetBindingNames(BOOL bDefining) {
   }
 
   // if not found, put errorneous string
-  mg_strBinding = "???";
+  SetText("???");
 }
 
 void CMGKeyDefinition::Appear(void) {
@@ -196,6 +196,6 @@ void CMGKeyDefinition::Render(CDrawPort *pdp) {
   PIX pixJ = box.Min()(2);
 
   COLOR col = GetCurrentColor();
-  pdp->PutTextR(mg_strLabel, pixIL, pixJ, col);
-  pdp->PutText(mg_strBinding, pixIR, pixJ, col);
+  pdp->PutTextR(GetName(), pixIL, pixJ, col);
+  pdp->PutText(GetText(), pixIR, pixJ, col);
 }
