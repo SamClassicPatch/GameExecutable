@@ -120,8 +120,10 @@ void CECIL_Init(void) {
 
     extern void CECIL_ApplyFOVPatch(void);
     extern void CECIL_ApplyScreenBlendPatch(void);
+    extern void CECIL_ApplyUndecoratedPatch(void);
     CECIL_ApplyFOVPatch();
     CECIL_ApplyScreenBlendPatch();
+    CECIL_ApplyUndecoratedPatch();
 
     CPrintF("  done!\n");
   }
