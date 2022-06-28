@@ -15,6 +15,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "Cecil/Patcher/patcher.h"
 
+// Force instruction rewrite
+void Patch_ForceRewrite(const int iLength);
+
 // Patch storage
 extern CDynamicContainer<CPatch> _cPatches;
 

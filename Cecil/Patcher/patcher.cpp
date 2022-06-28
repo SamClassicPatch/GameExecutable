@@ -18,9 +18,25 @@
   #define PATCHER_OUT(Output)
 #endif
 
+// [Cecil] Allowed to rewrite anything of this length
+static int _iRewriteLen = -1;
+
+// [Cecil] Force instruction rewrite
+void Patch_ForceRewrite(const int iLength) {
+  _iRewriteLen = iLength;
+};
+
 HANDLE CPatch::s_hHeap = 0;
 bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
 {
+  // [Cecil] Force rewrite
+  if (_iRewriteLen != -1) {
+    rw_len = _iRewriteLen;
+    _iRewriteLen = -1;
+    
+    return true;
+  }
+
   bool instruction_found;
   int read_len = 0;
   int instruction_len;
