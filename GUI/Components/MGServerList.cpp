@@ -27,8 +27,11 @@ FLOATaabbox2D GetBoxPartHoriz(const FLOATaabbox2D &box, FLOAT fMin, FLOAT fMax) 
   return FLOATaabbox2D(FLOAT2D(fBoxMin + fBoxSize * fMin, box.Min()(2)), FLOAT2D(fBoxMin + fBoxSize * fMax, box.Max()(2)));
 }
 
-void PrintInBox(CDrawPort *pdp, PIX pixI, PIX pixJ, PIX pixSizeI, CTString str, COLOR col) {
-  str = str.Undecorated();
+void PrintInBox(CDrawPort *pdp, PIX pixI, PIX pixJ, PIX pixSizeI, CTString str, COLOR col, BOOL bUndecorated) {
+  if (bUndecorated) {
+    str = str.Undecorated();
+  }
+
   PIX pixCharSize = pdp->dp_pixTextCharSpacing + pdp->dp_FontData->fd_pixCharWidth;
   str.TrimRight(pixSizeI / pixCharSize);
 
@@ -230,7 +233,7 @@ void CMGServerList::Render(CDrawPort *pdp) {
       mg_bFocused = TRUE;
       COLOR colItem = GetCurrentColor();
       PrintInBox(pdp, apixSeparatorI[0] + pixCharSizeI, pixListTopJ + pixCharSizeJ + pixLineSize + 1,
-                 apixSeparatorI[1] - apixSeparatorI[0], TRANS("searching..."), colItem);
+                 apixSeparatorI[1] - apixSeparatorI[0], TRANS("searching..."), colItem, TRUE);
     }
   } else {
     FOREACHINLIST(CNetworkSession, ns_lnNode, _lhServers, itns) {
@@ -256,13 +259,35 @@ void CMGServerList::Render(CDrawPort *pdp) {
       if (strMod == "") {
         strMod = "SeriousSam";
       }
-      PrintInBox(pdp, apixSeparatorI[0] + pixCharSizeI / 2, pixJ, apixSeparatorI[1] - apixSeparatorI[0] - pixCharSizeI, ns.ns_strSession, colItem);
-      PrintInBox(pdp, apixSeparatorI[1] + pixCharSizeI / 2, pixJ, apixSeparatorI[2] - apixSeparatorI[1] - pixCharSizeI, TranslateConst(ns.ns_strWorld), colItem);
-      PrintInBox(pdp, apixSeparatorI[2] + pixCharSizeI / 2, pixJ, apixSeparatorI[3] - apixSeparatorI[2] - pixCharSizeI, strPing, colItem);
-      PrintInBox(pdp, apixSeparatorI[3] + pixCharSizeI / 2, pixJ, apixSeparatorI[4] - apixSeparatorI[3] - pixCharSizeI, strPlayersCt, colItem);
-      PrintInBox(pdp, apixSeparatorI[4] + pixCharSizeI / 2, pixJ, apixSeparatorI[5] - apixSeparatorI[4] - pixCharSizeI, TranslateConst(ns.ns_strGameType), colItem);
-      PrintInBox(pdp, apixSeparatorI[5] + pixCharSizeI / 2, pixJ, apixSeparatorI[6] - apixSeparatorI[5] - pixCharSizeI, TranslateConst(strMod), colItem);
-      PrintInBox(pdp, apixSeparatorI[6] + pixCharSizeI / 2, pixJ, apixSeparatorI[7] - apixSeparatorI[6] - pixCharSizeI, ns.ns_strVer, colItem);
+
+      // [Cecil] Arranged in an array
+      const CTString astrEntries[7] = {
+        ns.ns_strSession,
+        TranslateConst(ns.ns_strWorld),
+        strPing,
+        strPlayersCt,
+        TranslateConst(ns.ns_strGameType),
+        TranslateConst(strMod),
+        ns.ns_strVer,
+      };
+
+      // [Cecil] Under which conditions to undecorate tab entries
+      const BOOL abUndecorate[7] = {
+        TRUE,
+        mg_bFocused,
+        TRUE,
+        TRUE,
+        mg_bFocused,
+        TRUE,
+        TRUE,
+      };
+
+      // [Cecil] Print entry in each tab
+      for (INDEX iTab = 0; iTab < 7; iTab++) {
+        PrintInBox(pdp, apixSeparatorI[iTab] + pixCharSizeI / 2, pixJ,
+                   apixSeparatorI[iTab + 1] - apixSeparatorI[iTab] - pixCharSizeI,
+                   astrEntries[iTab], colItem, abUndecorate[iTab]);
+      }
 
       iSession++;
     }
