@@ -22,14 +22,14 @@ void CLoadSaveMenu::Initialize_t(void) {
   gm_pgmNextMenu = NULL;
 
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  GetChildren().AddTail(gm_mgTitle.n_lnInParent);
+  AddChild(&gm_mgTitle);
 
   gm_mgNotes.mg_boxOnScreen = BoxMediumRow(10.0);
   gm_mgNotes.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgNotes.mg_iCenterI = -1;
   gm_mgNotes.mg_bEnabled = FALSE;
   gm_mgNotes.mg_bLabel = TRUE;
-  GetChildren().AddTail(gm_mgNotes.n_lnInParent);
+  AddChild(&gm_mgNotes);
 
   for (INDEX iLabel = 0; iLabel < SAVELOAD_BUTTONS_CT; iLabel++) {
     INDEX iPrev = (SAVELOAD_BUTTONS_CT + iLabel - 1) % SAVELOAD_BUTTONS_CT;
@@ -40,11 +40,11 @@ void CLoadSaveMenu::Initialize_t(void) {
     gm_amgButton[iLabel].mg_boxOnScreen = BoxSaveLoad(iLabel);
     gm_amgButton[iLabel].mg_pActivatedFunction = NULL; // never called!
     gm_amgButton[iLabel].mg_iCenterI = -1;
-    GetChildren().AddTail(gm_amgButton[iLabel].n_lnInParent);
+    AddChild(&gm_amgButton[iLabel]);
   }
 
-  GetChildren().AddTail(gm_mgArrowUp.n_lnInParent);
-  GetChildren().AddTail(gm_mgArrowDn.n_lnInParent);
+  AddChild(&gm_mgArrowUp);
+  AddChild(&gm_mgArrowDn);
   gm_mgArrowUp.mg_adDirection = AD_UP;
   gm_mgArrowDn.mg_adDirection = AD_DOWN;
   gm_mgArrowUp.mg_boxOnScreen = BoxArrow(AD_UP);

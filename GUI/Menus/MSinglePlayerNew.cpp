@@ -22,13 +22,13 @@ void CSinglePlayerNewMenu::Initialize_t(void) {
   // intialize single player new menu
   gm_mgTitle.mg_strText = TRANS("NEW GAME");
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  GetChildren().AddTail(gm_mgTitle.n_lnInParent);
+  AddChild(&gm_mgTitle);
 
   gm_mgTourist.mg_strText = TRANS("TOURIST");
   gm_mgTourist.mg_bfsFontSize = BFS_LARGE;
   gm_mgTourist.mg_boxOnScreen = BoxBigRow(0.0f);
   gm_mgTourist.mg_strTip = TRANS("for non-FPS players");
-  GetChildren().AddTail(gm_mgTourist.n_lnInParent);
+  AddChild(&gm_mgTourist);
   gm_mgTourist.mg_pmgUp = &gm_mgSerious;
   gm_mgTourist.mg_pmgDown = &gm_mgEasy;
   gm_mgTourist.mg_pActivatedFunction = NULL;
@@ -37,7 +37,7 @@ void CSinglePlayerNewMenu::Initialize_t(void) {
   gm_mgEasy.mg_bfsFontSize = BFS_LARGE;
   gm_mgEasy.mg_boxOnScreen = BoxBigRow(1.0f);
   gm_mgEasy.mg_strTip = TRANS("for unexperienced FPS players");
-  GetChildren().AddTail(gm_mgEasy.n_lnInParent);
+  AddChild(&gm_mgEasy);
   gm_mgEasy.mg_pmgUp = &gm_mgTourist;
   gm_mgEasy.mg_pmgDown = &gm_mgMedium;
   gm_mgEasy.mg_pActivatedFunction = NULL;
@@ -46,7 +46,7 @@ void CSinglePlayerNewMenu::Initialize_t(void) {
   gm_mgMedium.mg_bfsFontSize = BFS_LARGE;
   gm_mgMedium.mg_boxOnScreen = BoxBigRow(2.0f);
   gm_mgMedium.mg_strTip = TRANS("for experienced FPS players");
-  GetChildren().AddTail(gm_mgMedium.n_lnInParent);
+  AddChild(&gm_mgMedium);
   gm_mgMedium.mg_pmgUp = &gm_mgEasy;
   gm_mgMedium.mg_pmgDown = &gm_mgHard;
   gm_mgMedium.mg_pActivatedFunction = NULL;
@@ -55,7 +55,7 @@ void CSinglePlayerNewMenu::Initialize_t(void) {
   gm_mgHard.mg_bfsFontSize = BFS_LARGE;
   gm_mgHard.mg_boxOnScreen = BoxBigRow(3.0f);
   gm_mgHard.mg_strTip = TRANS("for experienced Serious Sam players");
-  GetChildren().AddTail(gm_mgHard.n_lnInParent);
+  AddChild(&gm_mgHard);
   gm_mgHard.mg_pmgUp = &gm_mgMedium;
   gm_mgHard.mg_pmgDown = &gm_mgSerious;
   gm_mgHard.mg_pActivatedFunction = NULL;
@@ -64,7 +64,7 @@ void CSinglePlayerNewMenu::Initialize_t(void) {
   gm_mgSerious.mg_bfsFontSize = BFS_LARGE;
   gm_mgSerious.mg_boxOnScreen = BoxBigRow(4.0f);
   gm_mgSerious.mg_strTip = TRANS("are you serious?");
-  GetChildren().AddTail(gm_mgSerious.n_lnInParent);
+  AddChild(&gm_mgSerious);
   gm_mgSerious.mg_pmgUp = &gm_mgHard;
   gm_mgSerious.mg_pmgDown = &gm_mgTourist;
   gm_mgSerious.mg_pActivatedFunction = NULL;
@@ -73,7 +73,7 @@ void CSinglePlayerNewMenu::Initialize_t(void) {
   gm_mgMental.mg_bfsFontSize = BFS_LARGE;
   gm_mgMental.mg_boxOnScreen = BoxBigRow(5.0f);
   gm_mgMental.mg_strTip = TRANS("you are not serious!");
-  GetChildren().AddTail(gm_mgMental.n_lnInParent);
+  AddChild(&gm_mgMental);
   gm_mgMental.mg_pmgUp = &gm_mgSerious;
   gm_mgMental.mg_pmgDown = &gm_mgTourist;
   gm_mgMental.mg_pActivatedFunction = NULL;

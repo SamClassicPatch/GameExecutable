@@ -21,13 +21,13 @@ void CConfirmMenu::Initialize_t(void) {
   gm_bPopup = TRUE;
 
   gm_mgConfirmLabel.mg_strText = "";
-  GetChildren().AddTail(gm_mgConfirmLabel.n_lnInParent);
+  AddChild(&gm_mgConfirmLabel);
   gm_mgConfirmLabel.mg_boxOnScreen = BoxPopupLabel();
   gm_mgConfirmLabel.mg_iCenterI = 0;
   gm_mgConfirmLabel.mg_bfsFontSize = BFS_LARGE;
 
   gm_mgConfirmYes.mg_strText = TRANS("YES");
-  GetChildren().AddTail(gm_mgConfirmYes.n_lnInParent);
+  AddChild(&gm_mgConfirmYes);
   gm_mgConfirmYes.mg_boxOnScreen = BoxPopupYesLarge();
   gm_mgConfirmYes.mg_pActivatedFunction = NULL;
   gm_mgConfirmYes.mg_pmgLeft = gm_mgConfirmYes.mg_pmgRight = &gm_mgConfirmNo;
@@ -35,7 +35,7 @@ void CConfirmMenu::Initialize_t(void) {
   gm_mgConfirmYes.mg_bfsFontSize = BFS_LARGE;
 
   gm_mgConfirmNo.mg_strText = TRANS("NO");
-  GetChildren().AddTail(gm_mgConfirmNo.n_lnInParent);
+  AddChild(&gm_mgConfirmNo);
   gm_mgConfirmNo.mg_boxOnScreen = BoxPopupNoLarge();
   gm_mgConfirmNo.mg_pActivatedFunction = NULL;
   gm_mgConfirmNo.mg_pmgLeft = gm_mgConfirmNo.mg_pmgRight = &gm_mgConfirmYes;

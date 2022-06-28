@@ -22,12 +22,12 @@ void CNetworkOpenMenu::Initialize_t(void) {
   // intialize network join menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("JOIN");
-  GetChildren().AddTail(gm_mgTitle.n_lnInParent);
+  AddChild(&gm_mgTitle);
 
   gm_mgAddressLabel.mg_strText = TRANS("Address:");
   gm_mgAddressLabel.mg_boxOnScreen = BoxMediumLeft(1);
   gm_mgAddressLabel.mg_iCenterI = -1;
-  GetChildren().AddTail(gm_mgAddressLabel.n_lnInParent);
+  AddChild(&gm_mgAddressLabel);
 
   gm_mgAddress.mg_strText = _pGame->gam_strJoinAddress;
   gm_mgAddress.mg_ctMaxStringLen = 20;
@@ -38,12 +38,12 @@ void CNetworkOpenMenu::Initialize_t(void) {
   gm_mgAddress.mg_pmgUp = &gm_mgJoin;
   gm_mgAddress.mg_pmgDown = &gm_mgPort;
   gm_mgAddress.mg_strTip = TRANS("specify server address");
-  GetChildren().AddTail(gm_mgAddress.n_lnInParent);
+  AddChild(&gm_mgAddress);
 
   gm_mgPortLabel.mg_strText = TRANS("Port:");
   gm_mgPortLabel.mg_boxOnScreen = BoxMediumLeft(2);
   gm_mgPortLabel.mg_iCenterI = -1;
-  GetChildren().AddTail(gm_mgPortLabel.n_lnInParent);
+  AddChild(&gm_mgPortLabel);
 
   gm_mgPort.mg_strText = "";
   gm_mgPort.mg_ctMaxStringLen = 10;
@@ -54,13 +54,13 @@ void CNetworkOpenMenu::Initialize_t(void) {
   gm_mgPort.mg_pmgUp = &gm_mgAddress;
   gm_mgPort.mg_pmgDown = &gm_mgJoin;
   gm_mgPort.mg_strTip = TRANS("specify server address");
-  GetChildren().AddTail(gm_mgPort.n_lnInParent);
+  AddChild(&gm_mgPort);
 
   gm_mgJoin.mg_boxOnScreen = BoxMediumMiddle(3);
   gm_mgJoin.mg_pmgUp = &gm_mgPort;
   gm_mgJoin.mg_pmgDown = &gm_mgAddress;
   gm_mgJoin.mg_strText = TRANS("Join");
-  GetChildren().AddTail(gm_mgJoin.n_lnInParent);
+  AddChild(&gm_mgJoin);
   gm_mgJoin.mg_pActivatedFunction = NULL;
 }
 

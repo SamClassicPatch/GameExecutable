@@ -862,9 +862,8 @@ void MenuBack(void) {
 extern void FixupBackButton(CGameMenu *pgm) {
   BOOL bResume = FALSE;
 
-  if (mgBack.n_lnInParent.IsLinked()) {
-    mgBack.n_lnInParent.Remove();
-  }
+  // [Cecil] Unparent button
+  mgBack.SetParent(NULL);
 
   BOOL bHasBack = TRUE;
 
@@ -901,7 +900,7 @@ extern void FixupBackButton(CGameMenu *pgm) {
   mgBack.mg_bfsFontSize = BFS_LARGE;
   mgBack.mg_boxOnScreen = BoxBack();
   mgBack.mg_boxOnScreen = BoxLeftColumn(16.5f);
-  pgm->GetChildren().AddTail(mgBack.n_lnInParent);
+  pgm->AddChild(&mgBack);
 
   mgBack.mg_pmgLeft =
   mgBack.mg_pmgRight =

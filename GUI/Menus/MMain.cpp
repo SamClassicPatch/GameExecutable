@@ -23,7 +23,7 @@ void CMainMenu::Initialize_t(void) {
   /*
   gm_mgTitle.mg_strText = "SERIOUS SAM - BETA";  // nothing to see here, kazuya
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  GetChildren().AddTail( gm_mgTitle.mg_lnNode);
+  AddChild(& gm_mgTitle.mg_lnNode);
   */
 
   extern CTString sam_strVersion;
@@ -33,7 +33,7 @@ void CMainMenu::Initialize_t(void) {
   gm_mgVersionLabel.mg_iCenterI = +1;
   gm_mgVersionLabel.mg_bEnabled = FALSE;
   gm_mgVersionLabel.mg_bLabel = TRUE;
-  GetChildren().AddTail(gm_mgVersionLabel.n_lnInParent);
+  AddChild(&gm_mgVersionLabel);
 
   extern CTString sam_strModName;
   gm_mgModLabel.mg_strText = sam_strModName;
@@ -42,13 +42,13 @@ void CMainMenu::Initialize_t(void) {
   gm_mgModLabel.mg_iCenterI = 0;
   gm_mgModLabel.mg_bEnabled = FALSE;
   gm_mgModLabel.mg_bLabel = TRUE;
-  GetChildren().AddTail(gm_mgModLabel.n_lnInParent);
+  AddChild(&gm_mgModLabel);
 
   gm_mgSingle.mg_strText = TRANS("SINGLE PLAYER");
   gm_mgSingle.mg_bfsFontSize = BFS_LARGE;
   gm_mgSingle.mg_boxOnScreen = BoxBigRow(0.0f);
   gm_mgSingle.mg_strTip = TRANS("single player game menus");
-  GetChildren().AddTail(gm_mgSingle.n_lnInParent);
+  AddChild(&gm_mgSingle);
   gm_mgSingle.mg_pmgUp = &gm_mgQuit;
   gm_mgSingle.mg_pmgDown = &gm_mgNetwork;
   gm_mgSingle.mg_pActivatedFunction = NULL;
@@ -57,7 +57,7 @@ void CMainMenu::Initialize_t(void) {
   gm_mgNetwork.mg_bfsFontSize = BFS_LARGE;
   gm_mgNetwork.mg_boxOnScreen = BoxBigRow(1.0f);
   gm_mgNetwork.mg_strTip = TRANS("LAN/iNet multiplayer menus");
-  GetChildren().AddTail(gm_mgNetwork.n_lnInParent);
+  AddChild(&gm_mgNetwork);
   gm_mgNetwork.mg_pmgUp = &gm_mgSingle;
   gm_mgNetwork.mg_pmgDown = &gm_mgSplitScreen;
   gm_mgNetwork.mg_pActivatedFunction = NULL;
@@ -66,7 +66,7 @@ void CMainMenu::Initialize_t(void) {
   gm_mgSplitScreen.mg_bfsFontSize = BFS_LARGE;
   gm_mgSplitScreen.mg_boxOnScreen = BoxBigRow(2.0f);
   gm_mgSplitScreen.mg_strTip = TRANS("play with multiple players on one computer");
-  GetChildren().AddTail(gm_mgSplitScreen.n_lnInParent);
+  AddChild(&gm_mgSplitScreen);
   gm_mgSplitScreen.mg_pmgUp = &gm_mgNetwork;
   gm_mgSplitScreen.mg_pmgDown = &gm_mgDemo;
   gm_mgSplitScreen.mg_pActivatedFunction = NULL;
@@ -75,7 +75,7 @@ void CMainMenu::Initialize_t(void) {
   gm_mgDemo.mg_bfsFontSize = BFS_LARGE;
   gm_mgDemo.mg_boxOnScreen = BoxBigRow(3.0f);
   gm_mgDemo.mg_strTip = TRANS("play a game demo");
-  GetChildren().AddTail(gm_mgDemo.n_lnInParent);
+  AddChild(&gm_mgDemo);
   gm_mgDemo.mg_pmgUp = &gm_mgSplitScreen;
   gm_mgDemo.mg_pmgDown = &gm_mgMods;
   gm_mgDemo.mg_pActivatedFunction = NULL;
@@ -84,7 +84,7 @@ void CMainMenu::Initialize_t(void) {
   gm_mgMods.mg_bfsFontSize = BFS_LARGE;
   gm_mgMods.mg_boxOnScreen = BoxBigRow(4.0f);
   gm_mgMods.mg_strTip = TRANS("run one of installed game modifications");
-  GetChildren().AddTail(gm_mgMods.n_lnInParent);
+  AddChild(&gm_mgMods);
   gm_mgMods.mg_pmgUp = &gm_mgDemo;
   gm_mgMods.mg_pmgDown = &gm_mgHighScore;
   gm_mgMods.mg_pActivatedFunction = NULL;
@@ -93,7 +93,7 @@ void CMainMenu::Initialize_t(void) {
   gm_mgHighScore.mg_bfsFontSize = BFS_LARGE;
   gm_mgHighScore.mg_boxOnScreen = BoxBigRow(5.0f);
   gm_mgHighScore.mg_strTip = TRANS("view list of top ten best scores");
-  GetChildren().AddTail(gm_mgHighScore.n_lnInParent);
+  AddChild(&gm_mgHighScore);
   gm_mgHighScore.mg_pmgUp = &gm_mgMods;
   gm_mgHighScore.mg_pmgDown = &gm_mgOptions;
   gm_mgHighScore.mg_pActivatedFunction = NULL;
@@ -102,7 +102,7 @@ void CMainMenu::Initialize_t(void) {
   gm_mgOptions.mg_bfsFontSize = BFS_LARGE;
   gm_mgOptions.mg_boxOnScreen = BoxBigRow(6.0f);
   gm_mgOptions.mg_strTip = TRANS("adjust video, audio and input options");
-  GetChildren().AddTail(gm_mgOptions.n_lnInParent);
+  AddChild(&gm_mgOptions);
   gm_mgOptions.mg_pmgUp = &gm_mgHighScore;
   gm_mgOptions.mg_pmgDown = &gm_mgQuit;
   gm_mgOptions.mg_pActivatedFunction = NULL;
@@ -111,7 +111,7 @@ void CMainMenu::Initialize_t(void) {
   gm_mgQuit.mg_bfsFontSize = BFS_LARGE;
   gm_mgQuit.mg_boxOnScreen = BoxBigRow(7.0f);
   gm_mgQuit.mg_strTip = TRANS("exit game immediately");
-  GetChildren().AddTail(gm_mgQuit.n_lnInParent);
+  AddChild(&gm_mgQuit);
   gm_mgQuit.mg_pmgUp = &gm_mgOptions;
   gm_mgQuit.mg_pmgDown = &gm_mgSingle;
   gm_mgQuit.mg_pActivatedFunction = NULL;

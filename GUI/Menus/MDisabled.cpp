@@ -19,10 +19,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 void CDisabledMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  GetChildren().AddTail(gm_mgTitle.n_lnInParent);
+  AddChild(&gm_mgTitle);
 
   gm_mgButton.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgButton.mg_boxOnScreen = BoxBigRow(0.0f);
-  GetChildren().AddTail(gm_mgButton.n_lnInParent);
+  AddChild(&gm_mgButton);
   gm_mgButton.mg_pActivatedFunction = NULL;
 }

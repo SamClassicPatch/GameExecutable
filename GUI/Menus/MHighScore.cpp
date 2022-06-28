@@ -19,11 +19,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 void CHighScoreMenu::Initialize_t(void) {
   gm_mgHScore.mg_boxOnScreen = FLOATaabbox2D(FLOAT2D(0, 0), FLOAT2D(1, 0.5));
-  GetChildren().AddTail(gm_mgHScore.n_lnInParent);
+  AddChild(&gm_mgHScore);
 
   gm_mgTitle.mg_strText = TRANS("HIGH SCORE TABLE");
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  GetChildren().AddTail(gm_mgTitle.n_lnInParent);
+  AddChild(&gm_mgTitle);
 }
 
 void CHighScoreMenu::StartMenu(void) {

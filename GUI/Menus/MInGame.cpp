@@ -21,7 +21,7 @@ void CInGameMenu::Initialize_t(void) {
   // intialize main menu
   gm_mgTitle.mg_strText = TRANS("GAME");
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  GetChildren().AddTail(gm_mgTitle.n_lnInParent);
+  AddChild(&gm_mgTitle);
 
   gm_mgLabel1.mg_strText = "";
   gm_mgLabel1.mg_boxOnScreen = BoxMediumRow(-2.0);
@@ -29,7 +29,7 @@ void CInGameMenu::Initialize_t(void) {
   gm_mgLabel1.mg_iCenterI = -1;
   gm_mgLabel1.mg_bEnabled = FALSE;
   gm_mgLabel1.mg_bLabel = TRUE;
-  GetChildren().AddTail(gm_mgLabel1.n_lnInParent);
+  AddChild(&gm_mgLabel1);
 
   gm_mgLabel2.mg_strText = "";
   gm_mgLabel2.mg_boxOnScreen = BoxMediumRow(-1.0);
@@ -37,13 +37,13 @@ void CInGameMenu::Initialize_t(void) {
   gm_mgLabel2.mg_iCenterI = -1;
   gm_mgLabel2.mg_bEnabled = FALSE;
   gm_mgLabel2.mg_bLabel = TRUE;
-  GetChildren().AddTail(gm_mgLabel2.n_lnInParent);
+  AddChild(&gm_mgLabel2);
 
   gm_mgQuickLoad.mg_strText = TRANS("QUICK LOAD");
   gm_mgQuickLoad.mg_bfsFontSize = BFS_LARGE;
   gm_mgQuickLoad.mg_boxOnScreen = BoxBigRow(0.0f);
   gm_mgQuickLoad.mg_strTip = TRANS("load a quick-saved game (F9)");
-  GetChildren().AddTail(gm_mgQuickLoad.n_lnInParent);
+  AddChild(&gm_mgQuickLoad);
   gm_mgQuickLoad.mg_pmgUp = &gm_mgQuit;
   gm_mgQuickLoad.mg_pmgDown = &gm_mgQuickSave;
   gm_mgQuickLoad.mg_pActivatedFunction = NULL;
@@ -52,7 +52,7 @@ void CInGameMenu::Initialize_t(void) {
   gm_mgQuickSave.mg_bfsFontSize = BFS_LARGE;
   gm_mgQuickSave.mg_boxOnScreen = BoxBigRow(1.0f);
   gm_mgQuickSave.mg_strTip = TRANS("quick-save current game (F6)");
-  GetChildren().AddTail(gm_mgQuickSave.n_lnInParent);
+  AddChild(&gm_mgQuickSave);
   gm_mgQuickSave.mg_pmgUp = &gm_mgQuickLoad;
   gm_mgQuickSave.mg_pmgDown = &gm_mgLoad;
   gm_mgQuickSave.mg_pActivatedFunction = NULL;
@@ -61,7 +61,7 @@ void CInGameMenu::Initialize_t(void) {
   gm_mgLoad.mg_bfsFontSize = BFS_LARGE;
   gm_mgLoad.mg_boxOnScreen = BoxBigRow(2.0f);
   gm_mgLoad.mg_strTip = TRANS("load a saved game");
-  GetChildren().AddTail(gm_mgLoad.n_lnInParent);
+  AddChild(&gm_mgLoad);
   gm_mgLoad.mg_pmgUp = &gm_mgQuickSave;
   gm_mgLoad.mg_pmgDown = &gm_mgSave;
   gm_mgLoad.mg_pActivatedFunction = NULL;
@@ -70,7 +70,7 @@ void CInGameMenu::Initialize_t(void) {
   gm_mgSave.mg_bfsFontSize = BFS_LARGE;
   gm_mgSave.mg_boxOnScreen = BoxBigRow(3.0f);
   gm_mgSave.mg_strTip = TRANS("save current game (each player has own slots!)");
-  GetChildren().AddTail(gm_mgSave.n_lnInParent);
+  AddChild(&gm_mgSave);
   gm_mgSave.mg_pmgUp = &gm_mgLoad;
   gm_mgSave.mg_pmgDown = &gm_mgDemoRec;
   gm_mgSave.mg_pActivatedFunction = NULL;
@@ -80,14 +80,14 @@ void CInGameMenu::Initialize_t(void) {
   gm_mgDemoRec.mg_pmgUp = &gm_mgSave;
   gm_mgDemoRec.mg_pmgDown = &gm_mgHighScore;
   gm_mgDemoRec.mg_strText = "Text not set";
-  GetChildren().AddTail(gm_mgDemoRec.n_lnInParent);
+  AddChild(&gm_mgDemoRec);
   gm_mgDemoRec.mg_pActivatedFunction = NULL;
 
   gm_mgHighScore.mg_strText = TRANS("HIGH SCORES");
   gm_mgHighScore.mg_bfsFontSize = BFS_LARGE;
   gm_mgHighScore.mg_boxOnScreen = BoxBigRow(5.0f);
   gm_mgHighScore.mg_strTip = TRANS("view list of top ten best scores");
-  GetChildren().AddTail(gm_mgHighScore.n_lnInParent);
+  AddChild(&gm_mgHighScore);
   gm_mgHighScore.mg_pmgUp = &gm_mgDemoRec;
   gm_mgHighScore.mg_pmgDown = &gm_mgOptions;
   gm_mgHighScore.mg_pActivatedFunction = NULL;
@@ -96,7 +96,7 @@ void CInGameMenu::Initialize_t(void) {
   gm_mgOptions.mg_bfsFontSize = BFS_LARGE;
   gm_mgOptions.mg_boxOnScreen = BoxBigRow(6.0f);
   gm_mgOptions.mg_strTip = TRANS("adjust video, audio and input options");
-  GetChildren().AddTail(gm_mgOptions.n_lnInParent);
+  AddChild(&gm_mgOptions);
   gm_mgOptions.mg_pmgUp = &gm_mgHighScore;
   gm_mgOptions.mg_pmgDown = &gm_mgStop;
   gm_mgOptions.mg_pActivatedFunction = NULL;
@@ -105,7 +105,7 @@ void CInGameMenu::Initialize_t(void) {
   gm_mgStop.mg_bfsFontSize = BFS_LARGE;
   gm_mgStop.mg_boxOnScreen = BoxBigRow(7.0f);
   gm_mgStop.mg_strTip = TRANS("stop currently running game");
-  GetChildren().AddTail(gm_mgStop.n_lnInParent);
+  AddChild(&gm_mgStop);
   gm_mgStop.mg_pmgUp = &gm_mgOptions;
   gm_mgStop.mg_pmgDown = &gm_mgQuit;
   gm_mgStop.mg_pActivatedFunction = NULL;
@@ -114,7 +114,7 @@ void CInGameMenu::Initialize_t(void) {
   gm_mgQuit.mg_bfsFontSize = BFS_LARGE;
   gm_mgQuit.mg_boxOnScreen = BoxBigRow(8.0f);
   gm_mgQuit.mg_strTip = TRANS("exit game immediately");
-  GetChildren().AddTail(gm_mgQuit.n_lnInParent);
+  AddChild(&gm_mgQuit);
   gm_mgQuit.mg_pmgUp = &gm_mgStop;
   gm_mgQuit.mg_pmgDown = &gm_mgQuickLoad;
   gm_mgQuit.mg_pActivatedFunction = NULL;

@@ -21,7 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 void CLevelsMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("CHOOSE LEVEL");
-  GetChildren().AddTail(gm_mgTitle.n_lnInParent);
+  AddChild(&gm_mgTitle);
 
   for (INDEX iLabel = 0; iLabel < LEVELS_ON_SCREEN; iLabel++) {
     INDEX iPrev = (LEVELS_ON_SCREEN + iLabel - 1) % LEVELS_ON_SCREEN;
@@ -31,11 +31,11 @@ void CLevelsMenu::Initialize_t(void) {
     gm_mgManualLevel[iLabel].mg_pmgDown = &gm_mgManualLevel[iNext];
     gm_mgManualLevel[iLabel].mg_boxOnScreen = BoxMediumRow(iLabel);
     gm_mgManualLevel[iLabel].mg_pActivatedFunction = NULL; // never called!
-    GetChildren().AddTail(gm_mgManualLevel[iLabel].n_lnInParent);
+    AddChild(&gm_mgManualLevel[iLabel]);
   }
 
-  GetChildren().AddTail(gm_mgArrowUp.n_lnInParent);
-  GetChildren().AddTail(gm_mgArrowDn.n_lnInParent);
+  AddChild(&gm_mgArrowUp);
+  AddChild(&gm_mgArrowDn);
   gm_mgArrowUp.mg_adDirection = AD_UP;
   gm_mgArrowDn.mg_adDirection = AD_DOWN;
   gm_mgArrowUp.mg_boxOnScreen = BoxArrow(AD_UP);

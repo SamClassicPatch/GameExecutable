@@ -24,7 +24,7 @@ void CAudioOptionsMenu::Initialize_t(void) {
   // intialize Audio options menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("AUDIO");
-  GetChildren().AddTail(gm_mgTitle.n_lnInParent);
+  AddChild(&gm_mgTitle);
 
   TRIGGER_MG(gm_mgAudioAutoTrigger, 0, gm_mgApply, gm_mgFrequencyTrigger, TRANS("AUTO-ADJUST"), astrNoYes);
   gm_mgAudioAutoTrigger.mg_strTip = TRANS("adjust quality to fit your system");
@@ -44,7 +44,7 @@ void CAudioOptionsMenu::Initialize_t(void) {
   gm_mgWaveVolume.mg_pmgDown = &gm_mgMPEGVolume;
   gm_mgWaveVolume.mg_pOnSliderChange = NULL;
   gm_mgWaveVolume.mg_pActivatedFunction = NULL;
-  GetChildren().AddTail(gm_mgWaveVolume.n_lnInParent);
+  AddChild(&gm_mgWaveVolume);
 
   gm_mgMPEGVolume.mg_boxOnScreen = BoxMediumRow(4);
   gm_mgMPEGVolume.mg_strText = TRANS("MUSIC VOLUME");
@@ -53,13 +53,13 @@ void CAudioOptionsMenu::Initialize_t(void) {
   gm_mgMPEGVolume.mg_pmgDown = &gm_mgApply;
   gm_mgMPEGVolume.mg_pOnSliderChange = NULL;
   gm_mgMPEGVolume.mg_pActivatedFunction = NULL;
-  GetChildren().AddTail(gm_mgMPEGVolume.n_lnInParent);
+  AddChild(&gm_mgMPEGVolume);
 
   gm_mgApply.mg_bfsFontSize = BFS_LARGE;
   gm_mgApply.mg_boxOnScreen = BoxBigRow(4);
   gm_mgApply.mg_strText = TRANS("APPLY");
   gm_mgApply.mg_strTip = TRANS("activate selected options");
-  GetChildren().AddTail(gm_mgApply.n_lnInParent);
+  AddChild(&gm_mgApply);
   gm_mgApply.mg_pmgUp = &gm_mgMPEGVolume;
   gm_mgApply.mg_pmgDown = &gm_mgAudioAutoTrigger;
   gm_mgApply.mg_pActivatedFunction = NULL;
