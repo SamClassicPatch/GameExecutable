@@ -71,7 +71,7 @@ void StartSplitStartMenu(void) {
 }
 
 void StartSinglePlayerNewMenuCustom(void) {
-  _pGUIM->gmSinglePlayerNewMenu.gm_pgmParentMenu = &_pGUIM->gmLevelsMenu;
+  _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmLevelsMenu);
   ChangeToMenu(&_pGUIM->gmSinglePlayerNewMenu);
 }
 
@@ -95,7 +95,7 @@ void StartSinglePlayerNewMenu(void) {
 
   _pGame->gam_strCustomLevel = sam_strFirstLevel;
 
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmSinglePlayerMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -113,18 +113,18 @@ void StartSinglePlayerGameOptions(void) {
 
   gmCurrent.gm_mgTitle.SetName(TRANS("GAME OPTIONS"));
   gmCurrent.gm_fnmMenuCFG = CTFILENAME("Scripts\\Menu\\SPOptions.cfg");
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmSinglePlayerMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
   ChangeToMenu(&gmCurrent);
 }
 
 void StartGameOptionsFromNetwork(void) {
   StartVarGameOptions();
-  _pGUIM->gmVarMenu.gm_pgmParentMenu = &_pGUIM->gmNetworkStartMenu;
+  _pGUIM->gmVarMenu.SetParentMenu(&_pGUIM->gmNetworkStartMenu);
 }
 
 void StartGameOptionsFromSplitScreen(void) {
   StartVarGameOptions();
-  _pGUIM->gmVarMenu.gm_pgmParentMenu = &_pGUIM->gmSplitStartMenu;
+  _pGUIM->gmVarMenu.SetParentMenu(&_pGUIM->gmSplitStartMenu);
 }
 
 // rendering options var settings
@@ -133,7 +133,7 @@ void StartRenderingOptionsMenu(void) {
 
   gmCurrent.gm_mgTitle.SetName(TRANS("RENDERING OPTIONS"));
   gmCurrent.gm_fnmMenuCFG = CTFILENAME("Scripts\\Menu\\RenderingOptions.cfg");
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmVideoOptionsMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmVideoOptionsMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -146,7 +146,7 @@ void StartCustomizeAxisMenu(void) {
 }
 
 void StartOptionsMenu(void) {
-  _pGUIM->gmOptionsMenu.gm_pgmParentMenu = pgmCurrentMenu;
+  _pGUIM->gmOptionsMenu.SetParentMenu(pgmCurrentMenu);
   ChangeToMenu(&_pGUIM->gmOptionsMenu);
 }
 
@@ -192,7 +192,7 @@ void StartCurrentQuickLoadMenu() {
 void StartChangePlayerMenuFromOptions(void) {
   _bPlayerMenuFromSinglePlayer = FALSE;
   _pGUIM->gmPlayerProfile.gm_piCurrentPlayer = &_pGame->gm_iSinglePlayer;
-  _pGUIM->gmPlayerProfile.gm_pgmParentMenu = &_pGUIM->gmOptionsMenu;
+  _pGUIM->gmPlayerProfile.SetParentMenu(&_pGUIM->gmOptionsMenu);
   ChangeToMenu(&_pGUIM->gmPlayerProfile);
 }
 
@@ -200,22 +200,22 @@ void StartChangePlayerMenuFromSinglePlayer(void) {
   _iLocalPlayer = -1;
   _bPlayerMenuFromSinglePlayer = TRUE;
   _pGUIM->gmPlayerProfile.gm_piCurrentPlayer = &_pGame->gm_iSinglePlayer;
-  _pGUIM->gmPlayerProfile.gm_pgmParentMenu = &_pGUIM->gmSinglePlayerMenu;
+  _pGUIM->gmPlayerProfile.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
   ChangeToMenu(&_pGUIM->gmPlayerProfile);
 }
 
 void StartControlsMenuFromPlayer(void) {
-  _pGUIM->gmControls.gm_pgmParentMenu = &_pGUIM->gmPlayerProfile;
+  _pGUIM->gmControls.SetParentMenu(&_pGUIM->gmPlayerProfile);
   ChangeToMenu(&_pGUIM->gmControls);
 }
 
 void StartControlsMenuFromOptions(void) {
-  _pGUIM->gmControls.gm_pgmParentMenu = &_pGUIM->gmOptionsMenu;
+  _pGUIM->gmControls.SetParentMenu(&_pGUIM->gmOptionsMenu);
   ChangeToMenu(&_pGUIM->gmControls);
 }
 
 void StartHighScoreMenu(void) {
-  _pGUIM->gmHighScoreMenu.gm_pgmParentMenu = pgmCurrentMenu;
+  _pGUIM->gmHighScoreMenu.SetParentMenu(pgmCurrentMenu);
   ChangeToMenu(&_pGUIM->gmHighScoreMenu);
 }
 
@@ -308,7 +308,7 @@ void StartSelectServerLAN(void) {
 
   gmCurrent.m_bInternet = FALSE;
   ChangeToMenu(&gmCurrent);
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmNetworkJoinMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmNetworkJoinMenu);
 }
 
 void StartSelectServerNET(void) {
@@ -316,7 +316,7 @@ void StartSelectServerNET(void) {
 
   gmCurrent.m_bInternet = TRUE;
   ChangeToMenu(&gmCurrent);
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmNetworkJoinMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmNetworkJoinMenu);
 }
 
 // -------- Levels Menu Functions
@@ -326,7 +326,7 @@ void StartSelectLevelFromSingle(void) {
   FilterLevels(GetSpawnFlagsForGameType(-1));
   _pAfterLevelChosen = StartSinglePlayerNewMenuCustom;
   ChangeToMenu(&gmCurrent);
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmSinglePlayerMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
 }
 
 void StartSelectLevelFromSplit(void) {
@@ -336,7 +336,7 @@ void StartSelectLevelFromSplit(void) {
   void StartSplitStartMenu(void);
   _pAfterLevelChosen = StartSplitStartMenu;
   ChangeToMenu(&gmCurrent);
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmSplitStartMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmSplitStartMenu);
 }
 
 void StartSelectLevelFromNetwork(void) {
@@ -346,7 +346,7 @@ void StartSelectLevelFromNetwork(void) {
   void StartNetworkStartMenu(void);
   _pAfterLevelChosen = StartNetworkStartMenu;
   ChangeToMenu(&gmCurrent);
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmNetworkStartMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmNetworkStartMenu);
 }
 
 // -------- Players Selection Menu Functions
@@ -356,7 +356,7 @@ void StartSelectPlayersMenuFromSplit(void) {
   gmCurrent.gm_bAllowDedicated = FALSE;
   gmCurrent.gm_bAllowObserving = FALSE;
   gmCurrent.gm_mgStart.mg_pActivatedFunction = &StartSplitScreenGame;
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmSplitStartMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmSplitStartMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -366,7 +366,7 @@ void StartSelectPlayersMenuFromNetwork(void) {
   gmCurrent.gm_bAllowDedicated = TRUE;
   gmCurrent.gm_bAllowObserving = TRUE;
   gmCurrent.gm_mgStart.mg_pActivatedFunction = &StartNetworkGame;
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmNetworkStartMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmNetworkStartMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -376,7 +376,7 @@ void StartSelectPlayersMenuFromNetworkLoad(void) {
   gmCurrent.gm_bAllowDedicated = FALSE;
   gmCurrent.gm_bAllowObserving = TRUE;
   gmCurrent.gm_mgStart.mg_pActivatedFunction = &StartNetworkLoadGame;
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmLoadSaveMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmLoadSaveMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -386,7 +386,7 @@ void StartSelectPlayersMenuFromSplitScreenLoad(void) {
   gmCurrent.gm_bAllowDedicated = FALSE;
   gmCurrent.gm_bAllowObserving = FALSE;
   gmCurrent.gm_mgStart.mg_pActivatedFunction = &StartSplitScreenGameLoad;
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmLoadSaveMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmLoadSaveMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -396,14 +396,14 @@ void StartSelectPlayersMenuFromOpen(void) {
   gmCurrent.gm_bAllowDedicated = FALSE;
   gmCurrent.gm_bAllowObserving = TRUE;
   gmCurrent.gm_mgStart.mg_pActivatedFunction = &JoinNetworkGame;
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmNetworkOpenMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmNetworkOpenMenu);
   ChangeToMenu(&gmCurrent);
 
   /*if (sam_strNetworkSettings == "")*/ {
     void StartNetworkSettingsMenu(void);
     StartNetworkSettingsMenu();
     _pGUIM->gmLoadSaveMenu.gm_bNoEscape = TRUE;
-    _pGUIM->gmLoadSaveMenu.gm_pgmParentMenu = &_pGUIM->gmNetworkOpenMenu;
+    _pGUIM->gmLoadSaveMenu.SetParentMenu(&_pGUIM->gmNetworkOpenMenu);
     _pGUIM->gmLoadSaveMenu.gm_pgmNextMenu = &gmCurrent;
   }
 }
@@ -414,14 +414,14 @@ void StartSelectPlayersMenuFromServers(void) {
   gmCurrent.gm_bAllowDedicated = FALSE;
   gmCurrent.gm_bAllowObserving = TRUE;
   gmCurrent.gm_mgStart.mg_pActivatedFunction = &JoinNetworkGame;
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmServersMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmServersMenu);
   ChangeToMenu(&gmCurrent);
 
   /*if (sam_strNetworkSettings == "")*/ {
     void StartNetworkSettingsMenu(void);
     StartNetworkSettingsMenu();
     _pGUIM->gmLoadSaveMenu.gm_bNoEscape = TRUE;
-    _pGUIM->gmLoadSaveMenu.gm_pgmParentMenu = &_pGUIM->gmServersMenu;
+    _pGUIM->gmLoadSaveMenu.SetParentMenu(&_pGUIM->gmServersMenu);
     _pGUIM->gmLoadSaveMenu.gm_pgmNextMenu = &gmCurrent;
   }
 }
@@ -441,7 +441,7 @@ void StartPlayerModelLoadMenu(void) {
   gmCurrent.gm_pAfterFileChosen = &LSLoadPlayerModel;
   gmCurrent.gm_mgNotes.SetText("");
 
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmPlayerProfile;
+  gmCurrent.SetParentMenu(&_pGUIM->gmPlayerProfile);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -459,7 +459,7 @@ void StartControlsLoadMenu(void) {
   gmCurrent.gm_pAfterFileChosen = &LSLoadControls;
   gmCurrent.gm_mgNotes.SetText("");
 
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmControls;
+  gmCurrent.SetParentMenu(&_pGUIM->gmControls);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -477,7 +477,7 @@ void StartCustomLoadMenu(void) {
   gmCurrent.gm_pAfterFileChosen = &LSLoadCustom;
   gmCurrent.gm_mgNotes.SetText("");
 
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmOptionsMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmOptionsMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -495,7 +495,7 @@ void StartAddonsLoadMenu(void) {
   gmCurrent.gm_pAfterFileChosen = &LSLoadAddon;
   gmCurrent.gm_mgNotes.SetText("");
 
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmOptionsMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmOptionsMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -512,7 +512,7 @@ void StartModsLoadMenu(void) {
   gmCurrent.gm_fnmExt = CTString(".des");
   gmCurrent.gm_pAfterFileChosen = &LSLoadMod;
 
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmMainMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmMainMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -540,7 +540,7 @@ void StartNetworkSettingsMenu(void) {
     gmCurrent.gm_mgNotes.SetText("");
   }
 
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmOptionsMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmOptionsMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -560,7 +560,7 @@ void StartSinglePlayerQuickLoadMenu(void) {
   gmCurrent.gm_pAfterFileChosen = &LSLoadSinglePlayer;
   SetQuickLoadNotes();
 
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -580,7 +580,7 @@ void StartSinglePlayerLoadMenu(void) {
   gmCurrent.gm_pAfterFileChosen = &LSLoadSinglePlayer;
   gmCurrent.gm_mgNotes.SetText("");
 
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -612,7 +612,7 @@ void StartSinglePlayerSaveMenu(void) {
   gmCurrent.gm_mgNotes.SetText("");
   gmCurrent.gm_strSaveDes = _pGame->GetDefaultGameDescription(TRUE);
 
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -632,7 +632,7 @@ void StartDemoLoadMenu(void) {
   gmCurrent.gm_pAfterFileChosen = &LSLoadDemo;
   gmCurrent.gm_mgNotes.SetText("");
 
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -658,7 +658,7 @@ void StartDemoSaveMenu(void) {
   gmCurrent.gm_mgNotes.SetText("");
   gmCurrent.gm_strSaveDes = _pGame->GetDefaultGameDescription(FALSE);
 
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -678,7 +678,7 @@ void StartNetworkQuickLoadMenu(void) {
   gmCurrent.gm_pAfterFileChosen = &LSLoadNetwork;
   SetQuickLoadNotes();
 
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -698,7 +698,7 @@ void StartNetworkLoadMenu(void) {
   gmCurrent.gm_pAfterFileChosen = &LSLoadNetwork;
   gmCurrent.gm_mgNotes.SetText("");
 
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -724,7 +724,7 @@ void StartNetworkSaveMenu(void) {
   gmCurrent.gm_mgNotes.SetText("");
   gmCurrent.gm_strSaveDes = _pGame->GetDefaultGameDescription(TRUE);
 
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -744,7 +744,7 @@ void StartSplitScreenQuickLoadMenu(void) {
   gmCurrent.gm_pAfterFileChosen = &LSLoadSplitScreen;
   SetQuickLoadNotes();
 
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -764,7 +764,7 @@ void StartSplitScreenLoadMenu(void) {
   gmCurrent.gm_pAfterFileChosen = &LSLoadSplitScreen;
   gmCurrent.gm_mgNotes.SetText("");
 
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -790,7 +790,7 @@ void StartSplitScreenSaveMenu(void) {
   gmCurrent.gm_mgNotes.SetText("");
   gmCurrent.gm_strSaveDes = _pGame->GetDefaultGameDescription(TRUE);
 
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   ChangeToMenu(&gmCurrent);
 }
 
@@ -798,7 +798,7 @@ void StartSplitScreenSaveMenu(void) {
 void DisabledFunction(void) {
   CDisabledMenu &gmCurrent = _pGUIM->gmDisabledFunction;
 
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.gm_mgButton.SetText(TRANS("The feature is not available in this version!"));
   gmCurrent.gm_mgTitle.SetName(TRANS("DISABLED"));
   ChangeToMenu(&gmCurrent);

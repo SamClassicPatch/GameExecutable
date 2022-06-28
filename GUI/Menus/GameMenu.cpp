@@ -18,7 +18,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "GameMenu.h"
 
 CGameMenu::CGameMenu(void) {
-  gm_pgmParentMenu = NULL;
   gm_pmgSelectedByDefault = NULL;
   gm_pmgArrowUp = NULL;
   gm_pmgArrowDn = NULL;

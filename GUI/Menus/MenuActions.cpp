@@ -140,7 +140,7 @@ static void ExitConfirm(void) {
   gmCurrent._pConfimedYes = &ExitGame;
   gmCurrent._pConfimedNo = NULL;
   gmCurrent.gm_mgConfirmLabel.SetText(TRANS("ARE YOU SERIOUS?"));
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
 }
@@ -158,7 +158,7 @@ static void StopConfirm(void) {
   gmCurrent._pConfimedYes = &StopCurrentGame;
   gmCurrent._pConfimedNo = NULL;
   gmCurrent.gm_mgConfirmLabel.SetText(TRANS("ARE YOU SERIOUS?"));
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
 }
@@ -193,7 +193,7 @@ extern void ModConnectConfirm(void) {
   gmCurrent._pConfimedYes = &ModConnect;
   gmCurrent._pConfimedNo = NULL;
   gmCurrent.gm_mgConfirmLabel.SetText(TRANS("CHANGE THE MOD?"));
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
 }
@@ -205,7 +205,7 @@ void SaveConfirm(void) {
   gmCurrent._pConfimedYes = &OnFileSaveOK;
   gmCurrent._pConfimedNo = NULL;
   gmCurrent.gm_mgConfirmLabel.SetText(TRANS("OVERWRITE?"));
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
 }
@@ -227,7 +227,7 @@ void ModNotInstalled(void) {
   strNoMod.PrintF(TRANS("You don't have MOD '%s' installed.\nDo you want to visit its web site?"), (const char *)_fnmModSelected);
 
   gmCurrent.gm_mgConfirmLabel.SetText(strNoMod);
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeSmall();
   ChangeToMenu(&gmCurrent);
 }
@@ -238,7 +238,7 @@ extern void ModConfirm(void) {
   gmCurrent._pConfimedYes = &ModLoadYes;
   gmCurrent._pConfimedNo = NULL;
   gmCurrent.gm_mgConfirmLabel.SetText(TRANS("LOAD THIS MOD?"));
-  gmCurrent.gm_pgmParentMenu = &_pGUIM->gmLoadSaveMenu;
+  gmCurrent.SetParentMenu(&_pGUIM->gmLoadSaveMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
 }
@@ -257,7 +257,7 @@ void VideoConfirm(void) {
   gmCurrent._pConfimedNo = RevertVideoSettings;
 
   gmCurrent.gm_mgConfirmLabel.SetText(TRANS("KEEP THIS SETTING?"));
-  gmCurrent.gm_pgmParentMenu = pgmCurrentMenu;
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
 }
@@ -349,13 +349,13 @@ extern CTString sam_strTrainingLevel;
 
 static void StartSinglePlayerGame_Normal(void);
 static void StartTechTest(void) {
-  _pGUIM->gmSinglePlayerNewMenu.gm_pgmParentMenu = &_pGUIM->gmSinglePlayerMenu;
+  _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
   _pGame->gam_strCustomLevel = sam_strTechTestLevel;
   StartSinglePlayerGame_Normal();
 }
 
 static void StartTraining(void) {
-  _pGUIM->gmSinglePlayerNewMenu.gm_pgmParentMenu = &_pGUIM->gmSinglePlayerMenu;
+  _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
   _pGame->gam_strCustomLevel = sam_strTrainingLevel;
   ChangeToMenu(&_pGUIM->gmSinglePlayerNewMenu);
 }

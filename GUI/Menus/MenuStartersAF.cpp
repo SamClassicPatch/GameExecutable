@@ -134,7 +134,7 @@ BOOL LSLoadCustom(const CTFileName &fnm) {
   //  LoadStringVar(fnm.NoExt()+".des", mgVarTitle.mg_strText);
   //  mgVarTitle.mg_strText.OnlyFirstLine();
   _pGUIM->gmVarMenu.gm_fnmMenuCFG = fnm;
-  _pGUIM->gmVarMenu.gm_pgmParentMenu = &_pGUIM->gmLoadSaveMenu;
+  _pGUIM->gmVarMenu.SetParentMenu(&_pGUIM->gmLoadSaveMenu);
   ChangeToMenu(&_pGUIM->gmVarMenu);
   return TRUE;
 }

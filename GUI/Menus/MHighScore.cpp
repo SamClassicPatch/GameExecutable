@@ -27,6 +27,6 @@ void CHighScoreMenu::Initialize_t(void) {
 }
 
 void CHighScoreMenu::StartMenu(void) {
-  gm_pgmParentMenu = pgmCurrentMenu;
+  SetParentMenu(pgmCurrentMenu);
   CGameMenu::StartMenu();
 }
