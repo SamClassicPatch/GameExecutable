@@ -76,7 +76,7 @@ CTString GetNextParam(void) {
   } else {
     // find first next space
     INDEX iSpace;
-    INDEX ctChars = strlen(_strCmd);
+    INDEX ctChars = _strCmd.Length();
 
     for (iSpace = 0; iSpace < ctChars; iSpace++) {
       if (isspace(_strCmd[iSpace])) {
@@ -105,7 +105,7 @@ void ParseCommandLine(CTString strCmd) {
   cmd_strOutput += CTString(0, TRANS("Command line: '%s'\n"), strCmd);
 
   // if no command line
-  if (strlen(strCmd) == 0) {
+  if (strCmd.Length() == 0) {
     // do nothing
     return;
   }

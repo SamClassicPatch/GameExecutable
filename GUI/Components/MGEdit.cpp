@@ -39,7 +39,7 @@ void CMGEdit::OnActivate(void) {
   ASSERT(mg_pstrToChange != NULL);
   PlayMenuSound(_psdPress);
   IFeel_PlayEffect("Menu_press");
-  mg_iCursorPos = strlen(GetText());
+  mg_iCursorPos = GetText().Length();
   mg_bEditing = TRUE;
   _bEditingString = TRUE;
 }
@@ -58,7 +58,7 @@ void CMGEdit::OnKillFocus(void) {
 // helper function for deleting char(s) from string
 static void Key_BackDel(CTString &str, INDEX &iPos, BOOL bShift, BOOL bRight) {
   // do nothing if string is empty
-  INDEX ctChars = strlen(str);
+  INDEX ctChars = str.Length();
 
   if (ctChars == 0) {
     return;
@@ -120,7 +120,7 @@ BOOL CMGEdit::OnKeyDown(int iVKey) {
     } break;
 
     case VK_RIGHT: {
-      if (mg_iCursorPos < strlen(GetText())) {
+      if (mg_iCursorPos < GetText().Length()) {
         mg_iCursorPos++;
       }
     } break;
@@ -130,7 +130,7 @@ BOOL CMGEdit::OnKeyDown(int iVKey) {
     } break;
 
     case VK_END: {
-      mg_iCursorPos = strlen(GetText());
+      mg_iCursorPos = GetText().Length();
     } break;
 
     case VK_BACK: {

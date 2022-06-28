@@ -84,7 +84,7 @@ void CGameAgentQuery::ServerParsePacket(INDEX iLength)
           plt.plt_penPlayerEntity->GetGameSpyPlayerInfo(plb.plb_Index, strPlayer);
 
           // if we don't have enough space left for the next player
-          if (strlen(strPacket) + strlen(strPlayer) > 2048) {
+          if (strPacket.Length() + strPlayer.Length() > 2048) {
             // send the packet
             _sendPacketTo(strPacket, &_sinFrom);
             strPacket = "";
