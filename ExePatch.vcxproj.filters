@@ -276,6 +276,9 @@
     <ClCompile Include="Cecil\UndecoratedPatch.cpp">
       <Filter>Source Files\Cecil</Filter>
     </ClCompile>
+    <ClCompile Include="Cecil\SoundListenPatch.cpp">
+      <Filter>Source Files\Cecil</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdLine.h">

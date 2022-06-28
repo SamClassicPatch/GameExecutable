@@ -121,9 +121,11 @@ void CECIL_Init(void) {
     extern void CECIL_ApplyFOVPatch(void);
     extern void CECIL_ApplyScreenBlendPatch(void);
     extern void CECIL_ApplyUndecoratedPatch(void);
+    extern void CECIL_ApplySoundListenPatch(void);
     CECIL_ApplyFOVPatch();
     CECIL_ApplyScreenBlendPatch();
     CECIL_ApplyUndecoratedPatch();
+    CECIL_ApplySoundListenPatch();
 
     CPrintF("  done!\n");
   }

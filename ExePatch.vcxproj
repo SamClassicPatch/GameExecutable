@@ -274,6 +274,7 @@
     <ClCompile Include="Cecil\Patches.cpp" />
     <ClCompile Include="Cecil\ScreenBlendPatch.cpp" />
     <ClCompile Include="Cecil\ScreenResolutions.cpp" />
+    <ClCompile Include="Cecil\SoundListenPatch.cpp" />
     <ClCompile Include="Cecil\UndecoratedPatch.cpp" />
     <ClCompile Include="Cecil\WindowModes.cpp" />
     <ClCompile Include="Cecil\WorldEntities.cpp" />
