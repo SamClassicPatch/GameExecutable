@@ -48,10 +48,16 @@ public:
     char achModelFile[MAX_PATH+1];
     memset(achModelFile, 0, sizeof(achModelFile));
     memcpy(achModelFile, ps_achModelFile, sizeof(ps_achModelFile));
+// [Cecil] Different implementation
+#ifdef SE1_TFE
+    CTString strModelFile = achModelFile;
+    strModelFile = "Models\\Player\\"+strModelFile+".amc";
+#else
     CTString strModelFile = "ModelsMP\\Player\\"+CTString(achModelFile)+".amc";
     if (!FileExists(strModelFile)) {
       strModelFile = "Models\\Player\\"+CTString(achModelFile)+".amc";
     }
+#endif
     return strModelFile;
   }
 };

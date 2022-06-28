@@ -297,8 +297,11 @@ public:
   virtual void LCDScreenBoxOpenRight(COLOR col);
   virtual void LCDRenderClouds1(void);
   virtual void LCDRenderClouds2(void);
+// [Cecil] Not present in TFE
+#ifndef SE1_TFE
           void LCDRenderCloudsForComp(void);
           void LCDRenderCompGrid(void);
+#endif
   virtual void LCDRenderGrid(void);
   virtual void LCDDrawPointer(PIX pixI, PIX pixJ);
   virtual COLOR LCDGetColor(COLOR colDefault, const char *strName);
