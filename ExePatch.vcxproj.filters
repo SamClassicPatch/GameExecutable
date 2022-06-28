@@ -270,6 +270,9 @@
     <ClCompile Include="Query\GameAgentQuery.cpp">
       <Filter>Source Files\Query</Filter>
     </ClCompile>
+    <ClCompile Include="Cecil\Node.cpp">
+      <Filter>Source Files\Cecil</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdLine.h">
@@ -484,6 +487,9 @@
     </ClInclude>
     <ClInclude Include="Query\QueryMgr.h">
       <Filter>Header Files\Query headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Cecil\Node.h">
+      <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -21,11 +21,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   #pragma once
 #endif
 
-#include <Core/Base/Lists.h>
-#include <Core/Objects/ReferenceCounted.h>
+#include <Engine/Base/Lists.h>
 
 //! Class that represents object type that can form trees.
-class CORE_API CNode : public CRefCounted 
+class CNode
 {
   public:
     CNode *n_pParent;       // parent node
