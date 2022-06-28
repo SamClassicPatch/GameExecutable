@@ -24,7 +24,7 @@ void CControlsMenu::Initialize_t(void) {
   // intialize player and controls menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("CONTROLS");
-  gm_lhGadgets.AddTail(gm_mgTitle.n_lnInParent);
+  GetChildren().AddTail(gm_mgTitle.n_lnInParent);
 
   gm_mgNameLabel.mg_strText = "";
   gm_mgNameLabel.mg_boxOnScreen = BoxMediumRow(0.0);
@@ -32,13 +32,13 @@ void CControlsMenu::Initialize_t(void) {
   gm_mgNameLabel.mg_iCenterI = -1;
   gm_mgNameLabel.mg_bEnabled = FALSE;
   gm_mgNameLabel.mg_bLabel = TRUE;
-  gm_lhGadgets.AddTail(gm_mgNameLabel.n_lnInParent);
+  GetChildren().AddTail(gm_mgNameLabel.n_lnInParent);
 
   gm_mgButtons.mg_strText = TRANS("CUSTOMIZE BUTTONS");
   gm_mgButtons.mg_boxOnScreen = BoxMediumRow(2.0);
   gm_mgButtons.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgButtons.mg_iCenterI = 0;
-  gm_lhGadgets.AddTail(gm_mgButtons.n_lnInParent);
+  GetChildren().AddTail(gm_mgButtons.n_lnInParent);
   gm_mgButtons.mg_pmgUp = &gm_mgPredefined;
   gm_mgButtons.mg_pmgDown = &gm_mgAdvanced;
   gm_mgButtons.mg_pActivatedFunction = NULL;
@@ -48,7 +48,7 @@ void CControlsMenu::Initialize_t(void) {
   gm_mgAdvanced.mg_iCenterI = 0;
   gm_mgAdvanced.mg_boxOnScreen = BoxMediumRow(3);
   gm_mgAdvanced.mg_bfsFontSize = BFS_MEDIUM;
-  gm_lhGadgets.AddTail(gm_mgAdvanced.n_lnInParent);
+  GetChildren().AddTail(gm_mgAdvanced.n_lnInParent);
   gm_mgAdvanced.mg_pmgUp = &gm_mgButtons;
   gm_mgAdvanced.mg_pmgDown = &gm_mgSensitivity;
   gm_mgAdvanced.mg_pActivatedFunction = NULL;
@@ -59,7 +59,7 @@ void CControlsMenu::Initialize_t(void) {
   gm_mgSensitivity.mg_pmgUp = &gm_mgAdvanced;
   gm_mgSensitivity.mg_pmgDown = &gm_mgInvertTrigger;
   gm_mgSensitivity.mg_strTip = TRANS("sensitivity for all axis in this control set");
-  gm_lhGadgets.AddTail(gm_mgSensitivity.n_lnInParent);
+  GetChildren().AddTail(gm_mgSensitivity.n_lnInParent);
 
   TRIGGER_MG(gm_mgInvertTrigger, 5.5, gm_mgSensitivity, gm_mgSmoothTrigger, TRANS("INVERT LOOK"), astrNoYes);
   gm_mgInvertTrigger.mg_strTip = TRANS("invert up/down looking");
@@ -74,7 +74,7 @@ void CControlsMenu::Initialize_t(void) {
   gm_mgPredefined.mg_iCenterI = 0;
   gm_mgPredefined.mg_boxOnScreen = BoxMediumRow(10);
   gm_mgPredefined.mg_bfsFontSize = BFS_MEDIUM;
-  gm_lhGadgets.AddTail(gm_mgPredefined.n_lnInParent);
+  GetChildren().AddTail(gm_mgPredefined.n_lnInParent);
   gm_mgPredefined.mg_pmgUp = &gm_mgIFeelTrigger;
   gm_mgPredefined.mg_pmgDown = &gm_mgButtons;
   gm_mgPredefined.mg_pActivatedFunction = NULL;

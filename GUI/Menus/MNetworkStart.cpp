@@ -25,7 +25,7 @@ void CNetworkStartMenu::Initialize_t(void) {
   // title
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("START SERVER");
-  gm_lhGadgets.AddTail(gm_mgTitle.n_lnInParent);
+  GetChildren().AddTail(gm_mgTitle.n_lnInParent);
 
   // session name edit box
   gm_mgSessionName.mg_strText = _pGame->gam_strSessionName;
@@ -38,7 +38,7 @@ void CNetworkStartMenu::Initialize_t(void) {
   gm_mgSessionName.mg_pmgUp = &gm_mgStart;
   gm_mgSessionName.mg_pmgDown = &gm_mgGameType;
   gm_mgSessionName.mg_strTip = TRANS("name the session to start");
-  gm_lhGadgets.AddTail(gm_mgSessionName.n_lnInParent);
+  GetChildren().AddTail(gm_mgSessionName.n_lnInParent);
 
   // game type trigger
   TRIGGER_MG(gm_mgGameType, 2, gm_mgSessionName, gm_mgDifficulty, TRANS("Game type:"), astrGameTypeRadioTexts);
@@ -60,7 +60,7 @@ void CNetworkStartMenu::Initialize_t(void) {
   gm_mgLevel.mg_pmgDown = &gm_mgMaxPlayers;
   gm_mgLevel.mg_strTip = TRANS("choose the level to start");
   gm_mgLevel.mg_pActivatedFunction = NULL;
-  gm_lhGadgets.AddTail(gm_mgLevel.n_lnInParent);
+  GetChildren().AddTail(gm_mgLevel.n_lnInParent);
 
   // max players trigger
   TRIGGER_MG(gm_mgMaxPlayers, 5, gm_mgLevel, gm_mgWaitAllPlayers, TRANS("Max players:"), astrMaxPlayersRadioTexts);
@@ -83,7 +83,7 @@ void CNetworkStartMenu::Initialize_t(void) {
   gm_mgGameOptions.mg_pmgDown = &gm_mgStart;
   gm_mgGameOptions.mg_strTip = TRANS("adjust game rules");
   gm_mgGameOptions.mg_pActivatedFunction = NULL;
-  gm_lhGadgets.AddTail(gm_mgGameOptions.n_lnInParent);
+  GetChildren().AddTail(gm_mgGameOptions.n_lnInParent);
 
   // start button
   gm_mgStart.mg_bfsFontSize = BFS_LARGE;
@@ -91,7 +91,7 @@ void CNetworkStartMenu::Initialize_t(void) {
   gm_mgStart.mg_pmgUp = &gm_mgGameOptions;
   gm_mgStart.mg_pmgDown = &gm_mgSessionName;
   gm_mgStart.mg_strText = TRANS("START");
-  gm_lhGadgets.AddTail(gm_mgStart.n_lnInParent);
+  GetChildren().AddTail(gm_mgStart.n_lnInParent);
   gm_mgStart.mg_pActivatedFunction = NULL;
 }
 

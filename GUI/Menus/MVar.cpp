@@ -23,7 +23,7 @@ extern BOOL _bVarChanged;
 void CVarMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = "";
-  gm_lhGadgets.AddTail(gm_mgTitle.n_lnInParent);
+  GetChildren().AddTail(gm_mgTitle.n_lnInParent);
 
   for (INDEX iLabel = 0; iLabel < VARS_ON_SCREEN; iLabel++) {
     INDEX iPrev = (VARS_ON_SCREEN + iLabel - 1) % VARS_ON_SCREEN;
@@ -34,7 +34,7 @@ void CVarMenu::Initialize_t(void) {
     gm_mgVar[iLabel].mg_pmgLeft = &gm_mgApply;
     gm_mgVar[iLabel].mg_boxOnScreen = BoxMediumRow(iLabel);
     gm_mgVar[iLabel].mg_pActivatedFunction = NULL; // never called!
-    gm_lhGadgets.AddTail(gm_mgVar[iLabel].n_lnInParent);
+    GetChildren().AddTail(gm_mgVar[iLabel].n_lnInParent);
   }
 
   gm_mgApply.mg_boxOnScreen = BoxMediumRow(16.5f);
@@ -46,11 +46,11 @@ void CVarMenu::Initialize_t(void) {
     gm_mgApply.mg_pmgDown = &gm_mgVar[0];
   gm_mgApply.mg_strText = TRANS("APPLY");
   gm_mgApply.mg_strTip = TRANS("apply changes");
-  gm_lhGadgets.AddTail(gm_mgApply.n_lnInParent);
+  GetChildren().AddTail(gm_mgApply.n_lnInParent);
   gm_mgApply.mg_pActivatedFunction = NULL;
 
-  gm_lhGadgets.AddTail(gm_mgArrowUp.n_lnInParent);
-  gm_lhGadgets.AddTail(gm_mgArrowDn.n_lnInParent);
+  GetChildren().AddTail(gm_mgArrowUp.n_lnInParent);
+  GetChildren().AddTail(gm_mgArrowDn.n_lnInParent);
   gm_mgArrowUp.mg_adDirection = AD_UP;
   gm_mgArrowDn.mg_adDirection = AD_DOWN;
   gm_mgArrowUp.mg_boxOnScreen = BoxArrow(AD_UP);

@@ -22,7 +22,7 @@ void CNetworkJoinMenu::Initialize_t(void) {
   // title
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.mg_strText = TRANS("JOIN GAME");
-  gm_lhGadgets.AddTail(gm_mgTitle.n_lnInParent);
+  GetChildren().AddTail(gm_mgTitle.n_lnInParent);
 
   gm_mgLAN.mg_bfsFontSize = BFS_LARGE;
   gm_mgLAN.mg_boxOnScreen = BoxBigRow(1.0f);
@@ -30,7 +30,7 @@ void CNetworkJoinMenu::Initialize_t(void) {
   gm_mgLAN.mg_pmgDown = &gm_mgNET;
   gm_mgLAN.mg_strText = TRANS("SEARCH LAN");
   gm_mgLAN.mg_strTip = TRANS("search local network for servers");
-  gm_lhGadgets.AddTail(gm_mgLAN.n_lnInParent);
+  GetChildren().AddTail(gm_mgLAN.n_lnInParent);
   gm_mgLAN.mg_pActivatedFunction = NULL;
 
   gm_mgNET.mg_bfsFontSize = BFS_LARGE;
@@ -39,7 +39,7 @@ void CNetworkJoinMenu::Initialize_t(void) {
   gm_mgNET.mg_pmgDown = &gm_mgOpen;
   gm_mgNET.mg_strText = TRANS("SEARCH INTERNET");
   gm_mgNET.mg_strTip = TRANS("search internet for servers");
-  gm_lhGadgets.AddTail(gm_mgNET.n_lnInParent);
+  GetChildren().AddTail(gm_mgNET.n_lnInParent);
   gm_mgNET.mg_pActivatedFunction = NULL;
 
   gm_mgOpen.mg_bfsFontSize = BFS_LARGE;
@@ -48,6 +48,6 @@ void CNetworkJoinMenu::Initialize_t(void) {
   gm_mgOpen.mg_pmgDown = &gm_mgLAN;
   gm_mgOpen.mg_strText = TRANS("SPECIFY SERVER");
   gm_mgOpen.mg_strTip = TRANS("type in server address to connect to");
-  gm_lhGadgets.AddTail(gm_mgOpen.n_lnInParent);
+  GetChildren().AddTail(gm_mgOpen.n_lnInParent);
   gm_mgOpen.mg_pActivatedFunction = NULL;
 }

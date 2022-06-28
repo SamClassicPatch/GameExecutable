@@ -19,9 +19,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #pragma once
 #endif
 
-class CGameMenu {
+// [Cecil] Nodes
+#include "Cecil/Node.h"
+
+class CGameMenu : public CNode {
   public:
-    CListHead gm_lhGadgets;
     CGameMenu *gm_pgmParentMenu;
     BOOL gm_bPopup;
     const char *gm_strName; // menu name (for mod interface only)

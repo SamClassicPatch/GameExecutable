@@ -31,7 +31,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   mg.mg_pActivatedFunction = &PPOnPlayerSelect; \
   mg.mg_strText = #index; \
   mg.mg_strTip = TRANS("select new currently active player"); \
-  gm_lhGadgets.AddTail(mg.n_lnInParent);
+  GetChildren().AddTail(mg.n_lnInParent);
 
 extern BOOL _bPlayerMenuFromSinglePlayer;
 extern CTString _strLastPlayerAppearance;
@@ -42,13 +42,13 @@ void CPlayerProfileMenu::Initialize_t(void) {
   _bPlayerMenuFromSinglePlayer = FALSE;
   gm_mgProfileTitle.mg_boxOnScreen = BoxTitle();
   gm_mgProfileTitle.mg_strText = TRANS("PLAYER PROFILE");
-  gm_lhGadgets.AddTail(gm_mgProfileTitle.n_lnInParent);
+  GetChildren().AddTail(gm_mgProfileTitle.n_lnInParent);
 
   gm_mgNoLabel.mg_strText = TRANS("PROFILE:");
   gm_mgNoLabel.mg_boxOnScreen = BoxMediumLeft(0.0f);
   gm_mgNoLabel.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgNoLabel.mg_iCenterI = -1;
-  gm_lhGadgets.AddTail(gm_mgNoLabel.n_lnInParent);
+  GetChildren().AddTail(gm_mgNoLabel.n_lnInParent);
 
   ADD_SELECT_PLAYER_MG(0, gm_mgNumber[0], gm_mgNumber[7], gm_mgNumber[1], gm_mgNumber[0]);
   ADD_SELECT_PLAYER_MG(1, gm_mgNumber[1], gm_mgNumber[0], gm_mgNumber[2], gm_mgNumber[1]);
@@ -64,7 +64,7 @@ void CPlayerProfileMenu::Initialize_t(void) {
   gm_mgNameLabel.mg_boxOnScreen = BoxMediumLeft(1.25f);
   gm_mgNameLabel.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgNameLabel.mg_iCenterI = -1;
-  gm_lhGadgets.AddTail(gm_mgNameLabel.n_lnInParent);
+  GetChildren().AddTail(gm_mgNameLabel.n_lnInParent);
 
   // setup of player name button is done on start menu
   gm_mgNameField.mg_strText = "<???>";
@@ -76,13 +76,13 @@ void CPlayerProfileMenu::Initialize_t(void) {
   gm_mgNameField.mg_pmgDown = &gm_mgTeam;
   gm_mgNameField.mg_pmgRight = &gm_mgModel;
   gm_mgNameField.mg_strTip = TRANS("rename currently active player");
-  gm_lhGadgets.AddTail(gm_mgNameField.n_lnInParent);
+  GetChildren().AddTail(gm_mgNameField.n_lnInParent);
 
   gm_mgTeamLabel.mg_strText = TRANS("TEAM:");
   gm_mgTeamLabel.mg_boxOnScreen = BoxMediumLeft(2.25f);
   gm_mgTeamLabel.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgTeamLabel.mg_iCenterI = -1;
-  gm_lhGadgets.AddTail(gm_mgTeamLabel.n_lnInParent);
+  GetChildren().AddTail(gm_mgTeamLabel.n_lnInParent);
 
   // setup of player name button is done on start menu
   gm_mgTeam.mg_strText = "<???>";
@@ -96,7 +96,7 @@ void CPlayerProfileMenu::Initialize_t(void) {
   gm_mgTeam.mg_pmgRight = &gm_mgModel;
   //gm_mgTeam.mg_strTip = TRANS("teamplay is disabled in this version");
   gm_mgTeam.mg_strTip = TRANS("enter team name, if playing in team");
-  gm_lhGadgets.AddTail(gm_mgTeam.n_lnInParent);
+  GetChildren().AddTail(gm_mgTeam.n_lnInParent);
 
   TRIGGER_MG(gm_mgCrosshair, 4.0, gm_mgTeam, gm_mgWeaponSelect, TRANS("CROSSHAIR"), astrCrosshair);
   gm_mgCrosshair.mg_bVisual = TRUE;
@@ -153,7 +153,7 @@ void CPlayerProfileMenu::Initialize_t(void) {
   gm_mgCustomizeControls.mg_pmgDown = &gm_mgNumber[0];
   gm_mgCustomizeControls.mg_pmgRight = &gm_mgModel;
   gm_mgCustomizeControls.mg_strTip = TRANS("customize controls for this player");
-  gm_lhGadgets.AddTail(gm_mgCustomizeControls.n_lnInParent);
+  GetChildren().AddTail(gm_mgCustomizeControls.n_lnInParent);
 
   gm_mgModel.mg_boxOnScreen = BoxPlayerModel();
   gm_mgModel.mg_pmgLeft = &gm_mgNameField;
@@ -161,7 +161,7 @@ void CPlayerProfileMenu::Initialize_t(void) {
   gm_mgModel.mg_pmgDown = &gm_mgNameField;
   gm_mgModel.mg_pmgLeft = &gm_mgNameField;
   gm_mgModel.mg_strTip = TRANS("change model for this player");
-  gm_lhGadgets.AddTail(gm_mgModel.n_lnInParent);
+  GetChildren().AddTail(gm_mgModel.n_lnInParent);
 }
 
 INDEX CPlayerProfileMenu::ComboFromPlayer(INDEX iPlayer) {
