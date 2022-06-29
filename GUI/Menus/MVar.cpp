@@ -72,12 +72,16 @@ void CVarMenu::FillListItems(void) {
     gm_mgVar[i].mg_pvsVar = NULL;
     gm_mgVar[i].mg_iInList = -2;
   }
+
+  // [Cecil] Current tab
+  CListHead &lhTab = _aTabs[0].lhVars;
+
   BOOL bHasFirst = FALSE;
   BOOL bHasLast = FALSE;
-  INDEX ctLabels = _lhVarSettings.Count();
+  INDEX ctLabels = lhTab.Count();
   INDEX iLabel = 0;
 
-  FOREACHINLIST(CVarSetting, vs_lnNode, _lhVarSettings, itvs) {
+  FOREACHINLIST(CVarSetting, vs_lnNode, lhTab, itvs) {
     CVarSetting &vs = *itvs;
     INDEX iInMenu = iLabel - gm_iListOffset;
     if ((iLabel >= gm_iListOffset) && (iLabel < (gm_iListOffset + VARS_ON_SCREEN))) {
@@ -99,7 +103,7 @@ void CVarMenu::StartMenu(void) {
   LoadVarSettings(gm_fnmMenuCFG);
   // set default parameters for the list
   gm_iListOffset = 0;
-  gm_ctListTotal = _lhVarSettings.Count();
+  gm_ctListTotal = _aTabs[0].lhVars.Count();
   gm_iListWantedItem = 0;
   CGameMenu::StartMenu();
 }

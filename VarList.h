@@ -39,9 +39,20 @@ class CVarSetting {
     CVarSetting();
     void Clear(void);
     BOOL Validate(void);
+
+    // [Cecil] Copy constructor
+    CVarSetting(const CVarSetting &vsOther);
 };
 
-extern CListHead _lhVarSettings;
+// [Cecil] Options tab
+class CVarTab {
+  public:
+    CTString strName; // Tab name
+    CListHead lhVars; // Tab variables
+};
+
+// [Cecil] Tabs of options
+extern CStaticStackArray<CVarTab> _aTabs;
 
 void LoadVarSettings(const CTFileName &fnmCfg);
 void FlushVarSettings(BOOL bApply);

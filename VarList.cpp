@@ -17,7 +17,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "VarList.h"
 
-CListHead _lhVarSettings;
+// [Cecil] Tabs of options
+CStaticStackArray<CVarTab> _aTabs;
 
 CTString _strFile;
 INDEX _ctLines;
@@ -74,6 +75,9 @@ void CheckPVS_t(CVarSetting *pvs) {
 void ParseCFG_t(CTStream &strm) {
   CVarSetting *pvs = NULL;
 
+  // [Cecil] All options tab
+  CListHead &lhAll = _aTabs.Push().lhVars;
+
   // repeat
   FOREVER {
     // read one line
@@ -84,7 +88,7 @@ void ParseCFG_t(CTStream &strm) {
 
     } else if (strLine.RemovePrefix("Gadget:")) {
       pvs = new CVarSetting;
-      _lhVarSettings.AddTail(pvs->vs_lnNode);
+      lhAll.AddTail(pvs->vs_lnNode);
 
       TranslateLine(strLine);
       strLine.TrimSpacesLeft();
@@ -174,6 +178,27 @@ void ParseCFG_t(CTStream &strm) {
       ThrowF_t(TRANS("unknown keyword"));
     }
   }
+
+  // [Cecil] Current tab
+  CVarTab *pCur = NULL;
+
+  // [Cecil] Go through each setting
+  FOREACHINLIST(CVarSetting, vs_lnNode, lhAll, itvs) {
+    CVarSetting &vs = *itvs;
+
+    // If it's a separator with a name
+    if (vs.vs_bSeparator && vs.vs_strName != "") {
+      // Start a new tab
+      pCur = &_aTabs.Push();
+      pCur->strName = vs.vs_strName;
+    }
+
+    // Copy setting into the new tab
+    if (pCur != NULL) {
+      CVarSetting *pvsCopy = new CVarSetting(vs);
+      pCur->lhVars.AddTail(pvsCopy->vs_lnNode);
+    }
+  }
 }
 
 void LoadVarSettings(const CTFileName &fnmCfg) {
@@ -190,24 +215,28 @@ void LoadVarSettings(const CTFileName &fnmCfg) {
     CPrintF("%s (%d) : %s\n", (const char *)_strFile, _ctLines, strError);
   }
 
-  FOREACHINLIST(CVarSetting, vs_lnNode, _lhVarSettings, itvs) {
-    CVarSetting &vs = *itvs;
+  // [Cecil] For each tab
+  for (INDEX iTab = 0; iTab < _aTabs.Count(); iTab++)
+  {
+    FOREACHINLIST(CVarSetting, vs_lnNode, _aTabs[iTab].lhVars, itvs) {
+      CVarSetting &vs = *itvs;
 
-    if (!vs.Validate() || vs.vs_bSeparator) {
-      continue;
-    }
+      if (!vs.Validate() || vs.vs_bSeparator) {
+        continue;
+      }
 
-    INDEX ctValues = vs.vs_ctValues;
-    CTString strValue = _pShell->GetValue(vs.vs_strVar);
+      INDEX ctValues = vs.vs_ctValues;
+      CTString strValue = _pShell->GetValue(vs.vs_strVar);
 
-    vs.vs_bCustom = TRUE;
-    vs.vs_iOrgValue = vs.vs_iValue = -1;
+      vs.vs_bCustom = TRUE;
+      vs.vs_iOrgValue = vs.vs_iValue = -1;
 
-    for (INDEX iValue = 0; iValue < ctValues; iValue++) {
-      if (strValue == vs.vs_astrValues[iValue]) {
-        vs.vs_iOrgValue = vs.vs_iValue = iValue;
-        vs.vs_bCustom = FALSE;
-        break;
+      for (INDEX iValue = 0; iValue < ctValues; iValue++) {
+        if (strValue == vs.vs_astrValues[iValue]) {
+          vs.vs_iOrgValue = vs.vs_iValue = iValue;
+          vs.vs_bCustom = FALSE;
+          break;
+        }
       }
     }
   }
@@ -216,35 +245,42 @@ void LoadVarSettings(const CTFileName &fnmCfg) {
 void FlushVarSettings(BOOL bApply) {
   CStaticStackArray<CTString> astrScheduled;
 
-  if (bApply) {
-    FOREACHINLIST(CVarSetting, vs_lnNode, _lhVarSettings, itvs) {
-      CVarSetting &vs = *itvs;
+  // [Cecil] For each tab
+  for (INDEX iTab = 0; iTab < _aTabs.Count(); iTab++)
+  {
+    if (bApply) {
+      FOREACHINLIST(CVarSetting, vs_lnNode, _aTabs[iTab].lhVars, itvs) {
+        CVarSetting &vs = *itvs;
 
-      if (vs.vs_iValue != vs.vs_iOrgValue) {
-        CTString strCmd;
-        _pShell->SetValue(vs.vs_strVar, vs.vs_astrValues[vs.vs_iValue]);
+        if (vs.vs_iValue != vs.vs_iOrgValue) {
+          CTString strCmd;
+          _pShell->SetValue(vs.vs_strVar, vs.vs_astrValues[vs.vs_iValue]);
 
-        if (vs.vs_strSchedule != "") {
-          BOOL bSheduled = FALSE;
+          if (vs.vs_strSchedule != "") {
+            BOOL bSheduled = FALSE;
 
-          for (INDEX i = 0; i < astrScheduled.Count(); i++) {
-            if (astrScheduled[i] == vs.vs_strSchedule) {
-              bSheduled = TRUE;
-              break;
+            for (INDEX i = 0; i < astrScheduled.Count(); i++) {
+              if (astrScheduled[i] == vs.vs_strSchedule) {
+                bSheduled = TRUE;
+                break;
+              }
             }
-          }
 
-          if (!bSheduled) {
-            astrScheduled.Push() = vs.vs_strSchedule;
+            if (!bSheduled) {
+              astrScheduled.Push() = vs.vs_strSchedule;
+            }
           }
         }
       }
     }
+
+    {FORDELETELIST(CVarSetting, vs_lnNode, _aTabs[iTab].lhVars, itvs) {
+      delete &*itvs;
+    }}
   }
 
-  {FORDELETELIST(CVarSetting, vs_lnNode, _lhVarSettings, itvs) {
-    delete &*itvs;
-  }}
+  // [Cecil] Clear tabs
+  _aTabs.Clear();
 
   for (INDEX i = 0; i < astrScheduled.Count(); i++) {
     CTString strCmd;
@@ -290,3 +326,24 @@ BOOL CVarSetting::Validate(void) {
 
   return TRUE;
 }
+
+// [Cecil] Copy constructor
+CVarSetting::CVarSetting(const CVarSetting &vsOther) {
+  if (&vsOther == this) return;
+
+  vs_bSeparator       = vsOther.vs_bSeparator;
+  vs_bCanChangeInGame = vsOther.vs_bCanChangeInGame;
+  vs_iSlider          = vsOther.vs_iSlider;
+  vs_strName          = vsOther.vs_strName;
+  vs_strTip           = vsOther.vs_strTip;
+  vs_strVar           = vsOther.vs_strVar;
+  vs_strFilter        = vsOther.vs_strFilter;
+  vs_strSchedule      = vsOther.vs_strSchedule;
+  vs_iValue           = vsOther.vs_iValue;
+  vs_ctValues         = vsOther.vs_ctValues;
+  vs_iOrgValue        = vsOther.vs_iOrgValue;
+  vs_bCustom          = vsOther.vs_bCustom;
+
+  vs_astrTexts.CopyArray(vsOther.vs_astrTexts);
+  vs_astrValues.CopyArray(vsOther.vs_astrValues);
+};
