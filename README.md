@@ -4,7 +4,7 @@ This project contains code for building custom Serious Sam Classic executable fi
 
 Original source code of the executable is taken from the `SeriousSam` project from [Serious Engine 1.10](https://github.com/Croteam-official/Serious-Engine).
 
-This project is based on **Serious Engine 1 SDK**, meaning that it's perfectly compatible with vanilla classic games.
+Complete description of the latest patch release can be found on the [project wiki](https://github.com/DreamyCecil/SamExePatch/wiki).
 
 ## Building
 
