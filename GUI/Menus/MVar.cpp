@@ -32,7 +32,7 @@ void CVarMenu::Initialize_t(void) {
     gm_mgVar[iLabel].mg_pmgUp = &gm_mgVar[iPrev];
     gm_mgVar[iLabel].mg_pmgDown = &gm_mgVar[iNext];
     gm_mgVar[iLabel].mg_pmgLeft = &gm_mgApply;
-    gm_mgVar[iLabel].mg_boxOnScreen = BoxMediumRow(iLabel);
+    gm_mgVar[iLabel].mg_boxOnScreen = BoxMediumRow(iLabel - 1.0f);
     gm_mgVar[iLabel].mg_pActivatedFunction = NULL; // never called!
     AddChild(&gm_mgVar[iLabel]);
   }
