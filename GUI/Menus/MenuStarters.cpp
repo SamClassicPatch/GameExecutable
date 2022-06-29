@@ -544,6 +544,16 @@ void StartNetworkSettingsMenu(void) {
   ChangeToMenu(&gmCurrent);
 }
 
+// [Cecil] Open patch options menu
+void StartPatchOptionsMenu(void) {
+  CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
+
+  gmCurrent.gm_mgTitle.SetName(TRANS("EXE PATCH OPTIONS"));
+  gmCurrent.gm_fnmMenuCFG = CTFILENAME("Scripts\\Menu\\ExePatch.cfg");
+  gmCurrent.SetParentMenu(&_pGUIM->gmOptionsMenu);
+  ChangeToMenu(&gmCurrent);
+};
+
 void StartSinglePlayerQuickLoadMenu(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 

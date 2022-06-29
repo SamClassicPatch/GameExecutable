@@ -51,7 +51,7 @@ void COptionsMenu::Initialize_t(void) {
   gm_mgPlayerProfileOptions.mg_pActivatedFunction = NULL;
 
   gm_mgNetworkOptions.mg_bfsFontSize = BFS_LARGE;
-  gm_mgNetworkOptions.mg_boxOnScreen = BoxBigRow(3);
+  gm_mgNetworkOptions.mg_boxOnScreen = BoxBigRow(3.0f);
   gm_mgNetworkOptions.mg_pmgUp = &gm_mgPlayerProfileOptions;
   gm_mgNetworkOptions.mg_pmgDown = &gm_mgCustomOptions;
   gm_mgNetworkOptions.SetText(TRANS("NETWORK CONNECTION"));
@@ -59,9 +59,19 @@ void COptionsMenu::Initialize_t(void) {
   AddChild(&gm_mgNetworkOptions);
   gm_mgNetworkOptions.mg_pActivatedFunction = NULL;
 
+  // [Cecil] EXE patch settings
+  gm_mgPatchOptions.mg_bfsFontSize = BFS_LARGE;
+  gm_mgPatchOptions.mg_boxOnScreen = BoxBigRow(4.0f);
+  gm_mgPatchOptions.mg_pmgUp = &gm_mgNetworkOptions;
+  gm_mgPatchOptions.mg_pmgDown = &gm_mgCustomOptions;
+  gm_mgPatchOptions.SetText(TRANS("EXE PATCH OPTIONS"));
+  gm_mgPatchOptions.mg_strTip = TRANS("commands from the patched executable file");
+  AddChild(&gm_mgPatchOptions);
+  gm_mgPatchOptions.mg_pActivatedFunction = NULL;
+
   gm_mgCustomOptions.mg_bfsFontSize = BFS_LARGE;
-  gm_mgCustomOptions.mg_boxOnScreen = BoxBigRow(4);
-  gm_mgCustomOptions.mg_pmgUp = &gm_mgNetworkOptions;
+  gm_mgCustomOptions.mg_boxOnScreen = BoxBigRow(5.0f);
+  gm_mgCustomOptions.mg_pmgUp = &gm_mgPatchOptions;
   gm_mgCustomOptions.mg_pmgDown = &gm_mgAddonOptions;
   gm_mgCustomOptions.SetText(TRANS("ADVANCED OPTIONS"));
   gm_mgCustomOptions.mg_strTip = TRANS("for advanced users only");
@@ -69,7 +79,7 @@ void COptionsMenu::Initialize_t(void) {
   gm_mgCustomOptions.mg_pActivatedFunction = NULL;
 
   gm_mgAddonOptions.mg_bfsFontSize = BFS_LARGE;
-  gm_mgAddonOptions.mg_boxOnScreen = BoxBigRow(5);
+  gm_mgAddonOptions.mg_boxOnScreen = BoxBigRow(6.0f);
   gm_mgAddonOptions.mg_pmgUp = &gm_mgCustomOptions;
   gm_mgAddonOptions.mg_pmgDown = &gm_mgVideoOptions;
   gm_mgAddonOptions.SetText(TRANS("EXECUTE ADDON"));

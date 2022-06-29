@@ -74,6 +74,7 @@ void StartCustomLoadMenu(void);
 void StartAddonsLoadMenu(void);
 void StartModsLoadMenu(void);
 void StartNetworkSettingsMenu(void);
+void StartPatchOptionsMenu(void); // [Cecil]
 void StartSinglePlayerMenu(void);
 void DisabledFunction(void);
 
