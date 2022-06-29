@@ -109,6 +109,21 @@ static void CECIL_RegisterCommand(void *pCommand) {
   }
 };
 
+// Display information about the patched executable
+static void PatchInfo(void) {
+  const char *strInfo = (
+    "      Patched Serious Sam executable\n"
+    "https://github.com/DreamyCecil/SamExePatch\n\n"
+
+    "- Game version: " _SE_VER_STRING "\n"
+    "- EXE version: 1.1\n"
+
+    "\n(c) Dreamy Cecil, 2022\n"
+  );
+
+  CPutString(strInfo);
+};
+
 // Custom initialization
 void CECIL_Init(void) {
   // Function patches
@@ -134,6 +149,9 @@ void CECIL_Init(void) {
 
   // Command registry
   _pShell->DeclareSymbol("void CECIL_RegisterCommand(INDEX);", &CECIL_RegisterCommand);
+
+  // Information about the patched executable
+  _pShell->DeclareSymbol("user void PatchInfo(void);", &PatchInfo);
 
   // Custom symbols
   {
