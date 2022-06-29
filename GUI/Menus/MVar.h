@@ -30,7 +30,7 @@ class CVarMenu : public CGameMenu {
     CTFileName gm_fnmMenuCFG;
 
     CMGTitle gm_mgTitle;
-    CMGVarButton gm_mgVar[LEVELS_ON_SCREEN];
+    CMGVarButton gm_mgVar[VARS_ON_SCREEN];
     CMGButton gm_mgApply;
     CMGArrow gm_mgArrowUp;
     CMGArrow gm_mgArrowDn;

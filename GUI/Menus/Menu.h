@@ -41,8 +41,7 @@ extern void PlayMenuSound(CSoundData *psd, BOOL bOverOtherSounds = TRUE);
 
 #define KEYS_ON_SCREEN    14
 #define LEVELS_ON_SCREEN  16
-#define SERVERS_ON_SCREEN 15
-#define VARS_ON_SCREEN    14
+#define VARS_ON_SCREEN    16 // [Cecil] 14 -> 16
 
 extern CListHead _lhServers;
 
