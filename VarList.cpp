@@ -259,6 +259,13 @@ void FlushVarSettings(BOOL bApply) {
           CTString strCmd;
           _pShell->SetValue(vs.vs_strVar, vs.vs_astrValues[vs.vs_iValue]);
 
+          // [Cecil] Execute post-function
+          CShellSymbol *pssVar = _pShell->GetSymbol(vs.vs_strVar, TRUE);
+
+          if (pssVar != NULL && pssVar->ss_pPostFunc != NULL) {
+            pssVar->ss_pPostFunc(pssVar->ss_pvValue);
+          }
+
           if (vs.vs_strSchedule != "") {
             BOOL bSheduled = FALSE;
 
