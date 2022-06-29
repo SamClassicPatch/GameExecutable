@@ -18,7 +18,40 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "VarList.h"
 #include "MVar.h"
 
+// [Cecil] For tab switching
+#include "GUI/Menus/MenuManager.h"
+extern CMenuGadget *_pmgLastActivatedGadget;
+extern CMenuGadget *_pmgUnderCursor;
+
 extern BOOL _bVarChanged;
+
+// [Cecil] Switch to another options tab
+void SelectOptionsTab(void) {
+  CMGButton &mgTab = (CMGButton &)*_pmgLastActivatedGadget;
+  CVarMenu &gm = _pGUIM->gmVarMenu;
+
+  // Same tab
+  if (gm.gm_iTab == mgTab.mg_iIndex) {
+    return;
+  }
+
+  _pmgUnderCursor = NULL;
+
+  // Select a new tab
+  gm.gm_iTab = mgTab.mg_iIndex;
+
+  // Disable current tab button
+  for (INDEX iTab = 0; iTab < gm.gm_agmTabs.Count(); iTab++) {
+    CMGButton &mgTab = gm.gm_agmTabs[iTab];
+    mgTab.mg_bEnabled = (iTab != gm.gm_iTab);
+  }
+
+  // Reload menu
+  gm.gm_iListOffset = 0;
+  gm.gm_ctListTotal = _aTabs[gm.gm_iTab].lhVars.Count();
+  gm.gm_iListWantedItem = 0;
+  gm.CGameMenu::StartMenu();
+};
 
 void CVarMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
@@ -63,6 +96,9 @@ void CVarMenu::Initialize_t(void) {
   gm_pmgArrowDn = &gm_mgArrowDn;
   gm_pmgListTop = &gm_mgVar[0];
   gm_pmgListBottom = &gm_mgVar[VARS_ON_SCREEN - 1];
+
+  // [Cecil] First tab
+  gm_iTab = 0;
 }
 
 void CVarMenu::FillListItems(void) {
@@ -74,7 +110,7 @@ void CVarMenu::FillListItems(void) {
   }
 
   // [Cecil] Current tab
-  CListHead &lhTab = _aTabs[0].lhVars;
+  CListHead &lhTab = _aTabs[gm_iTab].lhVars;
 
   BOOL bHasFirst = FALSE;
   BOOL bHasLast = FALSE;
@@ -101,9 +137,37 @@ void CVarMenu::FillListItems(void) {
 
 void CVarMenu::StartMenu(void) {
   LoadVarSettings(gm_fnmMenuCFG);
+
+  // [Cecil] Add tab buttons
+  for (INDEX iTab = 0; iTab < _aTabs.Count(); iTab++) {
+    const CVarTab &tab = _aTabs[iTab];
+
+    CMGButton &mgTab = gm_agmTabs.Push();
+    mgTab.mg_iIndex = iTab;
+    mgTab.mg_bfsFontSize = BFS_MEDIUM;
+    mgTab.mg_iCenterI = -1;
+
+    mgTab.mg_bEnabled = (iTab != 0);
+    mgTab.mg_boxOnScreen = BoxLeftColumn(iTab + 2.0f);
+    mgTab.mg_pActivatedFunction = &SelectOptionsTab;
+
+    // Connect previous button to the current one
+    if (iTab > 0) {
+      mgTab.mg_pmgUp = &gm_agmTabs[iTab - 1];
+      gm_agmTabs[iTab - 1].mg_pmgDown = &mgTab;
+    }
+
+    mgTab.SetText(tab.strName);
+
+    AddChild(&mgTab);
+  }
+
+  // [Cecil] Reset current tab
+  gm_iTab = 0;
+
   // set default parameters for the list
   gm_iListOffset = 0;
-  gm_ctListTotal = _aTabs[0].lhVars.Count();
+  gm_ctListTotal = _aTabs[gm_iTab].lhVars.Count();
   gm_iListWantedItem = 0;
   CGameMenu::StartMenu();
 }
@@ -115,6 +179,10 @@ void CVarMenu::EndMenu(void) {
     gm_mgVar[i].mg_pvsVar = NULL;
     gm_mgVar[i].mg_iInList = -2;
   }
+
+  // [Cecil] Remove all tabs
+  gm_agmTabs.Clear();
+
   FlushVarSettings(FALSE);
   _bVarChanged = FALSE;
 }

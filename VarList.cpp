@@ -76,7 +76,10 @@ void ParseCFG_t(CTStream &strm) {
   CVarSetting *pvs = NULL;
 
   // [Cecil] All options tab
-  CListHead &lhAll = _aTabs.Push().lhVars;
+  CVarTab &tabAll = _aTabs.Push();
+  tabAll.strName = TRANS("All options");
+
+  CListHead &lhAll = tabAll.lhVars;
 
   // repeat
   FOREVER {
@@ -84,7 +87,7 @@ void ParseCFG_t(CTStream &strm) {
     CTString strLine = GetNonEmptyLine_t(strm);
 
     if (strLine.RemovePrefix("MenuEnd")) {
-      return;
+      break;
 
     } else if (strLine.RemovePrefix("Gadget:")) {
       pvs = new CVarSetting;
@@ -344,6 +347,23 @@ CVarSetting::CVarSetting(const CVarSetting &vsOther) {
   vs_iOrgValue        = vsOther.vs_iOrgValue;
   vs_bCustom          = vsOther.vs_bCustom;
 
-  vs_astrTexts.CopyArray(vsOther.vs_astrTexts);
-  vs_astrValues.CopyArray(vsOther.vs_astrValues);
+  INDEX i;
+  INDEX ct;
+  CTString *pstr;
+
+  // Copy texts
+  ct = vsOther.vs_astrTexts.Count();
+  pstr = vs_astrTexts.Push(ct);
+
+  for (i = 0; i < ct; i++) {
+    pstr[i] = vsOther.vs_astrTexts[i];
+  }
+  
+  // Copy values
+  ct = vsOther.vs_astrValues.Count();
+  pstr = vs_astrValues.Push(ct);
+  
+  for (i = 0; i < ct; i++) {
+    pstr[i] = vsOther.vs_astrValues[i];
+  }
 };

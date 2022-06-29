@@ -35,6 +35,10 @@ class CVarMenu : public CGameMenu {
     CMGArrow gm_mgArrowUp;
     CMGArrow gm_mgArrowDn;
 
+    // [Cecil] Option tabs
+    CStaticStackArray<CMGButton> gm_agmTabs;
+    INDEX gm_iTab; // Currently selected tab
+
     void Initialize_t(void);
     void FillListItems(void);
     void StartMenu(void);
