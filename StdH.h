@@ -23,6 +23,16 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/CurrentVersion.h>
 #include <Game/LCDDrawing.h>
 
+// [Cecil] Choose value based on configuration
+#ifdef SE1_TFE
+  #define CHOOSE_FOR_GAME(_TFE105, _TSE105, _TSE107) _TFE105
+#elif SE1_VER == 105
+  #define CHOOSE_FOR_GAME(_TFE105, _TSE105, _TSE107) _TSE105
+#else
+  #define CHOOSE_FOR_GAME(_TFE105, _TSE105, _TSE107) _TSE107
+#endif
+
+// Main game headers
 #include "SeriousSam.h"
 #include "GUI/Menus/Menu.h"
 

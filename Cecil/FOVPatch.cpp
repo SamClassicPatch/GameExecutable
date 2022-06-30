@@ -132,13 +132,7 @@ static void P_BeginModelRenderingView(CAnyProjection3D &apr, CDrawPort *pdp) {
       // Iterate through the last 10 calls from here
       for (INDEX iDepth = 0; iDepth < 10; iDepth++)
       {
-        #ifdef SE1_TFE
-          const ULONG ulInRenderer = 0x601A462D; // TFE 1.05 address
-        #elif SE1_VER == 105
-          const ULONG ulInRenderer = 0x6017470D; // TSE 1.05 address
-        #else
-          const ULONG ulInRenderer = 0x601AF17E; // TSE 1.07 address
-        #endif
+        const ULONG ulInRenderer = CHOOSE_FOR_GAME(0x601A462D, 0x6017470D, 0x601AF17E);
 
         // Calling from CRenderer::RenderModels()
         if (ulCallAddress == ulInRenderer) {
@@ -220,13 +214,8 @@ extern void CECIL_ApplyFOVPatch(void) {
     FLOAT (CPerspectiveProjection3D::*pFunc)(FLOAT) const;
   } dist;
 
-#ifdef SE1_TFE
-  dist.ulAddress = 0x600F70D0; // Beginning of CPerspectiveProjection3D::MipFactor(FLOAT)
-#elif SE1_VER == 105
-  dist.ulAddress = 0x600C7160; // Beginning of CPerspectiveProjection3D::MipFactor(FLOAT)
-#else
-  dist.ulAddress = 0x601004D0; // Beginning of CPerspectiveProjection3D::MipFactor(FLOAT)
-#endif
+  // Beginning of CPerspectiveProjection3D::MipFactor(FLOAT)
+  dist.ulAddress = CHOOSE_FOR_GAME(0x600F70D0, 0x600C7160, 0x601004D0);
   NewPatch(dist.pFunc, &CProjectionPatch::P_MipFactorDist, "CPerspectiveProjection3D::MipFactor(FLOAT)");
 
   // Workaround for casting raw addresses into function pointers
@@ -235,12 +224,7 @@ extern void CECIL_ApplyFOVPatch(void) {
     FLOAT (CPerspectiveProjection3D::*pFunc)(void) const;
   } factor;
   
-#ifdef SE1_TFE
-  factor.ulAddress = 0x600F7100; // Beginning of CPerspectiveProjection3D::MipFactor()
-#elif SE1_VER == 105
-  factor.ulAddress = 0x600C7190; // Beginning of CPerspectiveProjection3D::MipFactor()
-#else
-  factor.ulAddress = 0x60100500; // Beginning of CPerspectiveProjection3D::MipFactor()
-#endif
+  // Beginning of CPerspectiveProjection3D::MipFactor()
+  factor.ulAddress = CHOOSE_FOR_GAME(0x600F7100, 0x600C7190, 0x60100500);
   NewPatch(factor.pFunc, &CProjectionPatch::P_MipFactor, "CPerspectiveProjection3D::MipFactor()");
 };

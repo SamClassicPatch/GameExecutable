@@ -140,10 +140,6 @@ namespace QueryData {
 
 // [Cecil] Moved out of Legacy query sources
 #define SERIOUSSAMKEY "AKbna4\0"
-#ifdef SE1_TFE
-  #define SERIOUSSAMSTR "serioussam"
-#else
-  #define SERIOUSSAMSTR "serioussamse"
-#endif
+#define SERIOUSSAMSTR CHOOSE_FOR_GAME("serioussam", "serioussamse", "serioussamse")
 
 #endif // include once check
