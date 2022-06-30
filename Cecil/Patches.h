@@ -21,11 +21,18 @@ void Patch_ForceRewrite(const int iLength);
 // Patch storage
 extern CDynamicContainer<CPatch> _cPatches;
 
+// Don't terminate the game in debug
+#ifndef NDEBUG
+  #define PATCH_ERROR_OUTPUT InfoMessage
+#else
+  #define PATCH_ERROR_OUTPUT FatalError
+#endif
+
 // Create a new function patch
 #define NEW_PATCH(OldFunc, NewFunc, FuncName) { \
   CPutString("  " FuncName "\n"); \
   CPatch *pPatch = new CPatch(OldFunc, NewFunc, true, true); \
   /* Add to the patch registry if patched */ \
   if (pPatch->ok()) _cPatches.Add(pPatch); \
-  else FatalError("Cannot set function patch for " FuncName "!\nAddress: 0x%p", OldFunc); \
+  else PATCH_ERROR_OUTPUT("Cannot set function patch for " FuncName "!\nAddress: 0x%p", OldFunc); \
 }
