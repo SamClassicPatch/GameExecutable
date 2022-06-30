@@ -15,8 +15,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include "Cecil/CecilExtensions.h"
-#include "Cecil/Patches.h"
+#include "Patches.h"
 
 // Original function pointer
 static void (*pRenderView)(CWorld &, CEntity &, CAnyProjection3D &, CDrawPort &) = NULL;

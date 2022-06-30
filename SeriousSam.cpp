@@ -31,9 +31,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // [Cecil] Window modes
 #include "Cecil/WindowModes.h"
 
-// [Cecil] Extra functionality
-#include "Cecil/CecilExtensions.h"
-
 // [Cecil] Sound data
 #include <Engine/Sound/SoundData.h>
 

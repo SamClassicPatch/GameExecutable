@@ -15,8 +15,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include "Cecil/CecilExtensions.h"
-#include "Cecil/Patches.h"
+#include "Patches.h"
 
 // Don't listen to in-game sounds
 BOOL _bNoListening = FALSE;

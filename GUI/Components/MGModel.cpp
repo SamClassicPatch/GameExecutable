@@ -16,9 +16,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 #include "MGModel.h"
 
-// [Cecil] Extra functionality
-#include "Cecil/CecilExtensions.h"
-
 CMGModel::CMGModel(void) {
   mg_fFloorY = 0;
 }

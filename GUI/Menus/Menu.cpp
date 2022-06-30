@@ -30,9 +30,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MenuStarters.h"
 
-// [Cecil] Extra functionality
-#include "Cecil/CecilExtensions.h"
-
 // macros for translating radio button text arrays
 #define TRANSLATERADIOARRAY(array) TranslateRadioTexts(array, ARRAYCOUNT(array))
 

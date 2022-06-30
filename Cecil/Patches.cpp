@@ -15,7 +15,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include "Cecil/Patches.h"
+#include "Patches.h"
 #include <Engine/Base/ParsingSymbols.h>
 
 // Patch storage

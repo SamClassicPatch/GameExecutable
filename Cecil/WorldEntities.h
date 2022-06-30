@@ -13,6 +13,16 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
+#ifndef CECIL_INCL_WORLDENTITIES_H
+#define CECIL_INCL_WORLDENTITIES_H
+
+#ifdef PRAGMA_ONCE
+  #pragma once
+#endif
+
+#include <Engine/Entities/Entity.h>
+#include <Engine/World/World.h>
+
 // Get current game world
 inline CWorld *GetWorld(void) {
   return &_pNetwork->ga_World;
@@ -26,3 +36,5 @@ CEntityProperty *FindProperty(CEntity *pen, const ULONG ulID, const SLONG slOffs
 
 // Get WorldSettingsController from the current world
 CEntity *GetWSC(void);
+
+#endif

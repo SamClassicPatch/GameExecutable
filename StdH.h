@@ -39,5 +39,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // [Cecil] Next argument in the symbol function call
 #define NEXT_ARG(Type) (*((Type *&)pArgs)++)
 
+// [Cecil] Extra functionality
+#include "Cecil/CecilExtensions.h"
+
 // [Cecil] Query manager
 #include "Query/QueryMgr.h"

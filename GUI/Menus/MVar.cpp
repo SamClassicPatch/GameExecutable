@@ -18,9 +18,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "VarList.h"
 #include "MVar.h"
 
-// [Cecil] Extra functionality
-#include "Cecil/CecilExtensions.h"
-
 // [Cecil] For tab switching
 #include "GUI/Menus/MenuManager.h"
 extern CMenuGadget *_pmgLastActivatedGadget;

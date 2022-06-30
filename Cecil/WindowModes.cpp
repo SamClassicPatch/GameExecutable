@@ -15,7 +15,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include "Cecil/WindowModes.h"
+#include "WindowModes.h"
 #include "MainWindow.h"
 
 #define RADIOTRANS(String) ("ETRS" String)

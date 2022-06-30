@@ -18,9 +18,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 #include "ArrowDir.h"
 
-// [Cecil] Extra functionality
-#include "Cecil/CecilExtensions.h"
-
 static const FLOAT _fBigStartJ = 0.25f;
 static const FLOAT _fBigSizeJ = 0.066f;
 static const FLOAT _fMediumSizeJ = 0.04f;

@@ -13,6 +13,13 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
+#ifndef CECIL_INCL_EXTENSIONS_H
+#define CECIL_INCL_EXTENSIONS_H
+
+#ifdef PRAGMA_ONCE
+  #pragma once
+#endif
+
 // General
 extern INDEX sam_bBackgroundGameRender;
 extern INDEX sam_bAdjustForAspectRatio;
@@ -40,3 +47,5 @@ void AdjustVFOV(const FLOAT2D &vScreen, FLOAT &fHFOV);
 
 // Custom initialization
 void CECIL_Init(void);
+
+#endif

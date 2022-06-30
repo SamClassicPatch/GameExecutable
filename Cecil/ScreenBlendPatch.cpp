@@ -15,9 +15,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include "Cecil/CecilExtensions.h"
-#include "Cecil/Patches.h"
-#include "Cecil/WorldEntities.h"
+#include "Patches.h"
+#include "WorldEntities.h"
 
 // Original function pointer
 static void (CDrawPort::*pBlendScreen)(void) = NULL;
