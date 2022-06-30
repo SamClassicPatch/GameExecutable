@@ -25,9 +25,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // Force instruction rewrite
 void Patch_ForceRewrite(const int iLength);
 
-// Patch storage
-extern CDynamicContainer<CPatch> _cPatches;
-
 // Don't terminate the game in debug
 #ifndef NDEBUG
   #define PATCH_ERROR_OUTPUT InfoMessage
@@ -43,7 +40,7 @@ CPatch *NewPatch(FuncType1 &funcOld, FuncType2 funcNew, const char *strName) {
 
   // Add to the patch registry
   if (pPatch->ok()) {
-    _cPatches.Add(pPatch);
+    _pPatchAPI->cPatches.Add(pPatch);
 
   // Couldn't patch
   } else {

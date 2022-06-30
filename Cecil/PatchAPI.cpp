@@ -15,27 +15,20 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-// Don't listen to in-game sounds
-BOOL _bNoListening = FALSE;
+#include "PatchAPI.h"
 
-// Patched function
-class CSoundLibPatch : public CSoundLibrary {
-  public:
-    void P_Listen(CSoundListener &sl)
-    {
-      // Ignore sound listener
-      if (_bNoListening) return;
+// Define external patch API
+CPatchAPI *_pPatchAPI = NULL;
 
-      // Original function code
-      if (sl.sli_lnInActiveListeners.IsLinked()) {
-        sl.sli_lnInActiveListeners.Remove();
-      }
+// Constructor
+CPatchAPI::CPatchAPI() {
+  // Add patch API to symbols
+  CShellSymbol &ssNew = *_pShell->sh_assSymbols.New(1);
 
-      sl_lhActiveListeners.AddTail(sl.sli_lnInActiveListeners);
-    };
-};
-
-extern void CECIL_ApplySoundListenPatch(void) {
-  void (CSoundLibrary::*pListen)(CSoundListener &) = &CSoundLibrary::Listen;
-  NewPatch(pListen, &CSoundLibPatch::P_Listen, "CSoundLibrary::Listen(...)");
+  ssNew.ss_strName = "PatchAPI"; // Access by this symbol name
+  ssNew.ss_istType = 0; // Should be '_shell_istUndeclared'
+  ssNew.ss_pvValue = this; // Pointer to self
+  ssNew.ss_ulFlags = SSF_CONSTANT; // Unchangable
+  ssNew.ss_pPreFunc = NULL; // Unused
+  ssNew.ss_pPostFunc = NULL; // Unused
 };

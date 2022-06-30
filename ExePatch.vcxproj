@@ -270,8 +270,8 @@
     <ClCompile Include="Cecil\FOVPatch.cpp" />
     <ClCompile Include="Cecil\MasterServerPatch.cpp" />
     <ClCompile Include="Cecil\Node.cpp" />
+    <ClCompile Include="Cecil\PatchAPI.cpp" />
     <ClCompile Include="Cecil\Patcher\patcher.cpp" />
-    <ClCompile Include="Cecil\Patches.cpp" />
     <ClCompile Include="Cecil\ScreenBlendPatch.cpp" />
     <ClCompile Include="Cecil\ScreenResolutions.cpp" />
     <ClCompile Include="Cecil\SoundListenPatch.cpp" />
@@ -333,6 +333,7 @@
     <ClCompile Include="MainWindow.cpp" />
     <ClInclude Include="Cecil\CecilExtensions.h" />
     <ClInclude Include="Cecil\Node.h" />
+    <ClInclude Include="Cecil\PatchAPI.h" />
     <ClInclude Include="Cecil\Patcher\patcher.h" />
     <ClInclude Include="Cecil\Patcher\patcher_defines.h" />
     <ClInclude Include="Cecil\Patches.h" />

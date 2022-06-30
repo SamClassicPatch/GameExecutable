@@ -143,9 +143,8 @@ static void PatchInfo(void) {
 
 // Custom initialization
 void CECIL_Init(void) {
-  // Function patches
-  extern void CECIL_InitPatches(void);
-  CECIL_InitPatches();
+  // Initialize executable patch API
+  _pPatchAPI = new CPatchAPI();
 
   {
     CPrintF("Intercepting Engine functions:\n");
