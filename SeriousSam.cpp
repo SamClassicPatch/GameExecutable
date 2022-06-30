@@ -405,26 +405,36 @@ void LoadAndForceTexture(CTextureObject &to, CTextureObject *&pto, const CTFileN
 
 void InitializeGame(void) {
   try {
-    #ifndef NDEBUG
-      #define GAMEDLL (_fnmApplicationExe.FileDir() + "Game" + _strModExt + "D.dll")
-    #else
-      #define GAMEDLL (_fnmApplicationExe.FileDir() + "Game" + _strModExt + ".dll")
+    // [Cecil] Construct game library name for games
+    CTString strGameLib = _fnmApplicationExe.FileDir() + "Game";
+
+    // Append mod extension for TSE
+    #ifndef SE1_TFE
+      strGameLib += _strModExt;
     #endif
 
+    // Debug library
+    #ifdef _DEBUG
+      strGameLib += "D";
+    #endif
+
+    // Library extension
+    strGameLib += ".dll";
+
     CTFileName fnmExpanded;
-    ExpandFilePath(EFP_READ, CTString(GAMEDLL), fnmExpanded);
+    ExpandFilePath(EFP_READ, strGameLib, fnmExpanded);
 
     CPrintF(TRANS("Loading game library '%s'...\n"), (const char *)fnmExpanded);
     HMODULE hGame = LoadLibraryA(fnmExpanded);
 
     if (hGame == NULL) {
-      ThrowF_t("%s", GetWindowsError(GetLastError()));
+      ThrowF_t("Cannot load Game library:\n%s", GetWindowsError(GetLastError()));
     }
 
     CGame *(*GAME_Create)(void) = (CGame * (*)(void)) GetProcAddress(hGame, "GAME_Create");
 
     if (GAME_Create == NULL) {
-      ThrowF_t("%s", GetWindowsError(GetLastError()));
+      ThrowF_t("Cannot create Game library:\n%s", GetWindowsError(GetLastError()));
     }
 
     _pGame = GAME_Create();
