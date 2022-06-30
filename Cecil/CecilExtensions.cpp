@@ -101,8 +101,7 @@ static void CECIL_RegisterCommand(void *pCommand) {
 
   // Save symbol values
   try {
-    CTFileName fnSymbols = CTFILENAME(CUSTOM_SYMBOLS_CONFIG);
-    ExpandFilePath(EFP_READ, fnSymbols, fnSymbols);
+    const CTFileName fnSymbols = _fnmApplicationPath + CTFILENAME(CUSTOM_SYMBOLS_CONFIG);
 
     // Open file for writing
     FILE *file = fopen(fnSymbols.str_String, "wb+");
