@@ -98,20 +98,28 @@ static void CECIL_RegisterCommand(void *pCommand) {
 
   // Save symbol values
   try {
-    CTFileStream strm;
-    strm.Create_t(CTFILENAME(CUSTOM_SYMBOLS_CONFIG));
+    CTFileName fnSymbols = CTFILENAME(CUSTOM_SYMBOLS_CONFIG);
+    ExpandFilePath(EFP_READ, fnSymbols, fnSymbols);
+
+    // Open file for writing
+    FILE *file = fopen(fnSymbols.str_String, "wb+");
+
+    // Couldn't create the file
+    if (file == NULL) {
+      throw strerror(errno);
+    }
 
     FOREACHINDYNAMICCONTAINER(_cCustomSymbols, CShellSymbol, itss) {
       CShellSymbol *pssWrite = itss;
 
-      // Symbol name
-      strm.FPrintF_t("%s = ", pssWrite->ss_strName);
+      // Symbol name and value
+      CTString str;
+      str.PrintF("%s = %s;\r\n", pssWrite->ss_strName, _pShell->GetValue(pssWrite->ss_strName));
 
-      // Symbol value
-      strm.FPrintF_t("%s;\n", _pShell->GetValue(pssWrite->ss_strName));
+      fwrite(str, sizeof(char), str.Length(), file);
     }
 
-    strm.Close();
+    fclose(file);
 
   } catch (char *strError) {
     CPrintF("Could not save custom symbols: %s\n", strError);
