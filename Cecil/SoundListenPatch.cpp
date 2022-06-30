@@ -40,5 +40,5 @@ class CSoundLibPatch : public CSoundLibrary {
 
 extern void CECIL_ApplySoundListenPatch(void) {
   void (CSoundLibrary::*pListen)(CSoundListener &) = &CSoundLibrary::Listen;
-  NEW_PATCH(pListen, &CSoundLibPatch::P_Listen, "CSoundLibrary::Listen(...)");
+  NewPatch(pListen, &CSoundLibPatch::P_Listen, "CSoundLibrary::Listen(...)");
 };

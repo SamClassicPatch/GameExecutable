@@ -29,10 +29,19 @@ extern CDynamicContainer<CPatch> _cPatches;
 #endif
 
 // Create a new function patch
-#define NEW_PATCH(OldFunc, NewFunc, FuncName) { \
-  CPutString("  " FuncName "\n"); \
-  CPatch *pPatch = new CPatch(OldFunc, NewFunc, true, true); \
-  /* Add to the patch registry if patched */ \
-  if (pPatch->ok()) _cPatches.Add(pPatch); \
-  else PATCH_ERROR_OUTPUT("Cannot set function patch for " FuncName "!\nAddress: 0x%p", OldFunc); \
-}
+template<class FuncType1, class FuncType2> inline
+CPatch *NewPatch(FuncType1 &funcOld, FuncType2 funcNew, const char *strName) {
+  CPrintF("  %s\n", strName);
+  CPatch *pPatch = new CPatch(funcOld, funcNew, true, true);
+
+  // Add to the patch registry
+  if (pPatch->ok()) {
+    _cPatches.Add(pPatch);
+
+  // Couldn't patch
+  } else {
+    PATCH_ERROR_OUTPUT("Cannot set function patch for %s!\nAddress: 0x%p", strName, funcOld);
+  }
+
+  return pPatch;
+};

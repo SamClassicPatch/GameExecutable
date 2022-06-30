@@ -57,5 +57,5 @@ class CStringPatch : public CTString {
 
 extern void CECIL_ApplyUndecoratedPatch(void) {
   CTString (CTString::*pUndecorated)(void) const = &CTString::Undecorated;
-  NEW_PATCH(pUndecorated, &CStringPatch::P_Undecorated, "CTString::Undecorated()");
+  NewPatch(pUndecorated, &CStringPatch::P_Undecorated, "CTString::Undecorated()");
 };

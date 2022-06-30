@@ -209,10 +209,10 @@ class CProjectionPatch : public CPerspectiveProjection3D {
 
 extern void CECIL_ApplyFOVPatch(void) {
   pRenderView = &RenderView;
-  NEW_PATCH(pRenderView, &P_RenderView, "::RenderView(...)");
+  NewPatch(pRenderView, &P_RenderView, "::RenderView(...)");
 
   pModelRender = &BeginModelRenderingView;
-  NEW_PATCH(pModelRender, &P_BeginModelRenderingView, "::BeginModelRenderingView(...)");
+  NewPatch(pModelRender, &P_BeginModelRenderingView, "::BeginModelRenderingView(...)");
   
   // Workaround for casting raw addresses into function pointers
   union {
@@ -227,7 +227,7 @@ extern void CECIL_ApplyFOVPatch(void) {
 #else
   dist.ulAddress = 0x601004D0; // Beginning of CPerspectiveProjection3D::MipFactor(FLOAT)
 #endif
-  NEW_PATCH(dist.pFunc, &CProjectionPatch::P_MipFactorDist, "CPerspectiveProjection3D::MipFactor(FLOAT)");
+  NewPatch(dist.pFunc, &CProjectionPatch::P_MipFactorDist, "CPerspectiveProjection3D::MipFactor(FLOAT)");
 
   // Workaround for casting raw addresses into function pointers
   union {
@@ -242,5 +242,5 @@ extern void CECIL_ApplyFOVPatch(void) {
 #else
   factor.ulAddress = 0x60100500; // Beginning of CPerspectiveProjection3D::MipFactor()
 #endif
-  NEW_PATCH(factor.pFunc, &CProjectionPatch::P_MipFactor, "CPerspectiveProjection3D::MipFactor()");
+  NewPatch(factor.pFunc, &CProjectionPatch::P_MipFactor, "CPerspectiveProjection3D::MipFactor()");
 };

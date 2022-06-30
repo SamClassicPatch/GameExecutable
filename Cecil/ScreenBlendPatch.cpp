@@ -55,5 +55,5 @@ class CDrawPortPatch : public CDrawPort {
 
 extern void CECIL_ApplyScreenBlendPatch(void) {
   pBlendScreen = &CDrawPort::BlendScreen;
-  NEW_PATCH(pBlendScreen, &CDrawPortPatch::P_BlendScreen, "CDrawPort::BlendScreen()");
+  NewPatch(pBlendScreen, &CDrawPortPatch::P_BlendScreen, "CDrawPort::BlendScreen()");
 };

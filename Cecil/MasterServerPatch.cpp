@@ -139,21 +139,21 @@ class CSessionStatePatch : public CSessionState {
 extern void CECIL_ApplyMasterServerPatch(void) {
   // CCommunicationInterface
   void (CCommunicationInterface::*pEndWindock)(void) = &CCommunicationInterface::EndWinsock;
-  NEW_PATCH(pEndWindock, &CComIntPatch::P_EndWinsock, "CCommunicationInterface::EndWinsock()");
+  NewPatch(pEndWindock, &CComIntPatch::P_EndWinsock, "CCommunicationInterface::EndWinsock()");
 
   pServerInit = &CCommunicationInterface::Server_Init_t;
-  NEW_PATCH(pServerInit, &CComIntPatch::P_ServerInit, "CCommunicationInterface::Server_Init_t()");
+  NewPatch(pServerInit, &CComIntPatch::P_ServerInit, "CCommunicationInterface::Server_Init_t()");
 
   pServerClose = &CCommunicationInterface::Server_Close;
-  NEW_PATCH(pServerClose, &CComIntPatch::P_ServerClose, "CCommunicationInterface::Server_Close()");
+  NewPatch(pServerClose, &CComIntPatch::P_ServerClose, "CCommunicationInterface::Server_Close()");
 
   // CMessageDispatcher
   pSendToClient = &CMessageDispatcher::SendToClientReliable;
-  NEW_PATCH(pSendToClient, &CMessageDisPatch::P_SendToClientReliable, "CMessageDispatcher::SendToClientReliable(...)");
+  NewPatch(pSendToClient, &CMessageDisPatch::P_SendToClientReliable, "CMessageDispatcher::SendToClientReliable(...)");
 
   // CSessionState
   pFlushPredictions = &CSessionState::FlushProcessedPredictions;
-  NEW_PATCH(pFlushPredictions, &CSessionStatePatch::P_FlushProcessedPredictions, "CSessionState::FlushProcessedPredictions()");
+  NewPatch(pFlushPredictions, &CSessionStatePatch::P_FlushProcessedPredictions, "CSessionState::FlushProcessedPredictions()");
 };
 
 // Disable GameSpy usage
