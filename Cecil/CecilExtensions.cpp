@@ -90,6 +90,12 @@ static void CECIL_RegisterCommand(void *pCommand) {
     _cCustomSymbols.Add(pss);
   }
 
+  // Special actions for commands
+  if (pss->ss_pvValue == &sam_bAdjustForAspectRatio) {
+    extern void ApplyVideoMode(void);
+    ApplyVideoMode();
+  }
+
   // Save symbol values
   try {
     CTFileStream strm;
