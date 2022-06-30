@@ -21,6 +21,7 @@ extern INDEX sam_bOptionTabs;
 // FOV patch
 extern INDEX sam_bUseVerticalFOV;
 extern FLOAT sam_fCustomFOV;
+extern FLOAT sam_fThirdPersonFOV;
 extern INDEX sam_bFixMipDistance;
 extern INDEX sam_bFixViewmodelFOV;
 extern INDEX sam_bCheckFOV;

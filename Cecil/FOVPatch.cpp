@@ -24,8 +24,18 @@ static void (*pRenderView)(CWorld &, CEntity &, CAnyProjection3D &, CDrawPort &)
 // Patched function
 static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &apr, CDrawPort &dp)
 {
+  // Not a perspective projection
+  if (!apr.IsPerspective()) {
+    // Proceed to the original function
+    (*pRenderView)(woWorld, enViewer, apr, dp);
+    return;
+  }
+
+  BOOL bPlayer = IsDerivedFromClass(&enViewer, "PlayerEntity");
+  BOOL bView = IsOfClass(&enViewer, "Player View");
+
   // Change FOV for the player view
-  if (apr.IsPerspective() && (IsDerivedFromClass(&enViewer, "PlayerEntity") || IsOfClass(&enViewer, "Player View"))) {
+  if (bPlayer || bView) {
     CPerspectiveProjection3D &ppr = *((CPerspectiveProjection3D *)(CProjection3D *)apr);
 
     FLOAT2D vScreen(dp.GetWidth(), dp.GetHeight());
@@ -48,8 +58,15 @@ static void P_RenderView(CWorld &woWorld, CEntity &enViewer, CAnyProjection3D &a
     }
 
     // Set custom FOV if not zooming in
-    if (sam_fCustomFOV > 0.0f && fNewFOV > 80.0f) {
-      fNewFOV = Clamp(sam_fCustomFOV, 60.0f, 110.0f);
+    if (fNewFOV > 80.0f) {
+      // Set different FOV for the third person view
+      if (bView && sam_fThirdPersonFOV > 0.0f) {
+        fNewFOV = Clamp(sam_fThirdPersonFOV, 60.0f, 110.0f);
+
+      // Set first person view FOV
+      } else if (sam_fCustomFOV > 0.0f) {
+        fNewFOV = Clamp(sam_fCustomFOV, 60.0f, 110.0f);
+      }
     }
 
     // Adjust FOV for wider resolutions (preserve vertical FOV instead of horizontal)

@@ -25,6 +25,7 @@ INDEX sam_bOptionTabs = TRUE;
 // FOV patch
 INDEX sam_bUseVerticalFOV = TRUE;
 FLOAT sam_fCustomFOV = -1.0f;
+FLOAT sam_fThirdPersonFOV = -1.0f;
 INDEX sam_bFixMipDistance = TRUE;
 INDEX sam_bFixViewmodelFOV = TRUE;
 INDEX sam_bCheckFOV = FALSE;
@@ -182,6 +183,7 @@ void CECIL_Init(void) {
     // FOV patch
     _pShell->DeclareSymbol("user INDEX sam_bUseVerticalFOV  post:CECIL_RegisterCommand;", &sam_bUseVerticalFOV);
     _pShell->DeclareSymbol("user FLOAT sam_fCustomFOV       post:CECIL_RegisterCommand;", &sam_fCustomFOV);
+    _pShell->DeclareSymbol("user FLOAT sam_fThirdPersonFOV  post:CECIL_RegisterCommand;", &sam_fThirdPersonFOV);
     _pShell->DeclareSymbol("user INDEX sam_bFixMipDistance  post:CECIL_RegisterCommand;", &sam_bFixMipDistance);
     _pShell->DeclareSymbol("user INDEX sam_bFixViewmodelFOV post:CECIL_RegisterCommand;", &sam_bFixViewmodelFOV);
     _pShell->DeclareSymbol("user INDEX sam_bCheckFOV;", &sam_bCheckFOV);
