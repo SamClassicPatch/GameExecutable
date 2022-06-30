@@ -66,8 +66,6 @@ static BOOL _bRegisterCommands = FALSE; // Don't register in the beginning
 
 // Register a certain command after its change
 static void CECIL_RegisterCommand(void *pCommand) {
-  if (!_bRegisterCommands) return;
-
   CShellSymbol *pss = NULL;
 
   for (INDEX i = 0; i < _pShell->sh_assSymbols.Count(); i++) {
@@ -89,6 +87,9 @@ static void CECIL_RegisterCommand(void *pCommand) {
   if (!_cCustomSymbols.IsMember(pss)) {
     _cCustomSymbols.Add(pss);
   }
+
+  // Don't resave anything yet
+  if (!_bRegisterCommands) return;
 
   // Special actions for commands
   if (pss->ss_pvValue == &sam_bAdjustForAspectRatio) {
