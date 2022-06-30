@@ -1348,26 +1348,26 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
   _pGame->StopGame();
 
   if (_fnmModToLoad != "") {
-    char strCmd[64] = {0};
-    char strParam[128] = {0};
-
     STARTUPINFOA cif;
     ZeroMemory(&cif, sizeof(STARTUPINFOA));
     PROCESS_INFORMATION pi;
 
+    const CTString strMod = _fnmModToLoad.FileName();
+
     // [Cecil] Use executable filename
-    strcpy(strCmd, _fnmApplicationExe.FileName() + ".exe");
-    strcpy(strParam, " +game ");
-    strcat(strParam, _fnmModToLoad.FileName());
+    CTString strCmd = _fnmApplicationExe.FileName() + ".exe";
+    CTString strParam = " +game " + strMod;
 
     if (_strModServerJoin != "") {
-      strcat(strParam, " +connect ");
-      strcat(strParam, _strModServerJoin);
-      strcat(strParam, " +quickjoin");
+      strParam += " +connect " + _strModServerJoin + " +quickjoin";
     }
 
-    if (CreateProcessA(strCmd, strParam, NULL, NULL, FALSE, CREATE_DEFAULT_ERROR_MODE, NULL, NULL, &cif, &pi) == FALSE) {
-      MessageBox(0, "error launching the Mod!\n", "Serious Sam", MB_OK | MB_ICONERROR);
+    if (!CreateProcessA(strCmd.str_String, strParam.str_String, NULL, NULL, FALSE, CREATE_DEFAULT_ERROR_MODE, NULL, NULL, &cif, &pi)) {
+      // [Cecil] Proper error message
+      CTString strError;
+      strError.PrintF("Cannot start '%s' mod:\n%s\n", strMod, GetWindowsError(GetLastError()));
+
+      MessageBoxA(0, strError, "Serious Sam", MB_OK | MB_ICONERROR);
     }
   }
 
