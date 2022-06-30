@@ -60,11 +60,14 @@ void AdjustVFOV(const FLOAT2D &vScreen, FLOAT &fHFOV) {
 
 // Custom command registy
 static CDynamicContainer<CShellSymbol> _cCustomSymbols;
+static BOOL _bRegisterCommands = FALSE; // Don't register in the beginning
 
 #define CUSTOM_SYMBOLS_CONFIG "Scripts\\CustomSymbols.ini"
 
 // Register a certain command after its change
 static void CECIL_RegisterCommand(void *pCommand) {
+  if (!_bRegisterCommands) return;
+
   CShellSymbol *pss = NULL;
 
   for (INDEX i = 0; i < _pShell->sh_assSymbols.Count(); i++) {
@@ -187,4 +190,7 @@ void CECIL_Init(void) {
 
   // Restore custom symbol values
   _pShell->Execute("include \"" CUSTOM_SYMBOLS_CONFIG "\";");
+
+  // Ready for registering
+  _bRegisterCommands = TRUE;
 };
