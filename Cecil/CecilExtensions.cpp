@@ -135,7 +135,7 @@ static void PatchInfo(void) {
     "https://github.com/DreamyCecil/SamExePatch\n\n"
 
     "- Game version: " _SE_VER_STRING "\n"
-    "- EXE version: 1.1\n"
+    "- EXE version: 1.1.1\n"
 
     "\n(c) Dreamy Cecil, 2022\n"
   );
