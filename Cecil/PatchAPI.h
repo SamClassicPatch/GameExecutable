@@ -24,7 +24,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 class CPatchAPI {
   public:
-    CDynamicContainer<CPatch> cPatches; // Patch storage
+    CTString strVersion; // Patch version
+    CDynamicContainer<CPatch> cPatches; // Function patch storage
 
   public:
     // Constructor

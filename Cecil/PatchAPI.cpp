@@ -31,4 +31,6 @@ CPatchAPI::CPatchAPI() {
   ssNew.ss_ulFlags = SSF_CONSTANT; // Unchangable
   ssNew.ss_pPreFunc = NULL; // Unused
   ssNew.ss_pPostFunc = NULL; // Unused
+
+  strVersion = "1.1.2";
 };
