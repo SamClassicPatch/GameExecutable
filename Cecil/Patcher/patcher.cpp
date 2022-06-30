@@ -67,7 +67,8 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
 
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8B\xFF", 2) 
             || !memcmp(reinterpret_cast<char*>(addr), "\x8B\xEC", 2)
-            || !memcmp(reinterpret_cast<char*>(addr), "\x8B\xF1", 2) // mov
+            || !memcmp(reinterpret_cast<char*>(addr), "\x8B\xF1", 2)
+            || !memcmp(reinterpret_cast<char*>(addr), "\x8B\xF9", 2) // mov
             ||        *reinterpret_cast<char*>(addr) == (char)0x6A)  // push XX
     {
       PATCHER_OUT("3 \n");
