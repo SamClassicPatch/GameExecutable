@@ -18,6 +18,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "VarList.h"
 #include "MVar.h"
 
+// [Cecil] Extra functionality
+#include "Cecil/CecilExtensions.h"
+
 // [Cecil] For tab switching
 #include "GUI/Menus/MenuManager.h"
 extern CMenuGadget *_pmgLastActivatedGadget;
@@ -27,6 +30,9 @@ extern BOOL _bVarChanged;
 
 // [Cecil] Switch to another options tab
 void SelectOptionsTab(void) {
+  // Tabs are disabled
+  if (!sam_bOptionTabs) return;
+
   CMGButton &mgTab = (CMGButton &)*_pmgLastActivatedGadget;
   CVarMenu &gm = _pGUIM->gmVarMenu;
 
@@ -139,27 +145,29 @@ void CVarMenu::StartMenu(void) {
   LoadVarSettings(gm_fnmMenuCFG);
 
   // [Cecil] Add tab buttons
-  for (INDEX iTab = 0; iTab < _aTabs.Count(); iTab++) {
-    const CVarTab &tab = _aTabs[iTab];
+  if (sam_bOptionTabs) {
+    for (INDEX iTab = 0; iTab < _aTabs.Count(); iTab++) {
+      const CVarTab &tab = _aTabs[iTab];
 
-    CMGButton &mgTab = gm_agmTabs.Push();
-    mgTab.mg_iIndex = iTab;
-    mgTab.mg_bfsFontSize = BFS_MEDIUM;
-    mgTab.mg_iCenterI = -1;
+      CMGButton &mgTab = gm_agmTabs.Push();
+      mgTab.mg_iIndex = iTab;
+      mgTab.mg_bfsFontSize = BFS_MEDIUM;
+      mgTab.mg_iCenterI = -1;
 
-    mgTab.mg_bEnabled = (iTab != 0);
-    mgTab.mg_boxOnScreen = BoxLeftColumn(iTab + 2.0f);
-    mgTab.mg_pActivatedFunction = &SelectOptionsTab;
+      mgTab.mg_bEnabled = (iTab != 0);
+      mgTab.mg_boxOnScreen = BoxLeftColumn(iTab + 2.0f);
+      mgTab.mg_pActivatedFunction = &SelectOptionsTab;
 
-    // Connect previous button to the current one
-    if (iTab > 0) {
-      mgTab.mg_pmgUp = &gm_agmTabs[iTab - 1];
-      gm_agmTabs[iTab - 1].mg_pmgDown = &mgTab;
+      // Connect previous button to the current one
+      if (iTab > 0) {
+        mgTab.mg_pmgUp = &gm_agmTabs[iTab - 1];
+        gm_agmTabs[iTab - 1].mg_pmgDown = &mgTab;
+      }
+
+      mgTab.SetText(tab.strName);
+
+      AddChild(&mgTab);
     }
-
-    mgTab.SetText(tab.strName);
-
-    AddChild(&mgTab);
   }
 
   // [Cecil] Reset current tab
