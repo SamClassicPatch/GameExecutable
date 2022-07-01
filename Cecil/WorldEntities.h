@@ -37,4 +37,10 @@ CEntityProperty *FindProperty(CEntity *pen, const ULONG ulID, const SLONG slOffs
 // Get WorldSettingsController from the current world
 CEntity *GetWSC(void);
 
+// Get all entities of a specific class
+void GetEntitiesOfClass(CDynamicContainer<CEntity> &cen, const CTString &strClass, BOOL bOnlyValid);
+
+// Get pointers to local player entities
+void GetLocalPlayers(CDynamicContainer<CPlayerEntity> &cen);
+
 #endif

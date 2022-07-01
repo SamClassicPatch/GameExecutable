@@ -86,3 +86,43 @@ CEntity *GetWSC(void) {
 
   return NULL;
 };
+
+// Get all entities of a specific class
+void GetEntitiesOfClass(CDynamicContainer<CEntity> &cen, const CTString &strClass, BOOL bOnlyValid) {
+  cen.Clear();
+
+  FOREACHINDYNAMICCONTAINER(GetWorld()->wo_cenEntities, CEntity, iten) {
+    CEntity *penCheck = iten;
+
+    if (bOnlyValid && (penCheck == NULL || penCheck->GetFlags() & ENF_DELETED)) {
+      continue;
+    }
+
+    if (!IsDerivedFromClass(penCheck, strClass)) {
+      continue;
+    }
+
+    cen.Add(penCheck);
+  }
+};
+
+// Get pointers to local player entities
+void GetLocalPlayers(CDynamicContainer<CPlayerEntity> &cen) {
+  cen.Clear();
+
+  const INDEX ctPlayers = _pNetwork->ga_aplsPlayers.Count();
+
+  // Go through all local players
+  for (INDEX iLocalPlayer = 0; iLocalPlayer < ctPlayers; iLocalPlayer++) {
+    INDEX iPlayer = _pNetwork->ga_aplsPlayers[iLocalPlayer].pls_Index;
+
+    // Player hasn't been added
+    if (iPlayer < 0) {
+      continue;
+    }
+
+    // Add player entity
+    CPlayerTarget &plt = _pNetwork->ga_sesSessionState.ses_apltPlayers[iPlayer];
+    cen.Add(plt.plt_penPlayerEntity);
+  }
+};
