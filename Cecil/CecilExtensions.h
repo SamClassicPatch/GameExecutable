@@ -21,6 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #endif
 
 #include "PatchAPI.h"
+#include "Patches.h"
 
 // General
 extern INDEX sam_bBackgroundGameRender;

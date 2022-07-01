@@ -20,19 +20,28 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   #pragma once
 #endif
 
-#include "Patches.h"
-
 class CPatchAPI {
   public:
     CTString strVersion; // Patch version
-    CDynamicContainer<CPatch> cPatches; // Function patch storage
+    CDynamicContainer<UBYTE> cPatches; // Function patch storage
 
   public:
     // Constructor
     CPatchAPI();
+
+    // Add new function patch
+    void AddFuncPatch(class CPatch *pPatch) {
+      cPatches.Add((UBYTE *)pPatch);
+    };
+
+    // Get function patch
+    class CPatch *GetFuncPatch(INDEX iPatch) {
+      return (CPatch *)cPatches.Pointer(iPatch);
+    };
 };
 
-// Declare external patch API
-extern "C" CPatchAPI *_pPatchAPI;
+// Don't use this variable outside the EXE patch project. Visit for more info:
+// https://github.com/DreamyCecil/SamExePatch/wiki/Mod-support#api-utilization
+extern "C" __declspec(dllexport) CPatchAPI *_pPatchAPI;
 
 #endif

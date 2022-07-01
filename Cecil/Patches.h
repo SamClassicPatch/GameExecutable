@@ -40,7 +40,7 @@ CPatch *NewPatch(FuncType1 &funcOld, FuncType2 funcNew, const char *strName) {
 
   // Add to the patch registry
   if (pPatch->ok()) {
-    _pPatchAPI->cPatches.Add(pPatch);
+    _pPatchAPI->AddFuncPatch(pPatch);
 
   // Couldn't patch
   } else {
