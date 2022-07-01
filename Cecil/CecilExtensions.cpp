@@ -140,48 +140,16 @@ static void PatchInfo(void) {
   CPutString(strInfo);
 };
 
-// List available function patches
-static void ListFuncPatches(void) {
-  if (_pPatchAPI->aPatches.Count() == 0) {
-    CPrintF("No function patches available!\n");
-    return;
-  }
-
-  CPrintF("Available function patches:\n");
-  
-  for (INDEX iPatch = 0; iPatch < _pPatchAPI->aPatches.Count(); iPatch++) {
-    CPrintF(" %d - %s\n", iPatch, _pPatchAPI->aPatches[iPatch].strName);
-  }
-};
-
-// Enable specific function patch
-static void EnableFuncPatch(INDEX iPatch) {
-  iPatch = Clamp(iPatch, (INDEX)0, INDEX(_pPatchAPI->aPatches.Count() - 1));
-
-  SFuncPatch &fpPatch = _pPatchAPI->aPatches[iPatch];
-  fpPatch.pPatch->set_patch();
-
-  if (fpPatch.pPatch->ok()) {
-    CPrintF("Successfully set '%s' function patch!\n", fpPatch.strName);
-  } else {
-    CPrintF("Cannot set '%s' function patch!\n", fpPatch.strName);
-  }
-};
-
-// Disable specific function patch
-static void DisableFuncPatch(INDEX iPatch) {
-  iPatch = Clamp(iPatch, (INDEX)0, INDEX(_pPatchAPI->aPatches.Count() - 1));
-  
-  SFuncPatch &fpPatch = _pPatchAPI->aPatches[iPatch];
-  fpPatch.pPatch->remove_patch();
-
-  CPrintF("Successfully removed '%s' function patch!\n", fpPatch.strName);
-};
-
 // Custom initialization
 void CECIL_Init(void) {
   // Initialize executable patch API
   _pPatchAPI = new CPatchAPI();
+
+  // Command registry
+  _pShell->DeclareSymbol("void CECIL_RegisterCommand(INDEX);", &CECIL_RegisterCommand);
+
+  // Information about the patched executable
+  _pShell->DeclareSymbol("user void PatchInfo(void);", &PatchInfo);
 
   {
     CPrintF("Intercepting Engine functions:\n");
@@ -198,52 +166,12 @@ void CECIL_Init(void) {
     CECIL_ApplyMasterServerPatch();
 
     CPrintF("  done!\n");
-
-    // Commands for manually toggling function patches
-    _pShell->DeclareSymbol("void ListPatches(void);",   &ListFuncPatches);
-    _pShell->DeclareSymbol("void EnablePatch(INDEX);",  &EnableFuncPatch);
-    _pShell->DeclareSymbol("void DisablePatch(INDEX);", &DisableFuncPatch);
   }
-
-  // Command registry
-  _pShell->DeclareSymbol("void CECIL_RegisterCommand(INDEX);", &CECIL_RegisterCommand);
-
-  // Information about the patched executable
-  _pShell->DeclareSymbol("user void PatchInfo(void);", &PatchInfo);
 
   // Custom symbols
-  {
-    // General
-    _pShell->DeclareSymbol("user INDEX sam_bBackgroundGameRender post:CECIL_RegisterCommand;", &sam_bBackgroundGameRender);
-    _pShell->DeclareSymbol("user INDEX sam_bAdjustForAspectRatio post:CECIL_RegisterCommand;", &sam_bAdjustForAspectRatio);
-    _pShell->DeclareSymbol("user INDEX sam_bOptionTabs           post:CECIL_RegisterCommand;", &sam_bOptionTabs);
-
-    // FOV patch
-    _pShell->DeclareSymbol("user INDEX sam_bUseVerticalFOV  post:CECIL_RegisterCommand;", &sam_bUseVerticalFOV);
-    _pShell->DeclareSymbol("user FLOAT sam_fCustomFOV       post:CECIL_RegisterCommand;", &sam_fCustomFOV);
-    _pShell->DeclareSymbol("user FLOAT sam_fThirdPersonFOV  post:CECIL_RegisterCommand;", &sam_fThirdPersonFOV);
-    _pShell->DeclareSymbol("user INDEX sam_bFixMipDistance  post:CECIL_RegisterCommand;", &sam_bFixMipDistance);
-    _pShell->DeclareSymbol("user INDEX sam_bFixViewmodelFOV post:CECIL_RegisterCommand;", &sam_bFixViewmodelFOV);
-    _pShell->DeclareSymbol("user INDEX sam_bCheckFOV;", &sam_bCheckFOV);
-
-    // Red screen on damage
-    _pShell->DeclareSymbol("user INDEX sam_bRedScreenOnDamage post:CECIL_RegisterCommand;", &sam_bRedScreenOnDamage);
-
-    // Query manager
-    _pShell->DeclareSymbol("user CTString ms_strGameAgentMS  post:CECIL_RegisterCommand;", &ms_strGameAgentMS);
-    _pShell->DeclareSymbol("user CTString ms_strMSLegacy     post:CECIL_RegisterCommand;", &ms_strMSLegacy);
-    _pShell->DeclareSymbol("user CTString ms_strDarkPlacesMS post:CECIL_RegisterCommand;", &ms_strDarkPlacesMS);
-    _pShell->DeclareSymbol("user INDEX ms_iProtocol          post:CECIL_RegisterCommand;", &ms_iProtocol);
-    _pShell->DeclareSymbol("user INDEX ms_bDebugOutput       post:CECIL_RegisterCommand;", &ms_bDebugOutput);
-
-    // Master server protocol types
-    static const INDEX iMSLegacy   = E_MS_LEGACY;
-    static const INDEX iDarkPlaces = E_MS_DARKPLACES;
-    static const INDEX iGameAgent  = E_MS_GAMEAGENT;
-    _pShell->DeclareSymbol("const INDEX MS_LEGACY;",     (void *)&iMSLegacy);
-    _pShell->DeclareSymbol("const INDEX MS_DARKPLACES;", (void *)&iDarkPlaces);
-    _pShell->DeclareSymbol("const INDEX MS_GAMEAGENT;",  (void *)&iGameAgent);
-  }
+  _pShell->DeclareSymbol("user INDEX sam_bBackgroundGameRender post:CECIL_RegisterCommand;", &sam_bBackgroundGameRender);
+  _pShell->DeclareSymbol("user INDEX sam_bAdjustForAspectRatio post:CECIL_RegisterCommand;", &sam_bAdjustForAspectRatio);
+  _pShell->DeclareSymbol("user INDEX sam_bOptionTabs           post:CECIL_RegisterCommand;", &sam_bOptionTabs);
 
   // Restore custom symbol values
   _pShell->Execute("include \"" CUSTOM_SYMBOLS_CONFIG "\";");

@@ -54,4 +54,7 @@ class CDrawPortPatch : public CDrawPort {
 extern void CECIL_ApplyScreenBlendPatch(void) {
   pBlendScreen = &CDrawPort::BlendScreen;
   NewPatch(pBlendScreen, &CDrawPortPatch::P_BlendScreen, "CDrawPort::BlendScreen()");
+
+  // Custom symbols
+  _pShell->DeclareSymbol("user INDEX sam_bRedScreenOnDamage post:CECIL_RegisterCommand;", &sam_bRedScreenOnDamage);
 };

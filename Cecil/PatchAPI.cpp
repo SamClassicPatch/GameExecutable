@@ -20,6 +20,44 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // Define external patch API
 CPatchAPI *_pPatchAPI = NULL;
 
+// List available function patches
+static void ListFuncPatches(void) {
+  if (_pPatchAPI->aPatches.Count() == 0) {
+    CPrintF("No function patches available!\n");
+    return;
+  }
+
+  CPrintF("Available function patches:\n");
+  
+  for (INDEX iPatch = 0; iPatch < _pPatchAPI->aPatches.Count(); iPatch++) {
+    CPrintF(" %d - %s\n", iPatch, _pPatchAPI->aPatches[iPatch].strName);
+  }
+};
+
+// Enable specific function patch
+static void EnableFuncPatch(INDEX iPatch) {
+  iPatch = Clamp(iPatch, (INDEX)0, INDEX(_pPatchAPI->aPatches.Count() - 1));
+
+  SFuncPatch &fpPatch = _pPatchAPI->aPatches[iPatch];
+  fpPatch.pPatch->set_patch();
+
+  if (fpPatch.pPatch->ok()) {
+    CPrintF("Successfully set '%s' function patch!\n", fpPatch.strName);
+  } else {
+    CPrintF("Cannot set '%s' function patch!\n", fpPatch.strName);
+  }
+};
+
+// Disable specific function patch
+static void DisableFuncPatch(INDEX iPatch) {
+  iPatch = Clamp(iPatch, (INDEX)0, INDEX(_pPatchAPI->aPatches.Count() - 1));
+  
+  SFuncPatch &fpPatch = _pPatchAPI->aPatches[iPatch];
+  fpPatch.pPatch->remove_patch();
+
+  CPrintF("Successfully removed '%s' function patch!\n", fpPatch.strName);
+};
+
 // Constructor
 CPatchAPI::CPatchAPI() {
   // Add patch API to symbols
@@ -33,4 +71,9 @@ CPatchAPI::CPatchAPI() {
   ssNew.ss_pPostFunc = NULL; // Unused
 
   strVersion = "1.1.2";
+
+  // Commands for manually toggling function patches
+  _pShell->DeclareSymbol("void ListPatches(void);",   &ListFuncPatches);
+  _pShell->DeclareSymbol("void EnablePatch(INDEX);",  &EnableFuncPatch);
+  _pShell->DeclareSymbol("void DisablePatch(INDEX);", &DisableFuncPatch);
 };

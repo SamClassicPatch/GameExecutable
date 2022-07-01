@@ -224,4 +224,12 @@ extern void CECIL_ApplyFOVPatch(void) {
   // Beginning of CPerspectiveProjection3D::MipFactor()
   factor.ulAddress = CHOOSE_FOR_GAME(0x600F7100, 0x600C7190, 0x60100500);
   NewPatch(factor.pFunc, &CProjectionPatch::P_MipFactor, "CPerspectiveProjection3D::MipFactor()");
+
+  // Custom symbols
+  _pShell->DeclareSymbol("user INDEX sam_bUseVerticalFOV  post:CECIL_RegisterCommand;", &sam_bUseVerticalFOV);
+  _pShell->DeclareSymbol("user FLOAT sam_fCustomFOV       post:CECIL_RegisterCommand;", &sam_fCustomFOV);
+  _pShell->DeclareSymbol("user FLOAT sam_fThirdPersonFOV  post:CECIL_RegisterCommand;", &sam_fThirdPersonFOV);
+  _pShell->DeclareSymbol("user INDEX sam_bFixMipDistance  post:CECIL_RegisterCommand;", &sam_bFixMipDistance);
+  _pShell->DeclareSymbol("user INDEX sam_bFixViewmodelFOV post:CECIL_RegisterCommand;", &sam_bFixViewmodelFOV);
+  _pShell->DeclareSymbol("user INDEX sam_bCheckFOV;", &sam_bCheckFOV);
 };
