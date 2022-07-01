@@ -20,7 +20,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   #pragma once
 #endif
 
-#include "Patcher/patcher.h"
+#include "../Patcher/patcher.h"
 
 // Force instruction rewrite
 void Patch_ForceRewrite(const int iLength);
@@ -36,7 +36,7 @@ void Patch_ForceRewrite(const int iLength);
 template<class FuncType1, class FuncType2> inline
 CPatch *NewPatch(FuncType1 &funcOld, FuncType2 funcNew, const char *strName) {
   CPrintF("  %s\n", strName);
-  CPatch *pPatch = new CPatch(funcOld, funcNew, true, true);
+  CPatch *pPatch = new CPatch(funcOld, funcNew, true, false);
 
   // Add to the patch registry
   if (pPatch->ok()) {

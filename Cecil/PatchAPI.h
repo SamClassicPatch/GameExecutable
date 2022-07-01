@@ -50,6 +50,7 @@ class CPatchAPI {
     CTString strVersion; // Patch version
     CStaticStackArray<SFuncPatch> aPatches; // Function patch storage
 
+  // Declared but undefined methods cannot be used outside the EXE patch project
   public:
     // Constructor
     CPatchAPI();
