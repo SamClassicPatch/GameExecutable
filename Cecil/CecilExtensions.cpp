@@ -173,6 +173,10 @@ void CECIL_Init(void) {
   _pShell->DeclareSymbol("user INDEX sam_bAdjustForAspectRatio post:CECIL_RegisterCommand;", &sam_bAdjustForAspectRatio);
   _pShell->DeclareSymbol("user INDEX sam_bOptionTabs           post:CECIL_RegisterCommand;", &sam_bOptionTabs);
 
+  // Initalize other modules
+  extern void CECIL_InitLocalCheats(void);
+  CECIL_InitLocalCheats();
+
   // Restore custom symbol values
   _pShell->Execute("include \"" CUSTOM_SYMBOLS_CONFIG "\";");
 
