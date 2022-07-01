@@ -15,7 +15,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include "WorldEntities.h"
+#include "../WorldEntities.h"
 
 // Original function pointer
 static void (CDrawPort::*pBlendScreen)(void) = NULL;

@@ -49,6 +49,9 @@
     <Filter Include="Header Files\Query headers">
       <UniqueIdentifier>{ad6aa673-adf4-40bb-b16b-b4380a09f4ac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Cecil\EnginePatches">
+      <UniqueIdentifier>{ccc2eda6-090f-43bc-a20a-3c77c65fdf30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CmdLine.cpp">
@@ -234,19 +237,10 @@
     <ClCompile Include="Cecil\CecilExtensions.cpp">
       <Filter>Source Files\Cecil</Filter>
     </ClCompile>
-    <ClCompile Include="Cecil\FOVPatch.cpp">
-      <Filter>Source Files\Cecil</Filter>
-    </ClCompile>
     <ClCompile Include="Cecil\Patcher\patcher.cpp">
       <Filter>Source Files\Patcher</Filter>
     </ClCompile>
     <ClCompile Include="Cecil\WorldEntities.cpp">
-      <Filter>Source Files\Cecil</Filter>
-    </ClCompile>
-    <ClCompile Include="Cecil\ScreenBlendPatch.cpp">
-      <Filter>Source Files\Cecil</Filter>
-    </ClCompile>
-    <ClCompile Include="Cecil\MasterServerPatch.cpp">
       <Filter>Source Files\Cecil</Filter>
     </ClCompile>
     <ClCompile Include="Query\Legacy_Functions.cpp">
@@ -270,14 +264,23 @@
     <ClCompile Include="Cecil\Node.cpp">
       <Filter>Source Files\Cecil</Filter>
     </ClCompile>
-    <ClCompile Include="Cecil\UndecoratedPatch.cpp">
-      <Filter>Source Files\Cecil</Filter>
-    </ClCompile>
-    <ClCompile Include="Cecil\SoundListenPatch.cpp">
-      <Filter>Source Files\Cecil</Filter>
-    </ClCompile>
     <ClCompile Include="Cecil\PatchAPI.cpp">
       <Filter>Source Files\Cecil</Filter>
+    </ClCompile>
+    <ClCompile Include="Cecil\EnginePatches\FOVPatch.cpp">
+      <Filter>Source Files\Cecil\EnginePatches</Filter>
+    </ClCompile>
+    <ClCompile Include="Cecil\EnginePatches\MasterServerPatch.cpp">
+      <Filter>Source Files\Cecil\EnginePatches</Filter>
+    </ClCompile>
+    <ClCompile Include="Cecil\EnginePatches\ScreenBlendPatch.cpp">
+      <Filter>Source Files\Cecil\EnginePatches</Filter>
+    </ClCompile>
+    <ClCompile Include="Cecil\EnginePatches\SoundListenPatch.cpp">
+      <Filter>Source Files\Cecil\EnginePatches</Filter>
+    </ClCompile>
+    <ClCompile Include="Cecil\EnginePatches\UndecoratedPatch.cpp">
+      <Filter>Source Files\Cecil\EnginePatches</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -485,7 +488,7 @@
     <ClInclude Include="Cecil\Patcher\patcher_defines.h">
       <Filter>Header Files\Patcher headers</Filter>
     </ClInclude>
-    <ClInclude Include="Cecil\Patches.h">
+    <ClInclude Include="Cecil\EnginePatches\Patches.h">
       <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>
     <ClInclude Include="Cecil\WorldEntities.h">
