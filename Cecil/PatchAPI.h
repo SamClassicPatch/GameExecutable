@@ -20,24 +20,39 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   #pragma once
 #endif
 
+// Declare patch class
+class CPatch;
+
+// Pointer to a function patch under a hashed name
+struct SFuncPatch {
+  CTString strName; // Patch name
+  ULONG ulHash; // Name hash
+
+  CPatch *pPatch; // Pointer to the patch
+  
+  // Default constructor
+  SFuncPatch() : strName(""), ulHash(0), pPatch(NULL)
+  {
+  };
+
+  // Constructor from name and patch
+  SFuncPatch(const CTString &strSetName, CPatch *pSetPatch) :
+    strName(strSetName), pPatch(pSetPatch)
+  {
+    // Calculate name hash
+    ulHash = strName.GetHash();
+  };
+};
+
+// Patch API class
 class CPatchAPI {
   public:
     CTString strVersion; // Patch version
-    CDynamicContainer<UBYTE> cPatches; // Function patch storage
+    CStaticStackArray<SFuncPatch> aPatches; // Function patch storage
 
   public:
     // Constructor
     CPatchAPI();
-
-    // Add new function patch
-    void AddFuncPatch(class CPatch *pPatch) {
-      cPatches.Add((UBYTE *)pPatch);
-    };
-
-    // Get function patch
-    class CPatch *GetFuncPatch(INDEX iPatch) {
-      return (CPatch *)cPatches.Pointer(iPatch);
-    };
 };
 
 // Don't use this variable outside the EXE patch project. Visit for more info:
