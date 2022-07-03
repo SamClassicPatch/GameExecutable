@@ -72,6 +72,11 @@ CPatchAPI::CPatchAPI() {
 
   strVersion = "1.1.2";
 
+  // Output patcher actions
+  if (FileExists(_fnmApplicationExe.FileDir() + "PatcherOutput")) {
+    Patch_DebugOutput() = true;
+  }
+
   // Commands for manually toggling function patches
   _pShell->DeclareSymbol("void ListPatches(void);",   &ListFuncPatches);
   _pShell->DeclareSymbol("void EnablePatch(INDEX);",  &EnableFuncPatch);

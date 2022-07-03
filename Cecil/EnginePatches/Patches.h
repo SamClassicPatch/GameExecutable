@@ -22,6 +22,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "../Patcher/patcher.h"
 
+// Patcher debug output
+bool &Patch_DebugOutput(void);
+
 // Force instruction rewrite
 void Patch_ForceRewrite(const int iLength);
 
@@ -50,6 +53,11 @@ struct FuncPtr {
 template<class FuncType1, class FuncType2> inline
 CPatch *NewPatch(FuncType1 &funcOld, FuncType2 funcNew, const char *strName) {
   CPrintF("  %s\n", strName);
+
+  if (Patch_DebugOutput()) {
+    InfoMessage(strName);
+  }
+
   CPatch *pPatch = new CPatch(funcOld, funcNew, true, false);
 
   // Add to the patch registry

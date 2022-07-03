@@ -1,6 +1,5 @@
 #include "StdH.h"
 
-//patcher.cpp
 #include "patcher.h"
 
 #define __DO_NOT_SHOW_PATCHER_WARNINGS__
@@ -9,14 +8,16 @@
 #pragma comment(linker, "/IGNORE:4786")
 #endif
 
-// [Cecil] SE1 Debug output function
-#define SE1_PATCHER_DEBUG_OUTPUT 0
+// [Cecil] Patcher debug output
+static bool _bDebugOutput = false;
+static CTString _strPatcherLog = "";
 
-#if SE1_PATCHER_DEBUG_OUTPUT
-  #define PATCHER_OUT(Output) InfoMessage(Output) //CPrintF(Output)
-#else
-  #define PATCHER_OUT(Output)
-#endif
+// [Cecil] Patcher debug output
+bool &Patch_DebugOutput(void) {
+  return _bDebugOutput;
+};
+
+#define PATCHER_OUT(Output) if (_bDebugOutput) { _strPatcherLog += Output; }
 
 // [Cecil] Allowed to rewrite anything of this length
 static int _iRewriteLen = -1;
@@ -31,11 +32,18 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
 {
   // [Cecil] Force rewrite
   if (_iRewriteLen != -1) {
+    if (_bDebugOutput) {
+      InfoMessage("Forced rewrite (%d bytes)", _iRewriteLen);
+    }
+
     rw_len = _iRewriteLen;
     _iRewriteLen = -1;
     
     return true;
   }
+
+  // [Cecil] Reset output log
+  _strPatcherLog = "";
 
   bool instruction_found;
   int read_len = 0;
@@ -47,7 +55,7 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
 
     if (*reinterpret_cast<char*>(addr) == (char)0xE9) // jmp XX XX XX XX
     {
-      PATCHER_OUT("jmp XX XX XX XX \n");
+      PATCHER_OUT("jmp XX XX XX XX\n");
       instruction_len = 5;
       m_old_jmp = 5 + addr + *reinterpret_cast<long*>(addr + 1);
 
@@ -55,13 +63,13 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
      ||        *reinterpret_cast<char*>(addr) == (char)0xB8 // mov eax, XX XX XX XX
      || !memcmp(reinterpret_cast<char*>(addr), "\xB8\x1E", 2))
     {
-      PATCHER_OUT("2 \n");
+      PATCHER_OUT("5 bytes\n");
       instruction_len = 5;
       instruction_found = true;
       
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8B\x55", 2)) // mov edx, [ebp + arg_0]
     {
-      PATCHER_OUT("mov edx, [ebp+arg0]\n");
+      PATCHER_OUT("mov edx, [ebp + arg0]\n");
       instruction_len = 3;
       instruction_found = true;
 
@@ -71,49 +79,49 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
             || !memcmp(reinterpret_cast<char*>(addr), "\x8B\xF9", 2) // mov
             ||        *reinterpret_cast<char*>(addr) == (char)0x6A)  // push XX
     {
-      PATCHER_OUT("3 \n");
+      PATCHER_OUT("mov / push XX\n");
       instruction_len = 2;
       instruction_found = true;
 
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8B\x46", 2))    
     {
-      PATCHER_OUT("mov ecx, [ebp + arg_0] \n");
+      PATCHER_OUT("mov ecx, [ebp + arg_0]\n");
       instruction_len = 3;
       instruction_found = true;
 
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8B\x4D", 2)) // mov ecx, [ebp + arg_0]
     {
-      PATCHER_OUT("mov ecx, [ebp + arg_0] \n");
+      PATCHER_OUT("mov ecx, [ebp + arg_0]\n");
       instruction_len = 3;
       instruction_found = true;
 
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8B\x75", 2))
     {
-      PATCHER_OUT("mov esi, [ebp + arg_0] \n");
+      PATCHER_OUT("mov esi, [ebp + arg_0]\n");
       instruction_len = 3;
       instruction_found = true;
 
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8B\x45", 2))
     {
-      PATCHER_OUT("mov eax, [ebp + arg_0] \n");
+      PATCHER_OUT("mov eax, [ebp + arg_0]\n");
       instruction_len = 3;
       instruction_found = true;
 
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\x8D\x45", 2)) // lea eax, [ebp+...]
     {
-      PATCHER_OUT("lea eax, [ebp+...] \n");
+      PATCHER_OUT("lea eax, [ebp+...]\n");
       instruction_len = 3;
       instruction_found = true;
 
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\x64\xA1", 2)) // mov eax, large FS
     {
-      PATCHER_OUT("mov eax, large FS \n");
+      PATCHER_OUT("mov eax, large FS\n");
       instruction_len = 6;
       instruction_found = true;
 
     } else if (*reinterpret_cast<char*>(addr) == (char)0xA1) // mov eax, DWORD
     {
-      PATCHER_OUT("mov eax, XX XX XX XX \n");
+      PATCHER_OUT("mov eax, XX XX XX XX\n");
       instruction_len = 5;
       instruction_found = true;
 
@@ -125,13 +133,13 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
 
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\x81\xEC", 2)) // sub esp, DWORD
     {
-      PATCHER_OUT("sub esp, DWORD \n");
+      PATCHER_OUT("sub esp, DWORD\n");
       instruction_len = 6;
       instruction_found = true;
 
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\x83\xEC", 2)) // sub esp, byte + N 
     {
-      PATCHER_OUT("sub esp, byte + N \n");
+      PATCHER_OUT("sub esp, byte + N\n");
       instruction_len = 3;
       instruction_found = true;
 
@@ -143,14 +151,14 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
 
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\xF6\x46", 2)) // test byte ptr [esi+...]
     {
-      PATCHER_OUT("test byte ptr [esi+...] \n");
+      PATCHER_OUT("test byte ptr [esi + ...]\n");
       instruction_len = 4;
       instruction_found = true;
 
     } else if (*reinterpret_cast<char*>(addr) == (char)0xD9  // fld
             || *reinterpret_cast<char*>(addr) == (char)0xD8) // fmul
     {
-      PATCHER_OUT("fld / fadd / fmul \n");
+      PATCHER_OUT("fld / fadd / fmul\n");
       instruction_len = 6;
       instruction_found = true;
     }
@@ -160,16 +168,23 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
 
     if (read_len >= 5) {
       rw_len = read_len;
-      PATCHER_OUT("Finished: read_len >= 5 \n\n");
+
+      // [Cecil] Output patcher log
+      if (_bDebugOutput) {
+        InfoMessage(_strPatcherLog + "\nInstruction found! (read_len >= 5)");
+      }
 
       return true;
     }
   } while(instruction_found);
   
-  #if SE1_PATCHER_DEBUG_OUTPUT
-    CTString strNotFound(0, "Invalid instruction! (0x%X) \n\n", *reinterpret_cast<long *>(addr));
-    PATCHER_OUT(strNotFound);
-  #endif
+  // [Cecil] Output patcher log
+  if (_bDebugOutput) {
+    CTString strError;
+    strError.PrintF("\nInvalid instruction! (0x%X)", *reinterpret_cast<long *>(addr));
+
+    InfoMessage(_strPatcherLog + strError);
+  }
   
   return false;
 }
