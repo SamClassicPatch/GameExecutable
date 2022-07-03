@@ -123,6 +123,12 @@ bool CPatch::okToRewriteTragetInstructionSet(long addr, int& rw_len)
       instruction_len = 1;
       instruction_found = true;
 
+    } else if (!memcmp(reinterpret_cast<char*>(addr), "\x81\xEC", 2)) // sub esp, DWORD
+    {
+      PATCHER_OUT("sub esp, DWORD \n");
+      instruction_len = 6;
+      instruction_found = true;
+
     } else if (!memcmp(reinterpret_cast<char*>(addr), "\x83\xEC", 2)) // sub esp, byte + N 
     {
       PATCHER_OUT("sub esp, byte + N \n");
