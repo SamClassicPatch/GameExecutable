@@ -37,7 +37,7 @@ void CGameAgentQuery::BuildHearthbeatPacket(CTString &strPacket, INDEX iChalleng
       _pNetwork->ga_World.wo_strName,
       _getCurrentGameTypeName(),
       _SE_VER_STRING,
-      _pShell->GetString("sam_strGameName"));
+      sam_strGameName);
 }
 
 void CGameAgentQuery::ServerParsePacket(INDEX iLength)
@@ -63,7 +63,7 @@ void CGameAgentQuery::ServerParsePacket(INDEX iLength)
         _pNetwork->ga_World.wo_strName,
         _getCurrentGameTypeName(),
         _SE_VER_STRING,
-        _pShell->GetString("sam_strGameName"),
+        sam_strGameName,
         _pPatchAPI->GetSessionName());
       _sendPacketTo(strPacket, &_sinFrom);
       break;

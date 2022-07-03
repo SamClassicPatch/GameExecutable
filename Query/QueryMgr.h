@@ -19,6 +19,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   #pragma once
 #endif
 
+// [Cecil] Get game name directly
+extern CTString sam_strGameName;
+
 extern CTString ms_strGameAgentMS;
 extern CTString ms_strMSLegacy;
 extern CTString ms_strDarkPlacesMS;

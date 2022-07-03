@@ -110,7 +110,7 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
     }
 
     strPacket.PrintF( PCKQUERY,
-      _pShell->GetString("sam_strGameName"),
+      sam_strGameName,
       _SE_VER_STRING,
       //_pShell->GetString("net_strLocalHost"),
       strLocation,
@@ -183,7 +183,7 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
       strLocation = "Heartland";
     }
     strPacket.PrintF( PCKBASIC,
-      _pShell->GetString("sam_strGameName"),
+      sam_strGameName,
       _SE_VER_STRING,
       //_pShell->GetString("net_strLocalHost"));
       strLocation);
