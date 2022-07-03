@@ -63,7 +63,7 @@ void DarkPlaces_BuildStatusResponse(const char* challenge, CTString &strPacket, 
             bFullStatus ? "statusResponse" : "infoResponse",
             // [Cecil] "$version" -> _SE_VER_STRING
             _pShell->GetString("sam_strGameName"), "", _SE_VER_STRING, ctMaxPlayers,
-            GetClientCount(), 0, _pNetwork->ga_World.wo_strName, _pShell->GetString("gam_strSessionName"), DP_NET_PROTOCOL_VERSION,
+            GetClientCount(), 0, _pNetwork->ga_World.wo_strName, _pPatchAPI->GetSessionName(), DP_NET_PROTOCOL_VERSION,
             "\\qcstatus\\", strStatus,
             challenge ? "\\challenge\\" : "", challenge ? challenge : "",
             "", "", // Crypto Key

@@ -350,13 +350,13 @@ extern CTString sam_strTrainingLevel;
 static void StartSinglePlayerGame_Normal(void);
 static void StartTechTest(void) {
   _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
-  _pGame->gam_strCustomLevel = sam_strTechTestLevel;
+  _pPatchAPI->GetCustomLevel() = sam_strTechTestLevel;
   StartSinglePlayerGame_Normal();
 }
 
 static void StartTraining(void) {
   _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
-  _pGame->gam_strCustomLevel = sam_strTrainingLevel;
+  _pPatchAPI->GetCustomLevel() = sam_strTrainingLevel;
   ChangeToMenu(&_pGUIM->gmSinglePlayerNewMenu);
 }
 
@@ -386,7 +386,7 @@ void StartSinglePlayerGame(void) {
   CUniversalSessionProperties sp;
   _pGame->SetSinglePlayerSession(sp);
 
-  if (_pGame->NewGame(_pGame->gam_strCustomLevel, _pGame->gam_strCustomLevel, sp)) {
+  if (_pGame->NewGame(_pPatchAPI->GetCustomLevel(), _pPatchAPI->GetCustomLevel(), sp)) {
     StopMenus();
     _gmRunningGameMode = GM_SINGLE_PLAYER;
   } else {
@@ -1060,9 +1060,9 @@ void InitActionsForNetworkJoinMenu() {
 
 // ------------------------ CNetworkStartMenu implementation
 extern void UpdateNetworkLevel(INDEX iDummy) {
-  ValidateLevelForFlags(_pGame->gam_strCustomLevel,
+  ValidateLevelForFlags(_pPatchAPI->GetCustomLevel(),
     GetSpawnFlagsForGameType(_pGUIM->gmNetworkStartMenu.gm_mgGameType.mg_iSelected));
-  _pGUIM->gmNetworkStartMenu.gm_mgLevel.SetText(FindLevelByFileName(_pGame->gam_strCustomLevel).li_strName);
+  _pGUIM->gmNetworkStartMenu.gm_mgLevel.SetText(FindLevelByFileName(_pPatchAPI->GetCustomLevel()).li_strName);
 }
 
 void InitActionsForNetworkStartMenu() {
@@ -1281,7 +1281,7 @@ void InitActionsForSplitStartMenu() {
 extern void UpdateSplitLevel(INDEX iDummy) {
   CSplitStartMenu &gmCurrent = _pGUIM->gmSplitStartMenu;
 
-  ValidateLevelForFlags(_pGame->gam_strCustomLevel,
+  ValidateLevelForFlags(_pPatchAPI->GetCustomLevel(),
     GetSpawnFlagsForGameType(gmCurrent.gm_mgGameType.mg_iSelected));
-  gmCurrent.gm_mgLevel.SetText(FindLevelByFileName(_pGame->gam_strCustomLevel).li_strName);
+  gmCurrent.gm_mgLevel.SetText(FindLevelByFileName(_pPatchAPI->GetCustomLevel()).li_strName);
 }

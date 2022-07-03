@@ -114,7 +114,7 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
       _SE_VER_STRING,
       //_pShell->GetString("net_strLocalHost"),
       strLocation,
-      _pShell->GetString("gam_strSessionName"),
+      _pPatchAPI->GetSessionName(),
       _pShell->GetINDEX("net_iPort"),
       _pNetwork->ga_World.wo_strName,
       _getCurrentGameTypeName(),
@@ -161,7 +161,7 @@ void CLegacyQuery::ServerParsePacket(INDEX iLength)
 
     CTString strPacket;
     strPacket.PrintF( PCKINFO,
-      _pShell->GetString("gam_strSessionName"),
+      _pPatchAPI->GetSessionName(),
       _pShell->GetINDEX("net_iPort"),
       _pNetwork->ga_World.wo_strName,
       _getCurrentGameTypeName(),

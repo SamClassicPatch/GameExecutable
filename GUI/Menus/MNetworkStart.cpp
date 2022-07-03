@@ -28,10 +28,10 @@ void CNetworkStartMenu::Initialize_t(void) {
   AddChild(&gm_mgTitle);
 
   // session name edit box
-  gm_mgSessionName.SetText(_pGame->gam_strSessionName);
+  gm_mgSessionName.SetText(_pPatchAPI->GetSessionName());
   gm_mgSessionName.SetName(TRANS("Session name:"));
   gm_mgSessionName.mg_ctMaxStringLen = 25;
-  gm_mgSessionName.mg_pstrToChange = &_pGame->gam_strSessionName;
+  gm_mgSessionName.mg_pstrToChange = &_pPatchAPI->GetSessionName();
   gm_mgSessionName.mg_boxOnScreen = BoxMediumRow(1);
   gm_mgSessionName.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgSessionName.mg_iCenterI = -1;

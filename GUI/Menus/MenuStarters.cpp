@@ -93,7 +93,7 @@ extern CTString sam_strFirstLevel;
 void StartSinglePlayerNewMenu(void) {
   CSinglePlayerNewMenu &gmCurrent = _pGUIM->gmSinglePlayerNewMenu;
 
-  _pGame->gam_strCustomLevel = sam_strFirstLevel;
+  _pPatchAPI->GetCustomLevel() = sam_strFirstLevel;
 
   gmCurrent.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
   ChangeToMenu(&gmCurrent);
@@ -228,7 +228,7 @@ void StartSplitScreenGame(void) {
   _pGame->gm_aiStartLocalPlayers[2] = _pGame->gm_aiMenuLocalPlayers[2];
   _pGame->gm_aiStartLocalPlayers[3] = _pGame->gm_aiMenuLocalPlayers[3];
 
-  CTFileName fnWorld = _pGame->gam_strCustomLevel;
+  CTFileName fnWorld = _pPatchAPI->GetCustomLevel();
 
   _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
   CUniversalSessionProperties sp;
@@ -250,12 +250,12 @@ void StartNetworkGame(void) {
   _pGame->gm_aiStartLocalPlayers[2] = _pGame->gm_aiMenuLocalPlayers[2];
   _pGame->gm_aiStartLocalPlayers[3] = _pGame->gm_aiMenuLocalPlayers[3];
 
-  CTFileName fnWorld = _pGame->gam_strCustomLevel;
+  CTFileName fnWorld = _pPatchAPI->GetCustomLevel();
 
   _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_SERVER);
   CUniversalSessionProperties sp;
   _pGame->SetMultiPlayerSession(sp);
-  if (_pGame->NewGame(_pGame->gam_strSessionName, fnWorld, sp)) {
+  if (_pGame->NewGame(_pPatchAPI->GetSessionName(), fnWorld, sp)) {
     StopMenus();
     _gmRunningGameMode = GM_NETWORK;
     // if starting a dedicated server
@@ -279,7 +279,7 @@ void JoinNetworkGame(void) {
   _pGame->gm_aiStartLocalPlayers[3] = _pGame->gm_aiMenuLocalPlayers[3];
 
   _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_CLIENT);
-  if (_pGame->JoinGame(CNetworkSession(_pGame->gam_strJoinAddress))) {
+  if (_pGame->JoinGame(CNetworkSession(_pPatchAPI->GetJoinAddress()))) {
     StopMenus();
     _gmRunningGameMode = GM_NETWORK;
   } else {
@@ -294,7 +294,7 @@ void JoinNetworkGame(void) {
       if (_strModURLSelected = "") {
         _strModURLSelected = "http://www.croteam.com/mods/Old";
       }
-      _strModServerSelected.PrintF("%s:%s", _pGame->gam_strJoinAddress, _pShell->GetValue("net_iPort"));
+      _strModServerSelected.PrintF("%s:%s", _pPatchAPI->GetJoinAddress(), _pShell->GetValue("net_iPort"));
       extern void ModConnectConfirm(void);
       ModConnectConfirm();
     }

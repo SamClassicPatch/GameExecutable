@@ -29,9 +29,9 @@ void CNetworkOpenMenu::Initialize_t(void) {
   gm_mgAddressLabel.mg_iCenterI = -1;
   AddChild(&gm_mgAddressLabel);
 
-  gm_mgAddress.SetText(_pGame->gam_strJoinAddress);
+  gm_mgAddress.SetText(_pPatchAPI->GetJoinAddress());
   gm_mgAddress.mg_ctMaxStringLen = 20;
-  gm_mgAddress.mg_pstrToChange = &_pGame->gam_strJoinAddress;
+  gm_mgAddress.mg_pstrToChange = &_pPatchAPI->GetJoinAddress();
   gm_mgAddress.mg_boxOnScreen = BoxMediumMiddle(1);
   gm_mgAddress.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgAddress.mg_iCenterI = -1;

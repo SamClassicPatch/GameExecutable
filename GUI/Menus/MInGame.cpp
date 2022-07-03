@@ -161,7 +161,7 @@ void CInGameMenu::StartMenu(void) {
         strConfig.OnlyFirstLine();
       }
 
-      gm_mgLabel1.SetText(TRANS("Connected to: ") + _pGame->gam_strJoinAddress);
+      gm_mgLabel1.SetText(TRANS("Connected to: ") + _pPatchAPI->GetJoinAddress());
       gm_mgLabel2.SetText(TRANS("Connection: ") + strConfig);
     }
   }

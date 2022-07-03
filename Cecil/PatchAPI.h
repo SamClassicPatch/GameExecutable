@@ -123,6 +123,23 @@ class CPatchAPI {
     void SetGameState(BOOL bState) {
       _pGame->gm_bGameOn = bState;
     };
+
+  // CGame session property wrappers
+  public:
+    // Get custom level filename
+    CTString &GetCustomLevel(void) {
+      return _pGame->gam_strCustomLevel;
+    };
+    
+    // Get session name
+    CTString &GetSessionName(void) {
+      return _pGame->gam_strSessionName;
+    };
+    
+    // Get address for joining
+    CTString &GetJoinAddress(void) {
+      return _pGame->gam_strJoinAddress;
+    };
 };
 
 // Don't use this variable outside the EXE patch project. Visit for more info:
