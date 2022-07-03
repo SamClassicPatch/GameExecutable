@@ -129,8 +129,8 @@ static void CECIL_RegisterCommand(void *pCommand) {
 // Display information about the patched executable
 static void PatchInfo(void) {
   static CTString strInfo =
-    "\n --- Custom Serious Sam Patch ---"
-    "\ngithub.com/DreamyCecil/SamExePatch"
+    "\n ------ Serious Sam Classic Patch ------"
+    "\ngithub.com/SamClassicPatch/GameExecutable"
     "\n"
     "\n- Engine version: " _SE_VER_STRING
     "\n- EXE patch version: "

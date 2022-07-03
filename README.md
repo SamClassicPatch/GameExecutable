@@ -1,10 +1,10 @@
-# Patched Serious Sam Executable
+# Serious Sam Classic Patch
 
-This project contains code for building custom Serious Sam Classic executable files that includes a number of modern enhancements that aren't present in the original code, nor in the official Steam patch.
+This custom Serious Sam Classic patch includes a lot of modern enhancements that aren't present in the original code, nor the official Steam patches.
 
 Original source code of the executable is taken from the `SeriousSam` project from [Serious Engine 1.10](https://github.com/Croteam-official/Serious-Engine).
 
-Complete description of the latest patch release can be found on the [project wiki](https://github.com/DreamyCecil/SamExePatch/wiki).
+Complete description of the [latest patch release](https://github.com/SamClassicPatch/GameExecutable/releases/latest) can be found on the [project wiki](https://github.com/SamClassicPatch/GameExecutable/wiki).
 
 ## Building
 
@@ -16,7 +16,7 @@ Full guide: https://github.com/DreamyCecil/SeriousSam_SDK107#building
 
 ## Notes
 
-Once the project is compiled, a custom executable file should appear in the `Bin` directory near the solution file and also automatically placed into the `Bin` directory one level above the project directory (e.g. `C:/SeriousSam/Bin` if the sources are in `C:/SeriousSam/SamExePatch`).
+Once the project is compiled, a custom executable file should appear in the `Bin` directory near the solution file and also automatically placed into the `Bin` directory one level above the project directory (e.g. `C:/SeriousSam/Bin` if the sources are in `C:/SeriousSam/GameExecutable`).
 
 To change the path where to copy the executable (if you wish to put sources separately from the game), consider changing the path in the post-build event (**Project properties** -> **Build Events** -> **Post-Build Event** -> **Command Line**).
 

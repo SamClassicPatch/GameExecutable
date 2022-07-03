@@ -143,7 +143,7 @@ class CPatchAPI {
 };
 
 // Don't use this variable outside the EXE patch project. Visit for more info:
-// https://github.com/DreamyCecil/SamExePatch/wiki/Mod-support#api-utilization
+// https://github.com/SamClassicPatch/GameExecutable/wiki/Mod-support#api-utilization
 extern "C" __declspec(dllexport) CPatchAPI *_pPatchAPI;
 
 #endif
