@@ -64,8 +64,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TSE107|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)Includes/;$(ProjectDir)Includes/Engine107/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Includes/Engine107/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine107/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)../CoreLib/Includes/Engine107/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
     <OutDir>$(ProjectDir)Bin\</OutDir>
@@ -74,8 +74,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE107|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)Includes/;$(ProjectDir)Includes/Engine107/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Includes/Engine107/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine107/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)../CoreLib/Includes/Engine107/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
     <OutDir>$(ProjectDir)Bin\</OutDir>
@@ -84,8 +84,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)Includes/;$(ProjectDir)Includes/Engine105/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Includes/Engine105/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine105/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)../CoreLib/Includes/Engine105/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
     <OutDir>$(ProjectDir)Bin\</OutDir>
@@ -94,8 +94,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)Includes/;$(ProjectDir)Includes/Engine105FE/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Includes/Engine105FE/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine105FE/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)../CoreLib/Includes/Engine105FE/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
     <OutDir>$(ProjectDir)Bin\</OutDir>
@@ -138,8 +138,8 @@
     </Link>
     <CustomBuildStep />
     <PostBuildEvent>
-      <Message>Copying $(TargetName)$(TargetExt) to $(ProjectDir)..\Bin</Message>
-      <Command>copy $(OutDir)$(TargetName)$(TargetExt) $(ProjectDir)..\Bin\Debug\ &gt;nul </Command>
+      <Message>Copying $(TargetName)$(TargetExt) to $(ProjectDir)..\..\Bin</Message>
+      <Command>copy $(OutDir)$(TargetName)$(TargetExt) $(ProjectDir)..\..\Bin\Debug\ &gt;nul </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE107|Win32'">
@@ -156,7 +156,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>StdH.h</PrecompiledHeaderFile>
       <DisableSpecificWarnings>4996;4333</DisableSpecificWarnings>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -180,8 +179,8 @@
     </Link>
     <CustomBuildStep />
     <PostBuildEvent>
-      <Message>Copying $(TargetName)$(TargetExt) to $(ProjectDir)..\Bin</Message>
-      <Command>copy $(OutDir)$(TargetName)$(TargetExt) $(ProjectDir)..\Bin\ &gt;nul </Command>
+      <Message>Copying $(TargetName)$(TargetExt) to $(ProjectDir)..\..\Bin</Message>
+      <Command>copy $(OutDir)$(TargetName)$(TargetExt) $(ProjectDir)..\..\Bin\ &gt;nul </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'">
@@ -221,8 +220,8 @@
     </Link>
     <CustomBuildStep />
     <PostBuildEvent>
-      <Message>Copying $(TargetName)$(TargetExt) to $(ProjectDir)..\Bin</Message>
-      <Command>copy $(OutDir)$(TargetName)$(TargetExt) $(ProjectDir)..\Bin\ &gt;nul </Command>
+      <Message>Copying $(TargetName)$(TargetExt) to $(ProjectDir)..\..\Bin</Message>
+      <Command>copy $(OutDir)$(TargetName)$(TargetExt) $(ProjectDir)..\..\Bin\ &gt;nul </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'">
@@ -262,8 +261,8 @@
     </Link>
     <CustomBuildStep />
     <PostBuildEvent>
-      <Message>Copying $(TargetName)$(TargetExt) to $(ProjectDir)..\Bin</Message>
-      <Command>copy $(OutDir)$(TargetName)$(TargetExt) $(ProjectDir)..\Bin\ &gt;nul </Command>
+      <Message>Copying $(TargetName)$(TargetExt) to $(ProjectDir)..\..\Bin</Message>
+      <Command>copy $(OutDir)$(TargetName)$(TargetExt) $(ProjectDir)..\..\Bin\ &gt;nul </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
