@@ -93,6 +93,36 @@ class CPatchAPI {
 
       _pGame->gm_strNetworkProvider = astrProviders[eProvider];
     };
+
+    // Get first loading state
+    BOOL GetFirstLoading(void) {
+      return _pGame->gm_bFirstLoading;
+    };
+
+    // Set if loading for the first time
+    void SetFirstLoading(BOOL bState) {
+      _pGame->gm_bFirstLoading = bState;
+    };
+
+    // Get menu state
+    BOOL GetMenuState(void) {
+      return _pGame->gm_bMenuOn;
+    };
+
+    // Set menu state
+    void SetMenuState(BOOL bState) {
+      _pGame->gm_bMenuOn = bState;
+    };
+
+    // Get game state
+    BOOL GetGameState(void) {
+      return _pGame->gm_bGameOn;
+    };
+
+    // Set game state
+    void SetGameState(BOOL bState) {
+      _pGame->gm_bGameOn = bState;
+    };
 };
 
 // Don't use this variable outside the EXE patch project. Visit for more info:

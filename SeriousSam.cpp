@@ -323,7 +323,7 @@ void StartNextDemo(void) {
     CUniversalSessionProperties sp;
     _pGame->SetSinglePlayerSession(sp);
 
-    _pGame->gm_bFirstLoading = TRUE;
+    _pPatchAPI->SetFirstLoading(TRUE);
 
     if (_pGame->NewGame(sam_strIntroLevel, sam_strIntroLevel, sp)) {
       _gmRunningGameMode = GM_INTRO;
@@ -753,7 +753,7 @@ void PrintDisplayModeInfo(void) {
 // Do the main game loop and render screen
 void DoGame(void) {
   // set flag if not in game
-  if (!_pGame->gm_bGameOn) {
+  if (!_pPatchAPI->GetGameState()) {
     _gmRunningGameMode = GM_NONE;
   }
 
@@ -1346,7 +1346,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     UpdatePauseState();
 
     // notify game whether menu is active
-    _pGame->gm_bMenuOn = bMenuActive;
+    _pPatchAPI->SetMenuState(bMenuActive);
 
     // do the main game loop and render screen
     DoGame();
