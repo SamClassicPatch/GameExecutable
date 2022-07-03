@@ -64,4 +64,49 @@ CPatch *NewPatch(FuncType1 &funcOld, FuncType2 funcNew, const char *strName) {
   return pPatch;
 };
 
+// Check if the current function is being called from a specific address
+__forceinline BOOL CallingFrom(const ULONG ulFrom, const INDEX ctDepth) {
+  // Create thread context
+  CONTEXT context;
+  ZeroMemory(&context, sizeof(CONTEXT));
+  context.ContextFlags = CONTEXT_CONTROL;
+
+  // Retrieve call stack
+  __asm {
+  Label:
+    mov [context.Ebp], ebp
+    mov [context.Esp], esp
+    mov eax, [Label]
+    mov [context.Eip], eax
+  }
+
+  DWORD ulCallAddress = context.Eip;
+
+  PDWORD pFrame = (PDWORD)context.Ebp;
+  PDWORD pPrevFrame = NULL;
+
+  // Iterate through the last N calls from here
+  for (INDEX iDepth = 0; iDepth < ctDepth; iDepth++)
+  {
+    // Calling from the right address
+    if (ulCallAddress == ulFrom) {
+      return TRUE;
+    }
+
+    // Get next call address
+    ulCallAddress = pFrame[1];
+
+    // Advance the frame
+    pPrevFrame = pFrame;
+    pFrame = (PDWORD)pFrame[0];
+
+    if ((DWORD)pFrame & 3) break;
+    if (pFrame <= pPrevFrame) break;
+
+    if (IsBadWritePtr(pFrame, sizeof(PVOID) * 2)) break;
+  }
+
+  return FALSE;
+};
+
 #endif
