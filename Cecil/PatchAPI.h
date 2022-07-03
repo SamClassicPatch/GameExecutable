@@ -54,6 +54,28 @@ class CPatchAPI {
   public:
     // Constructor
     CPatchAPI();
+
+  // CGame field wrappers
+  public:
+    // Get console state
+    INDEX GetConState(void) {
+      return _pGame->gm_csConsoleState;
+    };
+
+    // Set console state
+    void SetConState(INDEX iState) {
+      (INDEX &)_pGame->gm_csConsoleState = iState;
+    };
+
+    // Get computer state
+    INDEX GetCompState(void) {
+      return _pGame->gm_csComputerState;
+    };
+
+    // Set computer state
+    void SetCompState(INDEX iState) {
+      (INDEX &)_pGame->gm_csComputerState = iState;
+    };
 };
 
 // Don't use this variable outside the EXE patch project. Visit for more info:

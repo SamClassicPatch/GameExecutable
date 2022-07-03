@@ -70,8 +70,8 @@ void StartDemoPlay(void) {
   if (_pGame->StartDemoPlay(_fnDemoToPlay)) {
     // exit menu and pull up the console
     StopMenus();
-    if (_pGame->gm_csConsoleState != CS_OFF) {
-      _pGame->gm_csConsoleState = CS_TURNINGOFF;
+    if (_pPatchAPI->GetConState() != CS_OFF) {
+      _pPatchAPI->SetConState(CS_TURNINGOFF);
     }
     _gmRunningGameMode = GM_DEMO;
   } else {
