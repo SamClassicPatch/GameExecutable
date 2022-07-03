@@ -314,7 +314,7 @@ void StartNextDemo(void) {
     _pGame->gm_aiStartLocalPlayers[1] = -1;
     _pGame->gm_aiStartLocalPlayers[2] = -1;
     _pGame->gm_aiStartLocalPlayers[3] = -1;
-    _pGame->gm_strNetworkProvider = "Local";
+    _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
     _pGame->gm_StartSplitScreenCfg = CGame::SSC_PLAY1;
 
     _pShell->SetINDEX("gam_iStartDifficulty", CSessionProperties::GD_NORMAL);
@@ -339,7 +339,7 @@ void StartNextDemo(void) {
     _pGame->gm_aiStartLocalPlayers[3] = -1;
 
     // play the demo
-    _pGame->gm_strNetworkProvider = "Local";
+    _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
     _gmRunningGameMode = GM_NONE;
 
     if (_pGame->StartDemoPlay(pli->li_fnLevel)) {

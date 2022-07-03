@@ -230,7 +230,7 @@ void StartSplitScreenGame(void) {
 
   CTFileName fnWorld = _pGame->gam_strCustomLevel;
 
-  _pGame->gm_strNetworkProvider = "Local";
+  _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
   CUniversalSessionProperties sp;
   _pGame->SetMultiPlayerSession(sp);
   if (_pGame->NewGame(fnWorld.FileName(), fnWorld, sp)) {
@@ -252,7 +252,7 @@ void StartNetworkGame(void) {
 
   CTFileName fnWorld = _pGame->gam_strCustomLevel;
 
-  _pGame->gm_strNetworkProvider = "TCP/IP Server";
+  _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_SERVER);
   CUniversalSessionProperties sp;
   _pGame->SetMultiPlayerSession(sp);
   if (_pGame->NewGame(_pGame->gam_strSessionName, fnWorld, sp)) {
@@ -278,7 +278,7 @@ void JoinNetworkGame(void) {
   _pGame->gm_aiStartLocalPlayers[2] = _pGame->gm_aiMenuLocalPlayers[2];
   _pGame->gm_aiStartLocalPlayers[3] = _pGame->gm_aiMenuLocalPlayers[3];
 
-  _pGame->gm_strNetworkProvider = "TCP/IP Client";
+  _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_CLIENT);
   if (_pGame->JoinGame(CNetworkSession(_pGame->gam_strJoinAddress))) {
     StopMenus();
     _gmRunningGameMode = GM_NETWORK;

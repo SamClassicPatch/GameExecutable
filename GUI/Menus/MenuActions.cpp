@@ -382,7 +382,7 @@ void StartSinglePlayerGame(void) {
   _pGame->gm_aiStartLocalPlayers[2] = -1;
   _pGame->gm_aiStartLocalPlayers[3] = -1;
 
-  _pGame->gm_strNetworkProvider = "Local";
+  _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
   CUniversalSessionProperties sp;
   _pGame->SetSinglePlayerSession(sp);
 

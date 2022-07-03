@@ -47,6 +47,14 @@ struct SFuncPatch {
 // Patch API class
 class CPatchAPI {
   public:
+    // Network provider type for CGame
+    enum ENetworkProvider {
+      NP_LOCAL,
+      NP_SERVER,
+      NP_CLIENT,
+    };
+
+  public:
     CTString strVersion; // Patch version
     CStaticStackArray<SFuncPatch> aPatches; // Function patch storage
 
@@ -75,6 +83,15 @@ class CPatchAPI {
     // Set computer state
     void SetCompState(INDEX iState) {
       (INDEX &)_pGame->gm_csComputerState = iState;
+    };
+
+    // Set network provider
+    void SetNetworkProvider(ENetworkProvider eProvider) {
+      static const char *astrProviders[3] = {
+        "Local", "TCP/IP Server", "TCP/IP Client",
+      };
+
+      _pGame->gm_strNetworkProvider = astrProviders[eProvider];
     };
 };
 
