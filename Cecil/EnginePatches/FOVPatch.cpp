@@ -204,26 +204,14 @@ extern void CECIL_ApplyFOVPatch(void) {
 
   pModelRender = &BeginModelRenderingView;
   NewPatch(pModelRender, &P_BeginModelRenderingView, "::BeginModelRenderingView(...)");
-  
-  // Workaround for casting raw addresses into function pointers
-  union {
-    ULONG ulAddress;
-    FLOAT (CPerspectiveProjection3D::*pFunc)(FLOAT) const;
-  } dist;
 
-  // Beginning of CPerspectiveProjection3D::MipFactor(FLOAT)
-  dist.ulAddress = CHOOSE_FOR_GAME(0x600F70D0, 0x600C7160, 0x601004D0);
-  NewPatch(dist.pFunc, &CProjectionPatch::P_MipFactorDist, "CPerspectiveProjection3D::MipFactor(FLOAT)");
+  // Pointer to CPerspectiveProjection3D::MipFactor(FLOAT)
+  FuncPtr<FLOAT (CPerspectiveProjection3D::*)(FLOAT) const> pDist = CHOOSE_FOR_GAME(0x600F70D0, 0x600C7160, 0x601004D0);
+  NewPatch(pDist.pFunction, &CProjectionPatch::P_MipFactorDist, "CPerspectiveProjection3D::MipFactor(FLOAT)");
 
-  // Workaround for casting raw addresses into function pointers
-  union {
-    ULONG ulAddress;
-    FLOAT (CPerspectiveProjection3D::*pFunc)(void) const;
-  } factor;
-  
-  // Beginning of CPerspectiveProjection3D::MipFactor()
-  factor.ulAddress = CHOOSE_FOR_GAME(0x600F7100, 0x600C7190, 0x60100500);
-  NewPatch(factor.pFunc, &CProjectionPatch::P_MipFactor, "CPerspectiveProjection3D::MipFactor()");
+  // Pointer to CPerspectiveProjection3D::MipFactor()
+  FuncPtr<FLOAT (CPerspectiveProjection3D::*)(void) const> pFactor = CHOOSE_FOR_GAME(0x600F7100, 0x600C7190, 0x60100500);
+  NewPatch(pFactor.pFunction, &CProjectionPatch::P_MipFactor, "CPerspectiveProjection3D::MipFactor()");
 
   // Custom symbols
   _pShell->DeclareSymbol("user INDEX sam_bUseVerticalFOV  post:CECIL_RegisterCommand;", &sam_bUseVerticalFOV);

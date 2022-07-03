@@ -25,6 +25,20 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // Force instruction rewrite
 void Patch_ForceRewrite(const int iLength);
 
+// Caster from raw addresses to function pointers
+template<class FuncType>
+struct FuncPtr {
+  union {
+    ULONG ulAddress; // Raw address of the function
+    FuncType pFunction; // Pointer to the function
+  };
+
+  // Constructor from raw address
+  FuncPtr(ULONG ulSetAddress = NULL) : ulAddress(ulSetAddress)
+  {
+  };
+};
+
 // Don't terminate the game in debug
 #ifndef NDEBUG
   #define PATCH_ERROR_OUTPUT InfoMessage
