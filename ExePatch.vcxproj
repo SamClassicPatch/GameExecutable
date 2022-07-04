@@ -64,7 +64,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TSE107|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine107/;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/;$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine107/;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)../CoreLib/Includes/Engine107/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
@@ -74,7 +74,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE107|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine107/;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/;$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine107/;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)../CoreLib/Includes/Engine107/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
@@ -84,7 +84,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine105/;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/;$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine105/;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)../CoreLib/Includes/Engine105/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
@@ -94,7 +94,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine105FE/;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/;$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine105FE/;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)../CoreLib/Includes/Engine105FE/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>

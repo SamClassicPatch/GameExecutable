@@ -21,7 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // [Cecil] Moved from many individual files
 #include <Engine/Base/KeyNames.h>
 #include <Engine/CurrentVersion.h>
-#include <Game/LCDDrawing.h>
+#include <LCDDrawing.h> // [Cecil] Use local instead of Game's
 
 // [Cecil] Choose value based on configuration
 #ifdef SE1_TFE
