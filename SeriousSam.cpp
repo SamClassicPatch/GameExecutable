@@ -1366,7 +1366,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     const CTString strMod = _fnmModToLoad.FileName();
 
     // [Cecil] Use executable filename
-    CTString strCmd = _fnmApplicationExe.FileName() + ".exe";
+    CTString strCmd = _fnmApplicationPath + _fnmApplicationExe;
     CTString strParam = " +game " + strMod;
 
     if (_strModServerJoin != "") {
@@ -1394,7 +1394,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 /*static void CheckModReload(void) {
   if (_fnmModToLoad != "") {
     // [Cecil] Use executable filename
-    CTString strCommand = _fnmApplicationExe.FileDir() + _fnmApplicationExe.FileName() + ".exe";
+    CTString strCommand = _fnmApplicationPath + _fnmApplicationExe;
     //+mod " + _fnmModToLoad.FileName() + "\"";
 
     CTString strMod = _fnmModToLoad.FileName();
