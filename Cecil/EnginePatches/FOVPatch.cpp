@@ -365,10 +365,10 @@ extern void CECIL_ApplyFOVPatch(void) {
   NewPatch(pFactor.pFunction, &CProjectionPatch::P_MipFactor, "CPerspectiveProjection3D::MipFactor()");
 
   // Custom symbols
-  _pShell->DeclareSymbol("user INDEX sam_bUseVerticalFOV  post:CECIL_RegisterCommand;", &sam_bUseVerticalFOV);
-  _pShell->DeclareSymbol("user FLOAT sam_fCustomFOV       post:CECIL_RegisterCommand;", &sam_fCustomFOV);
-  _pShell->DeclareSymbol("user FLOAT sam_fThirdPersonFOV  post:CECIL_RegisterCommand;", &sam_fThirdPersonFOV);
-  _pShell->DeclareSymbol("user INDEX sam_bFixMipDistance  post:CECIL_RegisterCommand;", &sam_bFixMipDistance);
-  _pShell->DeclareSymbol("user INDEX sam_bFixViewmodelFOV post:CECIL_RegisterCommand;", &sam_bFixViewmodelFOV);
+  _pShell->DeclareSymbol("persistent user INDEX sam_bUseVerticalFOV;",  &sam_bUseVerticalFOV);
+  _pShell->DeclareSymbol("persistent user FLOAT sam_fCustomFOV;",       &sam_fCustomFOV);
+  _pShell->DeclareSymbol("persistent user FLOAT sam_fThirdPersonFOV;",  &sam_fThirdPersonFOV);
+  _pShell->DeclareSymbol("persistent user INDEX sam_bFixMipDistance;",  &sam_bFixMipDistance);
+  _pShell->DeclareSymbol("persistent user INDEX sam_bFixViewmodelFOV;", &sam_bFixViewmodelFOV);
   _pShell->DeclareSymbol("user INDEX sam_bCheckFOV;", &sam_bCheckFOV);
 };

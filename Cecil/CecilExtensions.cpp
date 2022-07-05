@@ -58,79 +58,8 @@ void AdjustVFOV(const FLOAT2D &vScreen, FLOAT &fHFOV) {
   fHFOV = 2.0f * ATan(fVerticalAngle);
 };
 
-// Custom command registy
-static CDynamicContainer<CShellSymbol> _cCustomSymbols;
-static BOOL _bRegisterCommands = FALSE; // Don't register in the beginning
-
-#define CUSTOM_SYMBOLS_CONFIG "Scripts\\CustomSymbols.ini"
-
-// Register a certain command after its change
-static void CECIL_RegisterCommand(void *pCommand) {
-  CShellSymbol *pss = NULL;
-
-  for (INDEX i = 0; i < _pShell->sh_assSymbols.Count(); i++) {
-    CShellSymbol *pssCheck = _pShell->sh_assSymbols.Pointer(i);
-
-    // Matching command
-    if (pssCheck->ss_pvValue == pCommand) {
-      pss = pssCheck;
-      break;
-    }
-  }
-
-  if (pss == NULL) {
-    CPrintF("Could not find corresponding command in the shell for registering!\n");
-    return;
-  }
-
-  // Add symbols to the list
-  if (!_cCustomSymbols.IsMember(pss)) {
-    _cCustomSymbols.Add(pss);
-  }
-
-  // Don't resave anything yet
-  if (!_bRegisterCommands) return;
-
-  // Special actions for commands
-  if (pss->ss_pvValue == &sam_bAdjustForAspectRatio) {
-    extern void ApplyVideoMode(void);
-    ApplyVideoMode();
-  }
-
-  // Save symbol values
-  try {
-    const CTFileName fnSymbols = _fnmApplicationPath + CTFILENAME(CUSTOM_SYMBOLS_CONFIG);
-
-    // Open file for writing
-    FILE *file = fopen(fnSymbols.str_String, "wb+");
-
-    // Couldn't create the file
-    if (file == NULL) {
-      throw strerror(errno);
-    }
-
-    FOREACHINDYNAMICCONTAINER(_cCustomSymbols, CShellSymbol, itss) {
-      CShellSymbol *pssWrite = itss;
-
-      // Symbol name and value
-      CTString str;
-      str.PrintF("%s = %s;\r\n", pssWrite->ss_strName, _pShell->GetValue(pssWrite->ss_strName));
-
-      fwrite(str, sizeof(char), str.Length(), file);
-    }
-
-    fclose(file);
-
-  } catch (char *strError) {
-    CPrintF("Could not save custom symbols: %s\n", strError);
-  }
-};
-
 // Custom initialization
 void CECIL_Init(void) {
-  // Command registry
-  _pShell->DeclareSymbol("void CECIL_RegisterCommand(INDEX);", &CECIL_RegisterCommand);
-
   // Initialize the core
   CECIL_InitCore();
 
@@ -152,17 +81,11 @@ void CECIL_Init(void) {
   }
 
   // Custom symbols
-  _pShell->DeclareSymbol("user INDEX sam_bBackgroundGameRender post:CECIL_RegisterCommand;", &sam_bBackgroundGameRender);
-  _pShell->DeclareSymbol("user INDEX sam_bAdjustForAspectRatio post:CECIL_RegisterCommand;", &sam_bAdjustForAspectRatio);
-  _pShell->DeclareSymbol("user INDEX sam_bOptionTabs           post:CECIL_RegisterCommand;", &sam_bOptionTabs);
+  _pShell->DeclareSymbol("persistent user INDEX sam_bBackgroundGameRender;", &sam_bBackgroundGameRender);
+  _pShell->DeclareSymbol("persistent user INDEX sam_bAdjustForAspectRatio;", &sam_bAdjustForAspectRatio);
+  _pShell->DeclareSymbol("persistent user INDEX sam_bOptionTabs;",           &sam_bOptionTabs);
 
   // Initalize other modules
   extern void CECIL_InitLocalCheats(void);
   CECIL_InitLocalCheats();
-
-  // Restore custom symbol values
-  _pShell->Execute("include \"" CUSTOM_SYMBOLS_CONFIG "\";");
-
-  // Ready for registering
-  _bRegisterCommands = TRUE;
 };

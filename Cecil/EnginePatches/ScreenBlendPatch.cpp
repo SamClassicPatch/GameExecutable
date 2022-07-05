@@ -56,5 +56,5 @@ extern void CECIL_ApplyScreenBlendPatch(void) {
   NewPatch(pBlendScreen, &CDrawPortPatch::P_BlendScreen, "CDrawPort::BlendScreen()");
 
   // Custom symbols
-  _pShell->DeclareSymbol("user INDEX sam_bRedScreenOnDamage post:CECIL_RegisterCommand;", &sam_bRedScreenOnDamage);
+  _pShell->DeclareSymbol("persistent user INDEX sam_bRedScreenOnDamage;", &sam_bRedScreenOnDamage);
 };
