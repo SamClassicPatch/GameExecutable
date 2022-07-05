@@ -40,32 +40,21 @@ void CMGHighScore::Render(CDrawPort *pdp) {
   strHighScores[0][5] = TRANS("Score");
 
   {for (INDEX i = 0; i < HIGHSCORE_COUNT; i++) {
-    switch (_pGame->gm_ahseHighScores[i].hse_gdDifficulty) {
-      default:
-        ASSERT(FALSE);
-      case (CSessionProperties::GameDifficulty)-100:
-        strHighScores[i + 1][1] = "---";
-        continue;
-        break;
-      case CSessionProperties::GD_TOURIST:
-        strHighScores[i + 1][2] = TRANS("Tourist");
-        break;
-      case CSessionProperties::GD_EASY:
-        strHighScores[i + 1][2] = TRANS("Easy");
-        break;
-      case CSessionProperties::GD_NORMAL:
-        strHighScores[i + 1][2] = TRANS("Normal");
-        break;
-      case CSessionProperties::GD_HARD:
-        strHighScores[i + 1][2] = TRANS("Hard");
-        break;
-      case CSessionProperties::GD_EXTREME:
-        strHighScores[i + 1][2] = TRANS("Serious");
-        break;
-      case CSessionProperties::GD_EXTREME + 1:
-        strHighScores[i + 1][2] = TRANS("Mental");
-        break;
+    // [Cecil] +1 because Tourist difficulty is -1
+    INDEX iDifficulty = _pGame->gm_ahseHighScores[i].hse_gdDifficulty + 1;
+
+    // [Cecil] Invalid difficulty
+    if (iDifficulty < 0 || iDifficulty >= _pPatchAPI->sp_aGameDifficulties.Count())
+    {
+      ASSERT(FALSE);
+      strHighScores[i + 1][1] = "---";
+      continue;
+
+    } else {
+      // [Cecil] Get difficulty name from the API
+      strHighScores[i + 1][2] = _pPatchAPI->GetDifficultyName(iDifficulty);
     }
+
     strHighScores[i + 1][0].PrintF("%d", i + 1);
     strHighScores[i + 1][1] = _pGame->gm_ahseHighScores[i].hse_strPlayer;
     strHighScores[i + 1][3] = TimeToString(_pGame->gm_ahseHighScores[i].hse_tmTime);

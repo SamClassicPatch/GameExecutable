@@ -317,8 +317,9 @@ void StartNextDemo(void) {
     _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
     _pGame->gm_StartSplitScreenCfg = CGame::SSC_PLAY1;
 
-    _pShell->SetINDEX("gam_iStartDifficulty", CSessionProperties::GD_NORMAL);
-    _pShell->SetINDEX("gam_iStartMode", CSessionProperties::GM_FLYOVER);
+    // [Cecil] Use difficulties and game modes from the API
+    _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(2)); // Normal
+    _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(0)); // Flyover
 
     CUniversalSessionProperties sp;
     _pGame->SetSinglePlayerSession(sp);

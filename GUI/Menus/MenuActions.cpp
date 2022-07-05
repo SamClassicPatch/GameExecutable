@@ -395,38 +395,44 @@ void StartSinglePlayerGame(void) {
 }
 
 static void StartSinglePlayerGame_Tourist(void) {
-  _pShell->SetINDEX("gam_iStartDifficulty", CSessionProperties::GD_TOURIST);
-  _pShell->SetINDEX("gam_iStartMode", CSessionProperties::GM_COOPERATIVE);
+  // [Cecil] Use difficulties and game modes from the API
+  _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(0));
+  _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(1));
   StartSinglePlayerGame();
 }
 
 static void StartSinglePlayerGame_Easy(void) {
-  _pShell->SetINDEX("gam_iStartDifficulty", CSessionProperties::GD_EASY);
-  _pShell->SetINDEX("gam_iStartMode", CSessionProperties::GM_COOPERATIVE);
+  // [Cecil] Use difficulties and game modes from the API
+  _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(1));
+  _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(1));
   StartSinglePlayerGame();
 }
 
 static void StartSinglePlayerGame_Normal(void) {
-  _pShell->SetINDEX("gam_iStartDifficulty", CSessionProperties::GD_NORMAL);
-  _pShell->SetINDEX("gam_iStartMode", CSessionProperties::GM_COOPERATIVE);
+  // [Cecil] Use difficulties and game modes from the API
+  _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(2));
+  _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(1));
   StartSinglePlayerGame();
 }
 
 static void StartSinglePlayerGame_Hard(void) {
-  _pShell->SetINDEX("gam_iStartDifficulty", CSessionProperties::GD_HARD);
-  _pShell->SetINDEX("gam_iStartMode", CSessionProperties::GM_COOPERATIVE);
+  // [Cecil] Use difficulties and game modes from the API
+  _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(3));
+  _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(1));
   StartSinglePlayerGame();
 }
 
 static void StartSinglePlayerGame_Serious(void) {
-  _pShell->SetINDEX("gam_iStartDifficulty", CSessionProperties::GD_EXTREME);
-  _pShell->SetINDEX("gam_iStartMode", CSessionProperties::GM_COOPERATIVE);
+  // [Cecil] Use difficulties and game modes from the API
+  _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(4));
+  _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(1));
   StartSinglePlayerGame();
 }
 
 static void StartSinglePlayerGame_Mental(void) {
-  _pShell->SetINDEX("gam_iStartDifficulty", CSessionProperties::GD_EXTREME + 1);
-  _pShell->SetINDEX("gam_iStartMode", CSessionProperties::GM_COOPERATIVE);
+  // [Cecil] Use difficulties and game modes from the API
+  _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(5));
+  _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(1));
   StartSinglePlayerGame();
 }
 

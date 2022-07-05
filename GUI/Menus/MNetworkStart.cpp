@@ -104,7 +104,7 @@ void CNetworkStartMenu::StartMenu(void) {
   gm_mgDifficulty.mg_iSelected = _pShell->GetINDEX("gam_iStartDifficulty") + 1;
   gm_mgDifficulty.ApplyCurrentSelection();
 
-  _pShell->SetINDEX("gam_iStartMode", CSessionProperties::GM_COOPERATIVE);
+  _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(1)); // [Cecil] API
 
   INDEX ctMaxPlayers = _pShell->GetINDEX("gam_ctMaxPlayers");
   if (ctMaxPlayers < 2 || ctMaxPlayers > 16) {

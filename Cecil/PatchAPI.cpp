@@ -72,6 +72,20 @@ CPatchAPI::CPatchAPI() {
 
   strVersion = "1.1.2";
 
+  // Session properties game modes used by the patch
+  sp_aiGameModes.New(2);
+  sp_aiGameModes[0] = -1; // Flyover
+  sp_aiGameModes[1] =  0; // Cooperative
+  
+  // Session properties difficulties used by the patch
+  sp_aGameDifficulties.New(6);
+  sp_aGameDifficulties[0] = Difficulty(-1, "Tourist");
+  sp_aGameDifficulties[1] = Difficulty( 0, "Easy");
+  sp_aGameDifficulties[2] = Difficulty( 1, "Normal");
+  sp_aGameDifficulties[3] = Difficulty( 2, "Hard");
+  sp_aGameDifficulties[4] = Difficulty( 3, "Serious");
+  sp_aGameDifficulties[5] = Difficulty( 4, "Mental");
+
   // Output patcher actions
   if (FileExists(_fnmApplicationExe.FileDir() + "PatcherOutput")) {
     Patch_DebugOutput() = true;

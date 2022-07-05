@@ -54,14 +54,50 @@ class CPatchAPI {
       NP_CLIENT,
     };
 
+    // Difficuties for CSessionProperties
+    struct Difficulty {
+      INDEX iIndex;
+      CTString strName;
+
+      // Default constructor
+      Difficulty() : iIndex(0), strName("")
+      {
+      };
+
+      // Constructor with an index and a translated name
+      Difficulty(INDEX iSetIndex, const char *strSetName) :
+        iIndex(iSetIndex), strName(TranslateConst(strSetName))
+      {
+      };
+    };
+
   public:
     CTString strVersion; // Patch version
     CStaticStackArray<SFuncPatch> aPatches; // Function patch storage
+
+    // Session properties
+    CStaticArray<INDEX> sp_aiGameModes; // Game mode indices
+    CStaticArray<Difficulty> sp_aGameDifficulties; // Game difficulties
 
   // Declared but undefined methods cannot be used outside the EXE patch project
   public:
     // Constructor
     CPatchAPI();
+
+    // Get game mode index
+    INDEX GetGameMode(INDEX i) {
+      return sp_aiGameModes[i];
+    };
+
+    // Get game difficulty index
+    INDEX GetDifficultyIndex(INDEX i) {
+      return sp_aGameDifficulties[i].iIndex;
+    };
+
+    // Get game difficulty name
+    const CTString &GetDifficultyName(INDEX i) {
+      return sp_aGameDifficulties[i].strName;
+    };
 
   // CGame field wrappers
   public:
