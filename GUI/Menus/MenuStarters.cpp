@@ -231,9 +231,12 @@ void StartSplitScreenGame(void) {
   CTFileName fnWorld = _pPatchAPI->GetCustomLevel();
 
   _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
-  CUniversalSessionProperties sp;
-  _pGame->SetMultiPlayerSession(sp);
-  if (_pGame->NewGame(fnWorld.FileName(), fnWorld, sp)) {
+
+  // [Cecil] Pass byte container
+  CSesPropsContainer sp;
+  _pGame->SetMultiPlayerSession((CSessionProperties &)sp);
+
+  if (_pGame->NewGame(fnWorld.FileName(), fnWorld, (CSessionProperties &)sp)) {
     StopMenus();
     _gmRunningGameMode = GM_SPLIT_SCREEN;
   } else {
@@ -253,9 +256,12 @@ void StartNetworkGame(void) {
   CTFileName fnWorld = _pPatchAPI->GetCustomLevel();
 
   _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_SERVER);
-  CUniversalSessionProperties sp;
-  _pGame->SetMultiPlayerSession(sp);
-  if (_pGame->NewGame(_pPatchAPI->GetSessionName(), fnWorld, sp)) {
+  
+  // [Cecil] Pass byte container
+  CSesPropsContainer sp;
+  _pGame->SetMultiPlayerSession((CSessionProperties &)sp);
+
+  if (_pGame->NewGame(_pPatchAPI->GetSessionName(), fnWorld, (CSessionProperties &)sp)) {
     StopMenus();
     _gmRunningGameMode = GM_NETWORK;
     // if starting a dedicated server

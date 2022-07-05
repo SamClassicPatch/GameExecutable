@@ -321,12 +321,13 @@ void StartNextDemo(void) {
     _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(2)); // Normal
     _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(0)); // Flyover
 
-    CUniversalSessionProperties sp;
-    _pGame->SetSinglePlayerSession(sp);
+    // [Cecil] Pass byte container
+    CSesPropsContainer sp;
+    _pGame->SetSinglePlayerSession((CSessionProperties &)sp);
 
     _pPatchAPI->SetFirstLoading(TRUE);
 
-    if (_pGame->NewGame(sam_strIntroLevel, sam_strIntroLevel, sp)) {
+    if (_pGame->NewGame(sam_strIntroLevel, sam_strIntroLevel, (CSessionProperties &)sp)) {
       _gmRunningGameMode = GM_INTRO;
     }
 

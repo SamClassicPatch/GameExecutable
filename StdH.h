@@ -44,3 +44,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // [Cecil] Query manager
 #include "Query/QueryMgr.h"
+
+// [Cecil] CSessionProperties byte container (replacement for CUniversalSessionProperties)
+typedef UBYTE CSesPropsContainer[NET_MAXSESSIONPROPERTIES];

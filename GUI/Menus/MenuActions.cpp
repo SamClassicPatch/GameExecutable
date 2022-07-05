@@ -383,10 +383,12 @@ void StartSinglePlayerGame(void) {
   _pGame->gm_aiStartLocalPlayers[3] = -1;
 
   _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
-  CUniversalSessionProperties sp;
-  _pGame->SetSinglePlayerSession(sp);
 
-  if (_pGame->NewGame(_pPatchAPI->GetCustomLevel(), _pPatchAPI->GetCustomLevel(), sp)) {
+  // [Cecil] Pass byte container
+  CSesPropsContainer sp;
+  _pGame->SetSinglePlayerSession((CSessionProperties &)sp);
+
+  if (_pGame->NewGame(_pPatchAPI->GetCustomLevel(), _pPatchAPI->GetCustomLevel(), (CSessionProperties &)sp)) {
     StopMenus();
     _gmRunningGameMode = GM_SINGLE_PLAYER;
   } else {
