@@ -88,8 +88,6 @@ static void SetQuickLoadNotes(void) {
   }
 }
 
-extern CTString sam_strFirstLevel;
-
 void StartSinglePlayerNewMenu(void) {
   CSinglePlayerNewMenu &gmCurrent = _pGUIM->gmSinglePlayerNewMenu;
 

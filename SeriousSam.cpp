@@ -116,31 +116,17 @@ extern CTextureObject *_ptoLogoCT = NULL;
 extern CTextureObject *_ptoLogoODI = NULL;
 extern CTextureObject *_ptoLogoEAX = NULL;
 
+CTString sam_strVersion = _SE_VER_STRING; // [Cecil] Use version string
+
 // [Cecil] The First Encounter
 #ifdef SE1_TFE
-
-extern CTString sam_strVersion = "1.05";
-extern CTString sam_strModName = TRANS("-   T H E   F I R S T   E N C O U N T E R   -");
-
-extern CTString sam_strFirstLevel = "Levels\\01_Hatshepsut.wld";
-extern CTString sam_strIntroLevel = "Levels\\Intro.wld";
-extern CTString sam_strGameName = "serioussam";
-
-extern CTString sam_strTechTestLevel = "Levels\\TechTest.wld";
-extern CTString sam_strTrainingLevel = "Levels\\KarnakDemo.wld";
-
+  CTString sam_strModName = TRANS("-   T H E   F I R S T   E N C O U N T E R   -");
+  CTString sam_strTechTestLevel = "Levels\\TechTest.wld";
+  CTString sam_strTrainingLevel = "Levels\\KarnakDemo.wld";
 #else
-
-extern CTString sam_strVersion = (SE1_VER == 105 ? "1.05" : "1.07"); // [Cecil] Different versions
-extern CTString sam_strModName = TRANS("-   T H E   S E C O N D   E N C O U N T E R   -");
-
-extern CTString sam_strFirstLevel = "Levels\\LevelsMP\\1_0_InTheLastEpisode.wld";
-extern CTString sam_strIntroLevel = "Levels\\LevelsMP\\Intro.wld";
-extern CTString sam_strGameName = "serioussamse";
-
-extern CTString sam_strTechTestLevel = "Levels\\LevelsMP\\TechTest.wld";
-extern CTString sam_strTrainingLevel = "Levels\\KarnakDemo.wld";
-
+  CTString sam_strModName = TRANS("-   T H E   S E C O N D   E N C O U N T E R   -");
+  CTString sam_strTechTestLevel = "Levels\\LevelsMP\\TechTest.wld";
+  CTString sam_strTrainingLevel = "Levels\\KarnakDemo.wld";
 #endif
 
 ENGINE_API extern INDEX snd_iFormat;
@@ -509,10 +495,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _pShell->DeclareSymbol("persistent user INDEX sam_bPauseOnMinimize;", &sam_bPauseOnMinimize);
   _pShell->DeclareSymbol("persistent user FLOAT sam_tmDisplayModeReport;",   &sam_tmDisplayModeReport);
   _pShell->DeclareSymbol("persistent user CTString sam_strNetworkSettings;", &sam_strNetworkSettings);
-  _pShell->DeclareSymbol("persistent user CTString sam_strIntroLevel;",      &sam_strIntroLevel);
-  _pShell->DeclareSymbol("persistent user CTString sam_strGameName;",      &sam_strGameName);
   _pShell->DeclareSymbol("user CTString sam_strVersion;",    &sam_strVersion);
-  _pShell->DeclareSymbol("user CTString sam_strFirstLevel;", &sam_strFirstLevel);
   _pShell->DeclareSymbol("user CTString sam_strModName;", &sam_strModName);
   _pShell->DeclareSymbol("persistent INDEX sam_bShowAllLevels;", &sam_bShowAllLevels);
   _pShell->DeclareSymbol("persistent INDEX sam_bMentalActivated;", &sam_bMentalActivated);

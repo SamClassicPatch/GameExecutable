@@ -291,8 +291,6 @@ void LoadDemosList(void) {
   _lhAutoDemos.Sort(qsort_CompareDemos, offsetof(CLevelInfo, li_lnNode));
 
   // add the intro to the start
-  extern CTString sam_strIntroLevel;
-
   if (sam_strIntroLevel != "") {
     CLevelInfo *pli = new CLevelInfo;
     pli->li_fnLevel = sam_strIntroLevel;
