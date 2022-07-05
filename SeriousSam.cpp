@@ -37,8 +37,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // [Cecil] Don't listen to in-game sounds
 extern BOOL _bNoListening;
 
-extern CGame *_pGame = NULL;
-
 // Application state variables
 extern BOOL _bRunning = TRUE;
 extern BOOL _bQuitScreen = TRUE;

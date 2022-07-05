@@ -255,9 +255,6 @@
     <ClCompile Include="Cecil\Node.cpp">
       <Filter>Source Files\Cecil</Filter>
     </ClCompile>
-    <ClCompile Include="Cecil\PatchAPI.cpp">
-      <Filter>Source Files\Cecil</Filter>
-    </ClCompile>
     <ClCompile Include="Cecil\EnginePatches\FOVPatch.cpp">
       <Filter>Source Files\Cecil\EnginePatches</Filter>
     </ClCompile>
@@ -476,9 +473,6 @@
     <ClInclude Include="Cecil\CecilExtensions.h">
       <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>
-    <ClInclude Include="Cecil\EnginePatches\Patches.h">
-      <Filter>Header Files\Cecil headers</Filter>
-    </ClInclude>
     <ClInclude Include="Cecil\WorldEntities.h">
       <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>
@@ -486,9 +480,6 @@
       <Filter>Header Files\Query headers</Filter>
     </ClInclude>
     <ClInclude Include="Cecil\Node.h">
-      <Filter>Header Files\Cecil headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Cecil\PatchAPI.h">
       <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>
   </ItemGroup>
