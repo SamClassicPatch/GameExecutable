@@ -29,6 +29,3 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // [Cecil] Extra functionality
 #include "Cecil/CecilExtensions.h"
-
-// [Cecil] CSessionProperties byte container (replacement for CUniversalSessionProperties)
-typedef UBYTE CSesPropsContainer[NET_MAXSESSIONPROPERTIES];
