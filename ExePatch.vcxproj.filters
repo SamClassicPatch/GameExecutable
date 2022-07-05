@@ -234,9 +234,6 @@
     <ClCompile Include="Cecil\EnginePatches\FOVPatch.cpp">
       <Filter>Source Files\Cecil\EnginePatches</Filter>
     </ClCompile>
-    <ClCompile Include="Cecil\EnginePatches\MasterServerPatch.cpp">
-      <Filter>Source Files\Cecil\EnginePatches</Filter>
-    </ClCompile>
     <ClCompile Include="Cecil\EnginePatches\ScreenBlendPatch.cpp">
       <Filter>Source Files\Cecil\EnginePatches</Filter>
     </ClCompile>

@@ -264,7 +264,6 @@
   <ItemGroup>
     <ClCompile Include="Cecil\CecilExtensions.cpp" />
     <ClCompile Include="Cecil\EnginePatches\FOVPatch.cpp" />
-    <ClCompile Include="Cecil\EnginePatches\MasterServerPatch.cpp" />
     <ClCompile Include="Cecil\LocalCheats.cpp" />
     <ClCompile Include="Cecil\Node.cpp" />
     <ClCompile Include="Cecil\EnginePatches\ScreenBlendPatch.cpp" />
