@@ -126,30 +126,13 @@ static void CECIL_RegisterCommand(void *pCommand) {
   }
 };
 
-// Display information about the patched executable
-static void PatchInfo(void) {
-  static CTString strInfo =
-    "\n ------ Serious Sam Classic Patch ------"
-    "\ngithub.com/SamClassicPatch/GameExecutable"
-    "\n"
-    "\n- Engine version: " _SE_VER_STRING
-    "\n- EXE patch version: "
-    + _pPatchAPI->strVersion
-    + "\n\n(c) Dreamy Cecil, 2022\n";
-
-  CPutString(strInfo);
-};
-
 // Custom initialization
 void CECIL_Init(void) {
-  // Initialize executable patch API
-  _pPatchAPI = new CPatchAPI();
-
   // Command registry
   _pShell->DeclareSymbol("void CECIL_RegisterCommand(INDEX);", &CECIL_RegisterCommand);
 
-  // Information about the patched executable
-  _pShell->DeclareSymbol("user void PatchInfo(void);", &PatchInfo);
+  // Initialize the core
+  CECIL_InitCore();
 
   {
     CPrintF("Intercepting Engine functions:\n");
