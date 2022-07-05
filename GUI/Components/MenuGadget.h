@@ -22,7 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 
 // [Cecil] Nodes
-#include "Cecil/Node.h"
+#include <CoreLib/Objects/Node.h>
 
 #define DOING_NOTHING 0
 #define PRESS_KEY_WAITING 1

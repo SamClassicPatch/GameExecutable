@@ -20,7 +20,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #endif
 
 // [Cecil] Nodes
-#include "Cecil/Node.h"
+#include <CoreLib/Objects/Node.h>
 
 class CGameMenu : public CNode {
   public:

@@ -228,9 +228,6 @@
     <ClCompile Include="Cecil\WorldEntities.cpp">
       <Filter>Source Files\Cecil</Filter>
     </ClCompile>
-    <ClCompile Include="Cecil\Node.cpp">
-      <Filter>Source Files\Cecil</Filter>
-    </ClCompile>
     <ClCompile Include="Cecil\EnginePatches\FOVPatch.cpp">
       <Filter>Source Files\Cecil\EnginePatches</Filter>
     </ClCompile>
@@ -447,9 +444,6 @@
       <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>
     <ClInclude Include="Cecil\WorldEntities.h">
-      <Filter>Header Files\Cecil headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Cecil\Node.h">
       <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>
   </ItemGroup>
