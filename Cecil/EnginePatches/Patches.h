@@ -20,8 +20,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   #pragma once
 #endif
 
-#include "../Patcher/patcher.h"
-
 // Patcher debug output
 bool &Patch_DebugOutput(void);
 

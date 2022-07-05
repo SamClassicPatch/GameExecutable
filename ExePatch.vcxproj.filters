@@ -37,12 +37,6 @@
     <Filter Include="Source Files\Cecil">
       <UniqueIdentifier>{f3b4b78b-e168-48da-928c-031f95f47855}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Patcher">
-      <UniqueIdentifier>{181edca3-5952-45ba-b055-01af692a8399}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Patcher headers">
-      <UniqueIdentifier>{f30c8131-e638-400e-82f1-f9b8edb8bd54}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Query">
       <UniqueIdentifier>{c89000eb-ae80-4737-a805-8fd1209852d9}</UniqueIdentifier>
     </Filter>
@@ -236,9 +230,6 @@
     </ClCompile>
     <ClCompile Include="Cecil\CecilExtensions.cpp">
       <Filter>Source Files\Cecil</Filter>
-    </ClCompile>
-    <ClCompile Include="Cecil\Patcher\patcher.cpp">
-      <Filter>Source Files\Patcher</Filter>
     </ClCompile>
     <ClCompile Include="Cecil\WorldEntities.cpp">
       <Filter>Source Files\Cecil</Filter>
@@ -484,12 +475,6 @@
     </ClInclude>
     <ClInclude Include="Cecil\CecilExtensions.h">
       <Filter>Header Files\Cecil headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Cecil\Patcher\patcher.h">
-      <Filter>Header Files\Patcher headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Cecil\Patcher\patcher_defines.h">
-      <Filter>Header Files\Patcher headers</Filter>
     </ClInclude>
     <ClInclude Include="Cecil\EnginePatches\Patches.h">
       <Filter>Header Files\Cecil headers</Filter>

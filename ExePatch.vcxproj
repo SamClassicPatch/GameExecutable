@@ -268,7 +268,6 @@
     <ClCompile Include="Cecil\LocalCheats.cpp" />
     <ClCompile Include="Cecil\Node.cpp" />
     <ClCompile Include="Cecil\PatchAPI.cpp" />
-    <ClCompile Include="Cecil\Patcher\patcher.cpp" />
     <ClCompile Include="Cecil\EnginePatches\ScreenBlendPatch.cpp" />
     <ClCompile Include="Cecil\ScreenResolutions.cpp" />
     <ClCompile Include="Cecil\EnginePatches\SoundListenPatch.cpp" />
@@ -331,8 +330,6 @@
     <ClInclude Include="Cecil\CecilExtensions.h" />
     <ClInclude Include="Cecil\Node.h" />
     <ClInclude Include="Cecil\PatchAPI.h" />
-    <ClInclude Include="Cecil\Patcher\patcher.h" />
-    <ClInclude Include="Cecil\Patcher\patcher_defines.h" />
     <ClInclude Include="Cecil\EnginePatches\Patches.h" />
     <ClInclude Include="Cecil\ScreenResolutions.h" />
     <ClInclude Include="Cecil\WindowModes.h" />
