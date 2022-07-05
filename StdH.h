@@ -20,15 +20,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <Engine/Base/KeyNames.h>
 #include <LCDDrawing.h> // [Cecil] Use local instead of Game's
 
-// [Cecil] Choose value based on configuration
-#ifdef SE1_TFE
-  #define CHOOSE_FOR_GAME(_TFE105, _TSE105, _TSE107) _TFE105
-#elif SE1_VER == 105
-  #define CHOOSE_FOR_GAME(_TFE105, _TSE105, _TSE107) _TSE105
-#else
-  #define CHOOSE_FOR_GAME(_TFE105, _TSE105, _TSE107) _TSE107
-#endif
-
 // Main game headers
 #include "SeriousSam.h"
 #include "GUI/Menus/Menu.h"
@@ -38,9 +29,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // [Cecil] Extra functionality
 #include "Cecil/CecilExtensions.h"
-
-// [Cecil] Query manager
-#include "Query/QueryMgr.h"
 
 // [Cecil] CSessionProperties byte container (replacement for CUniversalSessionProperties)
 typedef UBYTE CSesPropsContainer[NET_MAXSESSIONPROPERTIES];
