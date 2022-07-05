@@ -13,14 +13,11 @@ You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
 
-#include <Engine/Engine.h>
-#include <Engine/Templates/Stock_CTextureData.h>
-#include <Engine/Templates/Stock_CModelData.h>
-#include <Game/Game.h>
+// [Cecil] Include the core library
+#include <CoreLib/Core.h>
 
 // [Cecil] Moved from many individual files
 #include <Engine/Base/KeyNames.h>
-#include <Engine/CurrentVersion.h>
 #include <LCDDrawing.h> // [Cecil] Use local instead of Game's
 
 // [Cecil] Choose value based on configuration

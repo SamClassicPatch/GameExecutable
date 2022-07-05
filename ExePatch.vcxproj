@@ -64,8 +64,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TSE107|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/;$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine107/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)../CoreLib/Includes/Engine107/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)../;$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine107/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)../CoreLib/Bin/$(Configuration);$(ProjectDir)../CoreLib/Includes/Engine107/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
     <OutDir>$(ProjectDir)Bin\</OutDir>
@@ -74,8 +74,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE107|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/;$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine107/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)../CoreLib/Includes/Engine107/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)../;$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine107/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)../CoreLib/Bin/$(Configuration);$(ProjectDir)../CoreLib/Includes/Engine107/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
     <OutDir>$(ProjectDir)Bin\</OutDir>
@@ -84,8 +84,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/;$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine105/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)../CoreLib/Includes/Engine105/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)../;$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine105/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)../CoreLib/Bin/$(Configuration);$(ProjectDir)../CoreLib/Includes/Engine105/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
     <OutDir>$(ProjectDir)Bin\</OutDir>
@@ -94,8 +94,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(ProjectDir)../CoreLib/;$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine105FE/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)../CoreLib/Includes/Engine105FE/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir);$(ProjectDir)../;$(ProjectDir)../CoreLib/Includes/;$(ProjectDir)../CoreLib/Includes/Engine105FE/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)../CoreLib/Bin/$(Configuration);$(ProjectDir)../CoreLib/Includes/Engine105FE/;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
     <OutDir>$(ProjectDir)Bin\</OutDir>
@@ -119,7 +119,6 @@
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <TypeLibraryName>.\Debug\SeriousSam.tlb</TypeLibraryName>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <RedirectOutputAndErrors>NUL</RedirectOutputAndErrors>
       <TargetEnvironment>Win32</TargetEnvironment>
@@ -160,7 +159,6 @@
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <TypeLibraryName>.\Release\SeriousSam.tlb</TypeLibraryName>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <RedirectOutputAndErrors>NUL</RedirectOutputAndErrors>
       <TargetEnvironment>Win32</TargetEnvironment>
@@ -201,7 +199,6 @@
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <TypeLibraryName>.\Release\SeriousSam.tlb</TypeLibraryName>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <RedirectOutputAndErrors>NUL</RedirectOutputAndErrors>
       <TargetEnvironment>Win32</TargetEnvironment>
@@ -242,7 +239,6 @@
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <TypeLibraryName>.\Release\SeriousSam.tlb</TypeLibraryName>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <RedirectOutputAndErrors>NUL</RedirectOutputAndErrors>
       <TargetEnvironment>Win32</TargetEnvironment>
