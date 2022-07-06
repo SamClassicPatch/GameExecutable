@@ -390,50 +390,6 @@ void LoadAndForceTexture(CTextureObject &to, CTextureObject *&pto, const CTFileN
   }
 }
 
-void InitializeGame(void) {
-  try {
-    // [Cecil] Construct game library name for games
-    CTString strGameLib = _fnmApplicationExe.FileDir() + "Game";
-
-    // Append mod extension for TSE
-    #ifndef SE1_TFE
-      strGameLib += _strModExt;
-    #endif
-
-    // Debug library
-    #ifdef _DEBUG
-      strGameLib += "D";
-    #endif
-
-    // Library extension
-    strGameLib += ".dll";
-
-    CTFileName fnmExpanded;
-    ExpandFilePath(EFP_READ, strGameLib, fnmExpanded);
-
-    CPrintF(TRANS("Loading game library '%s'...\n"), (const char *)fnmExpanded);
-    HMODULE hGame = LoadLibraryA(fnmExpanded);
-
-    if (hGame == NULL) {
-      ThrowF_t("Cannot load Game library:\n%s", GetWindowsError(GetLastError()));
-    }
-
-    CGame *(*GAME_Create)(void) = (CGame * (*)(void)) GetProcAddress(hGame, "GAME_Create");
-
-    if (GAME_Create == NULL) {
-      ThrowF_t("Cannot create Game library:\n%s", GetWindowsError(GetLastError()));
-    }
-
-    _pGame = GAME_Create();
-
-  } catch (char *strError) {
-    FatalError("%s", strError);
-  }
-
-  // init game - this will load persistent symbols
-  _pGame->Initialize(CTString("Data\\SeriousSam.gms"));
-}
-
 BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _hInstance = hInstance;
   ShowSplashScreen(hInstance);
@@ -517,7 +473,9 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _pShell->DeclareSymbol("user INDEX sam_bToggleConsole;",&sam_bToggleConsole);
   _pShell->DeclareSymbol("INDEX sam_iStartCredits;", &sam_iStartCredits);
 
-  InitializeGame();
+  // [Cecil] Load Game library as a module
+  CECIL_LoadGameLib();
+
   _pNetwork->md_strGameID = sam_strGameName;
 
   LCDInit();
