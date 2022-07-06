@@ -438,7 +438,7 @@ BOOL CMGServerList::OnKeyDown(int iVKey) {
             char strAddress[256];
             int iPort;
             itns->ns_strAddress.ScanF("%200[^:]:%d", &strAddress, &iPort);
-            _pPatchAPI->GetJoinAddress() = strAddress;
+            GetGameAPI()->GetJoinAddress() = strAddress;
             _pShell->SetINDEX("net_iPort", iPort);
             extern void StartSelectPlayersMenuFromServers(void);
             StartSelectPlayersMenuFromServers();

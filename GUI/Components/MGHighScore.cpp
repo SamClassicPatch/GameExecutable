@@ -44,7 +44,7 @@ void CMGHighScore::Render(CDrawPort *pdp) {
     INDEX iDifficulty = _pGame->gm_ahseHighScores[i].hse_gdDifficulty + 1;
 
     // [Cecil] Invalid difficulty
-    if (iDifficulty < 0 || iDifficulty >= _pPatchAPI->sp_aGameDifficulties.Count())
+    if (iDifficulty < 0 || iDifficulty >= GetGameAPI()->sp_aGameDifficulties.Count())
     {
       ASSERT(FALSE);
       strHighScores[i + 1][1] = "---";
@@ -52,7 +52,7 @@ void CMGHighScore::Render(CDrawPort *pdp) {
 
     } else {
       // [Cecil] Get difficulty name from the API
-      strHighScores[i + 1][2] = _pPatchAPI->GetDifficultyName(iDifficulty);
+      strHighScores[i + 1][2] = GetGameAPI()->GetDifficultyName(iDifficulty);
     }
 
     strHighScores[i + 1][0].PrintF("%d", i + 1);

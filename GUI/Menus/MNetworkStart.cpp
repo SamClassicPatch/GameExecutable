@@ -28,10 +28,10 @@ void CNetworkStartMenu::Initialize_t(void) {
   AddChild(&gm_mgTitle);
 
   // session name edit box
-  gm_mgSessionName.SetText(_pPatchAPI->GetSessionName());
+  gm_mgSessionName.SetText(GetGameAPI()->GetSessionName());
   gm_mgSessionName.SetName(TRANS("Session name:"));
   gm_mgSessionName.mg_ctMaxStringLen = 25;
-  gm_mgSessionName.mg_pstrToChange = &_pPatchAPI->GetSessionName();
+  gm_mgSessionName.mg_pstrToChange = &GetGameAPI()->GetSessionName();
   gm_mgSessionName.mg_boxOnScreen = BoxMediumRow(1);
   gm_mgSessionName.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgSessionName.mg_iCenterI = -1;
@@ -104,7 +104,7 @@ void CNetworkStartMenu::StartMenu(void) {
   gm_mgDifficulty.mg_iSelected = _pShell->GetINDEX("gam_iStartDifficulty") + 1;
   gm_mgDifficulty.ApplyCurrentSelection();
 
-  _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(1)); // [Cecil] API
+  _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1)); // [Cecil] API
 
   INDEX ctMaxPlayers = _pShell->GetINDEX("gam_ctMaxPlayers");
   if (ctMaxPlayers < 2 || ctMaxPlayers > 16) {

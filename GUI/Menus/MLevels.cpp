@@ -107,7 +107,7 @@ void CLevelsMenu::StartMenu(void) {
   FOREACHINLIST(CLevelInfo, li_lnNode, _lhFilteredLevels, itlid) {
     CLevelInfo &lid = *itlid;
     // if it is the chosen one
-    if (lid.li_fnLevel == _pPatchAPI->GetCustomLevel()) {
+    if (lid.li_fnLevel == GetGameAPI()->GetCustomLevel()) {
       // demand focus on it
       gm_iListWantedItem = i;
       break;

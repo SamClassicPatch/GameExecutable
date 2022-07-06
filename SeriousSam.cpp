@@ -209,8 +209,8 @@ void UpdateInputEnabledState(void) {
 
   // input should be enabled if application is active
   // and no menu is active and no console is active
-  BOOL bShouldBeEnabled = (!IsIconic(_hwndMain) && !bMenuActive && _pPatchAPI->GetConState() == CS_OFF
-                       && (_pPatchAPI->GetCompState() == CS_OFF || _pPatchAPI->GetCompState() == CS_ONINBACKGROUND))
+  BOOL bShouldBeEnabled = (!IsIconic(_hwndMain) && !bMenuActive && GetGameAPI()->GetConState() == CS_OFF
+                       && (GetGameAPI()->GetCompState() == CS_OFF || GetGameAPI()->GetCompState() == CS_ONINBACKGROUND))
                        || _bDefiningKey;
 
   // if should be turned off
@@ -233,8 +233,8 @@ void UpdateInputEnabledState(void) {
 // Automaticaly manage pause toggling
 void UpdatePauseState(void) {
   // [Cecil] Get states
-  const INDEX iConState = _pPatchAPI->GetConState();
-  const INDEX iCompState = _pPatchAPI->GetCompState();
+  const INDEX iConState = GetGameAPI()->GetConState();
+  const INDEX iCompState = GetGameAPI()->GetCompState();
 
   BOOL bShouldPause = (_gmRunningGameMode == GM_SINGLE_PLAYER) && (bMenuActive ||
                        iConState  == CS_ON || iConState  == CS_TURNINGON || iConState  == CS_TURNINGOFF ||
@@ -298,18 +298,18 @@ void StartNextDemo(void) {
     _pGame->gm_aiStartLocalPlayers[1] = -1;
     _pGame->gm_aiStartLocalPlayers[2] = -1;
     _pGame->gm_aiStartLocalPlayers[3] = -1;
-    _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
+    GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
     _pGame->gm_StartSplitScreenCfg = CGame::SSC_PLAY1;
 
     // [Cecil] Use difficulties and game modes from the API
-    _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(2)); // Normal
-    _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(0)); // Flyover
+    _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(2)); // Normal
+    _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(0)); // Flyover
 
     // [Cecil] Pass byte container
     CSesPropsContainer sp;
     _pGame->SetSinglePlayerSession((CSessionProperties &)sp);
 
-    _pPatchAPI->SetFirstLoading(TRUE);
+    GetGameAPI()->SetFirstLoading(TRUE);
 
     if (_pGame->NewGame(sam_strIntroLevel, sam_strIntroLevel, (CSessionProperties &)sp)) {
       _gmRunningGameMode = GM_INTRO;
@@ -325,7 +325,7 @@ void StartNextDemo(void) {
     _pGame->gm_aiStartLocalPlayers[3] = -1;
 
     // play the demo
-    _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
+    GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
     _gmRunningGameMode = GM_NONE;
 
     if (_pGame->StartDemoPlay(pli->li_fnLevel)) {
@@ -558,7 +558,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
     CPrintF(TRANS("Command line connection: '%s%s'\n"), cmd_strServer, strPort);
 
     // go to join menu
-    _pPatchAPI->GetJoinAddress() = cmd_strServer;
+    GetGameAPI()->GetJoinAddress() = cmd_strServer;
 
     if (cmd_bQuickJoin) {
       extern void JoinNetworkGame(void);
@@ -581,7 +581,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
         _pShell->Execute(strCommand);
       }
 
-      _pPatchAPI->GetCustomLevel() = cmd_strWorld;
+      GetGameAPI()->GetCustomLevel() = cmd_strWorld;
 
       if (cmd_bServer) {
         extern void StartNetworkGame(void);
@@ -694,7 +694,7 @@ void PrintDisplayModeInfo(void) {
 // Do the main game loop and render screen
 void DoGame(void) {
   // set flag if not in game
-  if (!_pPatchAPI->GetGameState()) {
+  if (!GetGameAPI()->GetGameState()) {
     _gmRunningGameMode = GM_NONE;
   }
 
@@ -756,7 +756,7 @@ void DoGame(void) {
 
       // handle pretouching of textures and shadowmaps
       pdp->Unlock();
-      _pGame->GameRedrawView(pdp, (_pPatchAPI->GetConState() != CS_OFF) ? 0 : GRV_SHOWEXTRAS);
+      _pGame->GameRedrawView(pdp, (GetGameAPI()->GetConState() != CS_OFF) ? 0 : GRV_SHOWEXTRAS);
 
       pdp->Lock();
       _pGame->ComputerRender(pdp);
@@ -899,8 +899,8 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
   // initialy, application is running and active, console and menu are off
   _bRunning = TRUE;
   _bQuitScreen = TRUE;
-  _pPatchAPI->SetConState(CS_OFF);
-  _pPatchAPI->SetCompState(CS_OFF);
+  GetGameAPI()->SetConState(CS_OFF);
+  GetGameAPI()->SetCompState(CS_OFF);
 
   //bMenuActive    = FALSE;
   //bMenuRendering = FALSE;
@@ -1036,22 +1036,22 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         _gmRunningGameMode = GM_NONE;
       }
 
-      if (_pPatchAPI->GetConState() == CS_TALK && msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE) {
-        _pPatchAPI->SetConState(CS_OFF);
+      if (GetGameAPI()->GetConState() == CS_TALK && msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE) {
+        GetGameAPI()->SetConState(CS_OFF);
         msg.message = WM_NULL;
       }
 
       BOOL bMenuForced = (_gmRunningGameMode == GM_NONE &&
-        (_pPatchAPI->GetConState() == CS_OFF || _pPatchAPI->GetConState() == CS_TURNINGOFF));
+        (GetGameAPI()->GetConState() == CS_OFF || GetGameAPI()->GetConState() == CS_TURNINGOFF));
       BOOL bMenuToggle = (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE
-        && (_pPatchAPI->GetCompState() == CS_OFF || _pPatchAPI->GetCompState() == CS_ONINBACKGROUND));
+        && (GetGameAPI()->GetCompState() == CS_OFF || GetGameAPI()->GetCompState() == CS_ONINBACKGROUND));
 
       if (!bMenuActive) {
         if (bMenuForced || bMenuToggle) {
           // if console is active
-          if (_pPatchAPI->GetConState() == CS_ON || _pPatchAPI->GetConState() == CS_TURNINGON) {
+          if (GetGameAPI()->GetConState() == CS_ON || GetGameAPI()->GetConState() == CS_TURNINGON) {
             // deactivate it
-            _pPatchAPI->SetConState(CS_TURNINGOFF);
+            GetGameAPI()->SetConState(CS_TURNINGOFF);
             _iAddonExecState = 0;
           }
 
@@ -1070,7 +1070,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
       }
 
       // if neither menu nor console is running
-      if (!bMenuActive && (_pPatchAPI->GetConState() == CS_OFF || _pPatchAPI->GetConState() == CS_TURNINGOFF)) {
+      if (!bMenuActive && (GetGameAPI()->GetConState() == CS_OFF || GetGameAPI()->GetConState() == CS_TURNINGOFF)) {
         // if current menu is not root
         if (!IsMenusInRoot()) {
           // start current menu
@@ -1103,14 +1103,14 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         if (msg.message == WM_KEYDOWN) {
           _pGame->ConsoleKeyDown(msg);
 
-          if (_pPatchAPI->GetConState() != CS_ON) {
+          if (GetGameAPI()->GetConState() != CS_ON) {
             _pGame->ComputerKeyDown(msg);
           }
 
         } else if (msg.message == WM_KEYUP) {
           // special handler for talk (not to invoke return key bind)
-          if (msg.wParam == VK_RETURN && _pPatchAPI->GetConState() == CS_TALK) {
-            _pPatchAPI->SetConState(CS_OFF);
+          if (msg.wParam == VK_RETURN && GetGameAPI()->GetConState() == CS_TALK) {
+            GetGameAPI()->SetConState(CS_OFF);
           }
 
         } else if (msg.message == WM_CHAR) {
@@ -1123,7 +1123,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
          || msg.message == WM_RBUTTONDBLCLK
          || msg.message == WM_LBUTTONUP
          || msg.message == WM_RBUTTONUP) {
-          if (_pPatchAPI->GetConState() != CS_ON) {
+          if (GetGameAPI()->GetConState() != CS_ON) {
             _pGame->ComputerKeyDown(msg);
           }
         }
@@ -1175,9 +1175,9 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         }
 
         // if it is up, or pulling up
-        if (_pPatchAPI->GetConState() == CS_OFF || _pPatchAPI->GetConState() == CS_TURNINGOFF) {
+        if (GetGameAPI()->GetConState() == CS_OFF || GetGameAPI()->GetConState() == CS_TURNINGOFF) {
           // start it moving down and disable menu
-          _pPatchAPI->SetConState(CS_TURNINGON);
+          GetGameAPI()->SetConState(CS_TURNINGON);
 
           // stop all IFeel effects
           IFeel_StopEffect(NULL);
@@ -1187,15 +1187,15 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
           }
 
         // if it is down, or dropping down
-        } else if (_pPatchAPI->GetConState() == CS_ON || _pPatchAPI->GetConState() == CS_TURNINGON) {
+        } else if (GetGameAPI()->GetConState() == CS_ON || GetGameAPI()->GetConState() == CS_TURNINGON) {
           // start it moving up
-          _pPatchAPI->SetConState(CS_TURNINGOFF);
+          GetGameAPI()->SetConState(CS_TURNINGOFF);
         }
       }
 
-      if (_pShell->GetINDEX("con_bTalk") && _pPatchAPI->GetConState() == CS_OFF) {
+      if (_pShell->GetINDEX("con_bTalk") && GetGameAPI()->GetConState() == CS_OFF) {
         _pShell->SetINDEX("con_bTalk", FALSE);
-        _pPatchAPI->SetConState(CS_TALK);
+        GetGameAPI()->SetConState(CS_TALK);
       }
 
       // if pause pressed
@@ -1239,7 +1239,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         // if any other key is pressed except console invoking
         } else if (bAnyKey && !bTilde) {
           // if not in menu or in console
-          if (!bMenuActive && !bMenuRendering && _pPatchAPI->GetConState() == CS_OFF) {
+          if (!bMenuActive && !bMenuRendering && GetGameAPI()->GetConState() == CS_OFF) {
             // skip to next demo
             _pGame->StopGame();
             _gmRunningGameMode = GM_NONE;
@@ -1253,7 +1253,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     _bWindowChanging = FALSE;
 
     // get real cursor position
-    if (_pPatchAPI->GetCompState() != CS_OFF && _pPatchAPI->GetCompState() != CS_ONINBACKGROUND) {
+    if (GetGameAPI()->GetCompState() != CS_OFF && GetGameAPI()->GetCompState() != CS_ONINBACKGROUND) {
       POINT pt;
       ::GetCursorPos(&pt);
       ::ScreenToClient(_hwndMain, &pt);
@@ -1270,7 +1270,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
       _iAddonExecState = 2;
 
     // if addon is ready for execution
-    } else if (_iAddonExecState == 2 && _pPatchAPI->GetConState() == CS_ON) {
+    } else if (_iAddonExecState == 2 && GetGameAPI()->GetConState() == CS_ON) {
       // execute it
       CTString strCmd;
       strCmd.PrintF("include \"%s\"", (const char *)_fnmAddonToExec);
@@ -1287,7 +1287,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     UpdatePauseState();
 
     // notify game whether menu is active
-    _pPatchAPI->SetMenuState(bMenuActive);
+    GetGameAPI()->SetMenuState(bMenuActive);
 
     // do the main game loop and render screen
     DoGame();

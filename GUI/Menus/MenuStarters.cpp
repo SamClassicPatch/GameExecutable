@@ -91,7 +91,7 @@ static void SetQuickLoadNotes(void) {
 void StartSinglePlayerNewMenu(void) {
   CSinglePlayerNewMenu &gmCurrent = _pGUIM->gmSinglePlayerNewMenu;
 
-  _pPatchAPI->GetCustomLevel() = sam_strFirstLevel;
+  GetGameAPI()->GetCustomLevel() = sam_strFirstLevel;
 
   gmCurrent.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
   ChangeToMenu(&gmCurrent);
@@ -226,9 +226,9 @@ void StartSplitScreenGame(void) {
   _pGame->gm_aiStartLocalPlayers[2] = _pGame->gm_aiMenuLocalPlayers[2];
   _pGame->gm_aiStartLocalPlayers[3] = _pGame->gm_aiMenuLocalPlayers[3];
 
-  CTFileName fnWorld = _pPatchAPI->GetCustomLevel();
+  CTFileName fnWorld = GetGameAPI()->GetCustomLevel();
 
-  _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
+  GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
 
   // [Cecil] Pass byte container
   CSesPropsContainer sp;
@@ -251,15 +251,15 @@ void StartNetworkGame(void) {
   _pGame->gm_aiStartLocalPlayers[2] = _pGame->gm_aiMenuLocalPlayers[2];
   _pGame->gm_aiStartLocalPlayers[3] = _pGame->gm_aiMenuLocalPlayers[3];
 
-  CTFileName fnWorld = _pPatchAPI->GetCustomLevel();
+  CTFileName fnWorld = GetGameAPI()->GetCustomLevel();
 
-  _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_SERVER);
+  GetGameAPI()->SetNetworkProvider(CGameAPI::NP_SERVER);
   
   // [Cecil] Pass byte container
   CSesPropsContainer sp;
   _pGame->SetMultiPlayerSession((CSessionProperties &)sp);
 
-  if (_pGame->NewGame(_pPatchAPI->GetSessionName(), fnWorld, (CSessionProperties &)sp)) {
+  if (_pGame->NewGame(GetGameAPI()->GetSessionName(), fnWorld, (CSessionProperties &)sp)) {
     StopMenus();
     _gmRunningGameMode = GM_NETWORK;
     // if starting a dedicated server
@@ -282,8 +282,8 @@ void JoinNetworkGame(void) {
   _pGame->gm_aiStartLocalPlayers[2] = _pGame->gm_aiMenuLocalPlayers[2];
   _pGame->gm_aiStartLocalPlayers[3] = _pGame->gm_aiMenuLocalPlayers[3];
 
-  _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_CLIENT);
-  if (_pGame->JoinGame(CNetworkSession(_pPatchAPI->GetJoinAddress()))) {
+  GetGameAPI()->SetNetworkProvider(CGameAPI::NP_CLIENT);
+  if (_pGame->JoinGame(CNetworkSession(GetGameAPI()->GetJoinAddress()))) {
     StopMenus();
     _gmRunningGameMode = GM_NETWORK;
   } else {
@@ -298,7 +298,7 @@ void JoinNetworkGame(void) {
       if (_strModURLSelected = "") {
         _strModURLSelected = "http://www.croteam.com/mods/Old";
       }
-      _strModServerSelected.PrintF("%s:%s", _pPatchAPI->GetJoinAddress(), _pShell->GetValue("net_iPort"));
+      _strModServerSelected.PrintF("%s:%s", GetGameAPI()->GetJoinAddress(), _pShell->GetValue("net_iPort"));
       extern void ModConnectConfirm(void);
       ModConnectConfirm();
     }

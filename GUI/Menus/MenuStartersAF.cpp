@@ -39,7 +39,7 @@ BOOL LSLoadSinglePlayer(const CTFileName &fnm) {
   _pGame->gm_aiStartLocalPlayers[1] = -1;
   _pGame->gm_aiStartLocalPlayers[2] = -1;
   _pGame->gm_aiStartLocalPlayers[3] = -1;
-  _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
+  GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
   if (_pGame->LoadGame(fnm)) {
     StopMenus();
     _gmRunningGameMode = GM_SINGLE_PLAYER;
@@ -66,12 +66,12 @@ BOOL LSLoadSplitScreen(const CTFileName &fnm) {
 void StartDemoPlay(void) {
   _pGame->gm_StartSplitScreenCfg = CGame::SSC_OBSERVER;
   // play the demo
-  _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
+  GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
   if (_pGame->StartDemoPlay(_fnDemoToPlay)) {
     // exit menu and pull up the console
     StopMenus();
-    if (_pPatchAPI->GetConState() != CS_OFF) {
-      _pPatchAPI->SetConState(CS_TURNINGOFF);
+    if (GetGameAPI()->GetConState() != CS_OFF) {
+      GetGameAPI()->SetConState(CS_TURNINGOFF);
     }
     _gmRunningGameMode = GM_DEMO;
   } else {
@@ -179,7 +179,7 @@ void StartNetworkLoadGame(void) {
   _pGame->gm_aiStartLocalPlayers[2] = _pGame->gm_aiMenuLocalPlayers[2];
   _pGame->gm_aiStartLocalPlayers[3] = _pGame->gm_aiMenuLocalPlayers[3];
 
-  _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_SERVER);
+  GetGameAPI()->SetNetworkProvider(CGameAPI::NP_SERVER);
   if (_pGame->LoadGame(_fnGameToLoad)) {
     StopMenus();
     _gmRunningGameMode = GM_NETWORK;
@@ -197,7 +197,7 @@ void StartSplitScreenGameLoad(void) {
   _pGame->gm_aiStartLocalPlayers[2] = _pGame->gm_aiMenuLocalPlayers[2];
   _pGame->gm_aiStartLocalPlayers[3] = _pGame->gm_aiMenuLocalPlayers[3];
 
-  _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
+  GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
   if (_pGame->LoadGame(_fnGameToLoad)) {
     StopMenus();
     _gmRunningGameMode = GM_SPLIT_SCREEN;

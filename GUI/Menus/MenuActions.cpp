@@ -350,13 +350,13 @@ extern CTString sam_strTrainingLevel;
 static void StartSinglePlayerGame_Normal(void);
 static void StartTechTest(void) {
   _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
-  _pPatchAPI->GetCustomLevel() = sam_strTechTestLevel;
+  GetGameAPI()->GetCustomLevel() = sam_strTechTestLevel;
   StartSinglePlayerGame_Normal();
 }
 
 static void StartTraining(void) {
   _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
-  _pPatchAPI->GetCustomLevel() = sam_strTrainingLevel;
+  GetGameAPI()->GetCustomLevel() = sam_strTrainingLevel;
   ChangeToMenu(&_pGUIM->gmSinglePlayerNewMenu);
 }
 
@@ -382,13 +382,13 @@ void StartSinglePlayerGame(void) {
   _pGame->gm_aiStartLocalPlayers[2] = -1;
   _pGame->gm_aiStartLocalPlayers[3] = -1;
 
-  _pPatchAPI->SetNetworkProvider(CPatchAPI::NP_LOCAL);
+  GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
 
   // [Cecil] Pass byte container
   CSesPropsContainer sp;
   _pGame->SetSinglePlayerSession((CSessionProperties &)sp);
 
-  if (_pGame->NewGame(_pPatchAPI->GetCustomLevel(), _pPatchAPI->GetCustomLevel(), (CSessionProperties &)sp)) {
+  if (_pGame->NewGame(GetGameAPI()->GetCustomLevel(), GetGameAPI()->GetCustomLevel(), (CSessionProperties &)sp)) {
     StopMenus();
     _gmRunningGameMode = GM_SINGLE_PLAYER;
   } else {
@@ -398,43 +398,43 @@ void StartSinglePlayerGame(void) {
 
 static void StartSinglePlayerGame_Tourist(void) {
   // [Cecil] Use difficulties and game modes from the API
-  _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(0));
-  _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(1));
+  _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(0));
+  _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
   StartSinglePlayerGame();
 }
 
 static void StartSinglePlayerGame_Easy(void) {
   // [Cecil] Use difficulties and game modes from the API
-  _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(1));
-  _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(1));
+  _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(1));
+  _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
   StartSinglePlayerGame();
 }
 
 static void StartSinglePlayerGame_Normal(void) {
   // [Cecil] Use difficulties and game modes from the API
-  _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(2));
-  _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(1));
+  _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(2));
+  _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
   StartSinglePlayerGame();
 }
 
 static void StartSinglePlayerGame_Hard(void) {
   // [Cecil] Use difficulties and game modes from the API
-  _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(3));
-  _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(1));
+  _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(3));
+  _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
   StartSinglePlayerGame();
 }
 
 static void StartSinglePlayerGame_Serious(void) {
   // [Cecil] Use difficulties and game modes from the API
-  _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(4));
-  _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(1));
+  _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(4));
+  _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
   StartSinglePlayerGame();
 }
 
 static void StartSinglePlayerGame_Mental(void) {
   // [Cecil] Use difficulties and game modes from the API
-  _pShell->SetINDEX("gam_iStartDifficulty", _pPatchAPI->GetDifficultyIndex(5));
-  _pShell->SetINDEX("gam_iStartMode", _pPatchAPI->GetGameMode(1));
+  _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(5));
+  _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
   StartSinglePlayerGame();
 }
 
@@ -1068,9 +1068,9 @@ void InitActionsForNetworkJoinMenu() {
 
 // ------------------------ CNetworkStartMenu implementation
 extern void UpdateNetworkLevel(INDEX iDummy) {
-  ValidateLevelForFlags(_pPatchAPI->GetCustomLevel(),
+  ValidateLevelForFlags(GetGameAPI()->GetCustomLevel(),
     GetSpawnFlagsForGameType(_pGUIM->gmNetworkStartMenu.gm_mgGameType.mg_iSelected));
-  _pGUIM->gmNetworkStartMenu.gm_mgLevel.SetText(FindLevelByFileName(_pPatchAPI->GetCustomLevel()).li_strName);
+  _pGUIM->gmNetworkStartMenu.gm_mgLevel.SetText(FindLevelByFileName(GetGameAPI()->GetCustomLevel()).li_strName);
 }
 
 void InitActionsForNetworkStartMenu() {
@@ -1289,7 +1289,7 @@ void InitActionsForSplitStartMenu() {
 extern void UpdateSplitLevel(INDEX iDummy) {
   CSplitStartMenu &gmCurrent = _pGUIM->gmSplitStartMenu;
 
-  ValidateLevelForFlags(_pPatchAPI->GetCustomLevel(),
+  ValidateLevelForFlags(GetGameAPI()->GetCustomLevel(),
     GetSpawnFlagsForGameType(gmCurrent.gm_mgGameType.mg_iSelected));
-  gmCurrent.gm_mgLevel.SetText(FindLevelByFileName(_pPatchAPI->GetCustomLevel()).li_strName);
+  gmCurrent.gm_mgLevel.SetText(FindLevelByFileName(GetGameAPI()->GetCustomLevel()).li_strName);
 }

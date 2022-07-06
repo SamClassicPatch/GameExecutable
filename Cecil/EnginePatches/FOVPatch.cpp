@@ -168,7 +168,7 @@ class CProjectionPatch : public CPerspectiveProjection3D {
   public:
     void P_Prepare(void) {
       // Fix FOV for weapon viewmodels
-      if (sam_bFixViewmodelFOV && (_pPatchAPI->GetCompState() == CS_OFF || _pPatchAPI->GetCompState() == CS_ONINBACKGROUND))
+      if (sam_bFixViewmodelFOV && (GetGameAPI()->GetCompState() == CS_OFF || GetGameAPI()->GetCompState() == CS_ONINBACKGROUND))
       {
         // Calling from CRenderer::RenderModels()
         const ULONG ulRenderModels = CHOOSE_FOR_GAME(0x601A462D, 0x6017470D, 0x601AF17E);
