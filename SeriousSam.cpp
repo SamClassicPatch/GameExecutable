@@ -297,9 +297,9 @@ void StartNextDemo(void) {
 
     // [Cecil] Go through available local players
     for (INDEX iPlayer = 1; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
-      _pGame->gm_aiStartLocalPlayers[iPlayer] = -1;
+      GetGameAPI()->SetStartPlayer(iPlayer, -1);
     }
-    _pGame->gm_aiStartLocalPlayers[0] = 0;
+    GetGameAPI()->SetStartPlayer(0, 0);
 
     GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
     GetGameAPI()->SetStartSplitCfg(CGame::SSC_PLAY1);
@@ -325,7 +325,7 @@ void StartNextDemo(void) {
 
     // [Cecil] Go through available local players
     for (INDEX iPlayer = 0; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
-      _pGame->gm_aiStartLocalPlayers[iPlayer] = -1;
+      GetGameAPI()->SetStartPlayer(iPlayer, -1);
     }
 
     // play the demo

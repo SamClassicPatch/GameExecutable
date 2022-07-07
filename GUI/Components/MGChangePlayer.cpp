@@ -24,10 +24,11 @@ void CMGChangePlayer::OnActivate(void) {
   IFeel_PlayEffect("Menu_press");
   _iLocalPlayer = mg_iLocalPlayer;
 
-  if (_pGame->gm_aiMenuLocalPlayers[mg_iLocalPlayer] < 0)
-    _pGame->gm_aiMenuLocalPlayers[mg_iLocalPlayer] = 0;
+  if (GetGameAPI()->GetMenuPlayer(mg_iLocalPlayer) < 0) {
+    GetGameAPI()->SetMenuPlayer(mg_iLocalPlayer, 0);
+  }
 
-  _pGUIM->gmPlayerProfile.gm_piCurrentPlayer = &_pGame->gm_aiMenuLocalPlayers[mg_iLocalPlayer];
+  _pGUIM->gmPlayerProfile.gm_piCurrentPlayer = &GetGameAPI()->aiMenuLocalPlayers[mg_iLocalPlayer];
   _pGUIM->gmPlayerProfile.SetParentMenu(&_pGUIM->gmSelectPlayersMenu);
 
   extern BOOL _bPlayerMenuFromSinglePlayer;
@@ -36,7 +37,7 @@ void CMGChangePlayer::OnActivate(void) {
 }
 
 void CMGChangePlayer::SetPlayerText(void) {
-  INDEX iPlayer = _pGame->gm_aiMenuLocalPlayers[mg_iLocalPlayer];
+  INDEX iPlayer = GetGameAPI()->GetMenuPlayer(mg_iLocalPlayer);
   CPlayerCharacter &pc = _pGame->gm_apcPlayers[iPlayer];
 
   if (iPlayer < 0 || iPlayer > 7) {

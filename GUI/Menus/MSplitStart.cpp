@@ -79,8 +79,9 @@ void CSplitStartMenu::StartMenu(void) {
   gm_mgDifficulty.mg_iSelected = _pShell->GetINDEX("gam_iStartDifficulty") + 1;
   gm_mgDifficulty.ApplyCurrentSelection();
 
-  // clamp maximum number of players to at least 4
-  _pShell->SetINDEX("gam_ctMaxPlayers", ClampDn(_pShell->GetINDEX("gam_ctMaxPlayers"), 4L));
+  // [Cecil] Don't allow less players than amount of local ones
+  const INDEX ctMinPlayers = ClampDn(_pShell->GetINDEX("gam_ctMaxPlayers"), GetGameAPI()->GetLocalPlayerCount());
+  _pShell->SetINDEX("gam_ctMaxPlayers", ctMinPlayers);
 
   UpdateSplitLevel(0);
   CGameMenu::StartMenu();

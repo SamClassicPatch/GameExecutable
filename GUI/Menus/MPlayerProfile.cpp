@@ -183,8 +183,8 @@ void CPlayerProfileMenu::SelectPlayer(INDEX iPlayer) {
 
   iPlayer = Clamp(iPlayer, INDEX(0), INDEX(7));
 
-  if (_iLocalPlayer >= 0 && _iLocalPlayer < 4) {
-    _pGame->gm_aiMenuLocalPlayers[_iLocalPlayer] = iPlayer;
+  if (_iLocalPlayer >= 0 && _iLocalPlayer < GetGameAPI()->GetLocalPlayerCount()) {
+    GetGameAPI()->SetMenuPlayer(_iLocalPlayer, iPlayer);
   } else {
     _pGame->gm_iSinglePlayer = iPlayer;
   }
@@ -273,7 +273,7 @@ void CPlayerProfileMenu::StartMenu(void) {
       gm_mgNumber[i].mg_bEnabled = FALSE;
     }
     INDEX iFirstEnabled = 0;
-    {for (INDEX ilp = 0; ilp < 4; ilp++) {
+    {for (INDEX ilp = 0; ilp < GetGameAPI()->GetLocalPlayerCount(); ilp++) {
       // [Cecil] Access local players through the API
       const INDEX iPlayerIndex = GetGameAPI()->GetLocalPlayerIndex(ilp);
 

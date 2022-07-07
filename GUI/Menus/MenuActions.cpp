@@ -379,9 +379,9 @@ void StartSinglePlayerGame(void) {
 
   // [Cecil] Go through available local players
   for (INDEX iPlayer = 1; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
-    _pGame->gm_aiStartLocalPlayers[iPlayer] = -1;
+    GetGameAPI()->SetStartPlayer(iPlayer, -1);
   }
-  _pGame->gm_aiStartLocalPlayers[0] = _pGame->gm_iSinglePlayer;
+  GetGameAPI()->SetStartPlayer(0, _pGame->gm_iSinglePlayer);
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
 
@@ -1084,11 +1084,11 @@ void InitActionsForNetworkStartMenu() {
 
 // ------------------------ CSelectPlayersMenu implementation
 static INDEX FindUnusedPlayer(void) {
-  INDEX *ai = _pGame->gm_aiMenuLocalPlayers;
+  INDEX *ai = GetGameAPI()->aiMenuLocalPlayers;
   INDEX iPlayer = 0;
   for (; iPlayer < 8; iPlayer++) {
     BOOL bUsed = FALSE;
-    for (INDEX iLocal = 0; iLocal < 4; iLocal++) {
+    for (INDEX iLocal = 0; iLocal < GetGameAPI()->GetLocalPlayerCount(); iLocal++) {
       if (ai[iLocal] == iPlayer) {
         bUsed = TRUE;
         break;
@@ -1105,7 +1105,7 @@ static INDEX FindUnusedPlayer(void) {
 extern void SelectPlayersFillMenu(void) {
   CSelectPlayersMenu &gmCurrent = _pGUIM->gmSelectPlayersMenu;
 
-  INDEX *ai = _pGame->gm_aiMenuLocalPlayers;
+  INDEX *ai = GetGameAPI()->aiMenuLocalPlayers;
 
   gmCurrent.gm_mgPlayer0Change.mg_iLocalPlayer = 0;
   gmCurrent.gm_mgPlayer1Change.mg_iLocalPlayer = 1;
@@ -1164,7 +1164,7 @@ extern void SelectPlayersFillMenu(void) {
     gmCurrent.gm_mgObserver.Disappear();
   }
 
-  for (INDEX iLocal = 0; iLocal < 4; iLocal++) {
+  for (INDEX iLocal = 0; iLocal < GetGameAPI()->GetLocalPlayerCount(); iLocal++) {
     if (ai[iLocal] < 0 || ai[iLocal] > 7) {
       ai[iLocal] = 0;
     }

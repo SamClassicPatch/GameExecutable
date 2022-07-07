@@ -84,8 +84,8 @@ void CControlsMenu::Initialize_t(void) {
 void CControlsMenu::StartMenu(void) {
   gm_pmgSelectedByDefault = &gm_mgButtons;
   INDEX iPlayer = _pGame->gm_iSinglePlayer;
-  if (_iLocalPlayer >= 0 && _iLocalPlayer < 4) {
-    iPlayer = _pGame->gm_aiMenuLocalPlayers[_iLocalPlayer];
+  if (_iLocalPlayer >= 0 && _iLocalPlayer < GetGameAPI()->GetLocalPlayerCount()) {
+    iPlayer = GetGameAPI()->GetMenuPlayer(_iLocalPlayer);
   }
   _fnmControlsToCustomize.PrintF("Controls\\Controls%d.ctl", iPlayer);
 
