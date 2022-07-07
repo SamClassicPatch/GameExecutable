@@ -375,7 +375,7 @@ void InitActionsForSinglePlayerMenu() {
 
 // ------------------------ CSinglePlayerNewMenu implementation
 void StartSinglePlayerGame(void) {
-  _pGame->gm_StartSplitScreenCfg = CGame::SSC_PLAY1;
+  GetGameAPI()->SetStartSplitCfg(CGame::SSC_PLAY1);
 
   _pGame->gm_aiStartLocalPlayers[0] = _pGame->gm_iSinglePlayer;
   _pGame->gm_aiStartLocalPlayers[1] = -1;
@@ -1111,7 +1111,7 @@ extern void SelectPlayersFillMenu(void) {
   gmCurrent.gm_mgPlayer2Change.mg_iLocalPlayer = 2;
   gmCurrent.gm_mgPlayer3Change.mg_iLocalPlayer = 3;
 
-  if (gmCurrent.gm_bAllowDedicated && _pGame->gm_MenuSplitScreenCfg == CGame::SSC_DEDICATED) {
+  if (gmCurrent.gm_bAllowDedicated && GetGameAPI()->GetMenuSplitCfg() == CGame::SSC_DEDICATED) {
     gmCurrent.gm_mgDedicated.mg_iSelected = 1;
   } else {
     gmCurrent.gm_mgDedicated.mg_iSelected = 0;
@@ -1119,7 +1119,7 @@ extern void SelectPlayersFillMenu(void) {
 
   gmCurrent.gm_mgDedicated.ApplyCurrentSelection();
 
-  if (gmCurrent.gm_bAllowObserving && _pGame->gm_MenuSplitScreenCfg == CGame::SSC_OBSERVER) {
+  if (gmCurrent.gm_bAllowObserving && GetGameAPI()->GetMenuSplitCfg() == CGame::SSC_OBSERVER) {
     gmCurrent.gm_mgObserver.mg_iSelected = 1;
   } else {
     gmCurrent.gm_mgObserver.mg_iSelected = 0;
@@ -1127,8 +1127,8 @@ extern void SelectPlayersFillMenu(void) {
 
   gmCurrent.gm_mgObserver.ApplyCurrentSelection();
 
-  if (_pGame->gm_MenuSplitScreenCfg >= CGame::SSC_PLAY1) {
-    gmCurrent.gm_mgSplitScreenCfg.mg_iSelected = _pGame->gm_MenuSplitScreenCfg;
+  if (GetGameAPI()->GetMenuSplitCfg() >= CGame::SSC_PLAY1) {
+    gmCurrent.gm_mgSplitScreenCfg.mg_iSelected = GetGameAPI()->GetMenuSplitCfg();
     gmCurrent.gm_mgSplitScreenCfg.ApplyCurrentSelection();
   }
 
@@ -1238,16 +1238,16 @@ extern void SelectPlayersApplyMenu(void) {
   CSelectPlayersMenu &gmCurrent = _pGUIM->gmSelectPlayersMenu;
 
   if (gmCurrent.gm_bAllowDedicated && gmCurrent.gm_mgDedicated.mg_iSelected) {
-    _pGame->gm_MenuSplitScreenCfg = CGame::SSC_DEDICATED;
+    GetGameAPI()->SetMenuSplitCfg(CGame::SSC_DEDICATED);
     return;
   }
 
   if (gmCurrent.gm_bAllowObserving && gmCurrent.gm_mgObserver.mg_iSelected) {
-    _pGame->gm_MenuSplitScreenCfg = CGame::SSC_OBSERVER;
+    GetGameAPI()->SetMenuSplitCfg(CGame::SSC_OBSERVER);
     return;
   }
 
-  _pGame->gm_MenuSplitScreenCfg = (enum CGame::SplitScreenCfg)gmCurrent.gm_mgSplitScreenCfg.mg_iSelected;
+  GetGameAPI()->SetMenuSplitCfg(gmCurrent.gm_mgSplitScreenCfg.mg_iSelected);
 }
 
 static void UpdateSelectPlayers(INDEX i) {

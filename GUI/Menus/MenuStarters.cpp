@@ -218,8 +218,7 @@ void StartHighScoreMenu(void) {
 }
 
 void StartSplitScreenGame(void) {
-  //  _pGame->gm_MenuSplitScreenCfg = (enum CGame::SplitScreenCfg) mgSplitScreenCfg.mg_iSelected;
-  _pGame->gm_StartSplitScreenCfg = _pGame->gm_MenuSplitScreenCfg;
+  GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
   _pGame->gm_aiStartLocalPlayers[0] = _pGame->gm_aiMenuLocalPlayers[0];
   _pGame->gm_aiStartLocalPlayers[1] = _pGame->gm_aiMenuLocalPlayers[1];
@@ -243,8 +242,7 @@ void StartSplitScreenGame(void) {
 }
 
 void StartNetworkGame(void) {
-  //  _pGame->gm_MenuSplitScreenCfg = (enum CGame::SplitScreenCfg) mgSplitScreenCfg.mg_iSelected;
-  _pGame->gm_StartSplitScreenCfg = _pGame->gm_MenuSplitScreenCfg;
+  GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
   _pGame->gm_aiStartLocalPlayers[0] = _pGame->gm_aiMenuLocalPlayers[0];
   _pGame->gm_aiStartLocalPlayers[1] = _pGame->gm_aiMenuLocalPlayers[1];
@@ -263,7 +261,7 @@ void StartNetworkGame(void) {
     StopMenus();
     _gmRunningGameMode = GM_NETWORK;
     // if starting a dedicated server
-    if (_pGame->gm_MenuSplitScreenCfg == CGame::SSC_DEDICATED) {
+    if (GetGameAPI()->GetMenuSplitCfg() == CGame::SSC_DEDICATED) {
       // pull down the console
       extern INDEX sam_bToggleConsole;
       sam_bToggleConsole = TRUE;
@@ -274,8 +272,7 @@ void StartNetworkGame(void) {
 }
 
 void JoinNetworkGame(void) {
-  //  _pGame->gm_MenuSplitScreenCfg = (enum CGame::SplitScreenCfg) mgSplitScreenCfg.mg_iSelected;
-  _pGame->gm_StartSplitScreenCfg = _pGame->gm_MenuSplitScreenCfg;
+  GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
   _pGame->gm_aiStartLocalPlayers[0] = _pGame->gm_aiMenuLocalPlayers[0];
   _pGame->gm_aiStartLocalPlayers[1] = _pGame->gm_aiMenuLocalPlayers[1];

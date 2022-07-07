@@ -33,7 +33,7 @@ extern CTString _strModURLSelected;
 extern CTString _strModServerSelected;
 
 BOOL LSLoadSinglePlayer(const CTFileName &fnm) {
-  _pGame->gm_StartSplitScreenCfg = CGame::SSC_PLAY1;
+  GetGameAPI()->SetStartSplitCfg(CGame::SSC_PLAY1);
 
   _pGame->gm_aiStartLocalPlayers[0] = _pGame->gm_iSinglePlayer;
   _pGame->gm_aiStartLocalPlayers[1] = -1;
@@ -64,7 +64,7 @@ BOOL LSLoadSplitScreen(const CTFileName &fnm) {
 }
 
 void StartDemoPlay(void) {
-  _pGame->gm_StartSplitScreenCfg = CGame::SSC_OBSERVER;
+  GetGameAPI()->SetStartSplitCfg(CGame::SSC_OBSERVER);
   // play the demo
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
   if (_pGame->StartDemoPlay(_fnDemoToPlay)) {
@@ -171,8 +171,7 @@ BOOL LSSaveDemo(const CTFileName &fnm) {
 }
 
 void StartNetworkLoadGame(void) {
-  //  _pGame->gm_MenuSplitScreenCfg = (enum CGame::SplitScreenCfg) mgSplitScreenCfg.mg_iSelected;
-  _pGame->gm_StartSplitScreenCfg = _pGame->gm_MenuSplitScreenCfg;
+  GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
   _pGame->gm_aiStartLocalPlayers[0] = _pGame->gm_aiMenuLocalPlayers[0];
   _pGame->gm_aiStartLocalPlayers[1] = _pGame->gm_aiMenuLocalPlayers[1];
@@ -189,8 +188,7 @@ void StartNetworkLoadGame(void) {
 }
 
 void StartSplitScreenGameLoad(void) {
-  //  _pGame->gm_MenuSplitScreenCfg = (enum CGame::SplitScreenCfg) mgSplitScreenCfg.mg_iSelected;
-  _pGame->gm_StartSplitScreenCfg = _pGame->gm_MenuSplitScreenCfg;
+  GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
   _pGame->gm_aiStartLocalPlayers[0] = _pGame->gm_aiMenuLocalPlayers[0];
   _pGame->gm_aiStartLocalPlayers[1] = _pGame->gm_aiMenuLocalPlayers[1];

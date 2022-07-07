@@ -259,7 +259,7 @@ void LimitFrameRate(void) {
     iMaxFPS = sam_iMaxFPSInactive;
   }
 
-  if (_pGame->gm_CurrentSplitScreenCfg == CGame::SSC_DEDICATED) {
+  if (GetGameAPI()->GetCurrentSplitCfg() == CGame::SSC_DEDICATED) {
     iMaxFPS = ClampDn(iMaxFPS, 60L); // never go very slow if dedicated server
   }
 
@@ -299,7 +299,7 @@ void StartNextDemo(void) {
     _pGame->gm_aiStartLocalPlayers[2] = -1;
     _pGame->gm_aiStartLocalPlayers[3] = -1;
     GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
-    _pGame->gm_StartSplitScreenCfg = CGame::SSC_PLAY1;
+    GetGameAPI()->SetStartSplitCfg(CGame::SSC_PLAY1);
 
     // [Cecil] Use difficulties and game modes from the API
     _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(2)); // Normal
@@ -318,7 +318,7 @@ void StartNextDemo(void) {
   // if not intro
   } else {
     // start the demo
-    _pGame->gm_StartSplitScreenCfg = CGame::SSC_OBSERVER;
+    GetGameAPI()->SetStartSplitCfg(CGame::SSC_OBSERVER);
     _pGame->gm_aiStartLocalPlayers[0] = -1;
     _pGame->gm_aiStartLocalPlayers[1] = -1;
     _pGame->gm_aiStartLocalPlayers[2] = -1;

@@ -38,7 +38,7 @@ void CCustomizeAxisMenu::Initialize_t(void) {
 
   // for all available axis type controlers
   for (INDEX iControler = 0; iControler < AXIS_ACTIONS_CT; iControler++) {
-    gm_mgActionTrigger.mg_astrTexts[iControler] = TranslateConst(CTString(_pGame->gm_astrAxisNames[iControler]), 0);
+    gm_mgActionTrigger.mg_astrTexts[iControler] = TranslateConst(GetGameAPI()->GetAxisName(iControler), 0);
   }
   gm_mgActionTrigger.mg_iSelected = 3;
 
