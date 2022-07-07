@@ -294,10 +294,13 @@ void StartNextDemo(void) {
   if (pli->li_fnLevel == sam_strIntroLevel) {
     // start intro
     _gmRunningGameMode = GM_NONE;
+
+    // [Cecil] Go through available local players
+    for (INDEX iPlayer = 1; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
+      _pGame->gm_aiStartLocalPlayers[iPlayer] = -1;
+    }
     _pGame->gm_aiStartLocalPlayers[0] = 0;
-    _pGame->gm_aiStartLocalPlayers[1] = -1;
-    _pGame->gm_aiStartLocalPlayers[2] = -1;
-    _pGame->gm_aiStartLocalPlayers[3] = -1;
+
     GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
     GetGameAPI()->SetStartSplitCfg(CGame::SSC_PLAY1);
 
@@ -319,10 +322,11 @@ void StartNextDemo(void) {
   } else {
     // start the demo
     GetGameAPI()->SetStartSplitCfg(CGame::SSC_OBSERVER);
-    _pGame->gm_aiStartLocalPlayers[0] = -1;
-    _pGame->gm_aiStartLocalPlayers[1] = -1;
-    _pGame->gm_aiStartLocalPlayers[2] = -1;
-    _pGame->gm_aiStartLocalPlayers[3] = -1;
+
+    // [Cecil] Go through available local players
+    for (INDEX iPlayer = 0; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
+      _pGame->gm_aiStartLocalPlayers[iPlayer] = -1;
+    }
 
     // play the demo
     GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);

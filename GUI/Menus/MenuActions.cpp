@@ -377,10 +377,11 @@ void InitActionsForSinglePlayerMenu() {
 void StartSinglePlayerGame(void) {
   GetGameAPI()->SetStartSplitCfg(CGame::SSC_PLAY1);
 
+  // [Cecil] Go through available local players
+  for (INDEX iPlayer = 1; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
+    _pGame->gm_aiStartLocalPlayers[iPlayer] = -1;
+  }
   _pGame->gm_aiStartLocalPlayers[0] = _pGame->gm_iSinglePlayer;
-  _pGame->gm_aiStartLocalPlayers[1] = -1;
-  _pGame->gm_aiStartLocalPlayers[2] = -1;
-  _pGame->gm_aiStartLocalPlayers[3] = -1;
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
 

@@ -220,10 +220,10 @@ void StartHighScoreMenu(void) {
 void StartSplitScreenGame(void) {
   GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
-  _pGame->gm_aiStartLocalPlayers[0] = _pGame->gm_aiMenuLocalPlayers[0];
-  _pGame->gm_aiStartLocalPlayers[1] = _pGame->gm_aiMenuLocalPlayers[1];
-  _pGame->gm_aiStartLocalPlayers[2] = _pGame->gm_aiMenuLocalPlayers[2];
-  _pGame->gm_aiStartLocalPlayers[3] = _pGame->gm_aiMenuLocalPlayers[3];
+  // [Cecil] Go through available local players
+  for (INDEX iPlayer = 0; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
+    _pGame->gm_aiStartLocalPlayers[iPlayer] = _pGame->gm_aiMenuLocalPlayers[iPlayer];
+  }
 
   CTFileName fnWorld = GetGameAPI()->GetCustomLevel();
 
@@ -244,10 +244,10 @@ void StartSplitScreenGame(void) {
 void StartNetworkGame(void) {
   GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
-  _pGame->gm_aiStartLocalPlayers[0] = _pGame->gm_aiMenuLocalPlayers[0];
-  _pGame->gm_aiStartLocalPlayers[1] = _pGame->gm_aiMenuLocalPlayers[1];
-  _pGame->gm_aiStartLocalPlayers[2] = _pGame->gm_aiMenuLocalPlayers[2];
-  _pGame->gm_aiStartLocalPlayers[3] = _pGame->gm_aiMenuLocalPlayers[3];
+  // [Cecil] Go through available local players
+  for (INDEX iPlayer = 0; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
+    _pGame->gm_aiStartLocalPlayers[iPlayer] = _pGame->gm_aiMenuLocalPlayers[iPlayer];
+  }
 
   CTFileName fnWorld = GetGameAPI()->GetCustomLevel();
 
@@ -274,10 +274,10 @@ void StartNetworkGame(void) {
 void JoinNetworkGame(void) {
   GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
-  _pGame->gm_aiStartLocalPlayers[0] = _pGame->gm_aiMenuLocalPlayers[0];
-  _pGame->gm_aiStartLocalPlayers[1] = _pGame->gm_aiMenuLocalPlayers[1];
-  _pGame->gm_aiStartLocalPlayers[2] = _pGame->gm_aiMenuLocalPlayers[2];
-  _pGame->gm_aiStartLocalPlayers[3] = _pGame->gm_aiMenuLocalPlayers[3];
+  // [Cecil] Go through available local players
+  for (INDEX iPlayer = 0; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
+    _pGame->gm_aiStartLocalPlayers[iPlayer] = _pGame->gm_aiMenuLocalPlayers[iPlayer];
+  }
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_CLIENT);
   if (_pGame->JoinGame(CNetworkSession(GetGameAPI()->GetJoinAddress()))) {
