@@ -534,6 +534,9 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   LoadLevelsList();
   LoadDemosList();
 
+  // [Cecil] Load plugins
+  CECIL_LoadPlugins();
+
   // apply application mode
   StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,
                (enum DisplayDepth)sam_iDisplayDepth, sam_iWindowMode);
