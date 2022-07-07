@@ -274,11 +274,13 @@ void CPlayerProfileMenu::StartMenu(void) {
     }
     INDEX iFirstEnabled = 0;
     {for (INDEX ilp = 0; ilp < 4; ilp++) {
-      CLocalPlayer &lp = _pGame->gm_lpLocalPlayers[ilp];
-      if (lp.lp_bActive) {
-        gm_mgNumber[lp.lp_iPlayer].mg_bEnabled = TRUE;
+      // [Cecil] Access local players through the API
+      const INDEX iPlayerIndex = GetGameAPI()->GetLocalPlayerIndex(ilp);
+
+      if (GetGameAPI()->IsLocalPlayerActive(ilp)) {
+        gm_mgNumber[iPlayerIndex].mg_bEnabled = TRUE;
         if (iFirstEnabled == 0) {
-          iFirstEnabled = lp.lp_iPlayer;
+          iFirstEnabled = iPlayerIndex;
         }
       }
     }}
