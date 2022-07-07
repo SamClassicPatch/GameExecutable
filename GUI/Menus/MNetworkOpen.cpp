@@ -31,7 +31,7 @@ void CNetworkOpenMenu::Initialize_t(void) {
 
   gm_mgAddress.SetText(GetGameAPI()->GetJoinAddress());
   gm_mgAddress.mg_ctMaxStringLen = 20;
-  gm_mgAddress.mg_pstrToChange = &GetGameAPI()->GetJoinAddress();
+  gm_mgAddress.mg_pstrToChange = (CTString *)&GetGameAPI()->GetJoinAddress();
   gm_mgAddress.mg_boxOnScreen = BoxMediumMiddle(1);
   gm_mgAddress.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgAddress.mg_iCenterI = -1;

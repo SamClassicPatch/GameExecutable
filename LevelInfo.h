@@ -47,7 +47,7 @@ void ClearLevelsList(void);
 // get level info for its filename
 CLevelInfo FindLevelByFileName(const CTFileName &fnm);
 // if level doesn't support given flags, find one that does
-void ValidateLevelForFlags(CTString &fnm, ULONG ulSpawnFlags);
+void ValidateLevelForFlags(ULONG ulSpawnFlags);
 
 // init list of autoplay demos
 void LoadDemosList(void);

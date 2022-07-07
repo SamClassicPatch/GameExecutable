@@ -350,13 +350,13 @@ extern CTString sam_strTrainingLevel;
 static void StartSinglePlayerGame_Normal(void);
 static void StartTechTest(void) {
   _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
-  GetGameAPI()->GetCustomLevel() = sam_strTechTestLevel;
+  GetGameAPI()->SetCustomLevel(sam_strTechTestLevel);
   StartSinglePlayerGame_Normal();
 }
 
 static void StartTraining(void) {
   _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
-  GetGameAPI()->GetCustomLevel() = sam_strTrainingLevel;
+  GetGameAPI()->SetCustomLevel(sam_strTrainingLevel);
   ChangeToMenu(&_pGUIM->gmSinglePlayerNewMenu);
 }
 
@@ -1069,8 +1069,7 @@ void InitActionsForNetworkJoinMenu() {
 
 // ------------------------ CNetworkStartMenu implementation
 extern void UpdateNetworkLevel(INDEX iDummy) {
-  ValidateLevelForFlags(GetGameAPI()->GetCustomLevel(),
-    GetSpawnFlagsForGameType(_pGUIM->gmNetworkStartMenu.gm_mgGameType.mg_iSelected));
+  ValidateLevelForFlags(GetSpawnFlagsForGameType(_pGUIM->gmNetworkStartMenu.gm_mgGameType.mg_iSelected));
   _pGUIM->gmNetworkStartMenu.gm_mgLevel.SetText(FindLevelByFileName(GetGameAPI()->GetCustomLevel()).li_strName);
 }
 
@@ -1290,7 +1289,6 @@ void InitActionsForSplitStartMenu() {
 extern void UpdateSplitLevel(INDEX iDummy) {
   CSplitStartMenu &gmCurrent = _pGUIM->gmSplitStartMenu;
 
-  ValidateLevelForFlags(GetGameAPI()->GetCustomLevel(),
-    GetSpawnFlagsForGameType(gmCurrent.gm_mgGameType.mg_iSelected));
+  ValidateLevelForFlags(GetSpawnFlagsForGameType(gmCurrent.gm_mgGameType.mg_iSelected));
   gmCurrent.gm_mgLevel.SetText(FindLevelByFileName(GetGameAPI()->GetCustomLevel()).li_strName);
 }

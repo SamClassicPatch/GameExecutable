@@ -31,7 +31,7 @@ void CNetworkStartMenu::Initialize_t(void) {
   gm_mgSessionName.SetText(GetGameAPI()->GetSessionName());
   gm_mgSessionName.SetName(TRANS("Session name:"));
   gm_mgSessionName.mg_ctMaxStringLen = 25;
-  gm_mgSessionName.mg_pstrToChange = &GetGameAPI()->GetSessionName();
+  gm_mgSessionName.mg_pstrToChange = (CTString *)&GetGameAPI()->GetSessionName();
   gm_mgSessionName.mg_boxOnScreen = BoxMediumRow(1);
   gm_mgSessionName.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgSessionName.mg_iCenterI = -1;

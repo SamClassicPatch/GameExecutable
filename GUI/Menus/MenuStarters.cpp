@@ -91,7 +91,7 @@ static void SetQuickLoadNotes(void) {
 void StartSinglePlayerNewMenu(void) {
   CSinglePlayerNewMenu &gmCurrent = _pGUIM->gmSinglePlayerNewMenu;
 
-  GetGameAPI()->GetCustomLevel() = sam_strFirstLevel;
+  GetGameAPI()->SetCustomLevel(sam_strFirstLevel);
 
   gmCurrent.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
   ChangeToMenu(&gmCurrent);

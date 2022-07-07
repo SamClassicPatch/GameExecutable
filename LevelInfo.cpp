@@ -211,13 +211,13 @@ void FilterLevels(ULONG ulSpawnFlags) {
 }
 
 // If level doesn't support given flags, find one that does
-void ValidateLevelForFlags(CTString &fnm, ULONG ulSpawnFlags) {
+void ValidateLevelForFlags(ULONG ulSpawnFlags) {
   // for each level in main list
   {FOREACHINLIST(CLevelInfo, li_lnNode, _lhAllLevels, itli) {
     CLevelInfo &li = *itli;
 
     // if found
-    if (li.li_fnLevel == fnm) {
+    if (li.li_fnLevel == GetGameAPI()->GetCustomLevel()) {
       // if it satisfies the flags
       if (li.li_ulSpawnFlags & ulSpawnFlags) {
         // all ok
@@ -233,13 +233,13 @@ void ValidateLevelForFlags(CTString &fnm, ULONG ulSpawnFlags) {
     // if it satisfies the flags
     if (li.li_ulSpawnFlags & ulSpawnFlags) {
       // use that one
-      fnm = li.li_fnLevel;
+      GetGameAPI()->SetCustomLevel(li.li_fnLevel);
       return;
     }
   }}
 
   // if nothing found, use default invalid level
-  fnm = CLevelInfo().li_fnLevel;
+  GetGameAPI()->SetCustomLevel(CLevelInfo().li_fnLevel);
 }
 
 // get level info for its filename

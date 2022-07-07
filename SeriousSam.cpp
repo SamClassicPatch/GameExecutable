@@ -562,7 +562,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
     CPrintF(TRANS("Command line connection: '%s%s'\n"), cmd_strServer, strPort);
 
     // go to join menu
-    GetGameAPI()->GetJoinAddress() = cmd_strServer;
+    GetGameAPI()->SetJoinAddress(cmd_strServer);
 
     if (cmd_bQuickJoin) {
       extern void JoinNetworkGame(void);
@@ -585,7 +585,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
         _pShell->Execute(strCommand);
       }
 
-      GetGameAPI()->GetCustomLevel() = cmd_strWorld;
+      GetGameAPI()->SetCustomLevel(cmd_strWorld);
 
       if (cmd_bServer) {
         extern void StartNetworkGame(void);
