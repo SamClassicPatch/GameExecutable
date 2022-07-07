@@ -55,7 +55,7 @@ void CMGKeyDefinition::SetBindingNames(BOOL bDefining) {
   // find the button
   INDEX ict = 0;
   INDEX iDik = 0;
-  FOREACHINLIST(CButtonAction, ba_lnNode, _pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions, itba) {
+  FOREACHINLIST(CButtonAction, ba_lnNode, GetGameAPI()->GetControlsActions(), itba) {
     if (ict == mg_iControlNumber) {
       CButtonAction &ba = *itba;
       // get the current bindings and names
@@ -110,7 +110,7 @@ void CMGKeyDefinition::Disappear(void) {
 void CMGKeyDefinition::DefineKey(INDEX iDik) {
   // for each button in controls
   INDEX ict = 0;
-  FOREACHINLIST(CButtonAction, ba_lnNode, _pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions, itba) {
+  FOREACHINLIST(CButtonAction, ba_lnNode, GetGameAPI()->GetControlsActions(), itba) {
     CButtonAction &ba = *itba;
     // if it is this one
     if (ict == mg_iControlNumber) {

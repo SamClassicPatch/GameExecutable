@@ -79,7 +79,7 @@ CCustomizeAxisMenu::~CCustomizeAxisMenu(void) {
 
 void CCustomizeAxisMenu::ObtainActionSettings(void) {
   ControlsMenuOn();
-  CControls &ctrls = _pGame->gm_ctrlControlsExtra;
+  CControls &ctrls = *GetGameAPI()->GetControls();
   INDEX iSelectedAction = gm_mgActionTrigger.mg_iSelected;
   INDEX iMountedAxis = ctrls.ctrl_aaAxisActions[iSelectedAction].aa_iAxisAction;
 
@@ -107,7 +107,7 @@ void CCustomizeAxisMenu::ObtainActionSettings(void) {
 }
 
 void CCustomizeAxisMenu::ApplyActionSettings(void) {
-  CControls &ctrls = _pGame->gm_ctrlControlsExtra;
+  CControls &ctrls = *GetGameAPI()->GetControls();
   INDEX iSelectedAction = gm_mgActionTrigger.mg_iSelected;
   INDEX iMountedAxis = gm_mgMountedTrigger.mg_iSelected;
   FLOAT fSensitivity =

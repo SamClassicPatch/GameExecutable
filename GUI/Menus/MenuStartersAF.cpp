@@ -39,7 +39,7 @@ BOOL LSLoadSinglePlayer(const CTFileName &fnm) {
   for (INDEX iPlayer = 1; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
     GetGameAPI()->SetStartPlayer(iPlayer, -1);
   }
-  GetGameAPI()->SetStartPlayer(0, _pGame->gm_iSinglePlayer);
+  GetGameAPI()->SetStartPlayer(0, GetGameAPI()->GetPlayerForSP());
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
   if (_pGame->LoadGame(fnm)) {
@@ -92,7 +92,7 @@ BOOL LSLoadPlayerModel(const CTFileName &fnm) {
   // get base filename
   CTString strBaseName = fnm.FileName();
   // set it for current player
-  CPlayerCharacter &pc = _pGame->gm_apcPlayers[*_pGUIM->gmPlayerProfile.gm_piCurrentPlayer];
+  CPlayerCharacter &pc = *GetGameAPI()->GetPlayerCharacter(*_pGUIM->gmPlayerProfile.gm_piCurrentPlayer);
   CPlayerSettings *pps = (CPlayerSettings *)pc.pc_aubAppearance;
   memset(pps->ps_achModelFile, 0, sizeof(pps->ps_achModelFile));
   strncpy(pps->ps_achModelFile, strBaseName, sizeof(pps->ps_achModelFile));
@@ -105,7 +105,7 @@ BOOL LSLoadPlayerModel(const CTFileName &fnm) {
 BOOL LSLoadControls(const CTFileName &fnm) {
   try {
     ControlsMenuOn();
-    _pGame->gm_ctrlControlsExtra.Load_t(fnm);
+    GetGameAPI()->GetControls()->Load_t(fnm);
     ControlsMenuOff();
   } catch (char *strError) {
     CPrintF("%s", strError);

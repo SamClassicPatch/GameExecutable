@@ -28,7 +28,7 @@ void CMGHighScore::Render(CDrawPort *pdp) {
   COLOR colHeader = LCDGetColor(C_GREEN | 255, "hiscore header");
   COLOR colData = LCDGetColor(C_mdGREEN | 255, "hiscore data");
   COLOR colLastSet = LCDGetColor(C_mlGREEN | 255, "hiscore last set");
-  INDEX iLastSet = _pGame->gm_iLastSetHighScore;
+  INDEX iLastSet = GetGameAPI()->GetLastSetHighScore();
 
   CTString strText;
 
@@ -40,8 +40,10 @@ void CMGHighScore::Render(CDrawPort *pdp) {
   strHighScores[0][5] = TRANS("Score");
 
   {for (INDEX i = 0; i < HIGHSCORE_COUNT; i++) {
+    CHighScoreEntry &hse = *GetGameAPI()->GetHighScore(i);
+
     // [Cecil] +1 because Tourist difficulty is -1
-    INDEX iDifficulty = _pGame->gm_ahseHighScores[i].hse_gdDifficulty + 1;
+    INDEX iDifficulty = hse.hse_gdDifficulty + 1;
 
     // [Cecil] Invalid difficulty
     if (iDifficulty < 0 || iDifficulty >= GetGameAPI()->sp_aGameDifficulties.Count())
@@ -56,10 +58,10 @@ void CMGHighScore::Render(CDrawPort *pdp) {
     }
 
     strHighScores[i + 1][0].PrintF("%d", i + 1);
-    strHighScores[i + 1][1] = _pGame->gm_ahseHighScores[i].hse_strPlayer;
-    strHighScores[i + 1][3] = TimeToString(_pGame->gm_ahseHighScores[i].hse_tmTime);
-    strHighScores[i + 1][4].PrintF("%03d", _pGame->gm_ahseHighScores[i].hse_ctKills);
-    strHighScores[i + 1][5].PrintF("%9d", _pGame->gm_ahseHighScores[i].hse_ctScore);
+    strHighScores[i + 1][1] = hse.hse_strPlayer;
+    strHighScores[i + 1][3] = TimeToString(hse.hse_tmTime);
+    strHighScores[i + 1][4].PrintF("%03d", hse.hse_ctKills);
+    strHighScores[i + 1][5].PrintF("%9d", hse.hse_ctScore);
   }}
 
   PIX pixJ = pdp->GetHeight() * 0.25f;

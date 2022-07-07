@@ -250,21 +250,23 @@ CTFileName _fnmControlsToCustomize = CTString("");
 void ControlsMenuOn() {
   _pGame->SavePlayersAndControls();
   try {
-    _pGame->gm_ctrlControlsExtra.Load_t(_fnmControlsToCustomize);
+    GetGameAPI()->GetControls()->Load_t(_fnmControlsToCustomize);
   } catch (char *strError) {
     WarningMessage(strError);
   }
 }
 
 void ControlsMenuOff() {
+  CControls &ctrl = *GetGameAPI()->GetControls();
+
   try {
-    if (_pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions.Count() > 0) {
-      _pGame->gm_ctrlControlsExtra.Save_t(_fnmControlsToCustomize);
+    if (ctrl.ctrl_lhButtonActions.Count() > 0) {
+      ctrl.Save_t(_fnmControlsToCustomize);
     }
   } catch (char *strError) {
     FatalError(strError);
   }
-  FORDELETELIST(CButtonAction, ba_lnNode, _pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions, itAct) {
+  FORDELETELIST(CButtonAction, ba_lnNode, ctrl.ctrl_lhButtonActions, itAct) {
     delete &itAct.Current();
   }
   _pGame->LoadPlayersAndControls();

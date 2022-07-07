@@ -38,9 +38,9 @@ void CMGChangePlayer::OnActivate(void) {
 
 void CMGChangePlayer::SetPlayerText(void) {
   INDEX iPlayer = GetGameAPI()->GetMenuPlayer(mg_iLocalPlayer);
-  CPlayerCharacter &pc = _pGame->gm_apcPlayers[iPlayer];
+  CPlayerCharacter &pc = *GetGameAPI()->GetPlayerCharacter(iPlayer);
 
-  if (iPlayer < 0 || iPlayer > 7) {
+  if (iPlayer < 0 || iPlayer >= GetGameAPI()->GetProfileCount()) {
     SetText("????");
   } else {
     CTString strPlayer;

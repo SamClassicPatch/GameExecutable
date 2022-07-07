@@ -130,7 +130,7 @@ void CInGameMenu::StartMenu(void) {
   SetDemoStartStopRecText();
 
   if (_gmRunningGameMode == GM_SINGLE_PLAYER) {
-    CPlayerCharacter &pc = _pGame->gm_apcPlayers[_pGame->gm_iSinglePlayer];
+    CPlayerCharacter &pc = *GetGameAPI()->GetPlayerCharacter(GetGameAPI()->GetPlayerForSP());
 
     CTString strPlayer;
     strPlayer.PrintF(TRANS("Player: %s"), pc.GetNameForPrinting());

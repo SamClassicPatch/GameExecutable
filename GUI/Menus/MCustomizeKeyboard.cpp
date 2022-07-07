@@ -29,8 +29,8 @@ void CCustomizeKeyboardMenu::FillListItems(void) {
   BOOL bHasLast = FALSE;
   // set diks to key buttons
   INDEX iLabel = 0;
-  INDEX ctLabels = _pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions.Count();
-  FOREACHINLIST(CButtonAction, ba_lnNode, _pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions, itAct) {
+  INDEX ctLabels = GetGameAPI()->GetControlsActions().Count();
+  FOREACHINLIST(CButtonAction, ba_lnNode, GetGameAPI()->GetControlsActions(), itAct) {
     INDEX iInMenu = iLabel - gm_iListOffset;
     if ((iLabel >= gm_iListOffset) && (iLabel < (gm_iListOffset + gm_ctListVisible))) {
       bHasFirst |= (iLabel == 0);
@@ -89,7 +89,7 @@ void CCustomizeKeyboardMenu::Initialize_t(void) {
 void CCustomizeKeyboardMenu::StartMenu(void) {
   ControlsMenuOn();
   gm_iListOffset = 0;
-  gm_ctListTotal = _pGame->gm_ctrlControlsExtra.ctrl_lhButtonActions.Count();
+  gm_ctListTotal = GetGameAPI()->GetControlsActions().Count();
   gm_iListWantedItem = 0;
   CGameMenu::StartMenu();
 }

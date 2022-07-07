@@ -381,7 +381,7 @@ void StartSinglePlayerGame(void) {
   for (INDEX iPlayer = 1; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
     GetGameAPI()->SetStartPlayer(iPlayer, -1);
   }
-  GetGameAPI()->SetStartPlayer(0, _pGame->gm_iSinglePlayer);
+  GetGameAPI()->SetStartPlayer(0, GetGameAPI()->GetPlayerForSP());
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
 
@@ -453,19 +453,19 @@ void InitActionsForSinglePlayerNewMenu() {
 // ------------------------ CPlayerProfileMenu implementation
 static void ChangeCrosshair(INDEX iNew) {
   INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
-  CPlayerSettings *pps = (CPlayerSettings *)_pGame->gm_apcPlayers[iPlayer].pc_aubAppearance;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
   pps->ps_iCrossHairType = iNew - 1;
 }
 
 static void ChangeWeaponSelect(INDEX iNew) {
   INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
-  CPlayerSettings *pps = (CPlayerSettings *)_pGame->gm_apcPlayers[iPlayer].pc_aubAppearance;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
   pps->ps_iWeaponAutoSelect = iNew;
 }
 
 static void ChangeWeaponHide(INDEX iNew) {
   INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
-  CPlayerSettings *pps = (CPlayerSettings *)_pGame->gm_apcPlayers[iPlayer].pc_aubAppearance;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
   if (iNew) {
     pps->ps_ulFlags |= PSF_HIDEWEAPON;
   } else {
@@ -475,7 +475,7 @@ static void ChangeWeaponHide(INDEX iNew) {
 
 static void Change3rdPerson(INDEX iNew) {
   INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
-  CPlayerSettings *pps = (CPlayerSettings *)_pGame->gm_apcPlayers[iPlayer].pc_aubAppearance;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
   if (iNew) {
     pps->ps_ulFlags |= PSF_PREFER3RDPERSON;
   } else {
@@ -485,7 +485,7 @@ static void Change3rdPerson(INDEX iNew) {
 
 static void ChangeQuotes(INDEX iNew) {
   INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
-  CPlayerSettings *pps = (CPlayerSettings *)_pGame->gm_apcPlayers[iPlayer].pc_aubAppearance;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
   if (iNew) {
     pps->ps_ulFlags &= ~PSF_NOQUOTES;
   } else {
@@ -495,7 +495,7 @@ static void ChangeQuotes(INDEX iNew) {
 
 static void ChangeAutoSave(INDEX iNew) {
   INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
-  CPlayerSettings *pps = (CPlayerSettings *)_pGame->gm_apcPlayers[iPlayer].pc_aubAppearance;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
   if (iNew) {
     pps->ps_ulFlags |= PSF_AUTOSAVE;
   } else {
@@ -505,7 +505,7 @@ static void ChangeAutoSave(INDEX iNew) {
 
 static void ChangeCompDoubleClick(INDEX iNew) {
   INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
-  CPlayerSettings *pps = (CPlayerSettings *)_pGame->gm_apcPlayers[iPlayer].pc_aubAppearance;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
   if (iNew) {
     pps->ps_ulFlags &= ~PSF_COMPSINGLECLICK;
   } else {
@@ -515,7 +515,7 @@ static void ChangeCompDoubleClick(INDEX iNew) {
 
 static void ChangeViewBobbing(INDEX iNew) {
   INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
-  CPlayerSettings *pps = (CPlayerSettings *)_pGame->gm_apcPlayers[iPlayer].pc_aubAppearance;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
   if (iNew) {
     pps->ps_ulFlags &= ~PSF_NOBOBBING;
   } else {
@@ -525,7 +525,7 @@ static void ChangeViewBobbing(INDEX iNew) {
 
 static void ChangeSharpTurning(INDEX iNew) {
   INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
-  CPlayerSettings *pps = (CPlayerSettings *)_pGame->gm_apcPlayers[iPlayer].pc_aubAppearance;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
   if (iNew) {
     pps->ps_ulFlags |= PSF_SHARPTURNING;
   } else {
@@ -1086,7 +1086,7 @@ void InitActionsForNetworkStartMenu() {
 static INDEX FindUnusedPlayer(void) {
   INDEX *ai = GetGameAPI()->aiMenuLocalPlayers;
   INDEX iPlayer = 0;
-  for (; iPlayer < 8; iPlayer++) {
+  for (; iPlayer < GetGameAPI()->GetProfileCount(); iPlayer++) {
     BOOL bUsed = FALSE;
     for (INDEX iLocal = 0; iLocal < GetGameAPI()->GetLocalPlayerCount(); iLocal++) {
       if (ai[iLocal] == iPlayer) {
@@ -1165,7 +1165,7 @@ extern void SelectPlayersFillMenu(void) {
   }
 
   for (INDEX iLocal = 0; iLocal < GetGameAPI()->GetLocalPlayerCount(); iLocal++) {
-    if (ai[iLocal] < 0 || ai[iLocal] > 7) {
+    if (ai[iLocal] < 0 || ai[iLocal] >= GetGameAPI()->GetProfileCount()) {
       ai[iLocal] = 0;
     }
     for (INDEX iCopy = 0; iCopy < iLocal; iCopy++) {
@@ -1203,7 +1203,7 @@ extern void SelectPlayersFillMenu(void) {
   apmg[i++] = &gmCurrent.gm_mgStart;
 
   // relink
-  for (INDEX img = 0; img < 8; img++) {
+  for (INDEX img = 0; img < GetGameAPI()->GetProfileCount(); img++) {
     if (apmg[img] == NULL) {
       continue;
     }

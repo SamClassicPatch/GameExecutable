@@ -173,20 +173,20 @@ INDEX CPlayerProfileMenu::PlayerFromCombo(INDEX iCombo) {
 }
 
 void CPlayerProfileMenu::SelectPlayer(INDEX iPlayer) {
-  CPlayerCharacter &pc = _pGame->gm_apcPlayers[iPlayer];
+  CPlayerCharacter &pc = *GetGameAPI()->GetPlayerCharacter(iPlayer);
 
-  for (INDEX iPl = 0; iPl < 8; iPl++) {
+  for (INDEX iPl = 0; iPl < GetGameAPI()->GetProfileCount(); iPl++) {
     gm_mgNumber[iPl].mg_bHighlighted = FALSE;
   }
 
   gm_mgNumber[iPlayer].mg_bHighlighted = TRUE;
 
-  iPlayer = Clamp(iPlayer, INDEX(0), INDEX(7));
+  iPlayer = Clamp(iPlayer, INDEX(0), GetGameAPI()->GetProfileCount() - (INDEX)1);
 
   if (_iLocalPlayer >= 0 && _iLocalPlayer < GetGameAPI()->GetLocalPlayerCount()) {
     GetGameAPI()->SetMenuPlayer(_iLocalPlayer, iPlayer);
   } else {
-    _pGame->gm_iSinglePlayer = iPlayer;
+    GetGameAPI()->SetPlayerForSP(iPlayer);
   }
   gm_mgNameField.mg_pstrToChange = &pc.pc_strName;
   gm_mgNameField.SetText(*gm_mgNameField.mg_pstrToChange);
@@ -265,11 +265,11 @@ void CPlayerProfileMenu::StartMenu(void) {
   _pGUIM->gmPlayerProfile.gm_pmgSelectedByDefault = &gm_mgNameField;
 
   if (_gmRunningGameMode == GM_NONE || _gmRunningGameMode == GM_DEMO) {
-    for (INDEX i = 0; i < 8; i++) {
+    for (INDEX i = 0; i < GetGameAPI()->GetProfileCount(); i++) {
       gm_mgNumber[i].mg_bEnabled = TRUE;
     }
   } else {
-    for (INDEX i = 0; i < 8; i++) {
+    for (INDEX i = 0; i < GetGameAPI()->GetProfileCount(); i++) {
       gm_mgNumber[i].mg_bEnabled = FALSE;
     }
     INDEX iFirstEnabled = 0;

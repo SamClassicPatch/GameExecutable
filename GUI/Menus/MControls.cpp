@@ -83,7 +83,7 @@ void CControlsMenu::Initialize_t(void) {
 
 void CControlsMenu::StartMenu(void) {
   gm_pmgSelectedByDefault = &gm_mgButtons;
-  INDEX iPlayer = _pGame->gm_iSinglePlayer;
+  INDEX iPlayer = GetGameAPI()->GetPlayerForSP();
   if (_iLocalPlayer >= 0 && _iLocalPlayer < GetGameAPI()->GetLocalPlayerCount()) {
     iPlayer = GetGameAPI()->GetMenuPlayer(_iLocalPlayer);
   }
@@ -92,7 +92,7 @@ void CControlsMenu::StartMenu(void) {
   ControlsMenuOn();
 
   CTString strControls;
-  strControls.PrintF(TRANS("CONTROLS FOR: %s"), _pGame->gm_apcPlayers[iPlayer].GetNameForPrinting());
+  strControls.PrintF(TRANS("CONTROLS FOR: %s"), GetGameAPI()->GetPlayerCharacter(iPlayer)->GetNameForPrinting());
 
   gm_mgNameLabel.SetText(strControls);
 
@@ -109,7 +109,7 @@ void CControlsMenu::EndMenu(void) {
 }
 
 void CControlsMenu::ObtainActionSettings(void) {
-  CControls &ctrls = _pGame->gm_ctrlControlsExtra;
+  CControls &ctrls = *GetGameAPI()->GetControls();
 
   gm_mgSensitivity.mg_iMinPos = 0;
   gm_mgSensitivity.mg_iMaxPos = 50;
@@ -129,7 +129,7 @@ void CControlsMenu::ObtainActionSettings(void) {
 }
 
 void CControlsMenu::ApplyActionSettings(void) {
-  CControls &ctrls = _pGame->gm_ctrlControlsExtra;
+  CControls &ctrls = *GetGameAPI()->GetControls();
 
   FLOAT fSensitivity =
     FLOAT(gm_mgSensitivity.mg_iCurPos - gm_mgSensitivity.mg_iMinPos) /

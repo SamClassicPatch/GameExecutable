@@ -189,7 +189,7 @@ void StartCurrentQuickLoadMenu() {
 
 void StartChangePlayerMenuFromOptions(void) {
   _bPlayerMenuFromSinglePlayer = FALSE;
-  _pGUIM->gmPlayerProfile.gm_piCurrentPlayer = &_pGame->gm_iSinglePlayer;
+  _pGUIM->gmPlayerProfile.gm_piCurrentPlayer = GetGameAPI()->piSinglePlayer;
   _pGUIM->gmPlayerProfile.SetParentMenu(&_pGUIM->gmOptionsMenu);
   ChangeToMenu(&_pGUIM->gmPlayerProfile);
 }
@@ -197,7 +197,7 @@ void StartChangePlayerMenuFromOptions(void) {
 void StartChangePlayerMenuFromSinglePlayer(void) {
   _iLocalPlayer = -1;
   _bPlayerMenuFromSinglePlayer = TRUE;
-  _pGUIM->gmPlayerProfile.gm_piCurrentPlayer = &_pGame->gm_iSinglePlayer;
+  _pGUIM->gmPlayerProfile.gm_piCurrentPlayer = GetGameAPI()->piSinglePlayer;
   _pGUIM->gmPlayerProfile.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
   ChangeToMenu(&_pGUIM->gmPlayerProfile);
 }
@@ -565,7 +565,7 @@ void StartSinglePlayerQuickLoadMenu(void) {
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
   gmCurrent.gm_bManage = TRUE;
-  gmCurrent.gm_fnmDirectory.PrintF("SaveGame\\Player%d\\Quick\\", _pGame->gm_iSinglePlayer);
+  gmCurrent.gm_fnmDirectory.PrintF("SaveGame\\Player%d\\Quick\\", GetGameAPI()->GetPlayerForSP());
   gmCurrent.gm_fnmSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".sav");
   gmCurrent.gm_pAfterFileChosen = &LSLoadSinglePlayer;
@@ -585,7 +585,7 @@ void StartSinglePlayerLoadMenu(void) {
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
   gmCurrent.gm_bManage = TRUE;
-  gmCurrent.gm_fnmDirectory.PrintF("SaveGame\\Player%d\\", _pGame->gm_iSinglePlayer);
+  gmCurrent.gm_fnmDirectory.PrintF("SaveGame\\Player%d\\", GetGameAPI()->GetPlayerForSP());
   gmCurrent.gm_fnmSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".sav");
   gmCurrent.gm_pAfterFileChosen = &LSLoadSinglePlayer;
@@ -615,7 +615,7 @@ void StartSinglePlayerSaveMenu(void) {
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = TRUE;
   gmCurrent.gm_bManage = TRUE;
-  gmCurrent.gm_fnmDirectory.PrintF("SaveGame\\Player%d\\", _pGame->gm_iSinglePlayer);
+  gmCurrent.gm_fnmDirectory.PrintF("SaveGame\\Player%d\\", GetGameAPI()->GetPlayerForSP());
   gmCurrent.gm_fnmSelected = CTString("");
   gmCurrent.gm_fnmBaseName = CTString("SaveGame");
   gmCurrent.gm_fnmExt = CTString(".sav");
