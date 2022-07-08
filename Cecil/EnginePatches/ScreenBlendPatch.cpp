@@ -15,8 +15,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include "../WorldEntities.h"
-
 // Original function pointer
 static void (CDrawPort::*pBlendScreen)(void) = NULL;
 
@@ -29,7 +27,7 @@ class CDrawPortPatch : public CDrawPort {
         BOOL bReset = FALSE;
 
         // Reset blending altogether if no world glaring available
-        if (GetWSC() == NULL) {
+        if (IWorld::GetWSC(IWorld::GetWorld()) == NULL) {
           bReset = TRUE;
 
         // Reset red screen blending

@@ -15,13 +15,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
-#include "WorldEntities.h"
-
 // Container of local player entities
 static CDynamicContainer<CPlayerEntity> _cenPlayers;
 
 // Iterate through each local player
-#define FOREACHPLAYER(_PlayerIter) GetLocalPlayers(_cenPlayers); \
+#define FOREACHPLAYER(_PlayerIter) IWorld::GetLocalPlayers(_cenPlayers); \
   FOREACHINDYNAMICCONTAINER(_cenPlayers, CPlayerEntity, _PlayerIter)
 
 // Walk on any solid polygon
@@ -82,10 +80,10 @@ static void CreateWeapon(INDEX iWeapon) {
     CPlayerEntity *pen = iten;
 
     // Create weapon item
-    CEntity *penWeapon = GetWorld()->CreateEntity_t(pen->GetPlacement(), CTFILENAME("Classes\\WeaponItem.ecl"));
+    CEntity *penWeapon = IWorld::GetWorld()->CreateEntity_t(pen->GetPlacement(), CTFILENAME("Classes\\WeaponItem.ecl"));
 
     // CWeaponItem::m_EwitType
-    CEntityProperty *pep = FindProperty(penWeapon, (0x322 << 8) + 1, 0x3AC, CEntityProperty::EPT_ENUM);
+    CEntityProperty *pep = IWorld::FindProperty(penWeapon, (0x322 << 8) + 1, 0x3AC, CEntityProperty::EPT_ENUM);
     CTString strWeapon = "";
 
     // Property found
