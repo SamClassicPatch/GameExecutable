@@ -478,7 +478,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _pShell->DeclareSymbol("INDEX sam_iStartCredits;", &sam_iStartCredits);
 
   // [Cecil] Load Game library as a module
-  CECIL_LoadGameLib();
+  _pCoreAPI->LoadGameLib();
 
   _pNetwork->md_strGameID = sam_strGameName;
 
@@ -535,7 +535,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   LoadDemosList();
 
   // [Cecil] Load plugins
-  CECIL_LoadPlugins();
+  _pCoreAPI->LoadPlugins();
 
   // apply application mode
   StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,
