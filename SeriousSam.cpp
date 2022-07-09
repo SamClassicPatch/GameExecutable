@@ -769,7 +769,7 @@ void DoGame(void) {
       _pGame->ComputerRender(pdp);
 
       // [Cecil] Call API every game render frame
-      _pPatchAPI->OnFrame(pdp);
+      _pCoreAPI->OnFrame(pdp);
 
       pdp->Unlock();
 
