@@ -64,7 +64,7 @@ void CECIL_Init(void) {
   CECIL_InitCore();
 
   {
-    CPrintF("^c00ffffSam:\nIntercepting Engine functions:\n");
+    CPrintF("--- Sam: Intercepting Engine functions ---\n");
 
     extern void CECIL_ApplyFOVPatch(void);
     extern void CECIL_ApplyScreenBlendPatch(void);
@@ -75,7 +75,7 @@ void CECIL_Init(void) {
     CECIL_ApplyUndecoratedPatch();
     CECIL_ApplySoundListenPatch();
 
-    CPrintF("^c00ffffDone!\n");
+    CPrintF("--- Done! ---\n");
   }
 
   // Custom symbols
