@@ -768,6 +768,9 @@ void DoGame(void) {
       pdp->Lock();
       _pGame->ComputerRender(pdp);
 
+      // [Cecil] Call API every game render frame
+      _pPatchAPI->OnFrame(pdp);
+
       pdp->Unlock();
 
       CDrawPort dpScroller(pdp, TRUE);
