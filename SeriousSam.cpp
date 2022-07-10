@@ -617,6 +617,9 @@ void End(void) {
   ClearLevelsList();
   ClearDemosList();
 
+  // [Cecil] Clean up the core
+  CECIL_EndCore();
+
   // destroy the main window and its canvas
   if (pvpViewPort != NULL) {
     _pGfx->DestroyWindowCanvas(pvpViewPort);
