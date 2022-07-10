@@ -704,7 +704,7 @@ void PrintDisplayModeInfo(void) {
 // Do the main game loop and render screen
 void DoGame(void) {
   // set flag if not in game
-  if (!GetGameAPI()->GetGameState()) {
+  if (!GetGameAPI()->IsGameOn()) {
     _gmRunningGameMode = GM_NONE;
   }
 
