@@ -28,9 +28,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "CmdLine.h"
 #include "Credits.h"
 
-// [Cecil] Core's render space
-#include <CoreLib/Rendering/RenderFunctions.h>
-
 // [Cecil] Window modes
 #include "Cecil/WindowModes.h"
 
@@ -844,7 +841,7 @@ void RenderStarfield(CDrawPort *pdp, FLOAT fStrength) {
   PIX pixSizeJ = pdp->GetHeight();
 
   // [Cecil] Use height instead of width
-  FLOAT fStretch = HEIGHT_MULTIPLIER(pdp);
+  FLOAT fStretch = HEIGHT_SCALING(pdp);
   fStretch *= FLOAT(ptd->GetPixWidth()) / ptd->GetWidth();
 
   PIXaabbox2D boxScreen(PIX2D(0, 0), PIX2D(pixSizeI, pixSizeJ));

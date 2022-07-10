@@ -238,7 +238,7 @@ void SetFontTitle(CDrawPort *pdp) {
   pdp->SetFont(&_fdTitle);
 
   // [Cecil] Use height instead of width for text scaling
-  pdp->SetTextScaling(1.25f * HEIGHT_MULTIPLIER(pdp));
+  pdp->SetTextScaling(1.25f * HEIGHT_SCALING(pdp));
   pdp->SetTextAspect(1.0f);
 }
 
@@ -247,7 +247,7 @@ void SetFontBig(CDrawPort *pdp) {
   pdp->SetFont(&_fdBig);
   
   // [Cecil] Use height instead of width for text scaling
-  pdp->SetTextScaling(1.0f * HEIGHT_MULTIPLIER(pdp));
+  pdp->SetTextScaling(1.0f * HEIGHT_SCALING(pdp));
   pdp->SetTextAspect(1.0f);
 }
 
@@ -256,7 +256,7 @@ void SetFontMedium(CDrawPort *pdp) {
   pdp->SetFont(&_fdMedium);
   
   // [Cecil] Use height instead of width for text scaling
-  pdp->SetTextScaling(1.0f * HEIGHT_MULTIPLIER(pdp));
+  pdp->SetTextScaling(1.0f * HEIGHT_SCALING(pdp));
   pdp->SetTextAspect(0.75f);
 }
 

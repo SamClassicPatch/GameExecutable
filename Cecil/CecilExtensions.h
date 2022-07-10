@@ -27,9 +27,6 @@ extern INDEX sam_bOptionTabs;
 // Red screen on damage
 extern INDEX sam_bRedScreenOnDamage;
 
-// Get scaling multiplier based on screen height
-#define HEIGHT_MULTIPLIER(DrawPort) ((FLOAT)DrawPort->GetHeight() / 480.0f)
-
 // Custom initialization
 void CECIL_Init(void);
 
