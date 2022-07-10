@@ -534,8 +534,8 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   LoadLevelsList();
   LoadDemosList();
 
-  // [Cecil] Load plugins
-  _pCoreAPI->LoadPlugins();
+  // [Cecil] Load in-game plugins
+  _pCoreAPI->LoadPlugins(CPluginAPI::PF_GAME);
 
   // apply application mode
   StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,
