@@ -25,25 +25,11 @@ extern INDEX sam_bBackgroundGameRender;
 extern INDEX sam_bAdjustForAspectRatio;
 extern INDEX sam_bOptionTabs;
 
-// FOV patch
-extern INDEX sam_bUseVerticalFOV;
-extern FLOAT sam_fCustomFOV;
-extern FLOAT sam_fThirdPersonFOV;
-extern INDEX sam_bFixMipDistance;
-extern INDEX sam_bFixViewmodelFOV;
-extern INDEX sam_bCheckFOV;
-
 // Red screen on damage
 extern INDEX sam_bRedScreenOnDamage;
 
 // Get scaling multiplier based on screen height
 #define HEIGHT_MULTIPLIER(DrawPort) ((FLOAT)DrawPort->GetHeight() / 480.0f)
-
-// Calculate horizontal FOV according to the aspect ratio
-void AdjustHFOV(const FLOAT2D &vScreen, FLOAT &fHFOV);
-
-// Calculate vertical FOV from horizontal FOV according to the aspect ratio
-void AdjustVFOV(const FLOAT2D &vScreen, FLOAT &fHFOV);
 
 // Custom initialization
 void CECIL_Init(void);

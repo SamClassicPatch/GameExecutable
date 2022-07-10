@@ -28,6 +28,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "CmdLine.h"
 #include "Credits.h"
 
+// [Cecil] Core's render space
+#include <CoreLib/Rendering/RenderFunctions.h>
+
 // [Cecil] Window modes
 #include "Cecil/WindowModes.h"
 
@@ -1473,6 +1476,9 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
 
     // erase context of both buffers (for the sake of wide-screen)
     pdp = pdpNormal;
+
+    // [Cecil] Hook Core's render space
+    IRender::SetDrawPort(pdp);
 
     if (pdp != NULL && pdp->Lock()) {
       pdp->Fill(C_BLACK | CT_OPAQUE);

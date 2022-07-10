@@ -263,7 +263,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cecil\CecilExtensions.cpp" />
-    <ClCompile Include="Cecil\EnginePatches\FOVPatch.cpp" />
     <ClCompile Include="Cecil\LocalCheats.cpp" />
     <ClCompile Include="Cecil\EnginePatches\ScreenBlendPatch.cpp" />
     <ClCompile Include="Cecil\ScreenResolutions.cpp" />
