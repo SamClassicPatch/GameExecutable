@@ -478,7 +478,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _pShell->DeclareSymbol("INDEX sam_iStartCredits;", &sam_iStartCredits);
 
   // [Cecil] Load Game library as a module
-  _pCoreAPI->LoadGameLib();
+  GetAPI()->LoadGameLib();
 
   _pNetwork->md_strGameID = sam_strGameName;
 
@@ -535,7 +535,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   LoadDemosList();
 
   // [Cecil] Load in-game plugins
-  _pCoreAPI->LoadPlugins(CPluginAPI::PF_GAME);
+  GetAPI()->LoadPlugins(CPluginAPI::PF_GAME);
 
   // apply application mode
   StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,
@@ -769,7 +769,7 @@ void DoGame(void) {
       _pGame->ComputerRender(pdp);
 
       // [Cecil] Call API every game render frame
-      _pCoreAPI->OnFrame(pdp);
+      GetAPI()->OnFrame(pdp);
 
       pdp->Unlock();
 
