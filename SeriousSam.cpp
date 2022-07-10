@@ -759,6 +759,9 @@ void DoGame(void) {
     BOOL bRenderGame = (!bMenuActive || sam_bBackgroundGameRender);
 
     if (_gmRunningGameMode != GM_NONE && bRenderGame) {
+      // [Cecil] Call API before redrawing the game
+      GetAPI()->OnPreDraw(pdp);
+
       // [Cecil] Don't wait for server while playing demos (removes "Waiting for server to continue" message)
       if (_pNetwork->IsPlayingDemo()) {
         _pNetwork->ga_sesSessionState.ses_bWaitingForServer = FALSE;
@@ -774,8 +777,8 @@ void DoGame(void) {
       pdp->Lock();
       _pGame->ComputerRender(pdp);
 
-      // [Cecil] Call API every game render frame
-      GetAPI()->OnFrame(pdp);
+      // [Cecil] Call API after redrawing the game
+      GetAPI()->OnPostDraw(pdp);
 
       pdp->Unlock();
 
@@ -807,6 +810,9 @@ void DoGame(void) {
 
     // render console
     _pGame->ConsoleRender(pdp);
+
+    // [Cecil] Call API every render frame
+    GetAPI()->OnFrame(pdp);
 
     // done with all
     pdp->Unlock();
