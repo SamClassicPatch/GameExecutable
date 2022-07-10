@@ -1477,9 +1477,6 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
     // erase context of both buffers (for the sake of wide-screen)
     pdp = pdpNormal;
 
-    // [Cecil] Hook Core's render space
-    IRender::SetDrawPort(pdp);
-
     if (pdp != NULL && pdp->Lock()) {
       pdp->Fill(C_BLACK | CT_OPAQUE);
 
@@ -1491,11 +1488,6 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
 
       pdp->Unlock();
       pvpViewPort->SwapBuffers();
-    }
-    
-    // [Cecil] Set wide adjustment based on current aspect ratio
-    if (sam_bAdjustForAspectRatio) {
-      pdp->dp_fWideAdjustment = ((FLOAT)pdp->GetHeight() / (FLOAT)pdp->GetWidth()) * (4.0f / 3.0f);
     }
 
     // initial screen fill and swap, just to get context running

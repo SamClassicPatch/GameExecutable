@@ -22,7 +22,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // General
 extern INDEX sam_bBackgroundGameRender;
-extern INDEX sam_bAdjustForAspectRatio;
 extern INDEX sam_bOptionTabs;
 
 // Red screen on damage

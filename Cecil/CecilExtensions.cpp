@@ -17,7 +17,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // General
 INDEX sam_bBackgroundGameRender = TRUE;
-INDEX sam_bAdjustForAspectRatio = TRUE;
 INDEX sam_bOptionTabs = TRUE;
 
 // Red screen on damage
@@ -43,7 +42,6 @@ void CECIL_Init(void) {
 
   // Custom symbols
   _pShell->DeclareSymbol("persistent user INDEX sam_bBackgroundGameRender;", &sam_bBackgroundGameRender);
-  _pShell->DeclareSymbol("persistent user INDEX sam_bAdjustForAspectRatio;", &sam_bAdjustForAspectRatio);
   _pShell->DeclareSymbol("persistent user INDEX sam_bOptionTabs;",           &sam_bOptionTabs);
 
   // Initalize other modules
