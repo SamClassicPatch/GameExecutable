@@ -43,8 +43,4 @@ void CECIL_Init(void) {
   // Custom symbols
   _pShell->DeclareSymbol("persistent user INDEX sam_bBackgroundGameRender;", &sam_bBackgroundGameRender);
   _pShell->DeclareSymbol("persistent user INDEX sam_bOptionTabs;",           &sam_bOptionTabs);
-
-  // Initalize other modules
-  extern void CECIL_InitLocalCheats(void);
-  CECIL_InitLocalCheats();
 };

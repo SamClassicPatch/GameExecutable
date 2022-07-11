@@ -234,9 +234,6 @@
     <ClCompile Include="Cecil\EnginePatches\UndecoratedPatch.cpp">
       <Filter>Source Files\Cecil\EnginePatches</Filter>
     </ClCompile>
-    <ClCompile Include="Cecil\LocalCheats.cpp">
-      <Filter>Source Files\Cecil</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdLine.h">
