@@ -19,9 +19,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 INDEX sam_bBackgroundGameRender = TRUE;
 INDEX sam_bOptionTabs = TRUE;
 
-// Red screen on damage
-INDEX sam_bRedScreenOnDamage = TRUE;
-
 // Custom initialization
 void CECIL_Init(void) {
   // Initialize the core
@@ -30,10 +27,8 @@ void CECIL_Init(void) {
   {
     CPrintF("--- Sam: Intercepting Engine functions ---\n");
 
-    extern void CECIL_ApplyScreenBlendPatch(void);
     extern void CECIL_ApplyUndecoratedPatch(void);
     extern void CECIL_ApplySoundListenPatch(void);
-    CECIL_ApplyScreenBlendPatch();
     CECIL_ApplyUndecoratedPatch();
     CECIL_ApplySoundListenPatch();
 

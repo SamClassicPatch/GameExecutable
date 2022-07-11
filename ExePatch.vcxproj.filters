@@ -225,9 +225,6 @@
     <ClCompile Include="Cecil\CecilExtensions.cpp">
       <Filter>Source Files\Cecil</Filter>
     </ClCompile>
-    <ClCompile Include="Cecil\EnginePatches\ScreenBlendPatch.cpp">
-      <Filter>Source Files\Cecil\EnginePatches</Filter>
-    </ClCompile>
     <ClCompile Include="Cecil\EnginePatches\SoundListenPatch.cpp">
       <Filter>Source Files\Cecil\EnginePatches</Filter>
     </ClCompile>
