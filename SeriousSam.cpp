@@ -398,6 +398,9 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _hInstance = hInstance;
   ShowSplashScreen(hInstance);
 
+  // [Cecil] Mark as a game
+  CCoreAPI::SetApplication(CCoreAPI::APP_GAME);
+
   // [Cecil] Get screen resolution
   _vpixScreenRes = PIX2D(::GetSystemMetrics(SM_CXSCREEN),
                          ::GetSystemMetrics(SM_CYSCREEN));
