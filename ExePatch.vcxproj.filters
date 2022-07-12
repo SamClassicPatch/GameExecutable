@@ -228,9 +228,6 @@
     <ClCompile Include="Cecil\EnginePatches\SoundListenPatch.cpp">
       <Filter>Source Files\Cecil\EnginePatches</Filter>
     </ClCompile>
-    <ClCompile Include="Cecil\EnginePatches\UndecoratedPatch.cpp">
-      <Filter>Source Files\Cecil\EnginePatches</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdLine.h">
