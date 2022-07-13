@@ -220,10 +220,8 @@ void StartHighScoreMenu(void) {
 void StartSplitScreenGame(void) {
   GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
-  // [Cecil] Go through available local players
-  for (INDEX iPlayer = 0; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
-    GetGameAPI()->SetStartPlayer(iPlayer, GetGameAPI()->GetMenuPlayer(iPlayer));
-  }
+  // [Cecil] Set start players from menu players
+  GetGameAPI()->SetStartPlayersFromMenuPlayers();
 
   CTFileName fnWorld = GetGameAPI()->GetCustomLevel();
 
@@ -244,10 +242,8 @@ void StartSplitScreenGame(void) {
 void StartNetworkGame(void) {
   GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
-  // [Cecil] Go through available local players
-  for (INDEX iPlayer = 0; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
-    GetGameAPI()->SetStartPlayer(iPlayer, GetGameAPI()->GetMenuPlayer(iPlayer));
-  }
+  // [Cecil] Set start players from menu players
+  GetGameAPI()->SetStartPlayersFromMenuPlayers();
 
   CTFileName fnWorld = GetGameAPI()->GetCustomLevel();
 
@@ -274,10 +270,8 @@ void StartNetworkGame(void) {
 void JoinNetworkGame(void) {
   GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
-  // [Cecil] Go through available local players
-  for (INDEX iPlayer = 0; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
-    GetGameAPI()->SetStartPlayer(iPlayer, GetGameAPI()->GetMenuPlayer(iPlayer));
-  }
+  // [Cecil] Set start players from menu players
+  GetGameAPI()->SetStartPlayersFromMenuPlayers();
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_CLIENT);
   if (_pGame->JoinGame(CNetworkSession(GetGameAPI()->GetJoinAddress()))) {

@@ -295,10 +295,8 @@ void StartNextDemo(void) {
     // start intro
     _gmRunningGameMode = GM_NONE;
 
-    // [Cecil] Go through available local players
-    for (INDEX iPlayer = 1; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
-      GetGameAPI()->SetStartPlayer(iPlayer, -1);
-    }
+    // [Cecil] Reset start player indices
+    GetGameAPI()->ResetStartPlayers();
     GetGameAPI()->SetStartPlayer(0, 0);
 
     GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
@@ -323,10 +321,8 @@ void StartNextDemo(void) {
     // start the demo
     GetGameAPI()->SetStartSplitCfg(CGame::SSC_OBSERVER);
 
-    // [Cecil] Go through available local players
-    for (INDEX iPlayer = 0; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
-      GetGameAPI()->SetStartPlayer(iPlayer, -1);
-    }
+    // [Cecil] Reset start player indices
+    GetGameAPI()->ResetStartPlayers();
 
     // play the demo
     GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);

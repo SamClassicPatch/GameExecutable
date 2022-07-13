@@ -35,10 +35,8 @@ extern CTString _strModServerSelected;
 BOOL LSLoadSinglePlayer(const CTFileName &fnm) {
   GetGameAPI()->SetStartSplitCfg(CGame::SSC_PLAY1);
 
-  // [Cecil] Go through available local players
-  for (INDEX iPlayer = 1; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
-    GetGameAPI()->SetStartPlayer(iPlayer, -1);
-  }
+  // [Cecil] Reset start player indices
+  GetGameAPI()->ResetStartPlayers();
   GetGameAPI()->SetStartPlayer(0, GetGameAPI()->GetPlayerForSP());
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
@@ -175,10 +173,8 @@ BOOL LSSaveDemo(const CTFileName &fnm) {
 void StartNetworkLoadGame(void) {
   GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
-  // [Cecil] Go through available local players
-  for (INDEX iPlayer = 0; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
-    GetGameAPI()->SetStartPlayer(iPlayer, GetGameAPI()->GetMenuPlayer(iPlayer));
-  }
+  // [Cecil] Set start players from menu players
+  GetGameAPI()->SetStartPlayersFromMenuPlayers();
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_SERVER);
   if (_pGame->LoadGame(_fnGameToLoad)) {
@@ -192,10 +188,8 @@ void StartNetworkLoadGame(void) {
 void StartSplitScreenGameLoad(void) {
   GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
-  // [Cecil] Go through available local players
-  for (INDEX iPlayer = 0; iPlayer < GetGameAPI()->GetLocalPlayerCount(); iPlayer++) {
-    GetGameAPI()->SetStartPlayer(iPlayer, GetGameAPI()->GetMenuPlayer(iPlayer));
-  }
+  // [Cecil] Set start players from menu players
+  GetGameAPI()->SetStartPlayersFromMenuPlayers();
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
   if (_pGame->LoadGame(_fnGameToLoad)) {
