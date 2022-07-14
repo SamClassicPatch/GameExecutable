@@ -48,57 +48,65 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE107|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+    <Import Project="..\Properties\Common.props" />
+    <Import Project="..\Properties\TSE107.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+    <Import Project="..\Properties\Common.props" />
+    <Import Project="..\Properties\TFE105.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+    <Import Project="..\Properties\Common.props" />
+    <Import Project="..\Properties\TSE105.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TSE107|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.Cpp.UpgradeFromVC60.props" />
+    <Import Project="..\Properties\Common.props" />
+    <Import Project="..\Properties\TSE107.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_TSE107|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(SolutionDir);$(SolutionDir)Includes/;$(SolutionDir)Includes/Engine107/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Includes/Engine107/;$(SolutionDir)Bin/$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(CommonIncludes);$(EngineIncludes);$(IncludePath)</IncludePath>
+    <LibraryPath>$(EngineIncludes);$(SolutionDir)Bin/$(Configuration);$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
-    <OutDir>$(SolutionDir)Bin\$(Configuration)\</OutDir>
+    <OutDir>$(BinDir)</OutDir>
     <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
     <TargetName>SeriousSam_Custom</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE107|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(SolutionDir);$(SolutionDir)Includes/;$(SolutionDir)Includes/Engine107/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Includes/Engine107/;$(SolutionDir)Bin/$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(CommonIncludes);$(EngineIncludes);$(IncludePath)</IncludePath>
+    <LibraryPath>$(EngineIncludes);$(SolutionDir)Bin/$(Configuration);$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
-    <OutDir>$(SolutionDir)Bin\$(Configuration)\</OutDir>
+    <OutDir>$(BinDir)</OutDir>
     <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
     <TargetName>SeriousSam_Custom</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(SolutionDir);$(SolutionDir)Includes/;$(SolutionDir)Includes/Engine105/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Includes/Engine105/;$(SolutionDir)Bin/$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(CommonIncludes);$(EngineIncludes);$(IncludePath)</IncludePath>
+    <LibraryPath>$(EngineIncludes);$(SolutionDir)Bin/$(Configuration);$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
-    <OutDir>$(SolutionDir)Bin\$(Configuration)\</OutDir>
+    <OutDir>$(BinDir)</OutDir>
     <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
     <TargetName>SeriousSam_Custom</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(SolutionDir);$(SolutionDir)Includes/;$(SolutionDir)Includes/Engine105FE/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Includes/Engine105FE/;$(SolutionDir)Bin/$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(CommonIncludes);$(EngineIncludes);$(IncludePath)</IncludePath>
+    <LibraryPath>$(EngineIncludes);$(SolutionDir)Bin/$(Configuration);$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
     <EmbedManifest>true</EmbedManifest>
-    <OutDir>$(SolutionDir)Bin\$(Configuration)\</OutDir>
+    <OutDir>$(BinDir)</OutDir>
     <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
     <TargetName>SeriousSam_Custom</TargetName>
   </PropertyGroup>
