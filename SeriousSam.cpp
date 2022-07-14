@@ -452,7 +452,6 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _pShell->DeclareSymbol("persistent user INDEX sam_bPauseOnMinimize;", &sam_bPauseOnMinimize);
   _pShell->DeclareSymbol("persistent user FLOAT sam_tmDisplayModeReport;",   &sam_tmDisplayModeReport);
   _pShell->DeclareSymbol("persistent user CTString sam_strNetworkSettings;", &sam_strNetworkSettings);
-  _pShell->DeclareSymbol("user CTString sam_strVersion;",    &sam_strVersion);
   _pShell->DeclareSymbol("user CTString sam_strModName;", &sam_strModName);
   _pShell->DeclareSymbol("persistent INDEX sam_bShowAllLevels;", &sam_bShowAllLevels);
   _pShell->DeclareSymbol("persistent INDEX sam_bMentalActivated;", &sam_bMentalActivated);
