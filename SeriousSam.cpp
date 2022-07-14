@@ -116,8 +116,6 @@ extern CTextureObject *_ptoLogoCT = NULL;
 extern CTextureObject *_ptoLogoODI = NULL;
 extern CTextureObject *_ptoLogoEAX = NULL;
 
-CTString sam_strVersion = _SE_VER_STRING; // [Cecil] Use version string
-
 // [Cecil] The First Encounter
 #ifdef SE1_TFE
   CTString sam_strModName = TRANS("-   T H E   F I R S T   E N C O U N T E R   -");

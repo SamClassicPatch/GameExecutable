@@ -26,7 +26,6 @@ void CMainMenu::Initialize_t(void) {
   AddChild(& gm_mgTitle.mg_lnNode);
   */
 
-  extern CTString sam_strVersion;
   gm_mgVersionLabel.SetText(sam_strVersion);
   gm_mgVersionLabel.mg_boxOnScreen = BoxVersion();
   gm_mgVersionLabel.mg_bfsFontSize = BFS_MEDIUM;
