@@ -144,10 +144,7 @@
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep />
-    <PostBuildEvent>
-      <Message>Copying $(TargetName)$(TargetExt) to $(SolutionDir)..\Bin</Message>
-      <Command>copy $(OutDir)$(TargetName)$(TargetExt) $(SolutionDir)..\Bin\Debug\ &gt;nul </Command>
-    </PostBuildEvent>
+    <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE107|Win32'">
     <ClCompile>
@@ -184,10 +181,7 @@
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep />
-    <PostBuildEvent>
-      <Message>Copying $(TargetName)$(TargetExt) to $(SolutionDir)..\Bin</Message>
-      <Command>copy $(OutDir)$(TargetName)$(TargetExt) $(SolutionDir)..\Bin\ &gt;nul </Command>
-    </PostBuildEvent>
+    <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'">
     <ClCompile>
@@ -224,10 +218,7 @@
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep />
-    <PostBuildEvent>
-      <Message>Copying $(TargetName)$(TargetExt) to $(SolutionDir)..\Bin</Message>
-      <Command>copy $(OutDir)$(TargetName)$(TargetExt) $(SolutionDir)..\Bin\ &gt;nul </Command>
-    </PostBuildEvent>
+    <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_TFE105|Win32'">
     <ClCompile>
@@ -264,10 +255,7 @@
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep />
-    <PostBuildEvent>
-      <Message>Copying $(TargetName)$(TargetExt) to $(SolutionDir)..\Bin</Message>
-      <Command>copy $(OutDir)$(TargetName)$(TargetExt) $(SolutionDir)..\Bin\ &gt;nul </Command>
-    </PostBuildEvent>
+    <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cecil\CecilExtensions.cpp" />
