@@ -713,6 +713,20 @@ BOOL DoMenu(CDrawPort *pdp) {
         dpMenu.PutTexture(&_toLogoMenuB, PIXaabbox2D(
           PIX2D(pixCenterI, pixHeightJ), PIX2D(pixCenterI + pixSizeI, pixHeightJ + pixSizeJ)));
       }
+
+      // [Cecil] Display patch information
+      {
+        dpMenu.SetFont(_pfdConsoleFont);
+        dpMenu.SetTextScaling(1.0f);
+        dpMenu.SetTextCharSpacing(-1);
+
+        const PIX pixPatchX = dpMenu.GetWidth() - 16;
+        const PIX pixPatchY = dpMenu.GetHeight() - _pfdConsoleFont->fd_pixCharHeight;
+        const CTString strPatch = "Serious Sam Classics Patch v" + GetAPI()->GetVersion();
+
+        dpMenu.PutTextR(strPatch, pixPatchX, pixPatchY, 0xFFFFFFFF);
+      }
+
     } else if (pgmCurrentMenu == &_pGUIM->gmAudioOptionsMenu) {
       if (_ptoLogoEAX != NULL) {
         CTextureData &td = (CTextureData &)*_ptoLogoEAX->GetData();
