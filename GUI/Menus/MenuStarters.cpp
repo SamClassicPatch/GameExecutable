@@ -234,6 +234,10 @@ void StartSplitScreenGame(void) {
   if (_pGame->NewGame(fnWorld.FileName(), fnWorld, (CSessionProperties &)sp)) {
     StopMenus();
     _gmRunningGameMode = GM_SPLIT_SCREEN;
+
+    // [Cecil] Start game for Core
+    GetAPI()->OnGameStart();
+
   } else {
     _gmRunningGameMode = GM_NONE;
   }
@@ -256,6 +260,10 @@ void StartNetworkGame(void) {
   if (_pGame->NewGame(GetGameAPI()->GetSessionName(), fnWorld, (CSessionProperties &)sp)) {
     StopMenus();
     _gmRunningGameMode = GM_NETWORK;
+
+    // [Cecil] Start game for Core
+    GetAPI()->OnGameStart();
+
     // if starting a dedicated server
     if (GetGameAPI()->GetMenuSplitCfg() == CGame::SSC_DEDICATED) {
       // pull down the console

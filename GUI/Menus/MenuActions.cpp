@@ -146,6 +146,9 @@ static void ExitConfirm(void) {
 }
 
 static void StopCurrentGame(void) {
+  // [Cecil] Stop game for Core
+  GetAPI()->OnGameStop();
+
   _pGame->StopGame();
   _gmRunningGameMode = GM_NONE;
   StopMenus(TRUE);
@@ -390,6 +393,10 @@ void StartSinglePlayerGame(void) {
   if (_pGame->NewGame(GetGameAPI()->GetCustomLevel(), GetGameAPI()->GetCustomLevel(), (CSessionProperties &)sp)) {
     StopMenus();
     _gmRunningGameMode = GM_SINGLE_PLAYER;
+
+    // [Cecil] Start game for Core
+    GetAPI()->OnGameStart();
+
   } else {
     _gmRunningGameMode = GM_NONE;
   }
