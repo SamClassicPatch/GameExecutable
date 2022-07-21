@@ -704,8 +704,8 @@ void DoGame(void) {
     _gmRunningGameMode = GM_NONE;
   }
 
-  if (_gmRunningGameMode == GM_DEMO && _pNetwork->IsDemoPlayFinished()
-   || _gmRunningGameMode == GM_INTRO && _pNetwork->IsGameFinished()) {
+  if ((_gmRunningGameMode == GM_DEMO && _pNetwork->IsDemoPlayFinished())
+   || (_gmRunningGameMode == GM_INTRO && _pNetwork->IsGameFinished())) {
     _pGame->StopGame();
     _gmRunningGameMode = GM_NONE;
 
