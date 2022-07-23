@@ -37,14 +37,15 @@ void CVideoOptionsMenu::Initialize_t(void) {
   gm_mgDisplayAPITrigger.mg_strTip = TRANS("choose graphics API to be used");
   TRIGGER_MG(gm_mgDisplayAdaptersTrigger, 1, gm_mgDisplayAPITrigger, gm_mgDisplayPrefsTrigger, TRANS("DISPLAY ADAPTER"), astrNoYes);
   gm_mgDisplayAdaptersTrigger.mg_strTip = TRANS("choose display adapter to be used");
-  TRIGGER_MG(gm_mgDisplayPrefsTrigger, 2, gm_mgDisplayAdaptersTrigger, gm_mgResolutionsTrigger, TRANS("PREFERENCES"), astrDisplayPrefsRadioTexts);
+  TRIGGER_MG(gm_mgDisplayPrefsTrigger, 2, gm_mgDisplayAdaptersTrigger, gm_mgAspectRatiosTrigger, TRANS("PREFERENCES"), astrDisplayPrefsRadioTexts);
   gm_mgDisplayPrefsTrigger.mg_strTip = TRANS("balance between speed and rendering quality, depending on your system");
-  TRIGGER_MG(gm_mgResolutionsTrigger, 3, gm_mgDisplayPrefsTrigger, gm_mgAspectRatiosTrigger, TRANS("RESOLUTION"), astrNoYes);
-  gm_mgResolutionsTrigger.mg_strTip = TRANS("select video mode resolution");
 
   // [Cecil] Aspect ratio list
-  TRIGGER_MG(gm_mgAspectRatiosTrigger, 4, gm_mgResolutionsTrigger, gm_mgWindowModeTrigger, TRANS("ASPECT RATIO"), _astrAspectRatios);
+  TRIGGER_MG(gm_mgAspectRatiosTrigger, 3, gm_mgDisplayPrefsTrigger, gm_mgResolutionsTrigger, TRANS("ASPECT RATIO"), _astrAspectRatios);
   gm_mgAspectRatiosTrigger.mg_strTip = TRANS("select video mode aspect ratio");
+
+  TRIGGER_MG(gm_mgResolutionsTrigger, 4, gm_mgAspectRatiosTrigger, gm_mgWindowModeTrigger, TRANS("RESOLUTION"), astrNoYes);
+  gm_mgResolutionsTrigger.mg_strTip = TRANS("select video mode resolution");
 
   // [Cecil] Changed fullscreen switch to window modes
   TRIGGER_MG(gm_mgWindowModeTrigger, 5, gm_mgResolutionsTrigger, gm_mgBitsPerPixelTrigger, TRANS("WINDOW MODE"), _astrWindowModes);
