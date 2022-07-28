@@ -45,7 +45,15 @@ void CMGModel::Render(CDrawPort *pdp) {
   CRenderModel rmRenderModel;
   CPerspectiveProjection3D pr;
 
-  pr.FOVL() = 30.0f; // [Cecil] Adjusted in BeginModelRenderingView()
+  pr.FOVL() = 30.0f; // [Cecil] Static FOV
+
+  // [Cecil] Adjust FOV for the player model
+  extern INDEX sam_bUseVerticalFOV;
+  if (sam_bUseVerticalFOV) {
+    // Use screen ratio set in BoxPlayerModel() as the size
+    IRender::AdjustVFOV(FLOAT2D(285, 545), pr.FOVL());
+  }
+
   pr.ScreenBBoxL() = FLOATaabbox2D(FLOAT2D(0.0f, 0.0f), FLOAT2D((float)dpModel.GetWidth(), (float)dpModel.GetHeight()));
   pr.AspectRatioL() = 1.0f;
   pr.FrontClipDistanceL() = 0.3f;
