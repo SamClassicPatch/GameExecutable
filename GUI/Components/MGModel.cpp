@@ -54,7 +54,7 @@ void CMGModel::Render(CDrawPort *pdp) {
   // initialize remdering
   CAnyProjection3D apr;
   apr = pr;
-  IRender::BeginModelRendering(apr, &dpModel, TRUE);
+  BeginModelRenderingView(apr, &dpModel);
   rmRenderModel.rm_vLightDirection = FLOAT3D(0.2f, -0.2f, -0.2f);
 
   // if model needs floor
@@ -91,7 +91,7 @@ void CMGModel::Render(CDrawPort *pdp) {
     mg_plModel.pl_PositionVector + vShadowLightDir * mg_plModel.pl_PositionVector(3) * 5, ANGLE3D(0.0f, 0.0f, 0.0f));
   mg_moModel.RenderShadow(rmRenderModel, plLightPlacement, 200.0f, 200.0f, 1.0f, plFloorPlane);
   mg_moModel.RenderModel(rmRenderModel);
-  IRender::EndModelRendering();
+  EndModelRenderingView();
 
   LCDScreenBox(LCDGetColor(C_GREEN, "model box") | GetCurrentColor());
 
