@@ -184,16 +184,28 @@ void ParseCFG_t(CTStream &strm) {
 
   // [Cecil] Current tab
   CVarTab *pCur = NULL;
+  BOOL bOnlySeparators = FALSE;
 
   // [Cecil] Go through each setting
   FOREACHINLIST(CVarSetting, vs_lnNode, lhAll, itvs) {
     CVarSetting &vs = *itvs;
 
-    // If it's a separator with a name
-    if (vs.vs_bSeparator && vs.vs_strName != "") {
-      // Start a new tab
-      pCur = &_aTabs.Push();
-      pCur->strName = vs.vs_strName;
+    // It's a separator
+    if (vs.vs_bSeparator)
+    {
+      // It has a name and there are different settings under the current tab
+      if (!bOnlySeparators && vs.vs_strName != "") {
+        // Start a new tab
+        pCur = &_aTabs.Push();
+        pCur->strName = vs.vs_strName;
+
+        // Reset separators state
+        bOnlySeparators = TRUE;
+      }
+
+    // Not a separator
+    } else {
+      bOnlySeparators = FALSE;
     }
 
     // Copy setting into the new tab
@@ -354,23 +366,28 @@ CVarSetting::CVarSetting(const CVarSetting &vsOther) {
   vs_iOrgValue        = vsOther.vs_iOrgValue;
   vs_bCustom          = vsOther.vs_bCustom;
 
-  INDEX i;
   INDEX ct;
   CTString *pstr;
 
   // Copy texts
   ct = vsOther.vs_astrTexts.Count();
-  pstr = vs_astrTexts.Push(ct);
 
-  for (i = 0; i < ct; i++) {
-    pstr[i] = vsOther.vs_astrTexts[i];
+  if (ct > 0) {
+    pstr = vs_astrTexts.Push(ct);
+
+    while (--ct >= 0) {
+      pstr[ct] = vsOther.vs_astrTexts[ct];
+    }
   }
   
   // Copy values
   ct = vsOther.vs_astrValues.Count();
-  pstr = vs_astrValues.Push(ct);
+
+  if (ct > 0) {
+    pstr = vs_astrValues.Push(ct);
   
-  for (i = 0; i < ct; i++) {
-    pstr[i] = vsOther.vs_astrValues[i];
+    while (--ct >= 0) {
+      pstr[ct] = vsOther.vs_astrValues[ct];
+    }
   }
 };
