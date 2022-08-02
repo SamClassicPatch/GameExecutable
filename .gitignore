@@ -44,9 +44,3 @@ Debug/
 *.res
 *.lastbuildstate
 *.idb
-
-# Build directories
-Debug_TSE107/*
-Release_TSE107/*
-Release_TSE105/*
-Release_TFE105/*
