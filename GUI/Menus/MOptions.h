@@ -30,7 +30,7 @@ class COptionsMenu : public CGameMenu {
     CMGButton gm_mgAudioOptions;
     CMGButton gm_mgPlayerProfileOptions;
     CMGButton gm_mgNetworkOptions;
-    CMGButton gm_mgPatchOptions; // [Cecil] EXE patch settings
+    CMGButton gm_mgPatchOptions; // [Cecil] Patch settings
     CMGButton gm_mgCustomOptions;
     CMGButton gm_mgAddonOptions;
 

@@ -139,6 +139,16 @@ BOOL LSLoadCustom(const CTFileName &fnm) {
   return TRUE;
 }
 
+// [Cecil] Load config settings from the patch
+BOOL LSLoadPatchConfig(const CTFileName &fnm) {
+  _pGUIM->gmVarMenu.gm_mgTitle.SetName(TRANS("CLASSICS PATCH"));
+  _pGUIM->gmVarMenu.gm_fnmMenuCFG = fnm;
+  _pGUIM->gmVarMenu.SetParentMenu(&_pGUIM->gmLoadSaveMenu);
+
+  ChangeToMenu(&_pGUIM->gmVarMenu);
+  return TRUE;
+};
+
 BOOL LSLoadNetSettings(const CTFileName &fnm) {
   sam_strNetworkSettings = fnm;
   CTString strCmd;

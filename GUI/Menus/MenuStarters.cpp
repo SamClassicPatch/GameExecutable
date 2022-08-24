@@ -547,12 +547,21 @@ void StartNetworkSettingsMenu(void) {
   ChangeToMenu(&gmCurrent);
 }
 
-// [Cecil] Open patch options menu
+// [Cecil] Open list of option configs from the patch
 void StartPatchOptionsMenu(void) {
-  CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
+  CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("EXE PATCH OPTIONS"));
-  gmCurrent.gm_fnmMenuCFG = CTFILENAME("Scripts\\Menu\\ExePatch.cfg");
+  gmCurrent.gm_mgTitle.SetName(TRANS("CLASSICS PATCH"));
+  gmCurrent.gm_bAllowThumbnails = FALSE;
+  gmCurrent.gm_iSortType = LSSORT_FILEUP;
+  gmCurrent.gm_bSave = FALSE;
+  gmCurrent.gm_bManage = FALSE;
+  gmCurrent.gm_fnmDirectory = CTString("Scripts\\ClassicsPatch\\");
+  gmCurrent.gm_fnmSelected = CTString("");
+  gmCurrent.gm_fnmExt = CTString(".cfg");
+  gmCurrent.gm_pAfterFileChosen = &LSLoadPatchConfig;
+  gmCurrent.gm_mgNotes.SetText("");
+
   gmCurrent.SetParentMenu(&_pGUIM->gmOptionsMenu);
   ChangeToMenu(&gmCurrent);
 };

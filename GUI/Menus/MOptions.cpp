@@ -59,13 +59,13 @@ void COptionsMenu::Initialize_t(void) {
   AddChild(&gm_mgNetworkOptions);
   gm_mgNetworkOptions.mg_pActivatedFunction = NULL;
 
-  // [Cecil] EXE patch settings
+  // [Cecil] Patch settings
   gm_mgPatchOptions.mg_bfsFontSize = BFS_LARGE;
   gm_mgPatchOptions.mg_boxOnScreen = BoxBigRow(4.0f);
   gm_mgPatchOptions.mg_pmgUp = &gm_mgNetworkOptions;
   gm_mgPatchOptions.mg_pmgDown = &gm_mgCustomOptions;
-  gm_mgPatchOptions.SetText(TRANS("EXE PATCH OPTIONS"));
-  gm_mgPatchOptions.mg_strTip = TRANS("commands from the patched executable file");
+  gm_mgPatchOptions.SetText(TRANS("CLASSICS PATCH"));
+  gm_mgPatchOptions.mg_strTip = TRANS("settings for the classics patch");
   AddChild(&gm_mgPatchOptions);
   gm_mgPatchOptions.mg_pActivatedFunction = NULL;
 
