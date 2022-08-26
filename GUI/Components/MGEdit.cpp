@@ -55,6 +55,15 @@ void CMGEdit::OnKillFocus(void) {
   CMenuGadget::OnKillFocus();
 }
 
+// [Cecil] Cancel string editing upon disappearing
+void CMGEdit::Disappear(void) {
+  *mg_pstrToChange = GetText();
+  Clear();
+  OnStringChanged();
+
+  CMGButton::Disappear();
+};
+
 // helper function for deleting char(s) from string
 static void Key_BackDel(CTString &str, INDEX &iPos, BOOL bShift, BOOL bRight) {
   // do nothing if string is empty

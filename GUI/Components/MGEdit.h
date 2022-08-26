@@ -34,6 +34,7 @@ class CMGEdit : public CMGButton {
     void Clear(void);
     void OnActivate(void);
     void OnKillFocus(void);
+    void Disappear(void);
     void Render(CDrawPort *pdp);
     virtual void OnStringChanged(void);
     virtual void OnStringCanceled(void);
