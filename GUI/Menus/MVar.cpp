@@ -190,10 +190,11 @@ void CVarMenu::EndMenu(void) {
 
   FlushVarSettings(FALSE);
   _bVarChanged = FALSE;
+
+  // [Cecil] Make menu elements disappear
+  CGameMenu::EndMenu();
 }
 
 void CVarMenu::Think(void) {
   gm_mgApply.mg_bEnabled = _bVarChanged;
-  extern void FixupBackButton(CGameMenu * pgm);
-  FixupBackButton(this);
 }
