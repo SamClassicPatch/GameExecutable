@@ -57,9 +57,11 @@ void CMGEdit::OnKillFocus(void) {
 
 // [Cecil] Cancel string editing upon disappearing
 void CMGEdit::Disappear(void) {
-  *mg_pstrToChange = GetText();
-  Clear();
-  OnStringChanged();
+  if (mg_pstrToChange != NULL) {
+    *mg_pstrToChange = GetText();
+    Clear();
+    OnStringChanged();
+  }
 
   CMGButton::Disappear();
 };
