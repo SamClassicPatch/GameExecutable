@@ -95,7 +95,6 @@ BOOL LSLoadPlayerModel(const CTFileName &fnm) {
   memset(pps->ps_achModelFile, 0, sizeof(pps->ps_achModelFile));
   strncpy(pps->ps_achModelFile, strBaseName, sizeof(pps->ps_achModelFile));
 
-  void MenuGoToParent(void);
   MenuGoToParent();
   return TRUE;
 }
@@ -109,7 +108,6 @@ BOOL LSLoadControls(const CTFileName &fnm) {
     CPrintF("%s", strError);
   }
 
-  void MenuGoToParent(void);
   MenuGoToParent();
   return TRUE;
 }
@@ -155,7 +153,6 @@ BOOL LSLoadNetSettings(const CTFileName &fnm) {
   strCmd.PrintF("include \"%s\"", (const char *)sam_strNetworkSettings);
   _pShell->Execute(strCmd);
 
-  void MenuGoToParent(void);
   MenuGoToParent();
   return TRUE;
 }
