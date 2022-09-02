@@ -299,6 +299,7 @@
     <ClCompile Include="GUI\Menus\MNetworkStart.cpp" />
     <ClCompile Include="GUI\Menus\MOptions.cpp" />
     <ClCompile Include="GUI\Menus\MPlayerProfile.cpp" />
+    <ClCompile Include="GUI\Menus\MSelectionList.cpp" />
     <ClCompile Include="GUI\Menus\MSelectPlayers.cpp" />
     <ClCompile Include="GUI\Menus\MServers.cpp" />
     <ClCompile Include="GUI\Menus\MSinglePlayer.cpp" />
@@ -355,6 +356,7 @@
     <ClInclude Include="GUI\Menus\MOptions.h" />
     <ClInclude Include="GUI\Menus\MPlayerProfile.h" />
     <ClInclude Include="GUI\Menus\MRenderingOptions.h" />
+    <ClInclude Include="GUI\Menus\MSelectionList.h" />
     <ClInclude Include="GUI\Menus\MSelectPlayers.h" />
     <ClInclude Include="GUI\Menus\MServers.h" />
     <ClInclude Include="GUI\Menus\MSinglePlayer.h" />
