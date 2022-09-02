@@ -61,28 +61,42 @@ void CMGFileButton::DoSave(void) {
 }
 
 void CMGFileButton::SaveYes(void) {
+  // [Cecil] Saving can only be done through the load/save menu
+  ASSERT(GetParent() == &_pGUIM->gmLoadSaveMenu);
   ASSERT(_pGUIM->gmLoadSaveMenu.gm_bSave);
-  // call saving function
+
+  // Call saving function
   BOOL bSucceeded = _pGUIM->gmLoadSaveMenu.gm_pAfterFileChosen(mg_fnm);
-  // if saved
+
+  // If saved
   if (bSucceeded) {
-    // save the description too
+    // Save the description too
     SaveDescription();
   }
 }
 
 void CMGFileButton::DoLoad(void) {
-  ASSERT(!_pGUIM->gmLoadSaveMenu.gm_bSave);
-  // if no file
+#ifdef _DEBUG
+  // [Cecil] Check for saving state if currently in load/save menu
+  if (GetParent() == &_pGUIM->gmLoadSaveMenu) {
+    ASSERT(!_pGUIM->gmLoadSaveMenu.gm_bSave);
+  }
+#endif
+
+  // No file
   if (!FileExists(mg_fnm)) {
-    // do nothing
+    // Do nothing
     return;
   }
+
   if (_pGUIM->gmLoadSaveMenu.gm_pgmNextMenu != NULL) {
     _pGUIM->gmLoadSaveMenu.SetParentMenu(_pGUIM->gmLoadSaveMenu.gm_pgmNextMenu);
   }
-  // call loading function
-  BOOL bSucceeded = _pGUIM->gmLoadSaveMenu.gm_pAfterFileChosen(mg_fnm);
+
+  // [Cecil] Call loading function from the parent
+  BOOL bSucceeded = ((CSelectListMenu *)GetParent())->gm_pAfterFileChosen(mg_fnm);
+
+  // Should always succeed
   ASSERT(bSucceeded);
 }
 

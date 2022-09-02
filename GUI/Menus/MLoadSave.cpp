@@ -31,9 +31,9 @@ void CLoadSaveMenu::Initialize_t(void) {
   gm_mgNotes.mg_bLabel = TRUE;
   AddChild(&gm_mgNotes);
 
-  for (INDEX iLabel = 0; iLabel < SAVELOAD_BUTTONS_CT; iLabel++) {
-    INDEX iPrev = (SAVELOAD_BUTTONS_CT + iLabel - 1) % SAVELOAD_BUTTONS_CT;
-    INDEX iNext = (iLabel + 1) % SAVELOAD_BUTTONS_CT;
+  for (INDEX iLabel = 0; iLabel < SELECTLIST_BUTTONS_CT; iLabel++) {
+    INDEX iPrev = (SELECTLIST_BUTTONS_CT + iLabel - 1) % SELECTLIST_BUTTONS_CT;
+    INDEX iNext = (iLabel + 1) % SELECTLIST_BUTTONS_CT;
     // initialize label gadgets
     gm_amgButton[iLabel].mg_pmgUp = &gm_amgButton[iPrev];
     gm_amgButton[iLabel].mg_pmgDown = &gm_amgButton[iNext];
@@ -50,107 +50,87 @@ void CLoadSaveMenu::Initialize_t(void) {
   gm_mgArrowUp.mg_boxOnScreen = BoxArrow(AD_UP);
   gm_mgArrowDn.mg_boxOnScreen = BoxArrow(AD_DOWN);
   gm_mgArrowUp.mg_pmgRight = gm_mgArrowUp.mg_pmgDown = &gm_amgButton[0];
-  gm_mgArrowDn.mg_pmgRight = gm_mgArrowDn.mg_pmgUp = &gm_amgButton[SAVELOAD_BUTTONS_CT - 1];
+  gm_mgArrowDn.mg_pmgRight = gm_mgArrowDn.mg_pmgUp = &gm_amgButton[SELECTLIST_BUTTONS_CT - 1];
 
-  gm_ctListVisible = SAVELOAD_BUTTONS_CT;
+  gm_ctListVisible = SELECTLIST_BUTTONS_CT;
   gm_pmgArrowUp = &gm_mgArrowUp;
   gm_pmgArrowDn = &gm_mgArrowDn;
   gm_pmgListTop = &gm_amgButton[0];
-  gm_pmgListBottom = &gm_amgButton[SAVELOAD_BUTTONS_CT - 1];
+  gm_pmgListBottom = &gm_amgButton[SELECTLIST_BUTTONS_CT - 1];
 }
 
-void CLoadSaveMenu::StartMenu(void) {
-  gm_bNoEscape = FALSE;
-
-  // delete all file infos
-  FORDELETELIST(CFileInfo, fi_lnNode, gm_lhFileInfos, itfi) {
-    delete &itfi.Current();
-  }
-
-  // list the directory
+// Create new buttons with file infos
+void CLoadSaveMenu::CreateButtons(void) {
+  // List the directory
   CDynamicStackArray<CTFileName> afnmDir;
   MakeDirList(afnmDir, gm_fnmDirectory, "", 0);
   gm_iLastFile = -1;
 
-  // for each file in the directory
+  // For each file in the directory
   for (INDEX i = 0; i < afnmDir.Count(); i++) {
     CTFileName fnm = afnmDir[i];
 
-    // if it can be parsed
+    // If it can be parsed
     CTString strName;
-    if (ParseFile(fnm, strName)) {
-      // create new info for that file
+
+    if (ParseFile(fnm, strName))
+    {
+      // Create new info for that file
       CFileInfo *pfi = new CFileInfo;
       pfi->fi_fnFile = fnm;
       pfi->fi_strName = strName;
-      // add it to list
+
+      // Add it to the list
       gm_lhFileInfos.AddTail(pfi->fi_lnNode);
     }
   }
 
-  // sort if needed
-  switch (gm_iSortType) {
-    default: ASSERT(FALSE);
+  // Sort if needed
+  switch (gm_iSortType)
+  {
     case LSSORT_NONE: break;
+
     case LSSORT_NAMEUP:
       gm_lhFileInfos.Sort(qsort_CompareFileInfos_NameUp, offsetof(CFileInfo, fi_lnNode));
       break;
+
     case LSSORT_NAMEDN:
       gm_lhFileInfos.Sort(qsort_CompareFileInfos_NameDn, offsetof(CFileInfo, fi_lnNode));
       break;
+
     case LSSORT_FILEUP:
       gm_lhFileInfos.Sort(qsort_CompareFileInfos_FileUp, offsetof(CFileInfo, fi_lnNode));
       break;
+
     case LSSORT_FILEDN:
       gm_lhFileInfos.Sort(qsort_CompareFileInfos_FileDn, offsetof(CFileInfo, fi_lnNode));
       break;
+
+    default: ASSERT(FALSE);
   }
 
-  // if saving
-  if (gm_bSave) {
-    // add one info as empty slot
+  // If saving
+  if (gm_bSave)
+  {
+    // Add one info as empty slot
     CFileInfo *pfi = new CFileInfo;
+
     CTString strNumber;
     strNumber.PrintF("%04d", gm_iLastFile + 1);
+
     pfi->fi_fnFile = gm_fnmDirectory + gm_fnmBaseName + strNumber + gm_fnmExt;
     pfi->fi_strName = EMPTYSLOTSTRING;
-    // add it to beginning
+
+    // Add it to the beginning
     gm_lhFileInfos.AddHead(pfi->fi_lnNode);
   }
 
-  // set default parameters for the list
-  gm_iListOffset = 0;
-  gm_ctListTotal = gm_lhFileInfos.Count();
-
-  // find which one should be selected
-  gm_iListWantedItem = 0;
-  if (gm_fnmSelected != "") {
-    INDEX i = 0;
-    FOREACHINLIST(CFileInfo, fi_lnNode, gm_lhFileInfos, itfi) {
-      CFileInfo &fi = *itfi;
-      if (fi.fi_fnFile == gm_fnmSelected) {
-        gm_iListWantedItem = i;
-        break;
-      }
-      i++;
-    }
-  }
-
-  CGameMenu::StartMenu();
-}
-
-void CLoadSaveMenu::EndMenu(void) {
-  // delete all file infos
-  FORDELETELIST(CFileInfo, fi_lnNode, gm_lhFileInfos, itfi) {
-    delete &itfi.Current();
-  }
-  gm_pgmNextMenu = NULL;
-  CGameMenu::EndMenu();
-}
+  CSelectListMenu::CreateButtons();
+};
 
 void CLoadSaveMenu::FillListItems(void) {
-  // disable all items first
-  for (INDEX i = 0; i < SAVELOAD_BUTTONS_CT; i++) {
+  // Disable all items first
+  for (INDEX i = 0; i < SELECTLIST_BUTTONS_CT; i++) {
     gm_amgButton[i].mg_bEnabled = FALSE;
     gm_amgButton[i].SetText(TRANS("<empty>"));
     gm_amgButton[i].mg_strTip = "";
@@ -161,46 +141,54 @@ void CLoadSaveMenu::FillListItems(void) {
   BOOL bHasLast = FALSE;
   INDEX ctLabels = gm_lhFileInfos.Count();
   INDEX iLabel = 0;
+
   FOREACHINLIST(CFileInfo, fi_lnNode, gm_lhFileInfos, itfi) {
     CFileInfo &fi = *itfi;
     INDEX iInMenu = iLabel - gm_iListOffset;
-    if ((iLabel >= gm_iListOffset) && (iLabel < (gm_iListOffset + SAVELOAD_BUTTONS_CT))) {
+
+    if (iLabel >= gm_iListOffset && iLabel < gm_iListOffset + SELECTLIST_BUTTONS_CT) {
       bHasFirst |= (iLabel == 0);
       bHasLast |= (iLabel == ctLabels - 1);
+
       gm_amgButton[iInMenu].mg_iInList = iLabel;
       gm_amgButton[iInMenu].mg_strDes = fi.fi_strName;
       gm_amgButton[iInMenu].mg_fnm = fi.fi_fnFile;
       gm_amgButton[iInMenu].mg_bEnabled = TRUE;
       gm_amgButton[iInMenu].RefreshText();
+
       if (gm_bSave) {
         if (!FileExistsForWriting(gm_amgButton[iInMenu].mg_fnm)) {
           gm_amgButton[iInMenu].mg_strTip = TRANS("Enter - save in new slot");
         } else {
           gm_amgButton[iInMenu].mg_strTip = TRANS("Enter - save here, F2 - rename, Del - delete");
         }
+
       } else if (gm_bManage) {
         gm_amgButton[iInMenu].mg_strTip = TRANS("Enter - load this, F2 - rename, Del - delete");
       } else {
         gm_amgButton[iInMenu].mg_strTip = TRANS("Enter - load this");
       }
     }
+
     iLabel++;
   }
 
-  // enable/disable up/down arrows
+  // Toggle up and down arrows
   gm_mgArrowUp.mg_bEnabled = !bHasFirst && ctLabels > 0;
   gm_mgArrowDn.mg_bEnabled = !bHasLast && ctLabels > 0;
-}
+};
 
-// called to get info of a file from directory, or to skip it
+// Called to get info of a file from directory, or to skip it
 BOOL CLoadSaveMenu::ParseFile(const CTFileName &fnm, CTString &strName) {
   if (fnm.FileExt() != gm_fnmExt) {
     return FALSE;
   }
 
   CTFileName fnSaveGameDescription = fnm.NoExt() + ".des";
+
   try {
     strName.Load_t(fnSaveGameDescription);
+
   } catch (char *strError) {
     (void)strError;
     strName = fnm.FileName();
@@ -208,6 +196,7 @@ BOOL CLoadSaveMenu::ParseFile(const CTFileName &fnm, CTString &strName) {
     if (fnm.FileExt() == ".ctl") {
       INDEX iCtl = -1;
       strName.ScanF("Controls%d", &iCtl);
+
       if (iCtl >= 0 && iCtl < GetGameAPI()->GetProfileCount()) {
         strName.PrintF(TRANS("From player: %s"), GetGameAPI()->GetPlayerCharacter(iCtl)->GetNameForPrinting());
       }
@@ -215,9 +204,9 @@ BOOL CLoadSaveMenu::ParseFile(const CTFileName &fnm, CTString &strName) {
   }
 
   INDEX iFile = -1;
-  fnm.FileName().ScanF((const char *)(gm_fnmBaseName + "%d"), &iFile);
+  fnm.FileName().ScanF((gm_fnmBaseName + "%d").str_String, &iFile);
 
   gm_iLastFile = Max(gm_iLastFile, iFile);
 
   return TRUE;
-}
+};
