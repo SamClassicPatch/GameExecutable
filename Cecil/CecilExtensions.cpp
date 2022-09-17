@@ -25,12 +25,12 @@ void CECIL_Init(void) {
   CECIL_InitCore();
 
   // Function patches
-  CPrintF("--- Sam: Intercepting Engine functions ---\n");
+  CPutString("--- Sam: Intercepting Engine functions ---\n");
 
   extern void CECIL_ApplySoundListenPatch(void);
   CECIL_ApplySoundListenPatch();
 
-  CPrintF("--- Done! ---\n");
+  CPutString("--- Done! ---\n");
 
   // Custom symbols
   _pShell->DeclareSymbol("persistent user INDEX sam_bBackgroundGameRender;", &sam_bBackgroundGameRender);
