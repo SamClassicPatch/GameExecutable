@@ -18,7 +18,30 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "WindowModes.h"
 #include "MainWindow.h"
 
-#define RADIOTRANS(String) ("ETRS" String)
+// Make game application be aware of the DPI scaling on Windows Vista and later
+static BOOL SetDPIAwareness(void) {
+  typedef BOOL (*CSetAwarenessFunc)(void);
+
+  // Load the library
+  HMODULE hUser = LoadLibraryA("User32.dll");
+
+  if (hUser == NULL) {
+    return FALSE;
+  }
+
+  // Try to find the DPI awareness method
+  CSetAwarenessFunc pFunc = (CSetAwarenessFunc)GetProcAddress(hUser, "SetProcessDPIAware");
+
+  if (pFunc == NULL) {
+    return FALSE;
+  }
+
+  // Execute it
+  return pFunc();
+};
+
+// Mark game application as DPI-aware
+static BOOL _bDPIAware = SetDPIAwareness();
 
 // Window mode names
 CTString _astrWindowModes[3] = { "", "", "" };
