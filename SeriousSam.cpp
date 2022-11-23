@@ -473,7 +473,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _pShell->DeclareSymbol("INDEX sam_iStartCredits;", &sam_iStartCredits);
 
   // [Cecil] Load Game library as a module
-  GetAPI()->LoadGameLib();
+  GetAPI()->LoadGameLib("Data\\SeriousSam.gms");
 
   _pNetwork->md_strGameID = sam_strGameName;
 
