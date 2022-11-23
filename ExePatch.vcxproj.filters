@@ -37,9 +37,6 @@
     <Filter Include="Source Files\Cecil">
       <UniqueIdentifier>{f3b4b78b-e168-48da-928c-031f95f47855}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Cecil\EnginePatches">
-      <UniqueIdentifier>{ccc2eda6-090f-43bc-a20a-3c77c65fdf30}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CmdLine.cpp">
@@ -224,9 +221,6 @@
     </ClCompile>
     <ClCompile Include="Cecil\CecilExtensions.cpp">
       <Filter>Source Files\Cecil</Filter>
-    </ClCompile>
-    <ClCompile Include="Cecil\EnginePatches\SoundListenPatch.cpp">
-      <Filter>Source Files\Cecil\EnginePatches</Filter>
     </ClCompile>
     <ClCompile Include="GUI\Menus\MSelectionList.cpp">
       <Filter>Source Files\GUI\Menus</Filter>

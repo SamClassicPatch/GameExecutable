@@ -255,7 +255,6 @@
   <ItemGroup>
     <ClCompile Include="Cecil\CecilExtensions.cpp" />
     <ClCompile Include="Cecil\ScreenResolutions.cpp" />
-    <ClCompile Include="Cecil\EnginePatches\SoundListenPatch.cpp" />
     <ClCompile Include="Cecil\WindowModes.cpp" />
     <ClCompile Include="CmdLine.cpp" />
     <ClCompile Include="Credits.cpp" />

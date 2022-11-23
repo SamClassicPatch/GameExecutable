@@ -26,11 +26,17 @@ void CECIL_Init(void) {
 
   // Function patches
   CPutString("--- Sam: Intercepting Engine functions ---\n");
-
-  extern void CECIL_ApplySoundListenPatch(void);
-  CECIL_ApplySoundListenPatch();
-
+  {
+    _EnginePatches.CorePatches();
+  }
   CPutString("--- Done! ---\n");
+
+  // Render patch commands
+  _pShell->DeclareSymbol("persistent user INDEX sam_bAdjustForAspectRatio;", &_EnginePatches._bAdjustForAspectRatio);
+  _pShell->DeclareSymbol("persistent user INDEX sam_bUseVerticalFOV;", &_EnginePatches._bUseVerticalFOV);
+  _pShell->DeclareSymbol("persistent user FLOAT sam_fCustomFOV;",      &_EnginePatches._fCustomFOV);
+  _pShell->DeclareSymbol("persistent user FLOAT sam_fThirdPersonFOV;", &_EnginePatches._fThirdPersonFOV);
+  _pShell->DeclareSymbol("           user INDEX sam_bCheckFOV;",       &_EnginePatches._bCheckFOV);
 
   // Custom symbols
   _pShell->DeclareSymbol("persistent user INDEX sam_bBackgroundGameRender;", &sam_bBackgroundGameRender);

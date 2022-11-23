@@ -48,8 +48,7 @@ void CMGModel::Render(CDrawPort *pdp) {
   pr.FOVL() = 30.0f; // [Cecil] Static FOV
 
   // [Cecil] Adjust FOV for the player model
-  extern INDEX sam_bUseVerticalFOV;
-  if (sam_bUseVerticalFOV) {
+  if (_EnginePatches._bUseVerticalFOV) {
     // Use screen ratio set in BoxPlayerModel() as the size
     IRender::AdjustVFOV(FLOAT2D(285, 545), pr.FOVL());
   }

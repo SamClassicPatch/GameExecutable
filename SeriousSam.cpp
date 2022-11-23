@@ -34,9 +34,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // [Cecil] Sound data
 #include <Engine/Sound/SoundData.h>
 
-// [Cecil] Don't listen to in-game sounds
-extern BOOL _bNoListening;
-
 // Application state variables
 extern BOOL _bRunning = TRUE;
 extern BOOL _bQuitScreen = TRUE;
@@ -760,7 +757,7 @@ void DoGame(void) {
       }
 
       // [Cecil] Don't listen to in-game sounds if rendering the game in the menu
-      _bNoListening = bMenuActive;
+      _EnginePatches._bNoListening = bMenuActive;
 
       // handle pretouching of textures and shadowmaps
       pdp->Unlock();
