@@ -24,6 +24,44 @@ CAspectRatio _ar16_9;
 CAspectRatio _ar16_10;
 CAspectRatio _ar21_9;
 
+// Add screen resolution to one of the lists, if it's not there
+static void AddScreenResolution(void) {
+  // Check if screen resolution is listed
+  for (INDEX iAspectRatio = 0; iAspectRatio < CT_ASPECTRATIOS; iAspectRatio++) {
+    const INDEX ctRes = _aAspectRatios[iAspectRatio]->Count();
+
+    for (INDEX iRes = 0; iRes < ctRes; iRes++) {
+      const PIX2D &vpixRes = (*_aAspectRatios[iAspectRatio])[iRes];
+
+      // Found matching resolution
+      if (vpixRes == _vpixScreenRes) {
+        return;
+      }
+    }
+  }
+
+  // Determine closest aspect ratio
+  const FLOAT fRatio = FLOAT(_vpixScreenRes(1)) / FLOAT(_vpixScreenRes(2));
+
+  CAspectRatio *par = NULL;
+
+  if (fRatio >= 2.0f) {
+    par = &_ar21_9;
+
+  } else if (fRatio >= 1.65f) {
+    par = &_ar16_9;
+
+  } else if (fRatio >= 1.45f) {
+    par = &_ar16_10;
+
+  } else {
+    par = &_ar4_3;
+  }
+
+  // Push screen resolution into the aspect ratio list
+  par->Push() = _vpixScreenRes;
+};
+
 // Prepare arrays with window resolutions
 void PrepareVideoResolutions(void) {
   static BOOL bPrepared = FALSE;
@@ -53,7 +91,6 @@ void PrepareVideoResolutions(void) {
   _ar4_3.Push() = PIX2D(1920,  720); // Dual
   _ar4_3.Push() = PIX2D(1920, 1440);
   _ar4_3.Push() = PIX2D(1920, 1920); // 1:1
-  _ar4_3.Push() = PIX2D(2048,  786);
   _ar4_3.Push() = PIX2D(2048, 1536);
   _ar4_3.Push() = PIX2D(2560, 2048); // 5:4
 
@@ -94,6 +131,8 @@ void PrepareVideoResolutions(void) {
   _ar21_9.Push() = PIX2D(2560, 1080);
   _ar21_9.Push() = PIX2D(3440, 1440);
   _ar21_9.Push() = PIX2D(5120, 2160);
+
+  AddScreenResolution();
 
   // Set translated window mode names
   _astrWindowModes[0] = TRANS("Window");
