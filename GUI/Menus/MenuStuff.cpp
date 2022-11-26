@@ -123,38 +123,6 @@ extern CTString astrSoundAPIRadioTexts[] = {
   RADIOTRANS("EAX"),
 };
 
-ULONG GetSpawnFlagsForGameType(INDEX iGameType) {
-  if (iGameType == -1) {
-    return SPF_SINGLEPLAYER;
-  }
-
-  // get function that will provide us the flags
-  CShellSymbol *pss = _pShell->GetSymbol("GetSpawnFlagsForGameType", /*bDeclaredOnly=*/TRUE);
-  // if none
-  if (pss == NULL) {
-    // error
-    ASSERT(FALSE);
-    return 0;
-  }
-
-  ULONG (*pFunc)(INDEX) = (ULONG(*)(INDEX))pss->ss_pvValue;
-  return pFunc(iGameType);
-}
-
-BOOL IsMenuEnabled(const CTString &strMenuName) {
-  // get function that will provide us the flags
-  CShellSymbol *pss = _pShell->GetSymbol("IsMenuEnabled", /*bDeclaredOnly=*/TRUE);
-  // if none
-  if (pss == NULL) {
-    // error
-    ASSERT(FALSE);
-    return TRUE;
-  }
-
-  BOOL (*pFunc)(const CTString &) = (BOOL(*)(const CTString &))pss->ss_pvValue;
-  return pFunc(strMenuName);
-}
-
 // initialize game type strings table
 void InitGameTypes(void) {
   // get function that will provide us the info about gametype

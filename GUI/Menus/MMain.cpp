@@ -117,9 +117,10 @@ void CMainMenu::Initialize_t(void) {
 }
 
 void CMainMenu::StartMenu(void) {
-  gm_mgSingle.mg_bEnabled = IsMenuEnabled("Single Player");
-  gm_mgNetwork.mg_bEnabled = IsMenuEnabled("Network");
-  gm_mgSplitScreen.mg_bEnabled = IsMenuEnabled("Split Screen");
-  gm_mgHighScore.mg_bEnabled = IsMenuEnabled("High Score");
+  gm_mgSingle.mg_bEnabled      = GetGameAPI()->IsMenuEnabledSS("Single Player");
+  gm_mgNetwork.mg_bEnabled     = GetGameAPI()->IsMenuEnabledSS("Network");
+  gm_mgSplitScreen.mg_bEnabled = GetGameAPI()->IsMenuEnabledSS("Split Screen");
+  gm_mgHighScore.mg_bEnabled   = GetGameAPI()->IsMenuEnabledSS("High Score");
+
   CGameMenu::StartMenu();
 }

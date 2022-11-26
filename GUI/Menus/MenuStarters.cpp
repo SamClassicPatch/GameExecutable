@@ -326,7 +326,8 @@ void StartSelectServerNET(void) {
 void StartSelectLevelFromSingle(void) {
   CLevelsMenu &gmCurrent = _pGUIM->gmLevelsMenu;
 
-  FilterLevels(GetSpawnFlagsForGameType(-1));
+  FilterLevels(SPF_SINGLEPLAYER);
+
   _pAfterLevelChosen = StartSinglePlayerNewMenuCustom;
   ChangeToMenu(&gmCurrent);
   gmCurrent.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
@@ -335,7 +336,10 @@ void StartSelectLevelFromSingle(void) {
 void StartSelectLevelFromSplit(void) {
   CLevelsMenu &gmCurrent = _pGUIM->gmLevelsMenu;
 
-  FilterLevels(GetSpawnFlagsForGameType(_pGUIM->gmSplitStartMenu.gm_mgGameType.mg_iSelected));
+  const INDEX iGameType = _pGUIM->gmSplitStartMenu.gm_mgGameType.mg_iSelected;
+  const ULONG ulFlags = GetGameAPI()->GetSpawnFlagsForGameTypeSS(iGameType);
+  FilterLevels(ulFlags);
+
   void StartSplitStartMenu(void);
   _pAfterLevelChosen = StartSplitStartMenu;
   ChangeToMenu(&gmCurrent);
@@ -345,7 +349,10 @@ void StartSelectLevelFromSplit(void) {
 void StartSelectLevelFromNetwork(void) {
   CLevelsMenu &gmCurrent = _pGUIM->gmLevelsMenu;
 
-  FilterLevels(GetSpawnFlagsForGameType(_pGUIM->gmNetworkStartMenu.gm_mgGameType.mg_iSelected));
+  const INDEX iGameType = _pGUIM->gmNetworkStartMenu.gm_mgGameType.mg_iSelected;
+  const ULONG ulFlags = GetGameAPI()->GetSpawnFlagsForGameTypeSS(iGameType);
+  FilterLevels(ulFlags);
+
   void StartNetworkStartMenu(void);
   _pAfterLevelChosen = StartNetworkStartMenu;
   ChangeToMenu(&gmCurrent);

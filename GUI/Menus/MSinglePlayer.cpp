@@ -105,8 +105,8 @@ void CSinglePlayerMenu::Initialize_t(void) {
 }
 
 void CSinglePlayerMenu::StartMenu(void) {
-  gm_mgTraining.mg_bEnabled = IsMenuEnabled("Training");
-  gm_mgTechTest.mg_bEnabled = IsMenuEnabled("Technology Test");
+  gm_mgTraining.mg_bEnabled = GetGameAPI()->IsMenuEnabledSS("Training");
+  gm_mgTechTest.mg_bEnabled = GetGameAPI()->IsMenuEnabledSS("Technology Test");
 
   if (gm_mgTraining.mg_bEnabled) {
     AddChild(&gm_mgTraining);

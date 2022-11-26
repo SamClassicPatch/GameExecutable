@@ -48,8 +48,6 @@ extern CTString astrBitsPerPixelRadioTexts[3];
 extern CTString astrFrequencyRadioTexts[4];
 extern CTString astrSoundAPIRadioTexts[3];
 
-ULONG GetSpawnFlagsForGameType(INDEX iGameType);
-BOOL IsMenuEnabled(const CTString &strMenuName);
 void InitGameTypes(void);
 
 int qsort_CompareFileInfos_NameUp(const void *elem1, const void *elem2);

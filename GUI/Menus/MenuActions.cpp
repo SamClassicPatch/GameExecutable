@@ -1072,7 +1072,10 @@ void InitActionsForNetworkJoinMenu() {
 
 // ------------------------ CNetworkStartMenu implementation
 extern void UpdateNetworkLevel(INDEX iDummy) {
-  ValidateLevelForFlags(GetSpawnFlagsForGameType(_pGUIM->gmNetworkStartMenu.gm_mgGameType.mg_iSelected));
+  const INDEX iGameType = _pGUIM->gmNetworkStartMenu.gm_mgGameType.mg_iSelected;
+  const ULONG ulFlags = GetGameAPI()->GetSpawnFlagsForGameTypeSS(iGameType);
+  ValidateLevelForFlags(ulFlags);
+
   _pGUIM->gmNetworkStartMenu.gm_mgLevel.SetText(FindLevelByFileName(GetGameAPI()->GetCustomLevel()).li_strName);
 }
 
@@ -1292,6 +1295,9 @@ void InitActionsForSplitStartMenu() {
 extern void UpdateSplitLevel(INDEX iDummy) {
   CSplitStartMenu &gmCurrent = _pGUIM->gmSplitStartMenu;
 
-  ValidateLevelForFlags(GetSpawnFlagsForGameType(gmCurrent.gm_mgGameType.mg_iSelected));
+  const INDEX iGameType = gmCurrent.gm_mgGameType.mg_iSelected;
+  const ULONG ulFlags = GetGameAPI()->GetSpawnFlagsForGameTypeSS(iGameType);
+  ValidateLevelForFlags(ulFlags);
+
   gmCurrent.gm_mgLevel.SetText(FindLevelByFileName(GetGameAPI()->GetCustomLevel()).li_strName);
 }
