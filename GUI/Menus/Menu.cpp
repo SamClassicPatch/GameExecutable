@@ -715,7 +715,7 @@ BOOL DoMenu(CDrawPort *pdp) {
       }
 
       // [Cecil] Display patch information
-      {
+      if (sam_bPatchVersionLabel) {
         dpMenu.SetFont(_pfdConsoleFont);
         dpMenu.SetTextScaling(1.0f);
         dpMenu.SetTextCharSpacing(-1);

@@ -16,6 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 
 // General
+INDEX sam_bPatchVersionLabel = TRUE;
 INDEX sam_bBackgroundGameRender = TRUE;
 INDEX sam_bOptionTabs = TRUE;
 
@@ -32,6 +33,7 @@ void CECIL_Init(void) {
   CPutString("--- Done! ---\n");
 
   // Custom symbols
+  _pShell->DeclareSymbol("persistent user INDEX sam_bPatchVersionLabel;",    &sam_bPatchVersionLabel);
   _pShell->DeclareSymbol("persistent user INDEX sam_bBackgroundGameRender;", &sam_bBackgroundGameRender);
   _pShell->DeclareSymbol("persistent user INDEX sam_bOptionTabs;",           &sam_bOptionTabs);
 };

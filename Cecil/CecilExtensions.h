@@ -21,6 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #endif
 
 // General
+extern INDEX sam_bPatchVersionLabel;
 extern INDEX sam_bBackgroundGameRender;
 extern INDEX sam_bOptionTabs;
 
