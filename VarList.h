@@ -21,8 +21,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 class CVarSetting {
   public:
+    // [Cecil] Setting types
+    enum ESettingType {
+      E_SEPARATOR, // Equivalent of vanilla 'vs_bSeparator'
+      E_TOGGLE,
+    };
+
+  public:
     CListNode vs_lnNode;
-    BOOL vs_bSeparator;
+    ESettingType vs_eType; // [Cecil] Setting type
     BOOL vs_bCanChangeInGame;
     INDEX vs_iSlider;
     CTString vs_strName;

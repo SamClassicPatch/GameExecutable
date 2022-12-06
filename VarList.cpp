@@ -102,10 +102,12 @@ void ParseCFG_t(CTStream &strm) {
       strLine.TrimSpacesLeft();
       strLine.TrimSpacesRight();
 
+      // [Cecil] Match type name with a type number
       if (strLine == "Toggle") {
-        pvs->vs_bSeparator = FALSE;
+        pvs->vs_eType = CVarSetting::E_TOGGLE;
+
       } else if (strLine == "Separator") {
-        pvs->vs_bSeparator = TRUE;
+        pvs->vs_eType = CVarSetting::E_SEPARATOR;
       }
 
     } else if (strLine.RemovePrefix("Schedule:")) {
@@ -191,7 +193,7 @@ void ParseCFG_t(CTStream &strm) {
     CVarSetting &vs = *itvs;
 
     // It's a separator
-    if (vs.vs_bSeparator)
+    if (vs.vs_eType == CVarSetting::E_SEPARATOR)
     {
       // It has a name and there are different settings under the current tab
       if (!bOnlySeparators && vs.vs_strName != "") {
@@ -236,22 +238,36 @@ void LoadVarSettings(const CTFileName &fnmCfg) {
     FOREACHINLIST(CVarSetting, vs_lnNode, _aTabs[iTab].lhVars, itvs) {
       CVarSetting &vs = *itvs;
 
-      if (!vs.Validate() || vs.vs_bSeparator) {
+      // Skip if couldn't validate or it's a separator
+      if (!vs.Validate() || vs.vs_eType == CVarSetting::E_SEPARATOR) {
         continue;
       }
 
-      INDEX ctValues = vs.vs_ctValues;
+      // Get value from the shell variable
       CTString strValue = _pShell->GetValue(vs.vs_strVar);
 
-      vs.vs_bCustom = TRUE;
-      vs.vs_iOrgValue = vs.vs_iValue = -1;
+      // [Cecil] Different types
+      switch (vs.vs_eType)
+      {
+        case CVarSetting::E_TOGGLE: {
+          const INDEX ctValues = vs.vs_ctValues;
 
-      for (INDEX iValue = 0; iValue < ctValues; iValue++) {
-        if (strValue == vs.vs_astrValues[iValue]) {
-          vs.vs_iOrgValue = vs.vs_iValue = iValue;
-          vs.vs_bCustom = FALSE;
-          break;
-        }
+          // Custom value by default
+          vs.vs_bCustom = TRUE;
+          vs.vs_iOrgValue = -1;
+          vs.vs_iValue = -1;
+
+          // Search for the same value in the value list
+          for (INDEX iValue = 0; iValue < ctValues; iValue++) {
+            // If it matches this value
+            if (strValue == vs.vs_astrValues[iValue]) {
+              // Set index to the value in the list
+              vs.vs_iOrgValue = vs.vs_iValue = iValue;
+              vs.vs_bCustom = FALSE;
+              break;
+            }
+          }
+        } break;
       }
     }
   }
@@ -267,31 +283,39 @@ void FlushVarSettings(BOOL bApply) {
       FOREACHINLIST(CVarSetting, vs_lnNode, _aTabs[iTab].lhVars, itvs) {
         CVarSetting &vs = *itvs;
 
-        if (vs.vs_iValue != vs.vs_iOrgValue) {
-          CTString strCmd;
-          _pShell->SetValue(vs.vs_strVar, vs.vs_astrValues[vs.vs_iValue]);
+        // [Cecil] Different types
+        switch (vs.vs_eType)
+        {
+          case CVarSetting::E_TOGGLE: {
+            // If selected some other value
+            if (vs.vs_iValue != vs.vs_iOrgValue) {
+              // Set shell variable to it
+              _pShell->SetValue(vs.vs_strVar, vs.vs_astrValues[vs.vs_iValue]);
 
-          // [Cecil] Execute post-function
-          CShellSymbol *pssVar = _pShell->GetSymbol(vs.vs_strVar, TRUE);
+              // [Cecil] Execute post-function
+              CShellSymbol *pssVar = _pShell->GetSymbol(vs.vs_strVar, TRUE);
 
-          if (pssVar != NULL && pssVar->ss_pPostFunc != NULL) {
-            pssVar->ss_pPostFunc(pssVar->ss_pvValue);
-          }
+              if (pssVar != NULL && pssVar->ss_pPostFunc != NULL) {
+                pssVar->ss_pPostFunc(pssVar->ss_pvValue);
+              }
 
-          if (vs.vs_strSchedule != "") {
-            BOOL bSheduled = FALSE;
+              // Schedule commands to execute afterwards
+              if (vs.vs_strSchedule != "") {
+                BOOL bSheduled = FALSE;
 
-            for (INDEX i = 0; i < astrScheduled.Count(); i++) {
-              if (astrScheduled[i] == vs.vs_strSchedule) {
-                bSheduled = TRUE;
-                break;
+                for (INDEX i = 0; i < astrScheduled.Count(); i++) {
+                  if (astrScheduled[i] == vs.vs_strSchedule) {
+                    bSheduled = TRUE;
+                    break;
+                  }
+                }
+
+                if (!bSheduled) {
+                  astrScheduled.Push() = vs.vs_strSchedule;
+                }
               }
             }
-
-            if (!bSheduled) {
-              astrScheduled.Push() = vs.vs_strSchedule;
-            }
-          }
+          } break;
         }
       }
     }
@@ -319,7 +343,7 @@ void CVarSetting::Clear() {
   vs_iOrgValue = 0;
   vs_iValue = 0;
   vs_ctValues = 0;
-  vs_bSeparator = FALSE;
+  vs_eType = E_TOGGLE; // [Cecil] Toggleable type by default
   vs_bCanChangeInGame = TRUE;
   vs_iSlider = 0;
   vs_strName.Clear();
@@ -331,8 +355,10 @@ void CVarSetting::Clear() {
 }
 
 BOOL CVarSetting::Validate(void) {
-  if (vs_bSeparator) {
-    return TRUE;
+  // [Cecil] Specific types don't need validation
+  switch (vs_eType) {
+    case E_SEPARATOR:
+      return TRUE;
   }
 
   vs_ctValues = Min(vs_astrValues.Count(), vs_astrTexts.Count());
@@ -353,7 +379,7 @@ BOOL CVarSetting::Validate(void) {
 CVarSetting::CVarSetting(const CVarSetting &vsOther) {
   if (&vsOther == this) return;
 
-  vs_bSeparator       = vsOther.vs_bSeparator;
+  vs_eType            = vsOther.vs_eType;
   vs_bCanChangeInGame = vsOther.vs_bCanChangeInGame;
   vs_iSlider          = vsOther.vs_iSlider;
   vs_strName          = vsOther.vs_strName;
@@ -379,13 +405,13 @@ CVarSetting::CVarSetting(const CVarSetting &vsOther) {
       pstr[ct] = vsOther.vs_astrTexts[ct];
     }
   }
-  
+
   // Copy values
   ct = vsOther.vs_astrValues.Count();
 
   if (ct > 0) {
     pstr = vs_astrValues.Push(ct);
-  
+
     while (--ct >= 0) {
       pstr[ct] = vsOther.vs_astrValues[ct];
     }

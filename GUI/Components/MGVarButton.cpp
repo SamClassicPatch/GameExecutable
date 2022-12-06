@@ -24,7 +24,9 @@ BOOL CMGVarButton::IsSeparator(void) {
   if (mg_pvsVar == NULL) {
     return FALSE;
   }
-  return mg_pvsVar->vs_bSeparator;
+
+  // [Cecil] Check the separator type
+  return (mg_pvsVar->vs_eType == CVarSetting::E_SEPARATOR);
 }
 
 BOOL CMGVarButton::IsEnabled(void) {
@@ -43,29 +45,36 @@ PIXaabbox2D CMGVarButton::GetSliderBox(void) {
 }
 
 extern BOOL _bVarChanged;
-BOOL CMGVarButton::OnKeyDown(int iVKey) {
-  if (mg_pvsVar == NULL || mg_pvsVar->vs_bSeparator || !mg_pvsVar->Validate() || !mg_bEnabled) {
+BOOL CMGVarButton::OnKeyDown(int iVKey)
+{
+  if (mg_pvsVar == NULL || mg_pvsVar->vs_eType == CVarSetting::E_SEPARATOR || !mg_pvsVar->Validate() || !mg_bEnabled) {
     return CMenuGadget::OnKeyDown(iVKey);
   }
 
-  // handle slider
-  if (mg_pvsVar->vs_iSlider && !mg_pvsVar->vs_bCustom) {
-    // ignore RMB
-    if (iVKey == VK_RBUTTON) {
-      return TRUE;
-    }
-    // handle LMB
-    if (iVKey == VK_LBUTTON) {
-      // get position of slider box on screen
-      PIXaabbox2D boxSlider = GetSliderBox();
-      // if mouse is within
-      if (boxSlider >= PIX2D(_pixCursorPosI, _pixCursorPosJ)) {
-        // set new position exactly where mouse pointer is
-        mg_pvsVar->vs_iValue = (FLOAT)(_pixCursorPosI - boxSlider.Min()(1)) / boxSlider.Size()(1) * (mg_pvsVar->vs_ctValues);
-        _bVarChanged = TRUE;
+  // [Cecil] Toggleable setting
+  if (mg_pvsVar->vs_eType == CVarSetting::E_TOGGLE)
+  {
+    // handle slider
+    if (mg_pvsVar->vs_iSlider && !mg_pvsVar->vs_bCustom) {
+      // ignore RMB
+      if (iVKey == VK_RBUTTON) {
+        return TRUE;
       }
-      // handled
-      return TRUE;
+
+      // handle LMB
+      if (iVKey == VK_LBUTTON) {
+        // get position of slider box on screen
+        PIXaabbox2D boxSlider = GetSliderBox();
+        // if mouse is within
+        if (boxSlider >= PIX2D(_pixCursorPosI, _pixCursorPosJ)) {
+          // set new position exactly where mouse pointer is
+          mg_pvsVar->vs_iValue = (FLOAT)(_pixCursorPosI - boxSlider.Min()(1)) / boxSlider.Size()(1) * (mg_pvsVar->vs_ctValues);
+          _bVarChanged = TRUE;
+        }
+
+        // handled
+        return TRUE;
+      }
     }
   }
 
@@ -75,46 +84,57 @@ BOOL CMGVarButton::OnKeyDown(int iVKey) {
     return TRUE;
   }
 
-  if (iVKey == VK_LBUTTON || iVKey == VK_RIGHT) {
-    if (mg_pvsVar != NULL) {
-      INDEX iOldValue = mg_pvsVar->vs_iValue;
-      mg_pvsVar->vs_iValue++;
-      if (mg_pvsVar->vs_iValue >= mg_pvsVar->vs_ctValues) {
-        // wrap non-sliders, clamp sliders
-        if (mg_pvsVar->vs_iSlider) {
-          mg_pvsVar->vs_iValue = mg_pvsVar->vs_ctValues - 1L;
-        } else {
-          mg_pvsVar->vs_iValue = 0;
-        }
-      }
-      if (iOldValue != mg_pvsVar->vs_iValue) {
-        _bVarChanged = TRUE;
-        mg_pvsVar->vs_bCustom = FALSE;
-        mg_pvsVar->Validate();
-      }
-    }
-    return TRUE;
-  }
+  // [Cecil] Different types
+  switch (mg_pvsVar->vs_eType) {
+    // Toggle values
+    case CVarSetting::E_TOGGLE: {
+      // Select next value
+      if (iVKey == VK_LBUTTON || iVKey == VK_RIGHT) {
+        if (mg_pvsVar != NULL) {
+          INDEX iOldValue = mg_pvsVar->vs_iValue;
+          mg_pvsVar->vs_iValue++;
 
-  if (iVKey == VK_LEFT || iVKey == VK_RBUTTON) {
-    if (mg_pvsVar != NULL) {
-      INDEX iOldValue = mg_pvsVar->vs_iValue;
-      mg_pvsVar->vs_iValue--;
-      if (mg_pvsVar->vs_iValue < 0) {
-        // wrap non-sliders, clamp sliders
-        if (mg_pvsVar->vs_iSlider) {
-          mg_pvsVar->vs_iValue = 0;
-        } else {
-          mg_pvsVar->vs_iValue = mg_pvsVar->vs_ctValues - 1L;
+          if (mg_pvsVar->vs_iValue >= mg_pvsVar->vs_ctValues) {
+            // wrap non-sliders, clamp sliders
+            if (mg_pvsVar->vs_iSlider) {
+              mg_pvsVar->vs_iValue = mg_pvsVar->vs_ctValues - 1L;
+            } else {
+              mg_pvsVar->vs_iValue = 0;
+            }
+          }
+
+          if (iOldValue != mg_pvsVar->vs_iValue) {
+            _bVarChanged = TRUE;
+            mg_pvsVar->vs_bCustom = FALSE;
+            mg_pvsVar->Validate();
+          }
         }
+        return TRUE;
+
+      // Select previous value
+      } else if (iVKey == VK_LEFT || iVKey == VK_RBUTTON) {
+        if (mg_pvsVar != NULL) {
+          INDEX iOldValue = mg_pvsVar->vs_iValue;
+          mg_pvsVar->vs_iValue--;
+
+          if (mg_pvsVar->vs_iValue < 0) {
+            // wrap non-sliders, clamp sliders
+            if (mg_pvsVar->vs_iSlider) {
+              mg_pvsVar->vs_iValue = 0;
+            } else {
+              mg_pvsVar->vs_iValue = mg_pvsVar->vs_ctValues - 1L;
+            }
+          }
+
+          if (iOldValue != mg_pvsVar->vs_iValue) {
+            _bVarChanged = TRUE;
+            mg_pvsVar->vs_bCustom = FALSE;
+            mg_pvsVar->Validate();
+          }
+        }
+        return TRUE;
       }
-      if (iOldValue != mg_pvsVar->vs_iValue) {
-        _bVarChanged = TRUE;
-        mg_pvsVar->vs_bCustom = FALSE;
-        mg_pvsVar->Validate();
-      }
-    }
-    return TRUE;
+    } break;
   }
 
   // not handled
@@ -134,46 +154,64 @@ void CMGVarButton::Render(CDrawPort *pdp) {
   PIX pixIC = box.Center()(1);
   PIX pixJ = box.Min()(2);
 
-  if (mg_pvsVar->vs_bSeparator) {
-    mg_bEnabled = FALSE;
-    COLOR col = LCDGetColor(C_WHITE | 255, "separator");
-    CTString strText = mg_pvsVar->vs_strName;
-    pdp->PutTextC(strText, pixIC, pixJ, col);
-  } else if (mg_pvsVar->Validate()) {
-    // check whether the variable is disabled
-    if (mg_pvsVar->vs_strFilter != "") {
-      mg_bEnabled = _pShell->GetINDEX(mg_pvsVar->vs_strFilter);
-    }
-    COLOR col = GetCurrentColor();
-    pdp->PutTextR(mg_pvsVar->vs_strName, pixIL, pixJ, col);
-    // custom is by default
-    CTString strText = TRANS("Custom");
-    if (!mg_pvsVar->vs_bCustom) { // not custom!
-      strText = mg_pvsVar->vs_astrTexts[mg_pvsVar->vs_iValue];
-      // need slider?
-      if (mg_pvsVar->vs_iSlider > 0) {
-        // draw box around slider
-        PIX pixISize = box.Size()(1) * 0.13f;
-        PIX pixJSize = box.Size()(2);
-        LCDDrawBox(0, -1, PIXaabbox2D(PIX2D(pixIR, pixJ + 1), PIX2D(pixIR + pixISize - 4, pixJ + pixJSize - 6)),
-                   LCDGetColor(C_GREEN | 255, "slider box"));
+  // [Cecil] Different types
+  switch (mg_pvsVar->vs_eType) {
+    // Separator
+    case CVarSetting::E_SEPARATOR: {
+      mg_bEnabled = FALSE;
+      COLOR col = LCDGetColor(C_WHITE | 255, "separator");
 
-        // draw filled part of slider
-        if (mg_pvsVar->vs_iSlider == 1) {
-          // fill slider
-          FLOAT fFactor = (FLOAT)(mg_pvsVar->vs_iValue + 1) / mg_pvsVar->vs_ctValues;
-          pdp->Fill(pixIR + 1, pixJ + 2, (pixISize - 6) * fFactor, pixJSize - 9, col);
-        } else {
-          // ratio slider
-          ASSERT(mg_pvsVar->vs_iSlider == 2);
-          FLOAT fUnitWidth = (FLOAT)(pixISize - 5) / mg_pvsVar->vs_ctValues;
-          pdp->Fill(pixIR + 1 + (mg_pvsVar->vs_iValue * fUnitWidth), pixJ + 2, fUnitWidth, pixJSize - 9, col);
+      CTString strText = mg_pvsVar->vs_strName;
+      pdp->PutTextC(strText, pixIC, pixJ, col);
+    } break;
+
+    // Toggleable
+    case CVarSetting::E_TOGGLE: {
+      if (mg_pvsVar->Validate()) {
+        // check whether the variable is disabled
+        if (mg_pvsVar->vs_strFilter != "") {
+          mg_bEnabled = _pShell->GetINDEX(mg_pvsVar->vs_strFilter);
         }
-        // move text printout to the right of slider
-        pixIR += box.Size()(1) * 0.15f;
+
+        COLOR col = GetCurrentColor();
+        pdp->PutTextR(mg_pvsVar->vs_strName, pixIL, pixJ, col);
+
+        // custom is by default
+        CTString strText = TRANS("Custom");
+
+        // Not a custom value
+        if (!mg_pvsVar->vs_bCustom) {
+          strText = mg_pvsVar->vs_astrTexts[mg_pvsVar->vs_iValue];
+
+          // need slider?
+          if (mg_pvsVar->vs_iSlider > 0) {
+            // draw box around slider
+            PIX pixISize = box.Size()(1) * 0.13f;
+            PIX pixJSize = box.Size()(2);
+            LCDDrawBox(0, -1, PIXaabbox2D(PIX2D(pixIR, pixJ + 1), PIX2D(pixIR + pixISize - 4, pixJ + pixJSize - 6)),
+              LCDGetColor(C_GREEN | 255, "slider box"));
+
+            // draw filled part of slider
+            if (mg_pvsVar->vs_iSlider == 1) {
+              // fill slider
+              FLOAT fFactor = (FLOAT)(mg_pvsVar->vs_iValue + 1) / mg_pvsVar->vs_ctValues;
+              pdp->Fill(pixIR + 1, pixJ + 2, (pixISize - 6) * fFactor, pixJSize - 9, col);
+
+            } else {
+              // ratio slider
+              ASSERT(mg_pvsVar->vs_iSlider == 2);
+              FLOAT fUnitWidth = (FLOAT)(pixISize - 5) / mg_pvsVar->vs_ctValues;
+              pdp->Fill(pixIR + 1 + (mg_pvsVar->vs_iValue * fUnitWidth), pixJ + 2, fUnitWidth, pixJSize - 9, col);
+            }
+
+            // move text printout to the right of slider
+            pixIR += box.Size()(1) * 0.15f;
+          }
+        }
+
+        // write right text
+        pdp->PutText(strText, pixIR, pixJ, col);
       }
-    }
-    // write right text
-    pdp->PutText(strText, pixIR, pixJ, col);
+    } break;
   }
 }
