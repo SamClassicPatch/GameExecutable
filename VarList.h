@@ -25,6 +25,7 @@ class CVarSetting {
     enum ESettingType {
       E_SEPARATOR, // Equivalent of vanilla 'vs_bSeparator'
       E_TOGGLE,
+      E_TEXTBOX,
     };
 
   public:
@@ -38,6 +39,7 @@ class CVarSetting {
     CTString vs_strFilter;
     CTFileName vs_strSchedule;
     INDEX vs_iValue;
+    CTString vs_strValue; // [Cecil] String value
     INDEX vs_ctValues;
     INDEX vs_iOrgValue;
     BOOL vs_bCustom;

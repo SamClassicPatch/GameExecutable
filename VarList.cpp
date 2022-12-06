@@ -108,6 +108,9 @@ void ParseCFG_t(CTStream &strm) {
 
       } else if (strLine == "Separator") {
         pvs->vs_eType = CVarSetting::E_SEPARATOR;
+
+      } else if (strLine == "Textbox") {
+        pvs->vs_eType = CVarSetting::E_TEXTBOX;
       }
 
     } else if (strLine.RemovePrefix("Schedule:")) {
@@ -268,6 +271,14 @@ void LoadVarSettings(const CTFileName &fnmCfg) {
             }
           }
         } break;
+
+        case CVarSetting::E_TEXTBOX: {
+          // Set new string
+          vs.vs_strValue = strValue;
+
+          // Save hash value of the string
+          vs.vs_iOrgValue = static_cast<ULONG>(strValue.GetHash());
+        } break;
       }
     }
   }
@@ -316,6 +327,16 @@ void FlushVarSettings(BOOL bApply) {
               }
             }
           } break;
+
+          case CVarSetting::E_TEXTBOX: {
+            // If typed in a different string
+            ULONG ulOldHash = static_cast<ULONG>(vs.vs_iOrgValue);
+
+            if (vs.vs_strValue.GetHash() != ulOldHash) {
+              // Set shell variable to a new string
+              _pShell->SetValue(vs.vs_strVar, vs.vs_strValue);
+            }
+          } break;
         }
       }
     }
@@ -342,6 +363,7 @@ CVarSetting::CVarSetting() {
 void CVarSetting::Clear() {
   vs_iOrgValue = 0;
   vs_iValue = 0;
+  vs_strValue = ""; // [Cecil]
   vs_ctValues = 0;
   vs_eType = E_TOGGLE; // [Cecil] Toggleable type by default
   vs_bCanChangeInGame = TRUE;
@@ -358,6 +380,7 @@ BOOL CVarSetting::Validate(void) {
   // [Cecil] Specific types don't need validation
   switch (vs_eType) {
     case E_SEPARATOR:
+    case E_TEXTBOX:
       return TRUE;
   }
 
@@ -388,6 +411,7 @@ CVarSetting::CVarSetting(const CVarSetting &vsOther) {
   vs_strFilter        = vsOther.vs_strFilter;
   vs_strSchedule      = vsOther.vs_strSchedule;
   vs_iValue           = vsOther.vs_iValue;
+  vs_strValue         = vsOther.vs_strValue;
   vs_ctValues         = vsOther.vs_ctValues;
   vs_iOrgValue        = vsOther.vs_iOrgValue;
   vs_bCustom          = vsOther.vs_bCustom;

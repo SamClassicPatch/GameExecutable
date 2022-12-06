@@ -48,7 +48,13 @@ extern BOOL _bVarChanged;
 BOOL CMGVarButton::OnKeyDown(int iVKey)
 {
   if (mg_pvsVar == NULL || mg_pvsVar->vs_eType == CVarSetting::E_SEPARATOR || !mg_pvsVar->Validate() || !mg_bEnabled) {
-    return CMenuGadget::OnKeyDown(iVKey);
+    // [Cecil] CMenuGadget::OnKeyDown() would call CMGEdit::OnActivate(), which shouldn't happen
+    return (iVKey == VK_RETURN || iVKey == VK_LBUTTON);
+  }
+
+  // [Cecil] Editing the textbox
+  if (mg_bEditing) {
+    return CMGEdit::OnKeyDown(iVKey);
   }
 
   // [Cecil] Toggleable setting
@@ -135,6 +141,11 @@ BOOL CMGVarButton::OnKeyDown(int iVKey)
         return TRUE;
       }
     } break;
+
+    // Reset editing value
+    case CVarSetting::E_TEXTBOX: {
+      OnStringCanceled();
+    } break;
   }
 
   // not handled
@@ -213,5 +224,30 @@ void CMGVarButton::Render(CDrawPort *pdp) {
         pdp->PutText(strText, pixIR, pixJ, col);
       }
     } break;
+
+    // Textbox
+    case CVarSetting::E_TEXTBOX: {
+      CMGEdit::Render(pdp);
+    } break;
   }
 }
+
+// [Cecil] Change strings
+void CMGVarButton::OnStringChanged(void) {
+  // No textbox attached
+  if (mg_pvsVar == NULL || mg_pvsVar->vs_eType != CVarSetting::E_TEXTBOX) {
+    return;
+  }
+
+  // If new hash differs from the old one, mark as changed
+  ULONG ulOldHash = static_cast<ULONG>(mg_pvsVar->vs_iOrgValue);
+
+  if (mg_pvsVar->vs_strValue.GetHash() != ulOldHash) {
+    _bVarChanged = TRUE;
+  }
+};
+
+void CMGVarButton::OnStringCanceled(void) {
+  // Restore string from the setting
+  SetText(mg_pvsVar->vs_strValue);
+};

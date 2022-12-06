@@ -21,7 +21,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "MGButton.h"
 
-class CMGVarButton : public CMGButton {
+// [Cecil] Derive from CMGEdit, which derives from CMGButton
+class CMGVarButton : public CMGEdit {
   public:
     class CVarSetting *mg_pvsVar;
     PIXaabbox2D GetSliderBox(void);
@@ -29,6 +30,10 @@ class CMGVarButton : public CMGButton {
     void Render(CDrawPort *pdp);
     BOOL IsSeparator(void);
     BOOL IsEnabled(void);
+
+    // [Cecil] Change strings
+    void OnStringChanged(void);
+    void OnStringCanceled(void);
 };
 
 #endif /* include-once check. */

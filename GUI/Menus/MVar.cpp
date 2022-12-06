@@ -71,6 +71,7 @@ void CVarMenu::Initialize_t(void) {
     mgVar.mg_pmgDown = &gm_mgVar[iNext];
     mgVar.mg_pmgLeft = &gm_mgApply;
 
+    mgVar.mg_bfsFontSize = BFS_MEDIUM; // [Cecil] Set to medium size
     mgVar.mg_boxOnScreen = BoxMediumRow(iLabel - 1.0f);
     mgVar.mg_pActivatedFunction = NULL; // never called!
 
@@ -137,6 +138,11 @@ void CVarMenu::FillListItems(void) {
       mgVar.mg_strTip = vs.vs_strTip;
       mgVar.mg_bEnabled = gm_mgVar[iInMenu].IsEnabled();
       mgVar.mg_iInList = iLabel;
+
+      // [Cecil] Set variable name, value and editable string
+      mgVar.SetName(vs.vs_strName);
+      mgVar.SetText(vs.vs_strValue);
+      mgVar.mg_pstrToChange = &vs.vs_strValue;
     }
     iLabel++;
   }
