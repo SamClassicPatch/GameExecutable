@@ -64,12 +64,16 @@ void CVarMenu::Initialize_t(void) {
   for (INDEX iLabel = 0; iLabel < VARS_ON_SCREEN; iLabel++) {
     INDEX iPrev = (VARS_ON_SCREEN + iLabel - 1) % VARS_ON_SCREEN;
     INDEX iNext = (iLabel + 1) % VARS_ON_SCREEN;
+
     // initialize label gadgets
-    gm_mgVar[iLabel].mg_pmgUp = &gm_mgVar[iPrev];
-    gm_mgVar[iLabel].mg_pmgDown = &gm_mgVar[iNext];
-    gm_mgVar[iLabel].mg_pmgLeft = &gm_mgApply;
-    gm_mgVar[iLabel].mg_boxOnScreen = BoxMediumRow(iLabel - 1.0f);
-    gm_mgVar[iLabel].mg_pActivatedFunction = NULL; // never called!
+    CMGVarButton &mgVar = gm_mgVar[iLabel];
+    mgVar.mg_pmgUp = &gm_mgVar[iPrev];
+    mgVar.mg_pmgDown = &gm_mgVar[iNext];
+    mgVar.mg_pmgLeft = &gm_mgApply;
+
+    mgVar.mg_boxOnScreen = BoxMediumRow(iLabel - 1.0f);
+    mgVar.mg_pActivatedFunction = NULL; // never called!
+
     AddChild(&gm_mgVar[iLabel]);
   }
 
@@ -123,13 +127,16 @@ void CVarMenu::FillListItems(void) {
   FOREACHINLIST(CVarSetting, vs_lnNode, lhTab, itvs) {
     CVarSetting &vs = *itvs;
     INDEX iInMenu = iLabel - gm_iListOffset;
-    if ((iLabel >= gm_iListOffset) && (iLabel < (gm_iListOffset + VARS_ON_SCREEN))) {
+
+    if (iLabel >= gm_iListOffset && iLabel < gm_iListOffset + VARS_ON_SCREEN) {
       bHasFirst |= (iLabel == 0);
       bHasLast |= (iLabel == ctLabels - 1);
-      gm_mgVar[iInMenu].mg_pvsVar = &vs;
-      gm_mgVar[iInMenu].mg_strTip = vs.vs_strTip;
-      gm_mgVar[iInMenu].mg_bEnabled = gm_mgVar[iInMenu].IsEnabled();
-      gm_mgVar[iInMenu].mg_iInList = iLabel;
+
+      CMGVarButton &mgVar = gm_mgVar[iInMenu];
+      mgVar.mg_pvsVar = &vs;
+      mgVar.mg_strTip = vs.vs_strTip;
+      mgVar.mg_bEnabled = gm_mgVar[iInMenu].IsEnabled();
+      mgVar.mg_iInList = iLabel;
     }
     iLabel++;
   }

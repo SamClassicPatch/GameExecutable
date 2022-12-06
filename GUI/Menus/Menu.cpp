@@ -172,32 +172,37 @@ void StartMenus(char *str) {
       ChangeToMenu(&_pGUIM->gmInGameMenu);
     }
   }
-  if (CTString(str) == "load") {
+
+  // [Cecil] Replaced individual if blocks with if-else chain
+  const CTString strMenu = str;
+
+  if (strMenu == "load") {
     StartCurrentLoadMenu();
     _pGUIM->gmLoadSaveMenu.SetParentMenu(NULL);
-  }
-  if (CTString(str) == "save") {
+
+  } else if (strMenu == "save") {
     StartCurrentSaveMenu();
     _pGUIM->gmLoadSaveMenu.SetParentMenu(NULL);
     FixupBackButton(&_pGUIM->gmLoadSaveMenu);
-  }
-  if (CTString(str) == "controls") {
+
+  } else if (strMenu == "controls") {
     void StartControlsMenuFromOptions(void);
     StartControlsMenuFromOptions();
     _pGUIM->gmControls.SetParentMenu(NULL);
     FixupBackButton(&_pGUIM->gmControls);
-  }
-  if (CTString(str) == "join") {
+
+  } else if (strMenu == "join") {
     void StartSelectPlayersMenuFromOpen(void);
     StartSelectPlayersMenuFromOpen();
     _pGUIM->gmSelectPlayersMenu.SetParentMenu(&_pGUIM->gmMainMenu);
     FixupBackButton(&_pGUIM->gmSelectPlayersMenu);
-  }
-  if (CTString(str) == "hiscore") {
+
+  } else if (strMenu == "hiscore") {
     ChangeToMenu(&_pGUIM->gmHighScoreMenu);
     _pGUIM->gmHighScoreMenu.SetParentMenu(&_pGUIM->gmMainMenu);
     FixupBackButton(&_pGUIM->gmHighScoreMenu);
   }
+
   bMenuActive = TRUE;
   bMenuRendering = TRUE;
 }
