@@ -45,31 +45,48 @@ void CMGButton::OnActivate(void) {
 }
 
 void CMGButton::Render(CDrawPort *pdp) {
-  if (mg_bfsFontSize == BFS_LARGE) {
-    SetFontBig(pdp);
-  } else if (mg_bfsFontSize == BFS_MEDIUM) {
-    SetFontMedium(pdp);
-  } else {
-    ASSERT(mg_bfsFontSize == BFS_SMALL);
-    SetFontSmall(pdp);
+  // [Cecil] Replaced if-else blocks with switch-case
+  switch (mg_bfsFontSize)
+  {
+    default:
+    case BFS_SMALL: {
+      ASSERT(mg_bfsFontSize == BFS_SMALL);
+      SetFontSmall(pdp);
+    } break;
+
+    case BFS_MEDIUM: {
+      SetFontMedium(pdp);
+    } break;
+
+    case BFS_LARGE: {
+      SetFontBig(pdp);
+    } break;
   }
+
   pdp->SetTextMode(mg_iTextMode);
 
-  PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
+  // Convert to pixel box
+  const PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
+
+  // Get current colors
   COLOR col = GetCurrentColor();
+
   if (mg_bEditing) {
     col = LCDGetColor(C_GREEN | 0xFF, "editing");
   }
 
   COLOR colRectangle = col;
 
+  // Get highlighted colors
   if (mg_bHighlighted) {
     col = LCDGetColor(C_WHITE | 0xFF, "hilited");
+
     if (!mg_bFocused) {
       colRectangle = LCDGetColor(C_WHITE | 0xFF, "hilited rectangle");
     }
   }
 
+  // Fade in and out
   if (mg_bMental) {
     FLOAT tmIn = 0.2f;
     FLOAT tmOut = 1.0f;
@@ -79,78 +96,102 @@ void CMGButton::Render(CDrawPort *pdp) {
 
     FLOAT tmTime = _pTimer->GetHighPrecisionTimer().GetSeconds();
     FLOAT fFactor = 1;
+
     if (tmTime > 0.1f) {
       tmTime = fmod(tmTime, tmTotal);
       fFactor = CalculateRatio(tmTime, 0, tmExist, tmFade / tmExist, tmFade / tmExist);
     }
+
     col = (col & ~0xFF) | INDEX(0xFF * fFactor);
   }
 
+  // Draw rectangular border
   if (mg_bRectangle) {
-    // put border
     const PIX pixLeft = box.Min()(1);
     const PIX pixUp = box.Min()(2) - 3;
     const PIX pixWidth = box.Size()(1) + 1;
     const PIX pixHeight = box.Size()(2);
+
     pdp->DrawBorder(pixLeft, pixUp, pixWidth, pixHeight, colRectangle);
   }
 
+  // Draw border for textbox editing
   if (mg_bEditing) {
-    // put border
     PIX pixLeft = box.Min()(1);
     PIX pixUp = box.Min()(2) - 3;
     PIX pixWidth = box.Size()(1) + 1;
     PIX pixHeight = box.Size()(2);
+
+    // Shift to the right side if there's a button label
     if (GetName() != "") {
       pixLeft = box.Min()(1) + box.Size()(1) * 0.55f;
       pixWidth = box.Size()(1) * 0.45f + 1;
     }
+
     pdp->Fill(pixLeft, pixUp, pixWidth, pixHeight, LCDGetColor(C_dGREEN | 0x40, "edit fill"));
   }
 
   INDEX iCursor = mg_iCursorPos;
 
-  // print text
+  // If there's a button label
   if (GetName() != "") {
     PIX pixIL = box.Min()(1) + box.Size()(1) * 0.45f;
     PIX pixIR = box.Min()(1) + box.Size()(1) * 0.55f;
     PIX pixJ = box.Min()(2);
 
+    // Put label on the left and text on the right
     pdp->PutTextR(GetName(), pixIL, pixJ, col);
     pdp->PutText(GetText(), pixIR, pixJ, col);
+
+  // If no button label
   } else {
     CTString str = GetText();
+
+    // If using monospace font
     if (pdp->dp_FontData->fd_bFixedWidth) {
+      // Undecorate the string
       str = str.Undecorated();
-      INDEX iLen = str.Length();
-      INDEX iMaxLen = ClampDn(box.Size()(1) / (pdp->dp_pixTextCharSpacing + pdp->dp_FontData->fd_pixCharWidth), 1L);
+
+      const INDEX iMaxLen = ClampDn(box.Size()(1) / (pdp->dp_pixTextCharSpacing + pdp->dp_FontData->fd_pixCharWidth), 1L);
+
+      // Trim the string if the cursor is past the maximum length
       if (iCursor >= iMaxLen) {
         str.TrimRight(iCursor);
         str.TrimLeft(iMaxLen);
         iCursor = iMaxLen;
+
+      // Trim the string to the maximum length
       } else {
         str.TrimRight(iMaxLen);
       }
     }
-    if (mg_iCenterI == -1)
+
+    // Align text according to the centering
+    if (mg_iCenterI == -1) {
       pdp->PutText(str, box.Min()(1), box.Min()(2), col);
-    else if (mg_iCenterI == +1)
+
+    } else if (mg_iCenterI == +1) {
       pdp->PutTextR(str, box.Max()(1), box.Min()(2), col);
-    else
+
+    } else {
       pdp->PutTextC(str, box.Center()(1), box.Min()(2), col);
+    }
   }
 
-  // put cursor if editing
+  // Add blinking cursor to the string if editing
   if (mg_bEditing && ULONG(_pTimer->GetRealTimeTick() * 2.0f) & 1) {
     PIX pixX = box.Min()(1) + GetCharOffset(pdp, iCursor);
+    PIX pixY = box.Min()(2);
+
+    // Shift to the right side if there's a button label
     if (GetName() != "") {
       pixX += box.Size()(1) * 0.55f;
     }
 
-    PIX pixY = box.Min()(2);
     if (!pdp->dp_FontData->fd_bFixedWidth) {
       pixY -= pdp->dp_fTextScaling * 2;
     }
+
     pdp->PutText("|", pixX, pixY, LCDGetColor(C_WHITE | 0xFF, "editing cursor"));
   }
 }
