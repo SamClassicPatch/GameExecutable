@@ -29,7 +29,6 @@ class CHighScoreMenu : public CGameMenu {
     CMGHighScore gm_mgHScore;
 
     void Initialize_t(void);
-    void StartMenu(void);
 };
 
 #endif /* include-once check. */

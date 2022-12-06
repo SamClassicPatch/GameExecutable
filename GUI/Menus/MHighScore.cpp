@@ -25,8 +25,3 @@ void CHighScoreMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   AddChild(&gm_mgTitle);
 }
-
-void CHighScoreMenu::StartMenu(void) {
-  SetParentMenu(pgmCurrentMenu);
-  CGameMenu::StartMenu();
-}
