@@ -55,12 +55,12 @@ void CMGEdit::OnKillFocus(void) {
   CMenuGadget::OnKillFocus();
 }
 
-// [Cecil] Cancel string editing upon disappearing
+// [Cecil] Gadget should disappear
 void CMGEdit::Disappear(void) {
-  if (mg_pstrToChange != NULL) {
-    *mg_pstrToChange = GetText();
+  // Cancel string editing
+  if (mg_bEditing) {
+    OnKeyDown(VK_RETURN);
     Clear();
-    OnStringChanged();
   }
 
   CMGButton::Disappear();
