@@ -165,7 +165,7 @@ void CVarMenu::StartMenu(void) {
       mgTab.mg_iCenterI = -1;
 
       mgTab.mg_bEnabled = (iTab != 0);
-      mgTab.mg_boxOnScreen = BoxLeftColumn(iTab + 2.0f);
+      mgTab.mg_boxOnScreen = BoxLeftColumn(iTab - 1.0f);
       mgTab.mg_pActivatedFunction = &SelectOptionsTab;
 
       // Connect previous button to the current one
