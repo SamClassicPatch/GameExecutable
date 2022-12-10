@@ -26,7 +26,7 @@ extern CMenuGadget *_pmgUnderCursor;
 extern BOOL _bVarChanged;
 
 // [Cecil] Switch to another options tab
-void SelectOptionsTab(void) {
+static void SelectOptionsTab(void) {
   // Tabs are disabled
   if (!sam_bOptionTabs) return;
 
