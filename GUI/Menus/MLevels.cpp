@@ -18,6 +18,21 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "LevelInfo.h"
 #include "MLevels.h"
 
+// [Cecil] For menu reloading
+#include "GUI/Menus/MenuManager.h"
+extern INDEX sam_bShowAllLevels;
+
+// [Cecil] Toggle level visibility and reload the menu
+static void ChangeLevelVisibility(void) {
+  // Toggle visibility
+  sam_bShowAllLevels = !sam_bShowAllLevels;
+
+  // Reload the menu
+  CLevelsMenu &gmCurrent = _pGUIM->gmLevelsMenu;
+  gmCurrent.EndMenu();
+  gmCurrent.StartMenu();
+};
+
 void CLevelsMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.SetName(TRANS("CHOOSE LEVEL"));
@@ -34,20 +49,35 @@ void CLevelsMenu::Initialize_t(void) {
     AddChild(&gm_mgManualLevel[iLabel]);
   }
 
-  AddChild(&gm_mgArrowUp);
-  AddChild(&gm_mgArrowDn);
   gm_mgArrowUp.mg_adDirection = AD_UP;
-  gm_mgArrowDn.mg_adDirection = AD_DOWN;
   gm_mgArrowUp.mg_boxOnScreen = BoxArrow(AD_UP);
+  gm_mgArrowUp.mg_pmgRight = &gm_mgManualLevel[0];
+  gm_mgArrowUp.mg_pmgDown = &gm_mgVisibility;
+  AddChild(&gm_mgArrowUp);
+
+  gm_mgArrowDn.mg_adDirection = AD_DOWN;
   gm_mgArrowDn.mg_boxOnScreen = BoxArrow(AD_DOWN);
-  gm_mgArrowUp.mg_pmgRight = gm_mgArrowUp.mg_pmgDown = &gm_mgManualLevel[0];
-  gm_mgArrowDn.mg_pmgRight = gm_mgArrowDn.mg_pmgUp = &gm_mgManualLevel[LEVELS_ON_SCREEN - 1];
+  gm_mgArrowDn.mg_pmgRight = &gm_mgManualLevel[LEVELS_ON_SCREEN - 1];
+  gm_mgArrowDn.mg_pmgUp = &gm_mgVisibility;
+  AddChild(&gm_mgArrowDn);
 
   gm_ctListVisible = LEVELS_ON_SCREEN;
   gm_pmgArrowUp = &gm_mgArrowUp;
   gm_pmgArrowDn = &gm_mgArrowDn;
   gm_pmgListTop = &gm_mgManualLevel[0];
   gm_pmgListBottom = &gm_mgManualLevel[LEVELS_ON_SCREEN - 1];
+
+  // [Cecil] Level visibility switch
+  gm_mgVisibility.mg_bfsFontSize = BFS_MEDIUM;
+  gm_mgVisibility.mg_boxOnScreen = BoxLeftColumn(-1.0f);
+  gm_mgVisibility.mg_iCenterI = -1;
+
+  gm_mgVisibility.mg_pmgRight = &gm_mgManualLevel[0];
+  gm_mgVisibility.mg_pmgUp = &gm_mgArrowUp;
+  gm_mgVisibility.mg_pmgDown = &gm_mgArrowDn;
+  gm_mgVisibility.mg_pActivatedFunction = &ChangeLevelVisibility;
+
+  AddChild(&gm_mgVisibility);
 }
 
 void CLevelsMenu::FillListItems(void) {
@@ -105,6 +135,9 @@ void CLevelsMenu::StartMenu(void) {
   gm_iListOffset = 0;
   gm_ctListTotal = _lhFilteredLevels.Count();
   gm_iListWantedItem = 0;
+
+  // [Cecil] Set level visibility switch text
+  gm_mgVisibility.SetText(sam_bShowAllLevels ? TRANS("Show visible levels") : TRANS("Show all levels"));
 
   // for each level
   INDEX i = 0;

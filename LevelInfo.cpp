@@ -212,6 +212,9 @@ void FilterLevels(ULONG ulSpawnFlags) {
 
 // If level doesn't support given flags, find one that does
 void ValidateLevelForFlags(ULONG ulSpawnFlags) {
+  // [Cecil] All levels are supported
+  if (sam_bShowAllLevels) return;
+
   // for each level in main list
   {FOREACHINLIST(CLevelInfo, li_lnNode, _lhAllLevels, itli) {
     CLevelInfo &li = *itli;
