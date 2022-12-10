@@ -31,6 +31,8 @@ class CLevelsMenu : public CGameMenu {
     CMGArrow gm_mgArrowUp;
     CMGArrow gm_mgArrowDn;
 
+    ULONG gm_ulSpawnFlags; // [Cecil] Level visibility flags
+
     void Initialize_t(void);
     void FillListItems(void);
     void StartMenu(void);

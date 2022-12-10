@@ -98,21 +98,28 @@ void CLevelsMenu::FillListItems(void) {
 }
 
 void CLevelsMenu::StartMenu(void) {
+  // [Cecil] Filter levels using local spawn flags
+  FilterLevels(gm_ulSpawnFlags);
+
   // set default parameters for the list
   gm_iListOffset = 0;
   gm_ctListTotal = _lhFilteredLevels.Count();
   gm_iListWantedItem = 0;
+
   // for each level
   INDEX i = 0;
   FOREACHINLIST(CLevelInfo, li_lnNode, _lhFilteredLevels, itlid) {
     CLevelInfo &lid = *itlid;
+
     // if it is the chosen one
     if (lid.li_fnLevel == GetGameAPI()->GetCustomLevel()) {
       // demand focus on it
       gm_iListWantedItem = i;
       break;
     }
+
     i++;
   }
+
   CGameMenu::StartMenu();
 }
