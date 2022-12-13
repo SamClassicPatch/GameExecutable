@@ -23,6 +23,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "LevelInfo.h"
 #include "VarList.h"
 
+// [Cecil] Master server enumiration
+#include <CoreLib/Query/QueryMgr.h>
+
 // [Cecil] Screen resolution lists
 #include "Cecil/ScreenResolutions.h"
 

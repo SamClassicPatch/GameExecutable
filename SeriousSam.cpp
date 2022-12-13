@@ -28,6 +28,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "CmdLine.h"
 #include "Credits.h"
 
+// [Cecil] Master server enumiration
+#include <CoreLib/Query/QueryMgr.h>
+
 // [Cecil] Window modes
 #include "Cecil/WindowModes.h"
 
