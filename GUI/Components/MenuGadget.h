@@ -22,7 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 
 // [Cecil] Nodes
-#include <CoreLib/Objects/Node.h>
+#include "Cecil/GuiNode.h"
 
 #define DOING_NOTHING 0
 #define PRESS_KEY_WAITING 1
@@ -30,7 +30,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #define EMPTYSLOTSTRING TRANS("<save a new one>")
 
-class CMenuGadget : public CNode {
+class CMenuGadget : public CGuiNode {
   public:
     FLOATaabbox2D mg_boxOnScreen;
     BOOL mg_bVisible;

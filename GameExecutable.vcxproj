@@ -307,6 +307,7 @@
     <ClCompile Include="LevelInfo.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClInclude Include="Cecil\CecilExtensions.h" />
+    <ClInclude Include="Cecil\GuiNode.h" />
     <ClInclude Include="Cecil\ScreenResolutions.h" />
     <ClInclude Include="Cecil\WindowModes.h" />
     <ClInclude Include="GUI\Components\MenuGadget.h" />

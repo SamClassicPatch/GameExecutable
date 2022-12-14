@@ -20,9 +20,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #endif
 
 // [Cecil] Nodes
-#include <CoreLib/Objects/Node.h>
+#include "Cecil/GuiNode.h"
 
-class CGameMenu : public CNode {
+class CGameMenu : public CGuiNode {
   public:
     BOOL gm_bPopup;
     const char *gm_strName; // menu name (for mod interface only)
@@ -55,7 +55,7 @@ class CGameMenu : public CNode {
 
     // [Cecil] Set parent menu (as just a reference)
     inline void SetParentMenu(CGameMenu *pgmParent) {
-      n_pParent = pgmParent;
+      m_pParent = pgmParent;
     };
 };
 

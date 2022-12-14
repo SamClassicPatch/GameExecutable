@@ -531,7 +531,7 @@ void MenuUpdateMouseFocus(void) {
 
   CMenuGadget *pmgActive = NULL;
   // for all gadgets in menu
-  FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetChildren(), itmg) {
+  FOREACHNODE(CMenuGadget, pgmCurrentMenu->GetChildren(), itmg) {
     CMenuGadget &mg = *itmg;
     // if focused
     if (itmg->mg_bFocused) {
@@ -646,7 +646,7 @@ BOOL DoMenu(CDrawPort *pdp) {
   while (_tmMenuLastTickDone < tmTickNow) {
     _pTimer->SetCurrentTick(_tmMenuLastTickDone);
     // call think for all gadgets in menu
-    FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetChildren(), itmg) {
+    FOREACHNODE(CMenuGadget, pgmCurrentMenu->GetChildren(), itmg) {
       itmg->Think();
     }
     _tmMenuLastTickDone += _pTimer->TickQuantum;
@@ -777,7 +777,7 @@ BOOL DoMenu(CDrawPort *pdp) {
     // render parent menu first
     if (pgmCurrentMenu->GetParentMenu() != NULL) {
       _pGame->MenuPreRenderMenu(pgmCurrentMenu->GetParentMenu()->gm_strName);
-      FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetParentMenu()->GetChildren(), itmg) {
+      FOREACHNODE(CMenuGadget, pgmCurrentMenu->GetParentMenu()->GetChildren(), itmg) {
         if (itmg->mg_bVisible) {
           itmg->Render(&dpMenu);
         }
@@ -809,7 +809,7 @@ BOOL DoMenu(CDrawPort *pdp) {
   BOOL bStilInMenus = FALSE;
   _pGame->MenuPreRenderMenu(pgmCurrentMenu->gm_strName);
   // for each menu gadget
-  FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetChildren(), itmg) {
+  FOREACHNODE(CMenuGadget, pgmCurrentMenu->GetChildren(), itmg) {
     // if gadget is visible
     if (itmg->mg_bVisible) {
       bStilInMenus = TRUE;
@@ -826,7 +826,7 @@ BOOL DoMenu(CDrawPort *pdp) {
   // if mouse was not active last
   if (!_bMouseUsedLast) {
     // find focused gadget
-    FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetChildren(), itmg) {
+    FOREACHNODE(CMenuGadget, pgmCurrentMenu->GetChildren(), itmg) {
       CMenuGadget &mg = *itmg;
       // if focused
       if (itmg->mg_bFocused) {
@@ -938,7 +938,7 @@ void ChangeToMenu(CGameMenu *pgmNewMenu) {
     if (!pgmNewMenu->gm_bPopup) {
       pgmCurrentMenu->EndMenu();
     } else {
-      FOREACHINLIST(CMenuGadget, n_lnInParent, pgmCurrentMenu->GetChildren(), itmg) {
+      FOREACHNODE(CMenuGadget, pgmCurrentMenu->GetChildren(), itmg) {
         itmg->OnKillFocus();
       }
     }
