@@ -24,7 +24,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "VarList.h"
 
 // [Cecil] Master server enumiration
-#include <CoreLib/Query/QueryMgr.h>
+#include <CoreLib/Query/QueryManager.h>
 
 // [Cecil] Screen resolution lists
 #include "Cecil/ScreenResolutions.h"
@@ -1035,7 +1035,7 @@ static void SortByVer(void)     { SortByColumn(6); }
 
 extern void RefreshServerList(void) {
   // [Cecil] Own method
-  MS_EnumSessions(_pGUIM->gmServersMenu.m_bInternet);
+  IMasterServer::EnumSessions(_pGUIM->gmServersMenu.m_bInternet);
 }
 
 void RefreshServerListManually(void) {

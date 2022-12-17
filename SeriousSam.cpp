@@ -29,7 +29,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Credits.h"
 
 // [Cecil] Master server enumiration
-#include <CoreLib/Query/QueryMgr.h>
+#include <CoreLib/Query/QueryManager.h>
 
 // [Cecil] Window modes
 #include "Cecil/WindowModes.h"
@@ -724,7 +724,7 @@ void DoGame(void) {
   // if game is not started
   } else {
     // [Cecil] Update master server
-    MS_EnumUpdate();
+    IMasterServer::EnumUpdate();
 
     // just handle broadcast messages
     _pNetwork->GameInactive();
