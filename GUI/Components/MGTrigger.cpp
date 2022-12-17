@@ -73,8 +73,8 @@ void CMGTrigger::Render(CDrawPort *pdp) {
   SetFontMedium(pdp);
 
   PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
-  PIX pixIL = box.Min()(1) + box.Size()(1) * 0.45f;
-  PIX pixIR = box.Min()(1) + box.Size()(1) * 0.55f;
+  PIX pixIL = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioL;
+  PIX pixIR = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioR;
   PIX pixJ = box.Min()(2);
 
   COLOR col = GetCurrentColor();

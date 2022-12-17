@@ -29,6 +29,10 @@ static const FLOAT _fNoUpStartJ = 0.24f;
 static const FLOAT _fNoDownStartJ = 0.44f;
 static const FLOAT _fNoSizeJ = 0.04f;
 
+// [Cecil] Side size ratios
+extern FLOAT _fGadgetSideRatioL;
+extern FLOAT _fGadgetSideRatioR;
+
 FLOATaabbox2D BoxTitle(void) {
   return FLOATaabbox2D(
     FLOAT2D(0, _fBigSizeJ),
@@ -55,12 +59,12 @@ FLOATaabbox2D BoxBigRow(FLOAT fRow) {
 FLOATaabbox2D BoxBigLeft(FLOAT fRow) {
   return FLOATaabbox2D(
     FLOAT2D(0.1f, _fBigStartJ + fRow * _fBigSizeJ),
-    FLOAT2D(0.45f, _fBigStartJ + (fRow + 1) * _fBigSizeJ));
+    FLOAT2D(_fGadgetSideRatioL, _fBigStartJ + (fRow + 1) * _fBigSizeJ));
 }
 
 FLOATaabbox2D BoxBigRight(FLOAT fRow) {
   return FLOATaabbox2D(
-    FLOAT2D(0.55f, _fBigStartJ + fRow * _fBigSizeJ),
+    FLOAT2D(_fGadgetSideRatioR, _fBigStartJ + fRow * _fBigSizeJ),
     FLOAT2D(0.9f, _fBigStartJ + (fRow + 1) * _fBigSizeJ));
 }
 
@@ -91,7 +95,7 @@ FLOATaabbox2D BoxKeyRow(FLOAT fRow) {
 FLOATaabbox2D BoxMediumLeft(FLOAT fRow) {
   return FLOATaabbox2D(
     FLOAT2D(0.05f, _fBigStartJ + fRow * _fMediumSizeJ),
-    FLOAT2D(0.45f, _fBigStartJ + (fRow + 1) * _fMediumSizeJ));
+    FLOAT2D(_fGadgetSideRatioL, _fBigStartJ + (fRow + 1) * _fMediumSizeJ));
 }
 
 FLOATaabbox2D BoxPlayerSwitch(FLOAT fRow) {
@@ -114,7 +118,7 @@ FLOATaabbox2D BoxPlayerEdit(FLOAT fRow) {
 
 FLOATaabbox2D BoxMediumRight(FLOAT fRow) {
   return FLOATaabbox2D(
-    FLOAT2D(0.55f, _fBigStartJ + fRow * _fMediumSizeJ),
+    FLOAT2D(_fGadgetSideRatioR, _fBigStartJ + fRow * _fMediumSizeJ),
     FLOAT2D(0.95f, _fBigStartJ + (fRow + 1) * _fMediumSizeJ));
 }
 

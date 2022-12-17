@@ -30,6 +30,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #define EMPTYSLOTSTRING TRANS("<save a new one>")
 
+// [Cecil] Side size ratios for when one gadget has two elements (e.g. label and a button)
+extern FLOAT _fGadgetSideRatioL;
+extern FLOAT _fGadgetSideRatioR;
+
 class CMenuGadget : public CGuiNode {
   public:
     FLOATaabbox2D mg_boxOnScreen;

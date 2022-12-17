@@ -37,7 +37,7 @@ BOOL CMGVarButton::IsEnabled(void) {
 PIXaabbox2D CMGVarButton::GetSliderBox(void) {
   extern CDrawPort *pdp;
   PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
-  PIX pixIR = box.Min()(1) + box.Size()(1) * 0.55f;
+  PIX pixIR = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioR;
   PIX pixJ = box.Min()(2);
   PIX pixISize = box.Size()(1) * 0.13f;
   PIX pixJSize = box.Size()(2);
@@ -160,8 +160,8 @@ void CMGVarButton::Render(CDrawPort *pdp) {
   SetFontMedium(pdp);
 
   PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
-  PIX pixIL = box.Min()(1) + box.Size()(1) * 0.45f;
-  PIX pixIR = box.Min()(1) + box.Size()(1) * 0.55f;
+  PIX pixIL = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioL;
+  PIX pixIR = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioR;
   PIX pixIC = box.Center()(1);
   PIX pixJ = box.Min()(2);
 

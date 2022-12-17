@@ -68,9 +68,6 @@ void CMGButton::Render(CDrawPort *pdp) {
   // Convert to pixel box
   const PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
 
-  // [Cecil] Side size ratio
-  const FLOAT fSideRatio = 0.45f;
-
   // [Cecil] Check if there's a button label
   const BOOL bLabel = (GetName() != "");
 
@@ -130,8 +127,8 @@ void CMGButton::Render(CDrawPort *pdp) {
 
     // Shift to the right side if there's a button label
     if (bLabel) {
-      pixLeft = box.Max()(1) - box.Size()(1) * fSideRatio;
-      pixWidth = box.Size()(1) * fSideRatio + 1;
+      pixLeft = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioR;
+      pixWidth = box.Size()(1) * _fGadgetSideRatioL + 1;
     }
 
     pdp->Fill(pixLeft, pixUp, pixWidth, pixHeight, LCDGetColor(C_dGREEN | 0x40, "edit fill"));
@@ -141,8 +138,8 @@ void CMGButton::Render(CDrawPort *pdp) {
 
   // If there's a button label
   if (bLabel) {
-    PIX pixIL = box.Min()(1) + box.Size()(1) * fSideRatio;
-    PIX pixIR = box.Max()(1) - box.Size()(1) * fSideRatio;
+    PIX pixIL = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioL;
+    PIX pixIR = box.Max()(1) - box.Size()(1) * _fGadgetSideRatioL;
     PIX pixJ = box.Min()(2);
 
     // Put label on the left and text on the right
@@ -191,7 +188,7 @@ void CMGButton::Render(CDrawPort *pdp) {
 
     // Shift to the right side if there's a button label
     if (bLabel) {
-      pixX += box.Size()(1) * (1.0f - fSideRatio);
+      pixX += box.Size()(1) * _fGadgetSideRatioR;
     }
 
     if (!pdp->dp_FontData->fd_bFixedWidth) {

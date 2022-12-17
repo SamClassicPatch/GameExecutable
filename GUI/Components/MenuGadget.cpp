@@ -18,6 +18,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "VarList.h"
 #include "MenuGadget.h"
 
+// [Cecil] Side size ratio
+FLOAT _fGadgetSideRatioL = 0.47f;
+FLOAT _fGadgetSideRatioR = 0.53f;
+
 extern CSoundData *_psdSelect;
 
 extern BOOL _bDefiningKey = FALSE;

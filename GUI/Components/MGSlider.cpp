@@ -76,10 +76,10 @@ BOOL CMGSlider::OnKeyDown(int iVKey) {
 PIXaabbox2D CMGSlider::GetSliderBox(void) {
   extern CDrawPort *pdp;
   PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
-  PIX pixIR = box.Min()(1) + box.Size()(1) * 0.55f;
+  PIX pixIR = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioR;
   PIX pixJ = box.Min()(2);
   PIX pixJSize = box.Size()(2) * 0.95f;
-  PIX pixISizeR = box.Size()(1) * 0.45f;
+  PIX pixISizeR = box.Size()(1) * _fGadgetSideRatioL;
 
   return PIXaabbox2D(PIX2D(pixIR + 1, pixJ + 1), PIX2D(pixIR + pixISizeR - 2, pixJ + pixJSize - 2));
 }
@@ -90,11 +90,11 @@ void CMGSlider::Render(CDrawPort *pdp) {
   // get geometry
   COLOR col = GetCurrentColor();
   PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
-  PIX pixIL = box.Min()(1) + box.Size()(1) * 0.45f;
-  PIX pixIR = box.Min()(1) + box.Size()(1) * 0.55f;
+  PIX pixIL = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioL;
+  PIX pixIR = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioR;
   PIX pixJ = box.Min()(2);
   PIX pixJSize = box.Size()(2) * 0.95f;
-  PIX pixISizeR = box.Size()(1) * 0.45f;
+  PIX pixISizeR = box.Size()(1) * _fGadgetSideRatioL;
 
   // print text left of slider
   pdp->PutTextR(GetText(), pixIL, pixJ, col);
