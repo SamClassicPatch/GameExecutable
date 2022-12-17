@@ -29,6 +29,7 @@ CMGButton::CMGButton(void) {
   mg_iTextMode = 1;
   mg_bfsFontSize = BFS_MEDIUM;
   mg_iCursorPos = -1;
+  mg_fTextScale = 1.0f; // [Cecil] Text scaling
   mg_bRectangle = FALSE;
   mg_bMental = FALSE;
   mg_bEditing = FALSE;
@@ -51,15 +52,15 @@ void CMGButton::Render(CDrawPort *pdp) {
     default:
     case BFS_SMALL: {
       ASSERT(mg_bfsFontSize == BFS_SMALL);
-      SetFontSmall(pdp);
+      SetFontSmall(pdp, mg_fTextScale);
     } break;
 
     case BFS_MEDIUM: {
-      SetFontMedium(pdp);
+      SetFontMedium(pdp, mg_fTextScale);
     } break;
 
     case BFS_LARGE: {
-      SetFontBig(pdp);
+      SetFontBig(pdp, mg_fTextScale);
     } break;
   }
 

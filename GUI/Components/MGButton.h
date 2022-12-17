@@ -29,6 +29,7 @@ class CMGButton : public CMenuGadget {
 
   public:
     INDEX mg_iCenterI;
+    FLOAT mg_fTextScale; // [Cecil] Text scaling
     enum ButtonFontSize mg_bfsFontSize;
     BOOL mg_bEditing;
     BOOL mg_bHighlighted;

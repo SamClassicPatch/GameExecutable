@@ -17,7 +17,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MGArrow.h"
 
 void CMGArrow::Render(CDrawPort *pdp) {
-  SetFontMedium(pdp);
+  SetFontMedium(pdp, mg_fTextScale);
 
   PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
   COLOR col = GetCurrentColor();

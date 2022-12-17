@@ -142,7 +142,7 @@ void CMGServerList::Render(CDrawPort *pdp) {
   _bSortDown = mg_bSortDown;
   SortAndFilterServers();
 
-  SetFontSmall(pdp);
+  SetFontSmall(pdp, 1.0f);
   BOOL bFocusedBefore = mg_bFocused;
   mg_bFocused = FALSE;
 

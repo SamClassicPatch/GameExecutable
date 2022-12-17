@@ -856,7 +856,7 @@ BOOL DoMenu(CDrawPort *pdp) {
       strTip = TRANS("Enter - OK, Escape - Cancel");
     }
     // print the tip
-    SetFontMedium(&dpMenu);
+    SetFontMedium(&dpMenu, 1.0f);
     dpMenu.PutTextC(strTip, pixW * 0.5f, pixH * 0.92f, LCDGetColor(C_WHITE | 255, "tool tip"));
   }
 

@@ -247,25 +247,29 @@ void SetFontTitle(CDrawPort *pdp) {
 }
 
 extern CFontData _fdBig;
-void SetFontBig(CDrawPort *pdp) {
+extern CFontData _fdMedium;
+
+// [Cecil] Added text scale
+void SetFontBig(CDrawPort *pdp, FLOAT fScale) {
   pdp->SetFont(&_fdBig);
   
   // [Cecil] Use height instead of width for text scaling
-  pdp->SetTextScaling(1.0f * HEIGHT_SCALING(pdp));
+  pdp->SetTextScaling(fScale * HEIGHT_SCALING(pdp));
   pdp->SetTextAspect(1.0f);
 }
 
-extern CFontData _fdMedium;
-void SetFontMedium(CDrawPort *pdp) {
+// [Cecil] Added text scale
+void SetFontMedium(CDrawPort *pdp, FLOAT fScale) {
   pdp->SetFont(&_fdMedium);
   
   // [Cecil] Use height instead of width for text scaling
-  pdp->SetTextScaling(1.0f * HEIGHT_SCALING(pdp));
+  pdp->SetTextScaling(fScale * HEIGHT_SCALING(pdp));
   pdp->SetTextAspect(0.75f);
 }
 
-void SetFontSmall(CDrawPort *pdp) {
+// [Cecil] Added text scale
+void SetFontSmall(CDrawPort *pdp, FLOAT fScale) {
   pdp->SetFont(_pfdConsoleFont);
-  pdp->SetTextScaling(1.0f);
+  pdp->SetTextScaling(fScale);
   pdp->SetTextAspect(1.0f);
 }

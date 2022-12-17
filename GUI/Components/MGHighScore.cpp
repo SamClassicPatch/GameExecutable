@@ -23,7 +23,7 @@ FLOAT afI[HSCOLUMNS] = {
 };
 
 void CMGHighScore::Render(CDrawPort *pdp) {
-  SetFontMedium(pdp);
+  SetFontMedium(pdp, 1.0f);
 
   COLOR colHeader = LCDGetColor(C_GREEN | 255, "hiscore header");
   COLOR colData = LCDGetColor(C_mdGREEN | 255, "hiscore data");
