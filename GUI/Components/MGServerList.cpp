@@ -17,6 +17,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MGServerList.h"
 #include "MGEdit.h"
 
+// [Cecil] Data methods
+#include <CoreLib/Interfaces/DataFunctions.h>
+
 extern CSoundData *_psdSelect;
 extern CSoundData *_psdPress;
 
@@ -32,8 +35,16 @@ void PrintInBox(CDrawPort *pdp, PIX pixI, PIX pixJ, PIX pixSizeI, CTString str, 
     str = str.Undecorated();
   }
 
-  PIX pixCharSize = pdp->dp_pixTextCharSpacing + pdp->dp_FontData->fd_pixCharWidth;
-  str.TrimRight(pixSizeI / pixCharSize);
+  // [Cecil] Keep decreasing amount of characters in a string until it fits within the size limit
+  if (pixSizeI > 0) {
+    CTString strCheck = str.Undecorated();
+
+    while (pdp->GetTextWidth(strCheck) > pixSizeI)
+    {
+      str.TrimRight(IData::GetDecoratedChar(str, strCheck.Length() - 1));
+      strCheck = str.Undecorated();
+    }
+  }
 
   // print text
   pdp->PutText(str, pixI, pixJ, col);
