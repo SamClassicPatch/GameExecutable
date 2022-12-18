@@ -54,7 +54,7 @@ void CServersMenu::Initialize_t(void) {
 
   gm_mgRefresh.SetText(TRANS("REFRESH"));
   gm_mgRefresh.mg_boxOnScreen = BoxLeftColumn(15.0);
-  gm_mgRefresh.mg_bfsFontSize = BFS_SMALL;
+  gm_mgRefresh.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgRefresh.mg_iCenterI = -1;
   gm_mgRefresh.mg_pmgDown = &gm_mgList;
   gm_mgRefresh.mg_pActivatedFunction = NULL;

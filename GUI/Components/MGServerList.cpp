@@ -153,7 +153,17 @@ void CMGServerList::Render(CDrawPort *pdp) {
   _bSortDown = mg_bSortDown;
   SortAndFilterServers();
 
-  SetFontSmall(pdp, 1.0f);
+  // [Cecil] Medium text scale
+  const FLOAT fTextScale = 0.65f;
+  const FLOAT fScaling = HEIGHT_SCALING(pdp);
+
+  // [Cecil] Set medium font if scaling is larger than 150%
+  if (fScaling >= 1.5f) {
+    SetFontMedium(pdp, fTextScale);
+  } else {
+    SetFontSmall(pdp, 1.0f);
+  }
+
   BOOL bFocusedBefore = mg_bFocused;
   mg_bFocused = FALSE;
 
@@ -162,10 +172,10 @@ void CMGServerList::Render(CDrawPort *pdp) {
 
   PIX pixDPSizeI = pdp->GetWidth();
   PIX pixDPSizeJ = pdp->GetHeight();
-  PIX pixCharSizeI = pdp->dp_pixTextCharSpacing + pdp->dp_FontData->fd_pixCharWidth;
-  PIX pixCharSizeJ = pdp->dp_pixTextLineSpacing + pdp->dp_FontData->fd_pixCharHeight + 1;
+  PIX pixCharSizeI = (pdp->dp_pixTextCharSpacing + pdp->dp_FontData->fd_pixCharWidth) * pdp->dp_fTextScaling;
+  PIX pixCharSizeJ = (pdp->dp_pixTextLineSpacing + pdp->dp_FontData->fd_pixCharHeight + 1) * pdp->dp_fTextScaling;
   PIX pixLineSize = 1;
-  PIX pixSliderSizeI = 10;
+  PIX pixSliderSizeI = 10 * fScaling;
   PIX pixOuterMargin = 20;
 
   INDEX ctSessions = _lhServers.Count();
@@ -176,25 +186,36 @@ void CMGServerList::Render(CDrawPort *pdp) {
     ctColumns[i] = mgServerColumn[i].GetText().Length() + 1;
   }}
 
-  PIX pixSizePing = Max(PIX(pixCharSizeI * 5), pixCharSizeI * ctColumns[2]) + pixLineSize * 2;
-  PIX pixSizePlayerCt = Max(PIX(pixCharSizeI * 5), pixCharSizeI * ctColumns[3]) + pixLineSize * 2;
-  PIX pixSizeGameType = Max(Min(PIX(pixCharSizeI * 20), PIX(pixDPSizeI * 0.2f)), pixCharSizeI * ctColumns[4]) + pixLineSize * 2;
-  PIX pixSizeMapName = Max(PIX(pixDPSizeI * 0.25f), pixCharSizeI * ctColumns[1]) + pixLineSize * 2;
-  PIX pixSizeMod = Max(Min(PIX(pixCharSizeI * 11), PIX(pixDPSizeI * 0.2f)), pixCharSizeI * ctColumns[5]) + pixLineSize * 2;
-  PIX pixSizeVer = Max(PIX(pixCharSizeI * 7), pixCharSizeI * ctColumns[6]) + pixLineSize * 2;
+  PIX pixSizeMap, pixSizePing, pixSizePlrs, pixSizeMode, pixSizeMod, pixSizeVer;
+
+  // [Cecil] Adjust sizes for the medium font
+  if (fScaling >= 1.5f) {
+    pixSizeMap  = PIX(pixDPSizeI * 0.25f) + pixLineSize * 2;
+    pixSizePing = PIX(pixCharSizeI * 4)   + pixLineSize * 2;
+    pixSizePlrs = PIX(pixCharSizeI * 4)   + pixLineSize * 2;
+    pixSizeMode = PIX(pixCharSizeI * 7)   + pixLineSize * 2;
+    pixSizeMod  = PIX(pixCharSizeI * 7)   + pixLineSize * 2;
+    pixSizeVer  = PIX(pixCharSizeI * 4)   + pixLineSize * 2;
+
+  } else {
+    pixSizeMap  = Max(    PIX(pixDPSizeI * 0.25f),                         pixCharSizeI * ctColumns[1]) + pixLineSize * 2;
+    pixSizePing = Max(    PIX(pixCharSizeI * 5),                           pixCharSizeI * ctColumns[2]) + pixLineSize * 2;
+    pixSizePlrs = Max(    PIX(pixCharSizeI * 5),                           pixCharSizeI * ctColumns[3]) + pixLineSize * 2;
+    pixSizeMode = Max(Min(PIX(pixCharSizeI * 20), PIX(pixDPSizeI * 0.2f)), pixCharSizeI * ctColumns[4]) + pixLineSize * 2;
+    pixSizeMod  = Max(Min(PIX(pixCharSizeI * 11), PIX(pixDPSizeI * 0.2f)), pixCharSizeI * ctColumns[5]) + pixLineSize * 2;
+    pixSizeVer  = Max(    PIX(pixCharSizeI * 7),                           pixCharSizeI * ctColumns[6]) + pixLineSize * 2;
+  }
 
   PIX apixSeparatorI[9];
-  apixSeparatorI[0] = pixOuterMargin;
   apixSeparatorI[8] = pixDPSizeI - pixOuterMargin - pixLineSize;
   apixSeparatorI[7] = apixSeparatorI[8] - pixSliderSizeI - pixLineSize;
-  apixSeparatorI[6] = apixSeparatorI[7] - pixSizeVer - pixLineSize;
-  apixSeparatorI[5] = apixSeparatorI[6] - pixSizeMod - pixLineSize;
-  apixSeparatorI[4] = apixSeparatorI[5] - pixSizeGameType - pixLineSize;
-  apixSeparatorI[3] = apixSeparatorI[4] - pixSizePlayerCt - pixLineSize;
+  apixSeparatorI[6] = apixSeparatorI[7] - pixSizeVer  - pixLineSize;
+  apixSeparatorI[5] = apixSeparatorI[6] - pixSizeMod  - pixLineSize;
+  apixSeparatorI[4] = apixSeparatorI[5] - pixSizeMode - pixLineSize;
+  apixSeparatorI[3] = apixSeparatorI[4] - pixSizePlrs - pixLineSize;
   apixSeparatorI[2] = apixSeparatorI[3] - pixSizePing - pixLineSize;
-  apixSeparatorI[1] = apixSeparatorI[2] - pixSizeMapName - pixLineSize;
-  apixSeparatorI[1] = apixSeparatorI[2] - pixSizeMapName - pixLineSize;
-  PIX pixSizeServerName = apixSeparatorI[1] - apixSeparatorI[0] - pixLineSize;
+  apixSeparatorI[1] = apixSeparatorI[2] - pixSizeMap  - pixLineSize;
+  apixSeparatorI[0] = pixOuterMargin;
 
   PIX pixTopJ = pixDPSizeJ * 0.15f;
   PIX pixBottomJ = pixDPSizeJ * 0.82f;
@@ -222,6 +243,20 @@ void CMGServerList::Render(CDrawPort *pdp) {
       PIXaabbox2D(PIX2D(apixSeparatorI[i] + pixCharSizeI / 2, pixTopJ + pixLineSize * 4), PIX2D(apixSeparatorI[i + 1] - pixCharSizeI / 2, pixTopJ + pixLineSize * 4 + pixCharSizeJ)));
     mgServerFilter[i].mg_boxOnScreen = PixBoxToFloatBox(pdp,
       PIXaabbox2D(PIX2D(apixSeparatorI[i] + pixCharSizeI / 2, pixFilterTopJ), PIX2D(apixSeparatorI[i + 1] - pixCharSizeI / 2, pixFilterTopJ + pixCharSizeJ)));
+
+    // [Cecil] Set medium font if scaling is larger than 150%
+    if (fScaling >= 1.5f) {
+      mgServerColumn[i].mg_bfsFontSize = BFS_MEDIUM;
+      mgServerColumn[i].mg_fTextScale = fTextScale;
+      mgServerFilter[i].mg_bfsFontSize = BFS_MEDIUM;
+      mgServerFilter[i].mg_fTextScale = fTextScale;
+
+    } else {
+      mgServerColumn[i].mg_bfsFontSize = BFS_SMALL;
+      mgServerColumn[i].mg_fTextScale = 1.0f;
+      mgServerFilter[i].mg_bfsFontSize = BFS_SMALL;
+      mgServerFilter[i].mg_fTextScale = 1.0f;
+    }
   }}
 
   for (INDEX i = 0; i < ARRAYCOUNT(apixSeparatorI); i++) {
