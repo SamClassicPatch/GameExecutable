@@ -35,6 +35,7 @@ class CMGButton : public CMenuGadget {
     BOOL mg_bHighlighted;
     BOOL mg_bRectangle;
     BOOL mg_bMental;
+    BOOL mg_bHiddenText; // [Cecil] Hide value when not editing
     INDEX mg_iTextMode;
     INDEX mg_iCursorPos;
     INDEX mg_iIndex;

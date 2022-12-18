@@ -169,6 +169,19 @@ void ParseCFG_t(CTStream &strm) {
         pvs->vs_bCanChangeInGame = TRUE;
       }
 
+    // [Cecil] Hide value string
+    } else if (strLine.RemovePrefix("Hidden:")) {
+      CheckPVS_t(pvs);
+      strLine.TrimSpacesLeft();
+      strLine.TrimSpacesRight();
+
+      if (strLine == "No") {
+        pvs->vs_bHidden = FALSE;
+      } else {
+        ASSERT(strLine == "Yes");
+        pvs->vs_bHidden = TRUE;
+      }
+
     } else if (strLine.RemovePrefix("String:")) {
       CheckPVS_t(pvs);
       TranslateLine(strLine);
@@ -363,7 +376,7 @@ CVarSetting::CVarSetting() {
 void CVarSetting::Clear() {
   vs_iOrgValue = 0;
   vs_iValue = 0;
-  vs_strValue = ""; // [Cecil]
+  vs_strValue.Clear(); // [Cecil]
   vs_ctValues = 0;
   vs_eType = E_TOGGLE; // [Cecil] Toggleable type by default
   vs_bCanChangeInGame = TRUE;
@@ -374,6 +387,7 @@ void CVarSetting::Clear() {
   vs_strFilter.Clear();
   vs_strSchedule.Clear();
   vs_bCustom = FALSE;
+  vs_bHidden = FALSE; // [Cecil]
 }
 
 BOOL CVarSetting::Validate(void) {
@@ -415,6 +429,7 @@ CVarSetting::CVarSetting(const CVarSetting &vsOther) {
   vs_ctValues         = vsOther.vs_ctValues;
   vs_iOrgValue        = vsOther.vs_iOrgValue;
   vs_bCustom          = vsOther.vs_bCustom;
+  vs_bHidden          = vsOther.vs_bHidden;
 
   INDEX ct;
   CTString *pstr;

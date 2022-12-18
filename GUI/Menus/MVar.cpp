@@ -139,10 +139,11 @@ void CVarMenu::FillListItems(void) {
       mgVar.mg_bEnabled = gm_mgVar[iInMenu].IsEnabled();
       mgVar.mg_iInList = iLabel;
 
-      // [Cecil] Set variable name, value and editable string
+      // [Cecil] Set variable settings
       mgVar.SetName(vs.vs_strName);
       mgVar.SetText(vs.vs_strValue);
       mgVar.mg_pstrToChange = &vs.vs_strValue;
+      mgVar.mg_bHiddenText = vs.vs_bHidden;
     }
     iLabel++;
   }

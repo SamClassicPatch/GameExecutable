@@ -198,13 +198,22 @@ void CMGEdit::Render(CDrawPort *pdp) {
   }
 
   if (GetText() == "" && !mg_bEditing) {
+    // [Cecil] Don't hide empty string
+    BOOL bHiddenState = mg_bHiddenText;
+    mg_bHiddenText = FALSE;
+
     if (mg_bfsFontSize == BFS_SMALL) {
       SetText("*");
     } else {
       SetText(TRANS("<none>"));
     }
     CMGButton::Render(pdp);
+
     SetText("");
+
+    // [Cecil] Restore hidden state
+    mg_bHiddenText = bHiddenState;
+
   } else {
     CMGButton::Render(pdp);
   }

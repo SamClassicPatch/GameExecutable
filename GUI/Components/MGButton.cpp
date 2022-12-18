@@ -29,11 +29,12 @@ CMGButton::CMGButton(void) {
   mg_iTextMode = 1;
   mg_bfsFontSize = BFS_MEDIUM;
   mg_iCursorPos = -1;
-  mg_fTextScale = 1.0f; // [Cecil] Text scaling
+  mg_fTextScale = 1.0f; // [Cecil]
   mg_bRectangle = FALSE;
   mg_bMental = FALSE;
   mg_bEditing = FALSE;
   mg_bHighlighted = FALSE;
+  mg_bHiddenText = FALSE; // [Cecil]
 }
 
 void CMGButton::OnActivate(void) {
@@ -119,6 +120,8 @@ void CMGButton::Render(CDrawPort *pdp) {
     pdp->DrawBorder(pixLeft, pixUp, pixWidth, pixHeight, colRectangle);
   }
 
+  CTString strText = GetText();
+
   // Draw border for textbox editing
   if (mg_bEditing) {
     PIX pixLeft = box.Min()(1);
@@ -133,6 +136,21 @@ void CMGButton::Render(CDrawPort *pdp) {
     }
 
     pdp->Fill(pixLeft, pixUp, pixWidth, pixHeight, LCDGetColor(C_dGREEN | 0x40, "edit fill"));
+
+  // [Cecil] Hide the button text if not editing
+  } else if (mg_bHiddenText) {
+    INDEX iLength = strText.Length();
+
+    // Create a string as long as the original text
+    char *strHidden = new char[iLength + 1];
+
+    // Mask all the characters instead of copying them
+    memset(strHidden, '*', iLength);
+    strHidden[iLength] = '\0';
+
+    // Replace original text with the hidden string
+    strText = strHidden;
+    delete[] strHidden;
   }
 
   INDEX iCursor = mg_iCursorPos;
@@ -145,40 +163,38 @@ void CMGButton::Render(CDrawPort *pdp) {
 
     // Put label on the left and text on the right
     pdp->PutTextR(GetName(), pixIL, pixJ, col);
-    pdp->PutText(GetText(), pixIR, pixJ, col);
+    pdp->PutText(strText, pixIR, pixJ, col);
 
   // If no button label
   } else {
-    CTString str = GetText();
-
     // If using monospace font
     if (pdp->dp_FontData->fd_bFixedWidth) {
       // Undecorate the string
-      str = str.Undecorated();
+      strText = strText.Undecorated();
 
       const INDEX iMaxLen = ClampDn(box.Size()(1) / (pdp->dp_pixTextCharSpacing + pdp->dp_FontData->fd_pixCharWidth), 1L);
 
       // Trim the string if the cursor is past the maximum length
       if (iCursor >= iMaxLen) {
-        str.TrimRight(iCursor);
-        str.TrimLeft(iMaxLen);
+        strText.TrimRight(iCursor);
+        strText.TrimLeft(iMaxLen);
         iCursor = iMaxLen;
 
       // Trim the string to the maximum length
       } else {
-        str.TrimRight(iMaxLen);
+        strText.TrimRight(iMaxLen);
       }
     }
 
     // Align text according to the centering
     if (mg_iCenterI == -1) {
-      pdp->PutText(str, box.Min()(1), box.Min()(2), col);
+      pdp->PutText(strText, box.Min()(1), box.Min()(2), col);
 
     } else if (mg_iCenterI == +1) {
-      pdp->PutTextR(str, box.Max()(1), box.Min()(2), col);
+      pdp->PutTextR(strText, box.Max()(1), box.Min()(2), col);
 
     } else {
-      pdp->PutTextC(str, box.Center()(1), box.Min()(2), col);
+      pdp->PutTextC(strText, box.Center()(1), box.Min()(2), col);
     }
   }
 
