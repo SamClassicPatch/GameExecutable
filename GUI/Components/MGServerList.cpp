@@ -268,7 +268,7 @@ void CMGServerList::Render(CDrawPort *pdp) {
       CTString strPlayersCt(0, "%2d/%2d", ns.ns_ctPlayers, ns.ns_ctMaxPlayers);
       CTString strMod = ns.ns_strMod;
       if (strMod == "") {
-        strMod = "SeriousSam";
+        strMod = sam_strGameName;
       }
 
       // [Cecil] Arranged in an array
