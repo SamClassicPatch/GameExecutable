@@ -23,7 +23,7 @@ extern CTFileName _fnmControlsToCustomize;
 void CControlsMenu::Initialize_t(void) {
   // intialize player and controls menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  gm_mgTitle.SetName(TRANS("CONTROLS"));
+  gm_mgTitle.SetName(LOCALIZE("CONTROLS"));
   AddChild(&gm_mgTitle);
 
   gm_mgNameLabel.SetText("");
@@ -34,7 +34,7 @@ void CControlsMenu::Initialize_t(void) {
   gm_mgNameLabel.mg_bLabel = TRUE;
   AddChild(&gm_mgNameLabel);
 
-  gm_mgButtons.SetText(TRANS("CUSTOMIZE BUTTONS"));
+  gm_mgButtons.SetText(LOCALIZE("CUSTOMIZE BUTTONS"));
   gm_mgButtons.mg_boxOnScreen = BoxMediumRow(2.0);
   gm_mgButtons.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgButtons.mg_iCenterI = 0;
@@ -42,9 +42,9 @@ void CControlsMenu::Initialize_t(void) {
   gm_mgButtons.mg_pmgUp = &gm_mgPredefined;
   gm_mgButtons.mg_pmgDown = &gm_mgAdvanced;
   gm_mgButtons.mg_pActivatedFunction = NULL;
-  gm_mgButtons.mg_strTip = TRANS("customize buttons in current controls");
+  gm_mgButtons.mg_strTip = LOCALIZE("customize buttons in current controls");
 
-  gm_mgAdvanced.SetText(TRANS("ADVANCED JOYSTICK SETUP"));
+  gm_mgAdvanced.SetText(LOCALIZE("ADVANCED JOYSTICK SETUP"));
   gm_mgAdvanced.mg_iCenterI = 0;
   gm_mgAdvanced.mg_boxOnScreen = BoxMediumRow(3);
   gm_mgAdvanced.mg_bfsFontSize = BFS_MEDIUM;
@@ -52,25 +52,25 @@ void CControlsMenu::Initialize_t(void) {
   gm_mgAdvanced.mg_pmgUp = &gm_mgButtons;
   gm_mgAdvanced.mg_pmgDown = &gm_mgSensitivity;
   gm_mgAdvanced.mg_pActivatedFunction = NULL;
-  gm_mgAdvanced.mg_strTip = TRANS("adjust advanced settings for joystick axis");
+  gm_mgAdvanced.mg_strTip = LOCALIZE("adjust advanced settings for joystick axis");
 
   gm_mgSensitivity.mg_boxOnScreen = BoxMediumRow(4.5);
-  gm_mgSensitivity.SetText(TRANS("SENSITIVITY"));
+  gm_mgSensitivity.SetText(LOCALIZE("SENSITIVITY"));
   gm_mgSensitivity.mg_pmgUp = &gm_mgAdvanced;
   gm_mgSensitivity.mg_pmgDown = &gm_mgInvertTrigger;
-  gm_mgSensitivity.mg_strTip = TRANS("sensitivity for all axis in this control set");
+  gm_mgSensitivity.mg_strTip = LOCALIZE("sensitivity for all axis in this control set");
   AddChild(&gm_mgSensitivity);
 
-  TRIGGER_MG(gm_mgInvertTrigger, 5.5, gm_mgSensitivity, gm_mgSmoothTrigger, TRANS("INVERT LOOK"), astrNoYes);
-  gm_mgInvertTrigger.mg_strTip = TRANS("invert up/down looking");
-  TRIGGER_MG(gm_mgSmoothTrigger, 6.5, gm_mgInvertTrigger, gm_mgAccelTrigger, TRANS("SMOOTH AXIS"), astrNoYes);
-  gm_mgSmoothTrigger.mg_strTip = TRANS("smooth mouse/joystick movements");
-  TRIGGER_MG(gm_mgAccelTrigger, 7.5, gm_mgSmoothTrigger, gm_mgIFeelTrigger, TRANS("MOUSE ACCELERATION"), astrNoYes);
-  gm_mgAccelTrigger.mg_strTip = TRANS("allow mouse acceleration");
-  TRIGGER_MG(gm_mgIFeelTrigger, 8.5, gm_mgAccelTrigger, gm_mgPredefined, TRANS("ENABLE IFEEL"), astrNoYes);
-  gm_mgIFeelTrigger.mg_strTip = TRANS("enable support for iFeel tactile feedback mouse");
+  TRIGGER_MG(gm_mgInvertTrigger, 5.5, gm_mgSensitivity, gm_mgSmoothTrigger, LOCALIZE("INVERT LOOK"), astrNoYes);
+  gm_mgInvertTrigger.mg_strTip = LOCALIZE("invert up/down looking");
+  TRIGGER_MG(gm_mgSmoothTrigger, 6.5, gm_mgInvertTrigger, gm_mgAccelTrigger, LOCALIZE("SMOOTH AXIS"), astrNoYes);
+  gm_mgSmoothTrigger.mg_strTip = LOCALIZE("smooth mouse/joystick movements");
+  TRIGGER_MG(gm_mgAccelTrigger, 7.5, gm_mgSmoothTrigger, gm_mgIFeelTrigger, LOCALIZE("MOUSE ACCELERATION"), astrNoYes);
+  gm_mgAccelTrigger.mg_strTip = LOCALIZE("allow mouse acceleration");
+  TRIGGER_MG(gm_mgIFeelTrigger, 8.5, gm_mgAccelTrigger, gm_mgPredefined, LOCALIZE("ENABLE IFEEL"), astrNoYes);
+  gm_mgIFeelTrigger.mg_strTip = LOCALIZE("enable support for iFeel tactile feedback mouse");
 
-  gm_mgPredefined.SetText(TRANS("LOAD PREDEFINED SETTINGS"));
+  gm_mgPredefined.SetText(LOCALIZE("LOAD PREDEFINED SETTINGS"));
   gm_mgPredefined.mg_iCenterI = 0;
   gm_mgPredefined.mg_boxOnScreen = BoxMediumRow(10);
   gm_mgPredefined.mg_bfsFontSize = BFS_MEDIUM;
@@ -78,7 +78,7 @@ void CControlsMenu::Initialize_t(void) {
   gm_mgPredefined.mg_pmgUp = &gm_mgIFeelTrigger;
   gm_mgPredefined.mg_pmgDown = &gm_mgButtons;
   gm_mgPredefined.mg_pActivatedFunction = NULL;
-  gm_mgPredefined.mg_strTip = TRANS("load one of several predefined control settings");
+  gm_mgPredefined.mg_strTip = LOCALIZE("load one of several predefined control settings");
 }
 
 void CControlsMenu::StartMenu(void) {
@@ -92,7 +92,7 @@ void CControlsMenu::StartMenu(void) {
   ControlsMenuOn();
 
   CTString strControls;
-  strControls.PrintF(TRANS("CONTROLS FOR: %s"), GetGameAPI()->GetPlayerCharacter(iPlayer)->GetNameForPrinting());
+  strControls.PrintF(LOCALIZE("CONTROLS FOR: %s"), GetGameAPI()->GetPlayerCharacter(iPlayer)->GetNameForPrinting());
 
   gm_mgNameLabel.SetText(strControls);
 

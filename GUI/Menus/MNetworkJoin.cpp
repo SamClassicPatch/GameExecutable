@@ -21,15 +21,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 void CNetworkJoinMenu::Initialize_t(void) {
   // title
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  gm_mgTitle.SetName(TRANS("JOIN GAME"));
+  gm_mgTitle.SetName(LOCALIZE("JOIN GAME"));
   AddChild(&gm_mgTitle);
 
   gm_mgLAN.mg_bfsFontSize = BFS_LARGE;
   gm_mgLAN.mg_boxOnScreen = BoxBigRow(1.0f);
   gm_mgLAN.mg_pmgUp = &gm_mgOpen;
   gm_mgLAN.mg_pmgDown = &gm_mgNET;
-  gm_mgLAN.SetText(TRANS("SEARCH LAN"));
-  gm_mgLAN.mg_strTip = TRANS("search local network for servers");
+  gm_mgLAN.SetText(LOCALIZE("SEARCH LAN"));
+  gm_mgLAN.mg_strTip = LOCALIZE("search local network for servers");
   AddChild(&gm_mgLAN);
   gm_mgLAN.mg_pActivatedFunction = NULL;
 
@@ -37,8 +37,8 @@ void CNetworkJoinMenu::Initialize_t(void) {
   gm_mgNET.mg_boxOnScreen = BoxBigRow(2.0f);
   gm_mgNET.mg_pmgUp = &gm_mgLAN;
   gm_mgNET.mg_pmgDown = &gm_mgOpen;
-  gm_mgNET.SetText(TRANS("SEARCH INTERNET"));
-  gm_mgNET.mg_strTip = TRANS("search internet for servers");
+  gm_mgNET.SetText(LOCALIZE("SEARCH INTERNET"));
+  gm_mgNET.mg_strTip = LOCALIZE("search internet for servers");
   AddChild(&gm_mgNET);
   gm_mgNET.mg_pActivatedFunction = NULL;
 
@@ -46,8 +46,8 @@ void CNetworkJoinMenu::Initialize_t(void) {
   gm_mgOpen.mg_boxOnScreen = BoxBigRow(3.0f);
   gm_mgOpen.mg_pmgUp = &gm_mgNET;
   gm_mgOpen.mg_pmgDown = &gm_mgLAN;
-  gm_mgOpen.SetText(TRANS("SPECIFY SERVER"));
-  gm_mgOpen.mg_strTip = TRANS("type in server address to connect to");
+  gm_mgOpen.SetText(LOCALIZE("SPECIFY SERVER"));
+  gm_mgOpen.mg_strTip = LOCALIZE("type in server address to connect to");
   AddChild(&gm_mgOpen);
   gm_mgOpen.mg_pActivatedFunction = NULL;
 }

@@ -26,9 +26,9 @@ void CMGArrow::Render(CDrawPort *pdp) {
   if (mg_adDirection == AD_NONE) {
     str = "???";
   } else if (mg_adDirection == AD_UP) {
-    str = TRANS("Page Up");
+    str = LOCALIZE("Page Up");
   } else if (mg_adDirection == AD_DOWN) {
-    str = TRANS("Page Down");
+    str = LOCALIZE("Page Down");
   } else {
     ASSERT(FALSE);
   }

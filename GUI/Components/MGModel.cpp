@@ -24,7 +24,7 @@ void CMGModel::Render(CDrawPort *pdp) {
   // if no model
   if (mg_moModel.GetData() == NULL) {
     // just render text
-    SetText(TRANS("No model"));
+    SetText(LOCALIZE("No model"));
     CMGButton::Render(pdp);
     return;
   }

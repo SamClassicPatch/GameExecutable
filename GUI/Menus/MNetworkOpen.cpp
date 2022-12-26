@@ -21,10 +21,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 void CNetworkOpenMenu::Initialize_t(void) {
   // intialize network join menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  gm_mgTitle.SetName(TRANS("JOIN"));
+  gm_mgTitle.SetName(LOCALIZE("JOIN"));
   AddChild(&gm_mgTitle);
 
-  gm_mgAddressLabel.SetText(TRANS("Address:"));
+  gm_mgAddressLabel.SetText(LOCALIZE("Address:"));
   gm_mgAddressLabel.mg_boxOnScreen = BoxMediumLeft(1);
   gm_mgAddressLabel.mg_iCenterI = -1;
   AddChild(&gm_mgAddressLabel);
@@ -37,10 +37,10 @@ void CNetworkOpenMenu::Initialize_t(void) {
   gm_mgAddress.mg_iCenterI = -1;
   gm_mgAddress.mg_pmgUp = &gm_mgJoin;
   gm_mgAddress.mg_pmgDown = &gm_mgPort;
-  gm_mgAddress.mg_strTip = TRANS("specify server address");
+  gm_mgAddress.mg_strTip = LOCALIZE("specify server address");
   AddChild(&gm_mgAddress);
 
-  gm_mgPortLabel.SetText(TRANS("Port:"));
+  gm_mgPortLabel.SetText(LOCALIZE("Port:"));
   gm_mgPortLabel.mg_boxOnScreen = BoxMediumLeft(2);
   gm_mgPortLabel.mg_iCenterI = -1;
   AddChild(&gm_mgPortLabel);
@@ -53,13 +53,13 @@ void CNetworkOpenMenu::Initialize_t(void) {
   gm_mgPort.mg_iCenterI = -1;
   gm_mgPort.mg_pmgUp = &gm_mgAddress;
   gm_mgPort.mg_pmgDown = &gm_mgJoin;
-  gm_mgPort.mg_strTip = TRANS("specify server address");
+  gm_mgPort.mg_strTip = LOCALIZE("specify server address");
   AddChild(&gm_mgPort);
 
   gm_mgJoin.mg_boxOnScreen = BoxMediumMiddle(3);
   gm_mgJoin.mg_pmgUp = &gm_mgPort;
   gm_mgJoin.mg_pmgDown = &gm_mgAddress;
-  gm_mgJoin.SetText(TRANS("Join"));
+  gm_mgJoin.SetText(LOCALIZE("Join"));
   AddChild(&gm_mgJoin);
   gm_mgJoin.mg_pActivatedFunction = NULL;
 }

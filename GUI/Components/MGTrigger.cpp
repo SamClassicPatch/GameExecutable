@@ -81,7 +81,7 @@ void CMGTrigger::Render(CDrawPort *pdp) {
   if (!mg_bVisual || GetText() == "") {
     CTString strValue = GetText();
     if (mg_bVisual) {
-      strValue = TRANS("none");
+      strValue = LOCALIZE("none");
     }
 
     if (mg_iCenterI == -1) {

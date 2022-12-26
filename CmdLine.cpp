@@ -48,7 +48,7 @@ CTString GetNextParam(void) {
     // if not found
     if (pchClosingQuote == NULL) {
       // error in command line
-      cmd_strOutput += CTString(0, TRANS("Command line error!\n"));
+      cmd_strOutput += LOCALIZE("Command line error!\n");
 
       // finish parsing
       _strCmd = "";
@@ -102,7 +102,7 @@ CTString GetNextParam(void) {
 // Parse command line parameters and set results to static variables
 void ParseCommandLine(CTString strCmd) {
   cmd_strOutput = "";
-  cmd_strOutput += CTString(0, TRANS("Command line: '%s'\n"), strCmd);
+  cmd_strOutput += CTString(0, LOCALIZE("Command line: '%s'\n"), strCmd);
 
   // if no command line
   if (strCmd.Length() == 0) {
@@ -163,7 +163,7 @@ void ParseCommandLine(CTString strCmd) {
       _strLogFile = GetNextParam();
 
     } else {
-      cmd_strOutput += CTString(0, TRANS("  Unknown option: '%s'\n"), strWord);
+      cmd_strOutput += CTString(0, LOCALIZE("  Unknown option: '%s'\n"), strWord);
     }
   }
 }

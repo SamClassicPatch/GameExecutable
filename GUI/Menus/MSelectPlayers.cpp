@@ -35,20 +35,20 @@ extern void SelectPlayersApplyMenu(void);
 void CSelectPlayersMenu::Initialize_t(void) {
   // intialize split screen menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  gm_mgTitle.SetName(TRANS("SELECT PLAYERS"));
+  gm_mgTitle.SetName(LOCALIZE("SELECT PLAYERS"));
   AddChild(&gm_mgTitle);
 
-  TRIGGER_MG(gm_mgDedicated, 0, gm_mgStart, gm_mgObserver, TRANS("Dedicated:"), astrNoYes);
-  gm_mgDedicated.mg_strTip = TRANS("select to start dedicated server");
+  TRIGGER_MG(gm_mgDedicated, 0, gm_mgStart, gm_mgObserver, LOCALIZE("Dedicated:"), astrNoYes);
+  gm_mgDedicated.mg_strTip = LOCALIZE("select to start dedicated server");
   gm_mgDedicated.mg_pOnTriggerChange = NULL;
 
-  TRIGGER_MG(gm_mgObserver, 1, gm_mgDedicated, gm_mgSplitScreenCfg, TRANS("Observer:"), astrNoYes);
-  gm_mgObserver.mg_strTip = TRANS("select to join in for observing, not for playing");
+  TRIGGER_MG(gm_mgObserver, 1, gm_mgDedicated, gm_mgSplitScreenCfg, LOCALIZE("Observer:"), astrNoYes);
+  gm_mgObserver.mg_strTip = LOCALIZE("select to join in for observing, not for playing");
   gm_mgObserver.mg_pOnTriggerChange = NULL;
 
   // split screen config trigger
-  TRIGGER_MG(gm_mgSplitScreenCfg, 2, gm_mgObserver, gm_mgPlayer0Change, TRANS("Number of players:"), astrSplitScreenRadioTexts);
-  gm_mgSplitScreenCfg.mg_strTip = TRANS("choose more than one player to play in split screen");
+  TRIGGER_MG(gm_mgSplitScreenCfg, 2, gm_mgObserver, gm_mgPlayer0Change, LOCALIZE("Number of players:"), astrSplitScreenRadioTexts);
+  gm_mgSplitScreenCfg.mg_strTip = LOCALIZE("choose more than one player to play in split screen");
   gm_mgSplitScreenCfg.mg_pOnTriggerChange = NULL;
 
   gm_mgPlayer0Change.mg_iCenterI = -1;
@@ -62,7 +62,7 @@ void CSelectPlayersMenu::Initialize_t(void) {
   gm_mgPlayer0Change.mg_strTip =
     gm_mgPlayer1Change.mg_strTip =
     gm_mgPlayer2Change.mg_strTip =
-    gm_mgPlayer3Change.mg_strTip = TRANS("select profile for this player");
+    gm_mgPlayer3Change.mg_strTip = LOCALIZE("select profile for this player");
   AddChild(&gm_mgPlayer0Change);
   AddChild(&gm_mgPlayer1Change);
   AddChild(&gm_mgPlayer2Change);
@@ -77,13 +77,13 @@ void CSelectPlayersMenu::Initialize_t(void) {
   gm_mgNotes.SetText("");
 
   /*  // options button
-  mgSplitOptions.SetText(TRANS("Game options");
+  mgSplitOptions.SetText(LOCALIZE("Game options");
   mgSplitOptions.mg_boxOnScreen = BoxMediumRow(3);
   mgSplitOptions.mg_bfsFontSize = BFS_MEDIUM;
   mgSplitOptions.mg_iCenterI = 0;
   mgSplitOptions.mg_pmgUp = &mgSplitLevel;
   mgSplitOptions.mg_pmgDown = &mgSplitStartStart;
-  mgSplitOptions.mg_strTip = TRANS("adjust game rules");
+  mgSplitOptions.mg_strTip = LOCALIZE("adjust game rules");
   mgSplitOptions.mg_pActivatedFunction = &StartGameOptionsFromSplitScreen;
   AddChild(& mgSplitOptions.mg_lnNode);*/
 
@@ -92,12 +92,12 @@ void CSelectPlayersMenu::Initialize_t(void) {
   mgSplitStartStart.mg_boxOnScreen = BoxBigRow(4);
   mgSplitStartStart.mg_pmgUp = &mgSplitOptions;
   mgSplitStartStart.mg_pmgDown = &mgSplitGameType;
-  mgSplitStartStart.SetText(TRANS("START");
+  mgSplitStartStart.SetText(LOCALIZE("START");
   AddChild(&mgSplitStartStart);
   mgSplitStartStart.mg_pActivatedFunction = &StartSelectPlayersMenuFromSplit;
   */
 
-  ADD_GADGET(gm_mgStart, BoxMediumRow(11), &gm_mgSplitScreenCfg, &gm_mgPlayer0Change, NULL, NULL, TRANS("START"));
+  ADD_GADGET(gm_mgStart, BoxMediumRow(11), &gm_mgSplitScreenCfg, &gm_mgPlayer0Change, NULL, NULL, LOCALIZE("START"));
   gm_mgStart.mg_bfsFontSize = BFS_LARGE;
   gm_mgStart.mg_iCenterI = 0;
 }

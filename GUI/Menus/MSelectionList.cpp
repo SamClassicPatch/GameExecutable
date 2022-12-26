@@ -114,7 +114,7 @@ void CSelectListMenu::FillListItems(void) {
   // Disable all items first
   for (INDEX i = 0; i < SELECTLIST_BUTTONS_CT; i++) {
     gm_amgButton[i].mg_bEnabled = FALSE;
-    gm_amgButton[i].SetText(TRANS("<empty>"));
+    gm_amgButton[i].SetText(LOCALIZE("<empty>"));
     gm_amgButton[i].mg_strTip = "";
     gm_amgButton[i].mg_iInList = -2;
   }
@@ -138,7 +138,7 @@ void CSelectListMenu::FillListItems(void) {
       gm_amgButton[iInMenu].mg_bEnabled = TRUE;
       gm_amgButton[iInMenu].RefreshText();
 
-      gm_amgButton[iInMenu].mg_strTip = TRANS("Enter - load this");
+      gm_amgButton[iInMenu].mg_strTip = LOCALIZE("Enter - load this");
     }
 
     iLabel++;

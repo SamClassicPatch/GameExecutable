@@ -26,7 +26,7 @@ INDEX _ctLines;
 CTString GetNonEmptyLine_t(CTStream &strm) {
   FOREVER {
     if (strm.AtEOF()) {
-      ThrowF_t(TRANS("Unexpected end of file"));
+      ThrowF_t(LOCALIZE("Unexpected end of file"));
     }
 
     CTString str;
@@ -51,7 +51,7 @@ void TranslateLine(CTString &str) {
 
   if (str.RemovePrefix("TTRS")) {
     str.TrimSpacesLeft();
-    str = TranslateConst(str, 0);
+    str = TRANSV(str);
   }
 
   str.TrimSpacesLeft();
@@ -62,7 +62,7 @@ void FixupFileName_t(CTString &strFnm) {
   strFnm.TrimSpacesRight();
 
   if (!strFnm.RemovePrefix(CTString("TF") + "NM ")) { // must not directly have ids in code
-    ThrowF_t(TRANS("Expected %s%s before filename"), "TF", "NM");
+    ThrowF_t(LOCALIZE("Expected %s%s before filename"), "TF", "NM");
   }
 }
 
@@ -196,7 +196,7 @@ void ParseCFG_t(CTStream &strm) {
       pvs->vs_astrValues.Push() = strLine;
 
     } else {
-      ThrowF_t(TRANS("unknown keyword"));
+      ThrowF_t(LOCALIZE("unknown keyword"));
     }
   }
 

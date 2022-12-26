@@ -85,8 +85,8 @@ void CVarMenu::Initialize_t(void) {
     gm_mgApply.mg_pmgRight =
     gm_mgApply.mg_pmgUp =
     gm_mgApply.mg_pmgDown = &gm_mgVar[0];
-  gm_mgApply.SetText(TRANS("APPLY"));
-  gm_mgApply.mg_strTip = TRANS("apply changes");
+  gm_mgApply.SetText(LOCALIZE("APPLY"));
+  gm_mgApply.mg_strTip = LOCALIZE("apply changes");
   AddChild(&gm_mgApply);
   gm_mgApply.mg_pActivatedFunction = NULL;
 

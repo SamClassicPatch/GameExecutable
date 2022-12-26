@@ -120,7 +120,8 @@ extern void PlayMenuSound(CSoundData *psd, BOOL bOverOtherSounds) {
 // translate all texts in array for one radio button
 void TranslateRadioTexts(CTString astr[], INDEX ct) {
   for (INDEX i = 0; i < ct; i++) {
-    astr[i] = TranslateConst(astr[i], 4);
+    // [Cecil] No "ETRS" chunk to skip anymore, so: 4 -> 0
+    astr[i] = TranslateConst(astr[i], 0);
   }
 }
 
@@ -764,7 +765,7 @@ BOOL DoMenu(CDrawPort *pdp) {
         dpMenu.SetFont(_pfdDisplayFont);
         dpMenu.SetTextScaling(fScale);
         dpMenu.SetTextAspect(1.0f);
-        dpMenu.PutTextCXY(TRANS("no thumbnail"), (pixI0 + pixI1) / 2, (pixJ0 + pixJ1) / 2, LCDGetColor(C_GREEN | 255, "no thumbnail"));
+        dpMenu.PutTextCXY(LOCALIZE("no thumbnail"), (pixI0 + pixI1) / 2, (pixJ0 + pixJ1) / 2, LCDGetColor(C_GREEN | 255, "no thumbnail"));
       }
     }
 
@@ -853,7 +854,7 @@ BOOL DoMenu(CDrawPort *pdp) {
   if (pmgActive != NULL && (pmgActive->mg_strTip != "" || _bEditingString)) {
     CTString strTip = pmgActive->mg_strTip;
     if (_bEditingString) {
-      strTip = TRANS("Enter - OK, Escape - Cancel");
+      strTip = LOCALIZE("Enter - OK, Escape - Cancel");
     }
     // print the tip
     SetFontMedium(&dpMenu, 1.0f);
@@ -899,15 +900,15 @@ extern void FixupBackButton(CGameMenu *pgm) {
   }
 
   if (bResume) {
-    mgBack.SetText(TRANS("RESUME"));
-    mgBack.mg_strTip = TRANS("return to game");
+    mgBack.SetText(LOCALIZE("RESUME"));
+    mgBack.mg_strTip = LOCALIZE("return to game");
   } else {
     if (_bVarChanged) {
-      mgBack.SetText(TRANS("CANCEL"));
-      mgBack.mg_strTip = TRANS("cancel changes");
+      mgBack.SetText(LOCALIZE("CANCEL"));
+      mgBack.mg_strTip = LOCALIZE("cancel changes");
     } else {
-      mgBack.SetText(TRANS("BACK"));
-      mgBack.mg_strTip = TRANS("return to previous menu");
+      mgBack.SetText(LOCALIZE("BACK"));
+      mgBack.mg_strTip = LOCALIZE("return to previous menu");
     }
   }
 

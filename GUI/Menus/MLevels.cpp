@@ -35,7 +35,7 @@ static void ChangeLevelVisibility(void) {
 
 void CLevelsMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  gm_mgTitle.SetName(TRANS("CHOOSE LEVEL"));
+  gm_mgTitle.SetName(LOCALIZE("CHOOSE LEVEL"));
   AddChild(&gm_mgTitle);
 
   for (INDEX iLabel = 0; iLabel < LEVELS_ON_SCREEN; iLabel++) {
@@ -84,7 +84,7 @@ void CLevelsMenu::FillListItems(void) {
   // disable all items first
   for (INDEX i = 0; i < LEVELS_ON_SCREEN; i++) {
     gm_mgManualLevel[i].mg_bEnabled = FALSE;
-    gm_mgManualLevel[i].SetText(TRANS("<empty>"));
+    gm_mgManualLevel[i].SetText(LOCALIZE("<empty>"));
     gm_mgManualLevel[i].mg_iInList = -2;
   }
 

@@ -24,39 +24,39 @@ extern void UpdateSplitLevel(INDEX iDummy);
 void CSplitStartMenu::Initialize_t(void) {
   // intialize split screen menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  gm_mgTitle.SetName(TRANS("START SPLIT SCREEN"));
+  gm_mgTitle.SetName(LOCALIZE("START SPLIT SCREEN"));
   AddChild(&gm_mgTitle);
 
   // game type trigger
-  TRIGGER_MG(gm_mgGameType, 0, gm_mgStart, gm_mgDifficulty, TRANS("Game type:"), astrGameTypeRadioTexts);
+  TRIGGER_MG(gm_mgGameType, 0, gm_mgStart, gm_mgDifficulty, LOCALIZE("Game type:"), astrGameTypeRadioTexts);
   gm_mgGameType.mg_ctTexts = ctGameTypeRadioTexts;
-  gm_mgGameType.mg_strTip = TRANS("choose type of multiplayer game");
+  gm_mgGameType.mg_strTip = LOCALIZE("choose type of multiplayer game");
   gm_mgGameType.mg_pOnTriggerChange = &UpdateSplitLevel;
 
   // difficulty trigger
-  TRIGGER_MG(gm_mgDifficulty, 1, gm_mgGameType, gm_mgLevel, TRANS("Difficulty:"), astrDifficultyRadioTexts);
-  gm_mgDifficulty.mg_strTip = TRANS("choose difficulty level");
+  TRIGGER_MG(gm_mgDifficulty, 1, gm_mgGameType, gm_mgLevel, LOCALIZE("Difficulty:"), astrDifficultyRadioTexts);
+  gm_mgDifficulty.mg_strTip = LOCALIZE("choose difficulty level");
 
   // level name
   gm_mgLevel.SetText("");
-  gm_mgLevel.SetName(TRANS("Level:"));
+  gm_mgLevel.SetName(LOCALIZE("Level:"));
   gm_mgLevel.mg_boxOnScreen = BoxMediumRow(2);
   gm_mgLevel.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgLevel.mg_iCenterI = -1;
   gm_mgLevel.mg_pmgUp = &gm_mgDifficulty;
   gm_mgLevel.mg_pmgDown = &gm_mgOptions;
-  gm_mgLevel.mg_strTip = TRANS("choose the level to start");
+  gm_mgLevel.mg_strTip = LOCALIZE("choose the level to start");
   gm_mgLevel.mg_pActivatedFunction = NULL;
   AddChild(&gm_mgLevel);
 
   // options button
-  gm_mgOptions.SetText(TRANS("Game options"));
+  gm_mgOptions.SetText(LOCALIZE("Game options"));
   gm_mgOptions.mg_boxOnScreen = BoxMediumRow(3);
   gm_mgOptions.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgOptions.mg_iCenterI = 0;
   gm_mgOptions.mg_pmgUp = &gm_mgLevel;
   gm_mgOptions.mg_pmgDown = &gm_mgStart;
-  gm_mgOptions.mg_strTip = TRANS("adjust game rules");
+  gm_mgOptions.mg_strTip = LOCALIZE("adjust game rules");
   gm_mgOptions.mg_pActivatedFunction = NULL;
   AddChild(&gm_mgOptions);
 
@@ -65,7 +65,7 @@ void CSplitStartMenu::Initialize_t(void) {
   gm_mgStart.mg_boxOnScreen = BoxBigRow(4);
   gm_mgStart.mg_pmgUp = &gm_mgOptions;
   gm_mgStart.mg_pmgDown = &gm_mgGameType;
-  gm_mgStart.SetText(TRANS("START"));
+  gm_mgStart.SetText(LOCALIZE("START"));
   AddChild(&gm_mgStart);
   gm_mgStart.mg_pActivatedFunction = NULL;
 }

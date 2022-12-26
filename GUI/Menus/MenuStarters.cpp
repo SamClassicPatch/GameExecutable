@@ -79,7 +79,7 @@ static void SetQuickLoadNotes(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
   if (_pShell->GetINDEX("gam_iQuickSaveSlots") <= 8) {
-    gmCurrent.gm_mgNotes.SetText(TRANS(
+    gmCurrent.gm_mgNotes.SetText(LOCALIZE(
       "In-game QuickSave shortcuts:\n"
       "F6 - save a new QuickSave\n"
       "F9 - load the last QuickSave\n"));
@@ -101,7 +101,7 @@ void StartSinglePlayerNewMenu(void) {
 void StartVarGameOptions(void) {
   CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("GAME OPTIONS"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("GAME OPTIONS"));
   gmCurrent.gm_fnmMenuCFG = CTFILENAME("Scripts\\Menu\\GameOptions.cfg");
   ChangeToMenu(&gmCurrent);
 }
@@ -109,7 +109,7 @@ void StartVarGameOptions(void) {
 void StartSinglePlayerGameOptions(void) {
   CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("GAME OPTIONS"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("GAME OPTIONS"));
   gmCurrent.gm_fnmMenuCFG = CTFILENAME("Scripts\\Menu\\SPOptions.cfg");
   gmCurrent.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
   ChangeToMenu(&gmCurrent);
@@ -129,7 +129,7 @@ void StartGameOptionsFromSplitScreen(void) {
 void StartRenderingOptionsMenu(void) {
   CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("RENDERING OPTIONS"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("RENDERING OPTIONS"));
   gmCurrent.gm_fnmMenuCFG = CTFILENAME("Scripts\\Menu\\RenderingOptions.cfg");
   gmCurrent.SetParentMenu(&_pGUIM->gmVideoOptionsMenu);
   ChangeToMenu(&gmCurrent);
@@ -439,7 +439,7 @@ void StartSelectPlayersMenuFromServers(void) {
 void StartPlayerModelLoadMenu(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("CHOOSE MODEL"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("CHOOSE MODEL"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEUP;
   gmCurrent.gm_bSave = FALSE;
@@ -457,7 +457,7 @@ void StartPlayerModelLoadMenu(void) {
 void StartControlsLoadMenu(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("LOAD CONTROLS"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("LOAD CONTROLS"));
   gmCurrent.gm_bAllowThumbnails = FALSE;
   gmCurrent.gm_iSortType = LSSORT_FILEUP;
   gmCurrent.gm_bSave = FALSE;
@@ -475,7 +475,7 @@ void StartControlsLoadMenu(void) {
 void StartCustomLoadMenu(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("ADVANCED OPTIONS"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("ADVANCED OPTIONS"));
   gmCurrent.gm_bAllowThumbnails = FALSE;
   gmCurrent.gm_iSortType = LSSORT_NAMEUP;
   gmCurrent.gm_bSave = FALSE;
@@ -493,7 +493,7 @@ void StartCustomLoadMenu(void) {
 void StartAddonsLoadMenu(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("EXECUTE ADDON"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("EXECUTE ADDON"));
   gmCurrent.gm_bAllowThumbnails = FALSE;
   gmCurrent.gm_iSortType = LSSORT_NAMEUP;
   gmCurrent.gm_bSave = FALSE;
@@ -511,7 +511,7 @@ void StartAddonsLoadMenu(void) {
 void StartModsLoadMenu(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("CHOOSE MOD"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("CHOOSE MOD"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_NAMEUP;
   gmCurrent.gm_bSave = FALSE;
@@ -528,7 +528,7 @@ void StartModsLoadMenu(void) {
 void StartNetworkSettingsMenu(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("CONNECTION SETTINGS"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("CONNECTION SETTINGS"));
   gmCurrent.gm_bAllowThumbnails = FALSE;
   gmCurrent.gm_iSortType = LSSORT_FILEUP;
   gmCurrent.gm_bSave = FALSE;
@@ -539,7 +539,7 @@ void StartNetworkSettingsMenu(void) {
   gmCurrent.gm_pAfterFileChosen = &LSLoadNetSettings;
 
   if (sam_strNetworkSettings == "") {
-    gmCurrent.gm_mgNotes.SetText(TRANS(
+    gmCurrent.gm_mgNotes.SetText(LOCALIZE(
       "Before joining a network game,\n"
       "you have to adjust your connection parameters.\n"
       "Choose one option from the list.\n"
@@ -577,7 +577,7 @@ void StartSinglePlayerQuickLoadMenu(void) {
 
   _gmMenuGameMode = GM_SINGLE_PLAYER;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("QUICK LOAD"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("QUICK LOAD"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
@@ -597,7 +597,7 @@ void StartSinglePlayerLoadMenu(void) {
 
   _gmMenuGameMode = GM_SINGLE_PLAYER;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("LOAD"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("LOAD"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
@@ -627,7 +627,7 @@ void StartSinglePlayerSaveMenu(void) {
 
   _gmMenuGameMode = GM_SINGLE_PLAYER;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("SAVE"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("SAVE"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = TRUE;
@@ -649,7 +649,7 @@ void StartDemoLoadMenu(void) {
 
   _gmMenuGameMode = GM_DEMO;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("PLAY DEMO"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("PLAY DEMO"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
@@ -673,7 +673,7 @@ void StartDemoSaveMenu(void) {
 
   _gmMenuGameMode = GM_DEMO;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("RECORD DEMO"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("RECORD DEMO"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEUP;
   gmCurrent.gm_bSave = TRUE;
@@ -695,7 +695,7 @@ void StartNetworkQuickLoadMenu(void) {
 
   _gmMenuGameMode = GM_NETWORK;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("QUICK LOAD"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("QUICK LOAD"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
@@ -715,7 +715,7 @@ void StartNetworkLoadMenu(void) {
 
   _gmMenuGameMode = GM_NETWORK;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("LOAD"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("LOAD"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
@@ -739,7 +739,7 @@ void StartNetworkSaveMenu(void) {
 
   _gmMenuGameMode = GM_NETWORK;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("SAVE"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("SAVE"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = TRUE;
@@ -761,7 +761,7 @@ void StartSplitScreenQuickLoadMenu(void) {
 
   _gmMenuGameMode = GM_SPLIT_SCREEN;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("QUICK LOAD"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("QUICK LOAD"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
@@ -781,7 +781,7 @@ void StartSplitScreenLoadMenu(void) {
 
   _gmMenuGameMode = GM_SPLIT_SCREEN;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("LOAD"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("LOAD"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
@@ -805,7 +805,7 @@ void StartSplitScreenSaveMenu(void) {
 
   _gmMenuGameMode = GM_SPLIT_SCREEN;
 
-  gmCurrent.gm_mgTitle.SetName(TRANS("SAVE"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("SAVE"));
   gmCurrent.gm_bAllowThumbnails = TRUE;
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = TRUE;
@@ -827,7 +827,7 @@ void DisabledFunction(void) {
   CDisabledMenu &gmCurrent = _pGUIM->gmDisabledFunction;
 
   gmCurrent.SetParentMenu(pgmCurrentMenu);
-  gmCurrent.gm_mgButton.SetText(TRANS("The feature is not available in this version!"));
-  gmCurrent.gm_mgTitle.SetName(TRANS("DISABLED"));
+  gmCurrent.gm_mgButton.SetText(LOCALIZE("The feature is not available in this version!"));
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("DISABLED"));
   ChangeToMenu(&gmCurrent);
 }

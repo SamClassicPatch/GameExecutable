@@ -141,9 +141,8 @@ void MainWindow_Init(void) {
   if (0 == RegisterClassExA(&wc)) {
     DWORD dwError = GetLastError();
 
-    CTString strErrorMessage(TRANS("Cannot open main window!"));
     CTString strError;
-    strError.PrintF("%s Error %d", strErrorMessage, dwError);
+    strError.PrintF("%s Error %d", LOCALIZE("Cannot open main window!"), dwError);
 
     FatalError(strError);
   }
@@ -207,13 +206,13 @@ void OpenMainWindowNormal(PIX pixSizeI, PIX pixSizeJ) {
 
   // didn't make it
   if (_hwndMain == NULL) {
-    FatalError(TRANS("Cannot open main window!"));
+    FatalError(LOCALIZE("Cannot open main window!"));
   }
 
   SE_UpdateWindowHandle(_hwndMain);
 
   // set window title
-  sprintf(_achWindowTitle, TRANS("Serious Sam (Window %dx%d)"), pixSizeI, pixSizeJ);
+  sprintf(_achWindowTitle, LOCALIZE("Serious Sam (Window %dx%d)"), pixSizeI, pixSizeJ);
   SetWindowTextA(_hwndMain, _achWindowTitle);
 
   _pixLastSizeI = pixSizeI;
@@ -241,13 +240,13 @@ void OpenMainWindowFullScreen(PIX pixSizeI, PIX pixSizeJ) {
 
   // didn't make it
   if (_hwndMain == NULL) {
-    FatalError(TRANS("Cannot open main window!"));
+    FatalError(LOCALIZE("Cannot open main window!"));
   }
 
   SE_UpdateWindowHandle(_hwndMain);
 
   // set window title and show it
-  sprintf(_achWindowTitle, TRANS("Serious Sam (FullScreen %dx%d)"), pixSizeI, pixSizeJ);
+  sprintf(_achWindowTitle, LOCALIZE("Serious Sam (FullScreen %dx%d)"), pixSizeI, pixSizeJ);
 
   SetWindowTextA(_hwndMain, _achWindowTitle);
   ShowWindow(_hwndMain, SW_SHOWNORMAL);
@@ -274,9 +273,8 @@ void OpenMainWindowInvisible(void) {
   if (_hwndMain == NULL) {
     DWORD dwError = GetLastError();
 
-    CTString strErrorMessage(TRANS("Cannot open main window!"));
     CTString strError;
-    strError.PrintF("%s Error %d", strErrorMessage, dwError);
+    strError.PrintF("%s Error %d", LOCALIZE("Cannot open main window!"), dwError);
 
     FatalError(strError);
   }

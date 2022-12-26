@@ -132,7 +132,7 @@ void CLoadSaveMenu::FillListItems(void) {
   // Disable all items first
   for (INDEX i = 0; i < SELECTLIST_BUTTONS_CT; i++) {
     gm_amgButton[i].mg_bEnabled = FALSE;
-    gm_amgButton[i].SetText(TRANS("<empty>"));
+    gm_amgButton[i].SetText(LOCALIZE("<empty>"));
     gm_amgButton[i].mg_strTip = "";
     gm_amgButton[i].mg_iInList = -2;
   }
@@ -158,15 +158,15 @@ void CLoadSaveMenu::FillListItems(void) {
 
       if (gm_bSave) {
         if (!FileExistsForWriting(gm_amgButton[iInMenu].mg_fnm)) {
-          gm_amgButton[iInMenu].mg_strTip = TRANS("Enter - save in new slot");
+          gm_amgButton[iInMenu].mg_strTip = LOCALIZE("Enter - save in new slot");
         } else {
-          gm_amgButton[iInMenu].mg_strTip = TRANS("Enter - save here, F2 - rename, Del - delete");
+          gm_amgButton[iInMenu].mg_strTip = LOCALIZE("Enter - save here, F2 - rename, Del - delete");
         }
 
       } else if (gm_bManage) {
-        gm_amgButton[iInMenu].mg_strTip = TRANS("Enter - load this, F2 - rename, Del - delete");
+        gm_amgButton[iInMenu].mg_strTip = LOCALIZE("Enter - load this, F2 - rename, Del - delete");
       } else {
-        gm_amgButton[iInMenu].mg_strTip = TRANS("Enter - load this");
+        gm_amgButton[iInMenu].mg_strTip = LOCALIZE("Enter - load this");
       }
     }
 
@@ -198,7 +198,7 @@ BOOL CLoadSaveMenu::ParseFile(const CTFileName &fnm, CTString &strName) {
       strName.ScanF("Controls%d", &iCtl);
 
       if (iCtl >= 0 && iCtl < GetGameAPI()->GetProfileCount()) {
-        strName.PrintF(TRANS("From player: %s"), GetGameAPI()->GetPlayerCharacter(iCtl)->GetNameForPrinting());
+        strName.PrintF(LOCALIZE("From player: %s"), GetGameAPI()->GetPlayerCharacter(iCtl)->GetNameForPrinting());
       }
     }
   }

@@ -118,11 +118,11 @@ extern CTextureObject *_ptoLogoEAX = NULL;
 
 // [Cecil] The First Encounter
 #ifdef SE1_TFE
-  CTString sam_strModName = TRANS("-   T H E   F I R S T   E N C O U N T E R   -");
+  CTString sam_strModName = "-   T H E   F I R S T   E N C O U N T E R   -";
   CTString sam_strTechTestLevel = "Levels\\TechTest.wld";
   CTString sam_strTrainingLevel = "Levels\\KarnakDemo.wld";
 #else
-  CTString sam_strModName = TRANS("-   T H E   S E C O N D   E N C O U N T E R   -");
+  CTString sam_strModName = "-   T H E   S E C O N D   E N C O U N T E R   -";
   CTString sam_strTechTestLevel = "Levels\\LevelsMP\\TechTest.wld";
   CTString sam_strTrainingLevel = "Levels\\KarnakDemo.wld";
 #endif
@@ -182,7 +182,7 @@ static void DirectoryLockOn(void) {
   // if failed
   if (_hLock == NULL || GetLastError() != 0) {
     // report warning
-    CPrintF(TRANS("WARNING: SeriousSam didn't shut down properly last time!\n"));
+    CPutString(LOCALIZE("WARNING: SeriousSam didn't shut down properly last time!\n"));
   }
 }
 
@@ -430,6 +430,9 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   // [Cecil] Custom initialization
   CECIL_Init();
 
+  // [Cecil] Translate the mod name
+  sam_strModName = TRANSV(sam_strModName);
+
   // always disable all warnings when in serious sam
   _pShell->Execute("con_bNoWarnings=1;");
 
@@ -480,7 +483,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   LCDInit();
 
   if (sam_bFirstStarted) {
-    InfoMessage("%s", TRANS(
+    InfoMessage(LOCALIZE(
       "SeriousSam is starting for the first time.\n"
       "If you experience any problems, please consult\n"
       "ReadMe file for troubleshooting information."));
@@ -512,8 +515,8 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   // !! NOTE !! Re-enable these to allow mod support.
   LoadStringVar(CTString("Data\\Var\\Sam_Version.var"), sam_strVersion);
   LoadStringVar(CTString("Data\\Var\\ModName.var"), sam_strModName);
-  CPrintF(TRANS("Serious Sam version: %s\n"), sam_strVersion);
-  CPrintF(TRANS("Active mod: %s\n"), sam_strModName);
+  CPrintF(LOCALIZE("Serious Sam version: %s\n"), sam_strVersion);
+  CPrintF(LOCALIZE("Active mod: %s\n"), sam_strModName);
   InitializeMenus();
 
   // if there is a mod
@@ -557,7 +560,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
       strPort.PrintF(":%d", cmd_iPort);
     }
 
-    CPrintF(TRANS("Command line connection: '%s%s'\n"), cmd_strServer, strPort);
+    CPrintF(LOCALIZE("Command line connection: '%s%s'\n"), cmd_strServer, strPort);
 
     // go to join menu
     GetGameAPI()->SetJoinAddress(cmd_strServer);
@@ -572,12 +575,12 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
 
   // if starting world from command line
   } else if (cmd_strWorld != "") {
-    CPrintF(TRANS("Command line world: '%s'\n"), cmd_strWorld);
+    CPrintF(LOCALIZE("Command line world: '%s'\n"), cmd_strWorld);
 
     // try to start the game with that level
     try {
       if (cmd_iGoToMarker >= 0) {
-        CPrintF(TRANS("Command line marker: %d\n"), cmd_iGoToMarker);
+        CPrintF(LOCALIZE("Command line marker: %d\n"), cmd_iGoToMarker);
         CTString strCommand;
         strCommand.PrintF("cht_iGoToMarker = %d;", cmd_iGoToMarker);
         _pShell->Execute(strCommand);
@@ -594,7 +597,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
       }
 
     } catch (char *strError) {
-      CPrintF(TRANS("Cannot start '%s': '%s'\n"), cmd_strWorld, strError);
+      CPrintF(LOCALIZE("Cannot start '%s': '%s'\n"), cmd_strWorld, strError);
     }
 
   // if no relevant starting at command line
@@ -661,11 +664,11 @@ void PrintDisplayModeInfo(void) {
   strRes.PrintF("%dx%dx%s", slDPWidth, slDPHeight, _pGfx->gl_dmCurrentDisplayMode.DepthString());
 
   if (dm.IsDualHead()) {
-    strRes += TRANS(" DualMonitor");
+    strRes += LOCALIZE(" DualMonitor");
   }
 
   if (dm.IsWideScreen()) {
-    strRes += TRANS(" WideScreen");
+    strRes += LOCALIZE(" WideScreen");
   }
 
   if (_pGfx->gl_eCurrentAPI == GAT_OGL) {
@@ -684,9 +687,9 @@ void PrintDisplayModeInfo(void) {
 
   // tell if application is started for the first time, or failed to set mode
   if (_iDisplayModeChangeFlag == 0) {
-    strRes += TRANS("Display mode set by default!");
+    strRes += LOCALIZE("Display mode set by default!");
   } else if (_iDisplayModeChangeFlag == 2) {
-    strRes += TRANS("Last mode set failed!");
+    strRes += LOCALIZE("Last mode set failed!");
   }
 
   // print it all
@@ -1278,7 +1281,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     // if addon is to be executed
     if (_iAddonExecState == 1) {
       // print header and start console
-      CPrintF(TRANS("---- Executing addon: '%s'\n"), (const char *)_fnmAddonToExec);
+      CPrintF(LOCALIZE("---- Executing addon: '%s'\n"), (const char *)_fnmAddonToExec);
 
       sam_bToggleConsole = TRUE;
       _iAddonExecState = 2;
@@ -1290,7 +1293,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
       strCmd.PrintF("include \"%s\"", (const char *)_fnmAddonToExec);
       _pShell->Execute(strCmd);
 
-      CPrintF(TRANS("Addon done, press Escape to close console\n"));
+      CPutString(LOCALIZE("Addon done, press Escape to close console\n"));
       _iAddonExecState = 3;
     }
 
@@ -1411,7 +1414,7 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
   // [Cecil] Window mode name
   CTString strWindowMode = _astrWindowModes[eWindowMode];
 
-  CPrintF(TRANS("  Starting display mode: %dx%dx%s (%s)\n"), pixSizeI, pixSizeJ, dmTmp.DepthString(), strWindowMode);
+  CPrintF(LOCALIZE("  Starting display mode: %dx%dx%s (%s)\n"), pixSizeI, pixSizeJ, dmTmp.DepthString(), strWindowMode);
 
   // mark to start ignoring window size/position messages until settled down
   _bWindowChanging = TRUE;
@@ -1506,7 +1509,7 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
     // if the mode is not working, or is not accelerated
     if (!bSuccess || !_pGfx->IsCurrentModeAccelerated()) {
       // report error
-      CPrintF(TRANS("This mode does not support hardware acceleration.\n"));
+      CPutString(LOCALIZE("This mode does not support hardware acceleration.\n"));
 
       // destroy canvas if existing
       if (pvpViewPort != NULL) {
@@ -1561,7 +1564,7 @@ const INDEX ctDefaultModes = ARRAYCOUNT(aDefaultModes);
 // [Cecil] Different window modes
 void StartNewMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ,
                   enum DisplayDepth eColorDepth, INDEX iWindowMode) {
-  CPrintF(TRANS("\n* START NEW DISPLAY MODE ...\n"));
+  CPutString(LOCALIZE("\n* START NEW DISPLAY MODE ...\n"));
 
   // try to set the mode
   BOOL bSuccess = TryToSetDisplayMode(eGfxAPI, iAdapter, pixSizeI, pixSizeJ, eColorDepth, (EWindowModes)iWindowMode);
@@ -1570,7 +1573,7 @@ void StartNewMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pix
   if (!bSuccess) {
     // report failure and reset to default resolution
     _iDisplayModeChangeFlag = 2; // failure
-    CPrintF(TRANS("Requested display mode could not be set!\n"));
+    CPutString(LOCALIZE("Requested display mode could not be set!\n"));
 
     pixSizeI = 640;
     pixSizeJ = 480;
@@ -1582,7 +1585,7 @@ void StartNewMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pix
       eGfxAPI = (GfxAPIType)aDefaultModes[iMode][1];
       iAdapter = aDefaultModes[iMode][2];
 
-      CPrintF(TRANS("\nTrying recovery mode %d...\n"), iMode);
+      CPrintF(LOCALIZE("\nTrying recovery mode %d...\n"), iMode);
       bSuccess = TryToSetDisplayMode(eGfxAPI, iAdapter, pixSizeI, pixSizeJ, eColorDepth, (EWindowModes)iWindowMode);
 
       if (bSuccess) {
@@ -1592,7 +1595,7 @@ void StartNewMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pix
 
     // if all failed
     if (!bSuccess) {
-      FatalError(TRANS(
+      FatalError(LOCALIZE(
         "Cannot set display mode!\n"
         "Serious Sam was unable to find display mode with hardware acceleration.\n"
         "Make sure you install proper drivers for your video card as recommended\n"

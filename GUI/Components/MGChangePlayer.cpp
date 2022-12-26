@@ -44,7 +44,7 @@ void CMGChangePlayer::SetPlayerText(void) {
     SetText("????");
   } else {
     CTString strPlayer;
-    strPlayer.PrintF(TRANS("Player %d: %s\n"), mg_iLocalPlayer + 1, pc.GetNameForPrinting());
+    strPlayer.PrintF(LOCALIZE("Player %d: %s\n"), mg_iLocalPlayer + 1, pc.GetNameForPrinting());
 
     SetText(strPlayer);
   }

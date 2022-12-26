@@ -32,12 +32,12 @@ void CMGHighScore::Render(CDrawPort *pdp) {
 
   CTString strText;
 
-  strHighScores[0][0] = TRANS("No.");
-  strHighScores[0][1] = TRANS("Player Name");
-  strHighScores[0][2] = TRANS("Difficulty");
-  strHighScores[0][3] = TRANS("Time");
-  strHighScores[0][4] = TRANS("Kills");
-  strHighScores[0][5] = TRANS("Score");
+  strHighScores[0][0] = LOCALIZE("No.");
+  strHighScores[0][1] = LOCALIZE("Player Name");
+  strHighScores[0][2] = LOCALIZE("Difficulty");
+  strHighScores[0][3] = LOCALIZE("Time");
+  strHighScores[0][4] = LOCALIZE("Kills");
+  strHighScores[0][5] = LOCALIZE("Score");
 
   {for (INDEX i = 0; i < HIGHSCORE_COUNT; i++) {
     CHighScoreEntry &hse = *GetGameAPI()->GetHighScore(i);

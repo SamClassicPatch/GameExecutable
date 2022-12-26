@@ -20,15 +20,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 void CNetworkMenu::Initialize_t(void) {
   // intialize network menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  gm_mgTitle.SetName(TRANS("NETWORK"));
+  gm_mgTitle.SetName(LOCALIZE("NETWORK"));
   AddChild(&gm_mgTitle);
 
   gm_mgJoin.mg_bfsFontSize = BFS_LARGE;
   gm_mgJoin.mg_boxOnScreen = BoxBigRow(1.0f);
   gm_mgJoin.mg_pmgUp = &gm_mgLoad;
   gm_mgJoin.mg_pmgDown = &gm_mgStart;
-  gm_mgJoin.SetText(TRANS("JOIN GAME"));
-  gm_mgJoin.mg_strTip = TRANS("join a network game");
+  gm_mgJoin.SetText(LOCALIZE("JOIN GAME"));
+  gm_mgJoin.mg_strTip = LOCALIZE("join a network game");
   AddChild(&gm_mgJoin);
   gm_mgJoin.mg_pActivatedFunction = NULL;
 
@@ -36,8 +36,8 @@ void CNetworkMenu::Initialize_t(void) {
   gm_mgStart.mg_boxOnScreen = BoxBigRow(2.0f);
   gm_mgStart.mg_pmgUp = &gm_mgJoin;
   gm_mgStart.mg_pmgDown = &gm_mgQuickLoad;
-  gm_mgStart.SetText(TRANS("START SERVER"));
-  gm_mgStart.mg_strTip = TRANS("start a network game server");
+  gm_mgStart.SetText(LOCALIZE("START SERVER"));
+  gm_mgStart.mg_strTip = LOCALIZE("start a network game server");
   AddChild(&gm_mgStart);
   gm_mgStart.mg_pActivatedFunction = NULL;
 
@@ -45,8 +45,8 @@ void CNetworkMenu::Initialize_t(void) {
   gm_mgQuickLoad.mg_boxOnScreen = BoxBigRow(3.0f);
   gm_mgQuickLoad.mg_pmgUp = &gm_mgStart;
   gm_mgQuickLoad.mg_pmgDown = &gm_mgLoad;
-  gm_mgQuickLoad.SetText(TRANS("QUICK LOAD"));
-  gm_mgQuickLoad.mg_strTip = TRANS("load a quick-saved game (F9)");
+  gm_mgQuickLoad.SetText(LOCALIZE("QUICK LOAD"));
+  gm_mgQuickLoad.mg_strTip = LOCALIZE("load a quick-saved game (F9)");
   AddChild(&gm_mgQuickLoad);
   gm_mgQuickLoad.mg_pActivatedFunction = NULL;
 
@@ -54,8 +54,8 @@ void CNetworkMenu::Initialize_t(void) {
   gm_mgLoad.mg_boxOnScreen = BoxBigRow(4.0f);
   gm_mgLoad.mg_pmgUp = &gm_mgQuickLoad;
   gm_mgLoad.mg_pmgDown = &gm_mgJoin;
-  gm_mgLoad.SetText(TRANS("LOAD"));
-  gm_mgLoad.mg_strTip = TRANS("start server and load a network game (server only)");
+  gm_mgLoad.SetText(LOCALIZE("LOAD"));
+  gm_mgLoad.mg_strTip = LOCALIZE("start server and load a network game (server only)");
   AddChild(&gm_mgLoad);
   gm_mgLoad.mg_pActivatedFunction = NULL;
 }

@@ -279,7 +279,7 @@ void CMGServerList::Render(CDrawPort *pdp) {
       mg_bFocused = TRUE;
       COLOR colItem = GetCurrentColor();
       PrintInBox(pdp, apixSeparatorI[0] + pixCharSizeI, pixListTopJ + pixCharSizeJ + pixLineSize + 1,
-                 apixSeparatorI[1] - apixSeparatorI[0], TRANS("searching..."), colItem, TRUE);
+                 apixSeparatorI[1] - apixSeparatorI[0], LOCALIZE("searching..."), colItem, TRUE);
     }
   } else {
     FOREACHINLIST(CNetworkSession, ns_lnNode, _lhServers, itns) {
@@ -309,11 +309,11 @@ void CMGServerList::Render(CDrawPort *pdp) {
       // [Cecil] Arranged in an array
       const CTString astrEntries[7] = {
         ns.ns_strSession,
-        TranslateConst(ns.ns_strWorld),
+        TRANSV(ns.ns_strWorld),
         strPing,
         strPlayersCt,
-        TranslateConst(ns.ns_strGameType),
-        TranslateConst(strMod),
+        TRANSV(ns.ns_strGameType),
+        TRANSV(strMod),
         ns.ns_strVer,
       };
 

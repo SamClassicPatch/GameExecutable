@@ -188,7 +188,7 @@ void CMGVarButton::Render(CDrawPort *pdp) {
         pdp->PutTextR(mg_pvsVar->vs_strName, pixIL, pixJ, col);
 
         // custom is by default
-        CTString strText = TRANS("Custom");
+        CTString strText = LOCALIZE("Custom");
 
         // Not a custom value
         if (!mg_pvsVar->vs_bCustom) {

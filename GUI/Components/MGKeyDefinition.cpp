@@ -71,7 +71,7 @@ void CMGKeyDefinition::SetBindingNames(BOOL bDefining) {
         // if only first key is defined
         if (bKey1Bound && !bKey2Bound) {
           // put question mark for second key
-          SetText(strKey1 + TRANS(" or ") + "?");
+          SetText(strKey1 + LOCALIZE(" or ") + "?");
         // otherwise
         } else {
           // put question mark only
@@ -82,7 +82,7 @@ void CMGKeyDefinition::SetBindingNames(BOOL bDefining) {
         // if second key is defined
         if (bKey2Bound) {
           // add both
-          SetText(strKey1 + TRANS(" or ") + strKey2);
+          SetText(strKey1 + LOCALIZE(" or ") + strKey2);
         // if second key is undefined
         } else {
           // display only first one

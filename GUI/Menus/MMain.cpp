@@ -43,73 +43,73 @@ void CMainMenu::Initialize_t(void) {
   gm_mgModLabel.mg_bLabel = TRUE;
   AddChild(&gm_mgModLabel);
 
-  gm_mgSingle.SetText(TRANS("SINGLE PLAYER"));
+  gm_mgSingle.SetText(LOCALIZE("SINGLE PLAYER"));
   gm_mgSingle.mg_bfsFontSize = BFS_LARGE;
   gm_mgSingle.mg_boxOnScreen = BoxBigRow(0.0f);
-  gm_mgSingle.mg_strTip = TRANS("single player game menus");
+  gm_mgSingle.mg_strTip = LOCALIZE("single player game menus");
   AddChild(&gm_mgSingle);
   gm_mgSingle.mg_pmgUp = &gm_mgQuit;
   gm_mgSingle.mg_pmgDown = &gm_mgNetwork;
   gm_mgSingle.mg_pActivatedFunction = NULL;
 
-  gm_mgNetwork.SetText(TRANS("NETWORK"));
+  gm_mgNetwork.SetText(LOCALIZE("NETWORK"));
   gm_mgNetwork.mg_bfsFontSize = BFS_LARGE;
   gm_mgNetwork.mg_boxOnScreen = BoxBigRow(1.0f);
-  gm_mgNetwork.mg_strTip = TRANS("LAN/iNet multiplayer menus");
+  gm_mgNetwork.mg_strTip = LOCALIZE("LAN/iNet multiplayer menus");
   AddChild(&gm_mgNetwork);
   gm_mgNetwork.mg_pmgUp = &gm_mgSingle;
   gm_mgNetwork.mg_pmgDown = &gm_mgSplitScreen;
   gm_mgNetwork.mg_pActivatedFunction = NULL;
 
-  gm_mgSplitScreen.SetText(TRANS("SPLIT SCREEN"));
+  gm_mgSplitScreen.SetText(LOCALIZE("SPLIT SCREEN"));
   gm_mgSplitScreen.mg_bfsFontSize = BFS_LARGE;
   gm_mgSplitScreen.mg_boxOnScreen = BoxBigRow(2.0f);
-  gm_mgSplitScreen.mg_strTip = TRANS("play with multiple players on one computer");
+  gm_mgSplitScreen.mg_strTip = LOCALIZE("play with multiple players on one computer");
   AddChild(&gm_mgSplitScreen);
   gm_mgSplitScreen.mg_pmgUp = &gm_mgNetwork;
   gm_mgSplitScreen.mg_pmgDown = &gm_mgDemo;
   gm_mgSplitScreen.mg_pActivatedFunction = NULL;
 
-  gm_mgDemo.SetText(TRANS("DEMO"));
+  gm_mgDemo.SetText(LOCALIZE("DEMO"));
   gm_mgDemo.mg_bfsFontSize = BFS_LARGE;
   gm_mgDemo.mg_boxOnScreen = BoxBigRow(3.0f);
-  gm_mgDemo.mg_strTip = TRANS("play a game demo");
+  gm_mgDemo.mg_strTip = LOCALIZE("play a game demo");
   AddChild(&gm_mgDemo);
   gm_mgDemo.mg_pmgUp = &gm_mgSplitScreen;
   gm_mgDemo.mg_pmgDown = &gm_mgMods;
   gm_mgDemo.mg_pActivatedFunction = NULL;
 
-  gm_mgMods.SetText(TRANS("MODS"));
+  gm_mgMods.SetText(LOCALIZE("MODS"));
   gm_mgMods.mg_bfsFontSize = BFS_LARGE;
   gm_mgMods.mg_boxOnScreen = BoxBigRow(4.0f);
-  gm_mgMods.mg_strTip = TRANS("run one of installed game modifications");
+  gm_mgMods.mg_strTip = LOCALIZE("run one of installed game modifications");
   AddChild(&gm_mgMods);
   gm_mgMods.mg_pmgUp = &gm_mgDemo;
   gm_mgMods.mg_pmgDown = &gm_mgHighScore;
   gm_mgMods.mg_pActivatedFunction = NULL;
 
-  gm_mgHighScore.SetText(TRANS("HIGH SCORES"));
+  gm_mgHighScore.SetText(LOCALIZE("HIGH SCORES"));
   gm_mgHighScore.mg_bfsFontSize = BFS_LARGE;
   gm_mgHighScore.mg_boxOnScreen = BoxBigRow(5.0f);
-  gm_mgHighScore.mg_strTip = TRANS("view list of top ten best scores");
+  gm_mgHighScore.mg_strTip = LOCALIZE("view list of top ten best scores");
   AddChild(&gm_mgHighScore);
   gm_mgHighScore.mg_pmgUp = &gm_mgMods;
   gm_mgHighScore.mg_pmgDown = &gm_mgOptions;
   gm_mgHighScore.mg_pActivatedFunction = NULL;
 
-  gm_mgOptions.SetText(TRANS("OPTIONS"));
+  gm_mgOptions.SetText(LOCALIZE("OPTIONS"));
   gm_mgOptions.mg_bfsFontSize = BFS_LARGE;
   gm_mgOptions.mg_boxOnScreen = BoxBigRow(6.0f);
-  gm_mgOptions.mg_strTip = TRANS("adjust video, audio and input options");
+  gm_mgOptions.mg_strTip = LOCALIZE("adjust video, audio and input options");
   AddChild(&gm_mgOptions);
   gm_mgOptions.mg_pmgUp = &gm_mgHighScore;
   gm_mgOptions.mg_pmgDown = &gm_mgQuit;
   gm_mgOptions.mg_pActivatedFunction = NULL;
 
-  gm_mgQuit.SetText(TRANS("QUIT"));
+  gm_mgQuit.SetText(LOCALIZE("QUIT"));
   gm_mgQuit.mg_bfsFontSize = BFS_LARGE;
   gm_mgQuit.mg_boxOnScreen = BoxBigRow(7.0f);
-  gm_mgQuit.mg_strTip = TRANS("exit game immediately");
+  gm_mgQuit.mg_strTip = LOCALIZE("exit game immediately");
   AddChild(&gm_mgQuit);
   gm_mgQuit.mg_pmgUp = &gm_mgOptions;
   gm_mgQuit.mg_pmgDown = &gm_mgSingle;

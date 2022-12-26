@@ -43,10 +43,10 @@ BOOL CSettingsEntry::Matches(const CTString &strRenderer) const {
 const char *RenderingPreferencesDescription(int iMode) {
   // [Cecil] Replaced with an array
   static const CTString astrModes[] = {
-    TRANS("speed"),
-    TRANS("normal"),
-    TRANS("quality"),
-    TRANS("custom"),
+    LOCALIZE("speed"),
+    LOCALIZE("normal"),
+    LOCALIZE("quality"),
+    LOCALIZE("custom"),
   };
 
   ASSERT(iMode >= 0 && iMode <= 3);
@@ -96,7 +96,7 @@ void InitGLSettings(void) {
 
   // ignore errors
   } catch (char *strError) {
-    WarningMessage(TRANS("unable to setup OpenGL settings list: %s"), strError);
+    WarningMessage(LOCALIZE("unable to setup OpenGL settings list: %s"), strError);
   }
 
   _strLastRenderer = "none";
@@ -122,10 +122,10 @@ CSettingsEntry *GetGLSettings(const CTString &strRenderer) {
 }
 
 extern void ApplyGLSettings(BOOL bForce) {
-  CPrintF(TRANS("\nAutomatic 3D-board preferences adjustment...\n"));
+  CPrintF(LOCALIZE("\nAutomatic 3D-board preferences adjustment...\n"));
 
   CDisplayAdapter &da = _pGfx->gl_gaAPI[_pGfx->gl_eCurrentAPI].ga_adaAdapter[_pGfx->gl_iCurrentAdapter];
-  CPrintF(TRANS("Detected: %s - %s - %s\n"), da.da_strVendor, da.da_strRenderer, da.da_strVersion);
+  CPrintF(LOCALIZE("Detected: %s - %s - %s\n"), da.da_strVendor, da.da_strRenderer, da.da_strVersion);
 
   // get new settings
   CSettingsEntry *pse = GetGLSettings(da.da_strRenderer);
@@ -133,31 +133,31 @@ extern void ApplyGLSettings(BOOL bForce) {
   // if none found
   if (pse == NULL) {
     // error
-    CPrintF(TRANS("No matching preferences found! Automatic adjustment disabled!\n"));
+    CPrintF(LOCALIZE("No matching preferences found! Automatic adjustment disabled!\n"));
     return;
   }
 
   // report
-  CPrintF(TRANS("Matching: %s (%s)\n"), pse->se_strRenderer, pse->se_strDescription);
+  CPrintF(LOCALIZE("Matching: %s (%s)\n"), pse->se_strRenderer, pse->se_strDescription);
   _strPreferencesDescription = pse->se_strDescription;
 
   if (!bForce) {
     // if same as last
     if (pse->se_strDescription == _strLastRenderer && sam_iVideoSetup == _iLastPreferences) {
       // do nothing
-      CPrintF(TRANS("Similar to last, keeping same preferences.\n"));
+      CPrintF(LOCALIZE("Similar to last, keeping same preferences.\n"));
       return;
     }
 
-    CPrintF(TRANS("Different than last, applying new preferences.\n"));
+    CPrintF(LOCALIZE("Different than last, applying new preferences.\n"));
 
   } else {
-    CPrintF(TRANS("Applying new preferences.\n"));
+    CPrintF(LOCALIZE("Applying new preferences.\n"));
   }
 
   // clamp rendering preferences (just to be on the safe side)
   sam_iVideoSetup = Clamp(sam_iVideoSetup, 0L, 3L);
-  CPrintF(TRANS("Mode: %s\n"), RenderingPreferencesDescription(sam_iVideoSetup));
+  CPrintF(LOCALIZE("Mode: %s\n"), RenderingPreferencesDescription(sam_iVideoSetup));
 
   // if not in custom mode
   if (sam_iVideoSetup < 3) {
@@ -171,7 +171,7 @@ extern void ApplyGLSettings(BOOL bForce) {
   }
 
   // done
-  CPrintF(TRANS("Done.\n\n"));
+  CPrintF(LOCALIZE("Done.\n\n"));
 
   // remember settings
   _strLastRenderer = pse->se_strDescription;

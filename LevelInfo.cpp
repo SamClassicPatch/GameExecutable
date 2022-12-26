@@ -24,7 +24,7 @@ extern INDEX sam_bShowAllLevels;
 
 CLevelInfo::CLevelInfo(void) {
   li_fnLevel = CTString("Levels\\Default.wld");
-  li_strName = TRANS("<invalid level>");
+  li_strName = LOCALIZE("<invalid level>");
   li_ulSpawnFlags = 0x0;
   li_eFormat = E_LF_SE100; // [Cecil]
 }
@@ -89,7 +89,7 @@ BOOL GetLevelInfo(CLevelInfo &li, const CTFileName &fnm) {
     }
 
     // translate name
-    li.li_strName = TranslateConst(li.li_strName, 0);
+    li.li_strName = TRANSV(li.li_strName);
 
     // if dummy name
     if (li.li_strName == "") {
@@ -124,7 +124,7 @@ int qsort_CompareLevels(const void *elem1, const void *elem2) {
 
 // Init level-info subsystem
 void LoadLevelsList(void) {
-  CPrintF(TRANS("Reading levels directory...\n"));
+  CPutString(LOCALIZE("Reading levels directory...\n"));
 
   // list the levels directory with subdirs
   CDynamicStackArray<CTFileName> afnmDir;
@@ -134,13 +134,13 @@ void LoadLevelsList(void) {
   for (INDEX i = 0; i < afnmDir.Count(); i++) {
     CTFileName fnm = afnmDir[i];
 
-    CPrintF(TRANS("  file '%s' : "), (const char *)fnm);
+    CPrintF(LOCALIZE("  file '%s' : "), (const char *)fnm);
 
     // try to load its info, and if valid
     CLevelInfo li;
 
     if (GetLevelInfo(li, fnm)) {
-      CPrintF(TRANS("'%s' spawn=0x%08x\n"), li.li_strName, li.li_ulSpawnFlags);
+      CPrintF(LOCALIZE("'%s' spawn=0x%08x\n"), li.li_strName, li.li_ulSpawnFlags);
 
       // create new info for that file
       CLevelInfo *pliNew = new CLevelInfo;
@@ -150,7 +150,7 @@ void LoadLevelsList(void) {
       _lhAllLevels.AddTail(pliNew->li_lnNode);
 
     } else {
-      CPrintF(TRANS("invalid level\n"));
+      CPutString(LOCALIZE("invalid level\n"));
     }
   }
 
@@ -270,7 +270,7 @@ int qsort_CompareDemos(const void *elem1, const void *elem2) {
 
 // Init list of autoplay demos
 void LoadDemosList(void) {
-  CPrintF(TRANS("Reading demos directory...\n"));
+  CPutString(LOCALIZE("Reading demos directory...\n"));
 
   // list the levels directory with subdirs
   CDynamicStackArray<CTFileName> afnmDir;

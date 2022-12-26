@@ -20,59 +20,59 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 void CSinglePlayerNewMenu::Initialize_t(void) {
   // intialize single player new menu
-  gm_mgTitle.SetName(TRANS("NEW GAME"));
+  gm_mgTitle.SetName(LOCALIZE("NEW GAME"));
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   AddChild(&gm_mgTitle);
 
-  gm_mgTourist.SetText(TRANS("TOURIST"));
+  gm_mgTourist.SetText(LOCALIZE("TOURIST"));
   gm_mgTourist.mg_bfsFontSize = BFS_LARGE;
   gm_mgTourist.mg_boxOnScreen = BoxBigRow(0.0f);
-  gm_mgTourist.mg_strTip = TRANS("for non-FPS players");
+  gm_mgTourist.mg_strTip = LOCALIZE("for non-FPS players");
   AddChild(&gm_mgTourist);
   gm_mgTourist.mg_pmgUp = &gm_mgSerious;
   gm_mgTourist.mg_pmgDown = &gm_mgEasy;
   gm_mgTourist.mg_pActivatedFunction = NULL;
 
-  gm_mgEasy.SetText(TRANS("EASY"));
+  gm_mgEasy.SetText(LOCALIZE("EASY"));
   gm_mgEasy.mg_bfsFontSize = BFS_LARGE;
   gm_mgEasy.mg_boxOnScreen = BoxBigRow(1.0f);
-  gm_mgEasy.mg_strTip = TRANS("for unexperienced FPS players");
+  gm_mgEasy.mg_strTip = LOCALIZE("for unexperienced FPS players");
   AddChild(&gm_mgEasy);
   gm_mgEasy.mg_pmgUp = &gm_mgTourist;
   gm_mgEasy.mg_pmgDown = &gm_mgMedium;
   gm_mgEasy.mg_pActivatedFunction = NULL;
 
-  gm_mgMedium.SetText(TRANS("NORMAL"));
+  gm_mgMedium.SetText(LOCALIZE("NORMAL"));
   gm_mgMedium.mg_bfsFontSize = BFS_LARGE;
   gm_mgMedium.mg_boxOnScreen = BoxBigRow(2.0f);
-  gm_mgMedium.mg_strTip = TRANS("for experienced FPS players");
+  gm_mgMedium.mg_strTip = LOCALIZE("for experienced FPS players");
   AddChild(&gm_mgMedium);
   gm_mgMedium.mg_pmgUp = &gm_mgEasy;
   gm_mgMedium.mg_pmgDown = &gm_mgHard;
   gm_mgMedium.mg_pActivatedFunction = NULL;
 
-  gm_mgHard.SetText(TRANS("HARD"));
+  gm_mgHard.SetText(LOCALIZE("HARD"));
   gm_mgHard.mg_bfsFontSize = BFS_LARGE;
   gm_mgHard.mg_boxOnScreen = BoxBigRow(3.0f);
-  gm_mgHard.mg_strTip = TRANS("for experienced Serious Sam players");
+  gm_mgHard.mg_strTip = LOCALIZE("for experienced Serious Sam players");
   AddChild(&gm_mgHard);
   gm_mgHard.mg_pmgUp = &gm_mgMedium;
   gm_mgHard.mg_pmgDown = &gm_mgSerious;
   gm_mgHard.mg_pActivatedFunction = NULL;
 
-  gm_mgSerious.SetText(TRANS("SERIOUS"));
+  gm_mgSerious.SetText(LOCALIZE("SERIOUS"));
   gm_mgSerious.mg_bfsFontSize = BFS_LARGE;
   gm_mgSerious.mg_boxOnScreen = BoxBigRow(4.0f);
-  gm_mgSerious.mg_strTip = TRANS("are you serious?");
+  gm_mgSerious.mg_strTip = LOCALIZE("are you serious?");
   AddChild(&gm_mgSerious);
   gm_mgSerious.mg_pmgUp = &gm_mgHard;
   gm_mgSerious.mg_pmgDown = &gm_mgTourist;
   gm_mgSerious.mg_pActivatedFunction = NULL;
 
-  gm_mgMental.SetText(TRANS("MENTAL"));
+  gm_mgMental.SetText(LOCALIZE("MENTAL"));
   gm_mgMental.mg_bfsFontSize = BFS_LARGE;
   gm_mgMental.mg_boxOnScreen = BoxBigRow(5.0f);
-  gm_mgMental.mg_strTip = TRANS("you are not serious!");
+  gm_mgMental.mg_strTip = LOCALIZE("you are not serious!");
   AddChild(&gm_mgMental);
   gm_mgMental.mg_pmgUp = &gm_mgSerious;
   gm_mgMental.mg_pmgDown = &gm_mgTourist;

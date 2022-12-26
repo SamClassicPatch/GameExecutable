@@ -20,15 +20,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 void CCustomizeAxisMenu::Initialize_t(void) {
   // intialize axis menu
-  gm_mgTitle.SetName(TRANS("CUSTOMIZE AXIS"));
+  gm_mgTitle.SetName(LOCALIZE("CUSTOMIZE AXIS"));
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   AddChild(&gm_mgTitle);
 
-  TRIGGER_MG(gm_mgActionTrigger, 0, gm_mgSmoothTrigger, gm_mgMountedTrigger, TRANS("ACTION"), astrNoYes);
-  gm_mgActionTrigger.mg_strTip = TRANS("choose action to customize");
+  TRIGGER_MG(gm_mgActionTrigger, 0, gm_mgSmoothTrigger, gm_mgMountedTrigger, LOCALIZE("ACTION"), astrNoYes);
+  gm_mgActionTrigger.mg_strTip = LOCALIZE("choose action to customize");
 
-  TRIGGER_MG(gm_mgMountedTrigger, 2, gm_mgActionTrigger, gm_mgSensitivity, TRANS("MOUNTED TO"), astrNoYes);
-  gm_mgMountedTrigger.mg_strTip = TRANS("choose controller axis that will perform the action");
+  TRIGGER_MG(gm_mgMountedTrigger, 2, gm_mgActionTrigger, gm_mgSensitivity, LOCALIZE("MOUNTED TO"), astrNoYes);
+  gm_mgMountedTrigger.mg_strTip = LOCALIZE("choose controller axis that will perform the action");
 
   gm_mgActionTrigger.mg_astrTexts = new CTString[AXIS_ACTIONS_CT];
   gm_mgActionTrigger.mg_ctTexts = AXIS_ACTIONS_CT;
@@ -38,7 +38,7 @@ void CCustomizeAxisMenu::Initialize_t(void) {
 
   // for all available axis type controlers
   for (INDEX iControler = 0; iControler < AXIS_ACTIONS_CT; iControler++) {
-    gm_mgActionTrigger.mg_astrTexts[iControler] = TranslateConst(GetGameAPI()->GetAxisName(iControler), 0);
+    gm_mgActionTrigger.mg_astrTexts[iControler] = TRANSV(GetGameAPI()->GetAxisName(iControler));
   }
   gm_mgActionTrigger.mg_iSelected = 3;
 
@@ -51,25 +51,25 @@ void CCustomizeAxisMenu::Initialize_t(void) {
   }
 
   gm_mgSensitivity.mg_boxOnScreen = BoxMediumRow(3);
-  gm_mgSensitivity.SetText(TRANS("SENSITIVITY"));
+  gm_mgSensitivity.SetText(LOCALIZE("SENSITIVITY"));
   gm_mgSensitivity.mg_pmgUp = &gm_mgMountedTrigger;
   gm_mgSensitivity.mg_pmgDown = &gm_mgDeadzone;
   AddChild(&gm_mgSensitivity);
-  gm_mgSensitivity.mg_strTip = TRANS("set sensitivity for this axis");
+  gm_mgSensitivity.mg_strTip = LOCALIZE("set sensitivity for this axis");
 
   gm_mgDeadzone.mg_boxOnScreen = BoxMediumRow(4);
-  gm_mgDeadzone.SetText(TRANS("DEAD ZONE"));
+  gm_mgDeadzone.SetText(LOCALIZE("DEAD ZONE"));
   gm_mgDeadzone.mg_pmgUp = &gm_mgSensitivity;
   gm_mgDeadzone.mg_pmgDown = &gm_mgInvertTrigger;
   AddChild(&gm_mgDeadzone);
-  gm_mgDeadzone.mg_strTip = TRANS("set dead zone for this axis");
+  gm_mgDeadzone.mg_strTip = LOCALIZE("set dead zone for this axis");
 
-  TRIGGER_MG(gm_mgInvertTrigger, 5, gm_mgDeadzone, gm_mgRelativeTrigger, TRANS("INVERTED"), astrNoYes);
-  gm_mgInvertTrigger.mg_strTip = TRANS("choose whether to invert this axis or not");
-  TRIGGER_MG(gm_mgRelativeTrigger, 6, gm_mgInvertTrigger, gm_mgSmoothTrigger, TRANS("RELATIVE"), astrNoYes);
-  gm_mgRelativeTrigger.mg_strTip = TRANS("select relative or absolute axis reading");
-  TRIGGER_MG(gm_mgSmoothTrigger, 7, gm_mgRelativeTrigger, gm_mgActionTrigger, TRANS("SMOOTH"), astrNoYes);
-  gm_mgSmoothTrigger.mg_strTip = TRANS("turn this on to filter readings on this axis");
+  TRIGGER_MG(gm_mgInvertTrigger, 5, gm_mgDeadzone, gm_mgRelativeTrigger, LOCALIZE("INVERTED"), astrNoYes);
+  gm_mgInvertTrigger.mg_strTip = LOCALIZE("choose whether to invert this axis or not");
+  TRIGGER_MG(gm_mgRelativeTrigger, 6, gm_mgInvertTrigger, gm_mgSmoothTrigger, LOCALIZE("RELATIVE"), astrNoYes);
+  gm_mgRelativeTrigger.mg_strTip = LOCALIZE("select relative or absolute axis reading");
+  TRIGGER_MG(gm_mgSmoothTrigger, 7, gm_mgRelativeTrigger, gm_mgActionTrigger, LOCALIZE("SMOOTH"), astrNoYes);
+  gm_mgSmoothTrigger.mg_strTip = LOCALIZE("turn this on to filter readings on this axis");
 }
 
 CCustomizeAxisMenu::~CCustomizeAxisMenu(void) {

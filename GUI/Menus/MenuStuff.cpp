@@ -18,7 +18,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "MenuStuff.h"
 
-#define RADIOTRANS(str) ("ETRS" str)
+// [Cecil] Removed "ETRS" tag to not let strings be picked up by the Depend utility
+#define RADIOTRANS(str) (str)
 
 extern CTString astrNoYes[] = {
   RADIOTRANS("No"),

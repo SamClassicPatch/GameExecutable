@@ -28,7 +28,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define PRESS_KEY_WAITING 1
 #define RELEASE_RETURN_WAITING 2
 
-#define EMPTYSLOTSTRING TRANS("<save a new one>")
+#define EMPTYSLOTSTRING LOCALIZE("<save a new one>")
 
 // [Cecil] Side size ratios for when one gadget has two elements (e.g. label and a button)
 extern FLOAT _fGadgetSideRatioL;

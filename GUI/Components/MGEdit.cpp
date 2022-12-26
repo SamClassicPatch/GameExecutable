@@ -205,7 +205,7 @@ void CMGEdit::Render(CDrawPort *pdp) {
     if (mg_bfsFontSize == BFS_SMALL) {
       SetText("*");
     } else {
-      SetText(TRANS("<none>"));
+      SetText(LOCALIZE("<none>"));
     }
     CMGButton::Render(pdp);
 
