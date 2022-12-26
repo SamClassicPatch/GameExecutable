@@ -117,7 +117,7 @@ extern CTextureObject *_ptoLogoODI = NULL;
 extern CTextureObject *_ptoLogoEAX = NULL;
 
 // [Cecil] The First Encounter
-#ifdef SE1_TFE
+#if SE1_GAME == SS_TFE
   CTString sam_strModName = "-   T H E   F I R S T   E N C O U N T E R   -";
   CTString sam_strTechTestLevel = "Levels\\TechTest.wld";
   CTString sam_strTrainingLevel = "Levels\\KarnakDemo.wld";
