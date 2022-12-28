@@ -46,9 +46,7 @@ void CMGHighScore::Render(CDrawPort *pdp) {
     INDEX iDifficulty = hse.hse_gdDifficulty + 1;
 
     // [Cecil] Invalid difficulty
-    if (iDifficulty < 0 || iDifficulty >= GetGameAPI()->sp_aGameDifficulties.Count())
-    {
-      ASSERT(FALSE);
+    if (iDifficulty < 0 || iDifficulty >= GetGameAPI()->sp_aGameDifficulties.Count()) {
       strHighScores[i + 1][1] = "---";
       continue;
 

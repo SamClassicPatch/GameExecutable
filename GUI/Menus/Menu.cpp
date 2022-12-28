@@ -877,10 +877,6 @@ void MenuBack(void) {
 
 extern void FixupBackButton(CGameMenu *pgm) {
   BOOL bResume = FALSE;
-
-  // [Cecil] Unparent button
-  mgBack.SetParent(NULL);
-
   BOOL bHasBack = TRUE;
 
   if (pgm->gm_bPopup) {
