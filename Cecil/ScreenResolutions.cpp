@@ -111,6 +111,7 @@ void PrepareVideoResolutions(void) {
 
   // Extra widescreen resolutions
   _ar16_10.Push() = PIX2D(480,   320); // 3:2
+  _ar16_10.Push() = PIX2D(640,   400); // Extra
   _ar16_10.Push() = PIX2D(1152,  768); // 3:2
   _ar16_10.Push() = PIX2D(1280,  800);
   _ar16_10.Push() = PIX2D(1280,  854); // 3:2
@@ -125,6 +126,8 @@ void PrepareVideoResolutions(void) {
   _ar16_10.Push() = PIX2D(3840, 2400);
 
   // Very wide resolutions
+  _ar21_9.Push() = PIX2D(560,   240); // Extra
+  _ar21_9.Push() = PIX2D(840,   360); // Extra
   _ar21_9.Push() = PIX2D(1400,  600); // Extra
   _ar21_9.Push() = PIX2D(1680,  720); // Extra
   _ar21_9.Push() = PIX2D(2100,  900); // Extra
