@@ -24,6 +24,14 @@ CAspectRatio _ar16_9;
 CAspectRatio _ar16_10;
 CAspectRatio _ar21_9;
 
+// Compare two resolutions
+static int SortResolutions(const void *pRes1, const void *pRes2) {
+  const PIX2D &vpix1 = *(const PIX2D *)pRes1;
+  const PIX2D &vpix2 = *(const PIX2D *)pRes2;
+
+  return (int)Sgn(vpix1(1) - vpix2(1));
+};
+
 // Add screen resolution to one of the lists, if it's not there
 static void AddScreenResolution(void) {
   // Check if screen resolution is listed
@@ -58,8 +66,9 @@ static void AddScreenResolution(void) {
     par = &_ar4_3;
   }
 
-  // Push screen resolution into the aspect ratio list
+  // Push screen resolution into the aspect ratio list and sort it
   par->Push() = _vpixScreenRes;
+  qsort(par->sa_Array, par->Count(), sizeof(PIX2D), &SortResolutions);
 };
 
 // Prepare arrays with window resolutions
