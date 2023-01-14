@@ -319,7 +319,7 @@ void CMGServerList::Render(CDrawPort *pdp) {
 
       // [Cecil] Under which conditions to undecorate tab entries
       const BOOL abUndecorate[7] = {
-        TRUE,
+        mg_bFocused || !sam_bDecoratedServerNames,
         mg_bFocused,
         TRUE,
         TRUE,

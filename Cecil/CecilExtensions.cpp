@@ -19,6 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 INDEX sam_bPatchVersionLabel = TRUE;
 INDEX sam_bBackgroundGameRender = TRUE;
 INDEX sam_bOptionTabs = TRUE;
+INDEX sam_bDecoratedServerNames = TRUE;
 
 // Custom initialization
 void CECIL_Init(void) {
@@ -36,4 +37,5 @@ void CECIL_Init(void) {
   _pShell->DeclareSymbol("persistent user INDEX sam_bPatchVersionLabel;",    &sam_bPatchVersionLabel);
   _pShell->DeclareSymbol("persistent user INDEX sam_bBackgroundGameRender;", &sam_bBackgroundGameRender);
   _pShell->DeclareSymbol("persistent user INDEX sam_bOptionTabs;",           &sam_bOptionTabs);
+  _pShell->DeclareSymbol("persistent user INDEX sam_bDecoratedServerNames;", &sam_bDecoratedServerNames);
 };
