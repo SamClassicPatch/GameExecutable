@@ -1491,9 +1491,6 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
       pvpViewPort->SwapBuffers();
     }
 
-    // [Cecil] Force wide adjustment based on current aspect ratio
-    pdp->dp_fWideAdjustment = ((FLOAT)pdp->GetHeight() / (FLOAT)pdp->GetWidth()) * (4.0f / 3.0f);
-
     // initial screen fill and swap, just to get context running
     BOOL bSuccess = FALSE;
 
