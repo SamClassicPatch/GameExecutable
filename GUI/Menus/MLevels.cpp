@@ -100,6 +100,7 @@ void CLevelsMenu::FillListItems(void) {
       bHasLast |= (iLabel == ctLabels - 1);
       gm_mgManualLevel[iInMenu].SetText(li.li_strName);
       gm_mgManualLevel[iInMenu].mg_fnmLevel = li.li_fnLevel;
+      gm_mgManualLevel[iInMenu].mg_strTip = "";
       gm_mgManualLevel[iInMenu].mg_bEnabled = TRUE;
       gm_mgManualLevel[iInMenu].mg_iInList = iLabel;
 
