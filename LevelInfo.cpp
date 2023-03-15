@@ -17,6 +17,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "LevelInfo.h"
 #include <io.h>
 
+// [Cecil] For listing levels
+#include <CoreLib/Interfaces/FileFunctions.h>
+
 CListHead _lhAutoDemos;
 CListHead _lhAllLevels;
 CListHead _lhFilteredLevels;
@@ -128,7 +131,7 @@ void LoadLevelsList(void) {
 
   // list the levels directory with subdirs
   CDynamicStackArray<CTFileName> afnmDir;
-  MakeDirList(afnmDir, CTString("Levels\\"), "*.wld", DLI_RECURSIVE | DLI_SEARCHCD);
+  IFiles::ListGameFiles(afnmDir, "Levels\\", "*.wld", IFiles::FLF_RECURSIVE | IFiles::FLF_SEARCHCD | IFiles::FLF_SEARCHMOD);
 
   // for each file in the directory
   for (INDEX i = 0; i < afnmDir.Count(); i++) {
@@ -274,7 +277,7 @@ void LoadDemosList(void) {
 
   // list the levels directory with subdirs
   CDynamicStackArray<CTFileName> afnmDir;
-  MakeDirList(afnmDir, CTString("Demos\\"), "Demos\\Auto-*.dem", DLI_RECURSIVE);
+  IFiles::ListGameFiles(afnmDir, "Demos\\", "Demos\\Auto-*.dem", IFiles::FLF_RECURSIVE | IFiles::FLF_SEARCHMOD);
 
   // for each file in the directory
   for (INDEX i = 0; i < afnmDir.Count(); i++) {
