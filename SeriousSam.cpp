@@ -394,6 +394,9 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   // [Cecil] Mark as a game
   CCoreAPI::SetApplication(CCoreAPI::APP_GAME);
 
+  // [Cecil] Function patches
+  _EnginePatches.FileSystem();
+
   // [Cecil] Get screen resolution
   _vpixScreenRes = PIX2D(::GetSystemMetrics(SM_CXSCREEN),
                          ::GetSystemMetrics(SM_CYSCREEN));
@@ -1326,6 +1329,13 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     // [Cecil] Use executable filename
     CTString strCmd = _fnmApplicationPath + _fnmApplicationExe;
     CTString strParam = " +game " + strMod;
+
+    // [Cecil] Copy TFE path
+    #if SE1_GAME != SS_TFE
+      if (_fnmCDPath != "") {
+        strParam += CTString(0, " +tfe \"%s\"", _fnmCDPath.str_String);
+      }
+    #endif
 
     if (_strModServerJoin != "") {
       strParam += " +connect " + _strModServerJoin + " +quickjoin";
