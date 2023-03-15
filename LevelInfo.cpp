@@ -29,7 +29,7 @@ CLevelInfo::CLevelInfo(void) {
   li_fnLevel = CTString("Levels\\Default.wld");
   li_strName = LOCALIZE("<invalid level>");
   li_ulSpawnFlags = 0x0;
-  li_eFormat = E_LF_SE100; // [Cecil]
+  li_eFormat = E_LF_CURRENT; // [Cecil]
 }
 
 CLevelInfo::CLevelInfo(const CLevelInfo &li) {
@@ -53,6 +53,22 @@ BOOL GetLevelInfo(CLevelInfo &li, const CTFileName &fnm) {
     CTFileStream strm;
     strm.Open_t(fnm);
 
+    // [Cecil] Levels from the TFE directory
+    #if SE1_GAME != SS_TFE
+      if (_fnmCDPath != "") {
+        CTFileName fnmFull;
+
+        // Try checking the archive path
+        if (ExpandFilePath(EFP_READ, fnm, fnmFull) == EFP_BASEZIP) {
+          fnmFull = IUnzip::GetFileArchive(fnm);
+        }
+
+        if (fnmFull.HasPrefix(_fnmCDPath)) {
+          li.li_eFormat = CLevelInfo::E_LF_TFE;
+        }
+      }
+    #endif
+
     // skip initial chunk ids
     strm.ExpectID_t("BUIV"); // 'build version'
 
@@ -61,7 +77,7 @@ BOOL GetLevelInfo(CLevelInfo &li, const CTFileName &fnm) {
 
     // [Cecil] Levels from other games
     if (iDummy != 10000) {
-      li.li_eFormat = CLevelInfo::E_LF_SE150;
+      li.li_eFormat = CLevelInfo::E_LF_150;
     }
 
     strm.ExpectID_t("WRLD"); // 'world'
@@ -143,6 +159,11 @@ void LoadLevelsList(void) {
     CLevelInfo li;
 
     if (GetLevelInfo(li, fnm)) {
+      // Mark as a TFE level in the log
+      if (li.li_eFormat == CLevelInfo::E_LF_TFE) {
+        CPutString("(TFE) ");
+      }
+
       CPrintF(LOCALIZE("'%s' spawn=0x%08x\n"), li.li_strName, li.li_ulSpawnFlags);
 
       // create new info for that file

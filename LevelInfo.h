@@ -21,9 +21,10 @@ class CLevelInfo {
   public:
     // [Cecil] Different level formats
     enum ELevelFormat {
-      E_LF_SE100,
-      E_LF_SE150,
-      E_LF_SSR,
+      E_LF_CURRENT, // Current engine
+      E_LF_TFE, // Serious Sam The First Encounter
+      E_LF_150, // Games on 1.50
+      E_LF_SSR, // Serious Sam Revolution
     };
 
     CListNode li_lnNode;
