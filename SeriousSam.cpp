@@ -1331,7 +1331,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     CTString strParam = " +game " + strMod;
 
     // [Cecil] Copy TFE path
-    #if SE1_GAME != SS_TFE
+    #if TSE_FUSION_MODE
       if (_fnmCDPath != "") {
         strParam += CTString(0, " +tfe \"%s\"", _fnmCDPath.str_String);
       }

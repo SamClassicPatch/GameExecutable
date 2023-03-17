@@ -54,7 +54,7 @@ BOOL GetLevelInfo(CLevelInfo &li, const CTFileName &fnm) {
     strm.Open_t(fnm);
 
     // [Cecil] Levels from the TFE directory
-    #if SE1_GAME != SS_TFE
+    #if TSE_FUSION_MODE
       if (_fnmCDPath != "") {
         CTFileName fnmFull;
 
