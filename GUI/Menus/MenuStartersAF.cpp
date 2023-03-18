@@ -40,9 +40,14 @@ BOOL LSLoadSinglePlayer(const CTFileName &fnm) {
   GetGameAPI()->SetStartPlayer(0, GetGameAPI()->GetPlayerForSP());
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
+
   if (_pGame->LoadGame(fnm)) {
     StopMenus();
     _gmRunningGameMode = GM_SINGLE_PLAYER;
+
+    // [Cecil] Load game for Core
+    GetAPI()->OnGameLoad(fnm);
+
   } else {
     _gmRunningGameMode = GM_NONE;
   }
@@ -161,20 +166,25 @@ BOOL LSLoadNetSettings(const CTFileName &fnm) {
 BOOL LSSaveAnyGame(const CTFileName &fnm) {
   if (_pGame->SaveGame(fnm)) {
     StopMenus();
+
+    // [Cecil] Save game for Core
+    GetAPI()->OnGameSave(fnm);
+
     return TRUE;
-  } else {
-    return FALSE;
   }
+
+  return FALSE;
 }
 
 BOOL LSSaveDemo(const CTFileName &fnm) {
   // save the demo
   if (_pGame->StartDemoRec(fnm)) {
     StopMenus();
+
     return TRUE;
-  } else {
-    return FALSE;
   }
+
+  return FALSE;
 }
 
 void StartNetworkLoadGame(void) {
@@ -184,9 +194,14 @@ void StartNetworkLoadGame(void) {
   GetGameAPI()->SetStartPlayersFromMenuPlayers();
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_SERVER);
+
   if (_pGame->LoadGame(_fnGameToLoad)) {
     StopMenus();
     _gmRunningGameMode = GM_NETWORK;
+
+    // [Cecil] Load game for Core
+    GetAPI()->OnGameLoad(_fnGameToLoad);
+
   } else {
     _gmRunningGameMode = GM_NONE;
   }
@@ -199,9 +214,14 @@ void StartSplitScreenGameLoad(void) {
   GetGameAPI()->SetStartPlayersFromMenuPlayers();
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
+
   if (_pGame->LoadGame(_fnGameToLoad)) {
     StopMenus();
     _gmRunningGameMode = GM_SPLIT_SCREEN;
+
+    // [Cecil] Load game for Core
+    GetAPI()->OnGameLoad(_fnGameToLoad);
+
   } else {
     _gmRunningGameMode = GM_NONE;
   }
