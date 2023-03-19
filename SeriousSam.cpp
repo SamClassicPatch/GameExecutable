@@ -1613,6 +1613,11 @@ void StartNewMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pix
   // if succeeded
   } else {
     _iDisplayModeChangeFlag = 1; // all ok
+
+    // [Cecil] Resize console horizontally to fit as many characters as possible
+    const PIX pixConsoleChar = (_pfdConsoleFont->GetWidth() + _pfdConsoleFont->GetCharSpacing());
+    const INDEX ctConsoleChars = pixSizeI / pixConsoleChar;
+    GetAPI()->ReinitConsole(ctConsoleChars - 15, 512);
   }
 
   // apply 3D-acc settings
