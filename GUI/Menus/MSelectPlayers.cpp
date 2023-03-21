@@ -97,7 +97,7 @@ void CSelectPlayersMenu::Initialize_t(void) {
   mgSplitStartStart.mg_pActivatedFunction = &StartSelectPlayersMenuFromSplit;
   */
 
-  ADD_GADGET(gm_mgStart, BoxMediumRow(11), &gm_mgSplitScreenCfg, &gm_mgPlayer0Change, NULL, NULL, LOCALIZE("START"));
+  ADD_GADGET(gm_mgStart, BoxBigRow(7), &gm_mgSplitScreenCfg, &gm_mgPlayer0Change, NULL, NULL, LOCALIZE("START"));
   gm_mgStart.mg_bfsFontSize = BFS_LARGE;
   gm_mgStart.mg_iCenterI = 0;
 }
