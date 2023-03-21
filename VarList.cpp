@@ -307,6 +307,9 @@ void FlushVarSettings(BOOL bApply) {
       FOREACHINLIST(CVarSetting, vs_lnNode, _aTabs[iTab].lhVars, itvs) {
         CVarSetting &vs = *itvs;
 
+        // [Cecil] Add scheduled commands for all types
+        BOOL bScheduledCommands = FALSE;
+
         // [Cecil] Different types
         switch (vs.vs_eType)
         {
@@ -323,21 +326,7 @@ void FlushVarSettings(BOOL bApply) {
                 pssVar->ss_pPostFunc(pssVar->ss_pvValue);
               }
 
-              // Schedule commands to execute afterwards
-              if (vs.vs_strSchedule != "") {
-                BOOL bSheduled = FALSE;
-
-                for (INDEX i = 0; i < astrScheduled.Count(); i++) {
-                  if (astrScheduled[i] == vs.vs_strSchedule) {
-                    bSheduled = TRUE;
-                    break;
-                  }
-                }
-
-                if (!bSheduled) {
-                  astrScheduled.Push() = vs.vs_strSchedule;
-                }
-              }
+              bScheduledCommands = TRUE;
             }
           } break;
 
@@ -348,8 +337,27 @@ void FlushVarSettings(BOOL bApply) {
             if (vs.vs_strValue.GetHash() != ulOldHash) {
               // Set shell variable to a new string
               _pShell->SetValue(vs.vs_strVar, vs.vs_strValue);
+
+              bScheduledCommands = TRUE;
             }
           } break;
+        }
+
+        // Schedule commands to execute afterwards
+        if (bScheduledCommands && vs.vs_strSchedule != "") {
+          // Check if it's not scheduled yet
+          bScheduledCommands = FALSE;
+
+          for (INDEX i = 0; i < astrScheduled.Count(); i++) {
+            if (astrScheduled[i] == vs.vs_strSchedule) {
+              bScheduledCommands = TRUE;
+              break;
+            }
+          }
+
+          if (!bScheduledCommands) {
+            astrScheduled.Push() = vs.vs_strSchedule;
+          }
         }
       }
     }
