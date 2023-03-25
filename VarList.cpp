@@ -49,7 +49,8 @@ CTString GetNonEmptyLine_t(CTStream &strm) {
 void TranslateLine(CTString &str) {
   str.TrimSpacesLeft();
 
-  if (str.RemovePrefix("TTRS")) {
+  // [Cecil] "TTRS" in the EXE as is gets picked up by the Depend utility
+  if (str.RemovePrefix(CTString("TT") + "RS")) {
     str.TrimSpacesLeft();
     str = TRANSV(str);
   }
@@ -61,7 +62,8 @@ void FixupFileName_t(CTString &strFnm) {
   strFnm.TrimSpacesLeft();
   strFnm.TrimSpacesRight();
 
-  if (!strFnm.RemovePrefix(CTString("TF") + "NM ")) { // must not directly have ids in code
+  // [Cecil] "TFNM" in the EXE as is gets picked up by the Depend utility
+  if (!strFnm.RemovePrefix(CTString("TF") + "NM ")) {
     ThrowF_t(LOCALIZE("Expected %s%s before filename"), "TF", "NM");
   }
 }

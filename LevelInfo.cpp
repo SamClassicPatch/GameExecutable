@@ -83,8 +83,11 @@ BOOL GetLevelInfo(CLevelInfo &li, const CTFileName &fnm) {
     strm.ExpectID_t("WRLD"); // 'world'
     strm.ExpectID_t("WLIF"); // 'world info'
 
-    if (strm.PeekID_t() == CChunkID("DTRS")) {
-      strm.ExpectID_t("DTRS"); // 'world info'
+    // [Cecil] "DTRS" in the EXE as is gets picked up by the Depend utility
+    static const CChunkID chnkDTRS(CTString("DT") + "RS");
+
+    if (strm.PeekID_t() == chnkDTRS) {
+      strm.ExpectID_t(chnkDTRS);
     }
 
     // [Cecil] Prevent game from crashing from parsing SSR levels
