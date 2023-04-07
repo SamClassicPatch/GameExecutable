@@ -47,11 +47,15 @@ void CMGModel::Render(CDrawPort *pdp) {
 
   pr.FOVL() = 30.0f; // [Cecil] Static FOV
 
+#if CLASSICSPATCH_ENGINEPATCHES
+
   // [Cecil] Adjust FOV for the player model
   if (_EnginePatches._bUseVerticalFOV) {
     // Use screen ratio set in BoxPlayerModel() as the size
     IRender::AdjustVFOV(FLOAT2D(285, 545), pr.FOVL());
   }
+
+#endif // CLASSICSPATCH_ENGINEPATCHES
 
   pr.ScreenBBoxL() = FLOATaabbox2D(FLOAT2D(0.0f, 0.0f), FLOAT2D((float)dpModel.GetWidth(), (float)dpModel.GetHeight()));
   pr.AspectRatioL() = 1.0f;

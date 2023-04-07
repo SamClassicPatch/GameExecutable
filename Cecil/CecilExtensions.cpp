@@ -26,12 +26,14 @@ void CECIL_Init(void) {
   // Initialize the core
   CECIL_InitCore();
 
+#if CLASSICSPATCH_ENGINEPATCHES
+
   // Function patches
   CPutString("--- Sam: Intercepting Engine functions ---\n");
-  {
-    _EnginePatches.CorePatches();
-  }
+  _EnginePatches.CorePatches();
   CPutString("--- Done! ---\n");
+
+#endif // CLASSICSPATCH_ENGINEPATCHES
 
   // Custom symbols
   _pShell->DeclareSymbol("persistent user INDEX sam_bPatchVersionLabel;",    &sam_bPatchVersionLabel);

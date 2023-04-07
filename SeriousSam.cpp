@@ -394,8 +394,10 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   // [Cecil] Mark as a game
   CCoreAPI::SetApplication(CCoreAPI::APP_GAME);
 
+#if CLASSICSPATCH_ENGINEPATCHES
   // [Cecil] Function patches
   _EnginePatches.FileSystem();
+#endif
 
   // [Cecil] Get screen resolution
   _vpixScreenRes = PIX2D(::GetSystemMetrics(SM_CXSCREEN),
@@ -765,8 +767,10 @@ void DoGame(void) {
         _pNetwork->ga_sesSessionState.ses_bWaitingForServer = FALSE;
       }
 
+    #if CLASSICSPATCH_ENGINEPATCHES
       // [Cecil] Don't listen to in-game sounds if rendering the game in the menu
       _EnginePatches._bNoListening = bMenuActive;
+    #endif
 
       // handle pretouching of textures and shadowmaps
       pdp->Unlock();
