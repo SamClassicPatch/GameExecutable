@@ -24,7 +24,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 class CGameMenu : public CGuiNode {
   public:
-    BOOL gm_bPopup;
+    FLOAT gm_fPopupSize; // [Cecil] Considered a popup if the size is bigger than 0 (replacing 'gm_bPopup')
     const char *gm_strName; // menu name (for mod interface only)
     class CMenuGadget *gm_pmgSelectedByDefault;
     class CMenuGadget *gm_pmgArrowUp;

@@ -26,7 +26,7 @@ CGameMenu::CGameMenu(void) {
   gm_iListOffset = 0;
   gm_ctListVisible = 0;
   gm_ctListTotal = 0;
-  gm_bPopup = FALSE;
+  gm_fPopupSize = 0.0f;
 }
 
 void CGameMenu::Initialize_t(void) {}

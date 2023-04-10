@@ -19,7 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // [Cecil] Reset popup box
 static void ResetPopup(CConfirmMenu *pgm, FLOAT fHeight) {
-  gm_bPopup = TRUE;
+  pgm->gm_fPopupSize = fHeight;
   pgm->gm_mgConfirmLabel.mg_boxOnScreen = BoxPopupLabel(fHeight);
 };
 
@@ -61,6 +61,12 @@ void CConfirmMenu::BeLarge(FLOAT fHeight) {
   gm_mgConfirmLabel.mg_iCenterI = 0;
   gm_mgConfirmYes.mg_boxOnScreen = BoxPopupYesLarge(fHeight);
   gm_mgConfirmNo.mg_boxOnScreen = BoxPopupNoLarge(fHeight);
+
+  // [Cecil] Top right and top left
+  gm_mgConfirmYes.mg_iCenterI = +1;
+  gm_mgConfirmYes.mg_iCenterJ = -1;
+  gm_mgConfirmNo.mg_iCenterI = -1;
+  gm_mgConfirmNo.mg_iCenterJ = -1;
 }
 
 void CConfirmMenu::BeSmall(FLOAT fHeight) {
@@ -73,6 +79,12 @@ void CConfirmMenu::BeSmall(FLOAT fHeight) {
   gm_mgConfirmLabel.mg_iCenterI = -1;
   gm_mgConfirmYes.mg_boxOnScreen = BoxPopupYesSmall(fHeight);
   gm_mgConfirmNo.mg_boxOnScreen = BoxPopupNoSmall(fHeight);
+
+  // [Cecil] Center buttons
+  gm_mgConfirmYes.mg_iCenterI = 0;
+  gm_mgConfirmYes.mg_iCenterJ = 0;
+  gm_mgConfirmNo.mg_iCenterI = 0;
+  gm_mgConfirmNo.mg_iCenterJ = 0;
 }
 
 // [Cecil] Set label and button text

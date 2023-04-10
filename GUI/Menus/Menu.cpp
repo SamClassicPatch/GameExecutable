@@ -773,7 +773,7 @@ BOOL DoMenu(CDrawPort *pdp) {
   }
 
   // if this is popup menu
-  if (pgmCurrentMenu->gm_bPopup) {
+  if (pgmCurrentMenu->gm_fPopupSize > 0.0f) { // [Cecil]
     // render parent menu first
     if (pgmCurrentMenu->GetParentMenu() != NULL) {
       _pGame->MenuPreRenderMenu(pgmCurrentMenu->GetParentMenu()->gm_strName);
@@ -790,7 +790,7 @@ BOOL DoMenu(CDrawPort *pdp) {
 
     // clear popup box
     dpMenu.Unlock();
-    PIXaabbox2D box = FloatBoxToPixBox(&dpMenu, BoxPopup(0.2f));
+    PIXaabbox2D box = FloatBoxToPixBox(&dpMenu, BoxPopup(pgmCurrentMenu->gm_fPopupSize));
     CDrawPort dpPopup(pdp, box);
     dpPopup.Lock();
     LCDSetDrawport(&dpPopup);
@@ -878,7 +878,7 @@ extern void FixupBackButton(CGameMenu *pgm) {
   BOOL bResume = FALSE;
   BOOL bHasBack = TRUE;
 
-  if (pgm->gm_bPopup) {
+  if (pgm->gm_fPopupSize > 0.0f) { // [Cecil]
     bHasBack = FALSE;
   }
 
@@ -931,7 +931,7 @@ void ChangeToMenu(CGameMenu *pgmNewMenu) {
   _pmgUnderCursor = NULL;
 
   if (pgmCurrentMenu != NULL) {
-    if (!pgmNewMenu->gm_bPopup) {
+    if (pgmNewMenu->gm_fPopupSize <= 0.0f) { // [Cecil]
       pgmCurrentMenu->EndMenu();
     } else {
       FOREACHNODE(CMenuGadget, pgmCurrentMenu->GetChildren(), itmg) {
