@@ -66,6 +66,13 @@ void CConfirmMenu::BeSmall(void) {
   gm_mgConfirmNo.mg_boxOnScreen = BoxPopupNoSmall();
 }
 
+// [Cecil] Set label and button text
+void CConfirmMenu::SetText(const CTString &strLabel, const CTString &strYes, const CTString &strNo) {
+  gm_mgConfirmLabel.SetText(strLabel);
+  gm_mgConfirmYes.SetText(strYes == "" ? LOCALIZE("YES") : strYes);
+  gm_mgConfirmNo.SetText(strNo == "" ? LOCALIZE("NO") : strNo);
+};
+
 // return TRUE if handled
 BOOL CConfirmMenu::OnKeyDown(int iVKey) {
   if ((iVKey == VK_ESCAPE || iVKey == VK_RBUTTON) && gm_mgConfirmNo.mg_pActivatedFunction != NULL) {

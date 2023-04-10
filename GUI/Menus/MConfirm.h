@@ -42,6 +42,9 @@ class CConfirmMenu : public CGameMenu {
 
     void BeLarge(void);
     void BeSmall(void);
+
+    // [Cecil] Set label and button text
+    void SetText(const CTString &strLabel, const CTString &strYes = "", const CTString &strNo = "");
 };
 
 #endif /* include-once check. */

@@ -22,13 +22,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "LevelInfo.h"
 #include "VarList.h"
 
-// [Cecil] Master server enumiration
+// [Cecil] Classics patch
 #include <CoreLib/Query/QueryManager.h>
 
-// [Cecil] Screen resolution lists
 #include "Cecil/ScreenResolutions.h"
-
-// [Cecil] Window modes
 #include "Cecil/WindowModes.h"
 
 ENGINE_API extern INDEX snd_iFormat;
@@ -141,7 +138,7 @@ static void ExitConfirm(void) {
 
   gmCurrent._pConfimedYes = &ExitGame;
   gmCurrent._pConfimedNo = NULL;
-  gmCurrent.gm_mgConfirmLabel.SetText(LOCALIZE("ARE YOU SERIOUS?"));
+  gmCurrent.SetText(LOCALIZE("ARE YOU SERIOUS?"));
   gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
@@ -162,7 +159,7 @@ static void StopConfirm(void) {
 
   gmCurrent._pConfimedYes = &StopCurrentGame;
   gmCurrent._pConfimedNo = NULL;
-  gmCurrent.gm_mgConfirmLabel.SetText(LOCALIZE("ARE YOU SERIOUS?"));
+  gmCurrent.SetText(LOCALIZE("ARE YOU SERIOUS?"));
   gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
@@ -197,7 +194,7 @@ extern void ModConnectConfirm(void) {
   CPrintF(LOCALIZE("Server is running a different MOD (%s).\nYou need to reload to connect.\n"), _fnmModSelected);
   gmCurrent._pConfimedYes = &ModConnect;
   gmCurrent._pConfimedNo = NULL;
-  gmCurrent.gm_mgConfirmLabel.SetText(LOCALIZE("CHANGE THE MOD?"));
+  gmCurrent.SetText(LOCALIZE("CHANGE THE MOD?"));
   gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
@@ -209,7 +206,7 @@ void SaveConfirm(void) {
   extern void OnFileSaveOK(void);
   gmCurrent._pConfimedYes = &OnFileSaveOK;
   gmCurrent._pConfimedNo = NULL;
-  gmCurrent.gm_mgConfirmLabel.SetText(LOCALIZE("OVERWRITE?"));
+  gmCurrent.SetText(LOCALIZE("OVERWRITE?"));
   gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
@@ -231,7 +228,7 @@ void ModNotInstalled(void) {
   CTString strNoMod;
   strNoMod.PrintF(LOCALIZE("You don't have MOD '%s' installed.\nDo you want to visit its web site?"), (const char *)_fnmModSelected);
 
-  gmCurrent.gm_mgConfirmLabel.SetText(strNoMod);
+  gmCurrent.SetText(strNoMod);
   gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeSmall();
   ChangeToMenu(&gmCurrent);
@@ -242,7 +239,7 @@ extern void ModConfirm(void) {
 
   gmCurrent._pConfimedYes = &ModLoadYes;
   gmCurrent._pConfimedNo = NULL;
-  gmCurrent.gm_mgConfirmLabel.SetText(LOCALIZE("LOAD THIS MOD?"));
+  gmCurrent.SetText(LOCALIZE("LOAD THIS MOD?"));
   gmCurrent.SetParentMenu(&_pGUIM->gmLoadSaveMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
@@ -261,7 +258,7 @@ void VideoConfirm(void) {
   gmCurrent._pConfimedYes = NULL;
   gmCurrent._pConfimedNo = RevertVideoSettings;
 
-  gmCurrent.gm_mgConfirmLabel.SetText(LOCALIZE("KEEP THIS SETTING?"));
+  gmCurrent.SetText(LOCALIZE("KEEP THIS SETTING?"));
   gmCurrent.SetParentMenu(pgmCurrentMenu);
   gmCurrent.BeLarge();
   ChangeToMenu(&gmCurrent);
