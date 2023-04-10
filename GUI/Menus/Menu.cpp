@@ -790,7 +790,7 @@ BOOL DoMenu(CDrawPort *pdp) {
 
     // clear popup box
     dpMenu.Unlock();
-    PIXaabbox2D box = FloatBoxToPixBox(&dpMenu, BoxPopup());
+    PIXaabbox2D box = FloatBoxToPixBox(&dpMenu, BoxPopup(0.2f));
     CDrawPort dpPopup(pdp, box);
     dpPopup.Lock();
     LCDSetDrawport(&dpPopup);

@@ -40,8 +40,9 @@ class CConfirmMenu : public CGameMenu {
     // return TRUE if handled
     BOOL OnKeyDown(int iVKey);
 
-    void BeLarge(void);
-    void BeSmall(void);
+    // [Cecil] Height adjustment
+    void BeLarge(FLOAT fHeight = 0.2f);
+    void BeSmall(FLOAT fHeight = 0.2f);
 
     // [Cecil] Set label and button text
     void SetText(const CTString &strLabel, const CTString &strYes = "", const CTString &strNo = "");

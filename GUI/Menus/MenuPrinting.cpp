@@ -122,38 +122,47 @@ FLOATaabbox2D BoxMediumRight(FLOAT fRow) {
     FLOAT2D(0.95f, _fBigStartJ + (fRow + 1) * _fMediumSizeJ));
 }
 
-FLOATaabbox2D BoxPopup(void) {
-  return FLOATaabbox2D(FLOAT2D(0.2f, 0.4f), FLOAT2D(0.8f, 0.6f));
+// [Cecil] Height adjustment for popup boxes
+FLOATaabbox2D BoxPopup(FLOAT fHeight) {
+  fHeight *= 0.5f;
+  return FLOATaabbox2D(
+    FLOAT2D(0.2f, 0.5f - fHeight),
+    FLOAT2D(0.8f, 0.5f + fHeight));
 }
 
-FLOATaabbox2D BoxPopupLabel(void) {
+FLOATaabbox2D BoxPopupLabel(FLOAT fHeight) {
+  fHeight *= 0.5f;
   return FLOATaabbox2D(
-    FLOAT2D(0.22f, 0.43f),
-    FLOAT2D(0.78f, 0.49f));
+    FLOAT2D(0.22f, 0.53f - fHeight),
+    FLOAT2D(0.78f, 0.59f - fHeight));
 }
 
-FLOATaabbox2D BoxPopupYesLarge(void) {
+FLOATaabbox2D BoxPopupYesLarge(FLOAT fHeight) {
+  fHeight *= 0.5f;
   return FLOATaabbox2D(
-    FLOAT2D(0.30f, 0.51f),
-    FLOAT2D(0.48f, 0.57f));
+    FLOAT2D(0.30f, 0.41f + fHeight),
+    FLOAT2D(0.48f, 0.47f + fHeight));
 }
 
-FLOATaabbox2D BoxPopupNoLarge(void) {
+FLOATaabbox2D BoxPopupNoLarge(FLOAT fHeight) {
+  fHeight *= 0.5f;
   return FLOATaabbox2D(
-    FLOAT2D(0.52f, 0.51f),
-    FLOAT2D(0.70f, 0.57f));
+    FLOAT2D(0.52f, 0.41f + fHeight),
+    FLOAT2D(0.70f, 0.47f + fHeight));
 }
 
-FLOATaabbox2D BoxPopupYesSmall(void) {
+FLOATaabbox2D BoxPopupYesSmall(FLOAT fHeight) {
+  fHeight *= 0.5f;
   return FLOATaabbox2D(
-    FLOAT2D(0.30f, 0.54f),
-    FLOAT2D(0.48f, 0.59f));
+    FLOAT2D(0.30f, 0.44f + fHeight),
+    FLOAT2D(0.48f, 0.49f + fHeight));
 }
 
-FLOATaabbox2D BoxPopupNoSmall(void) {
+FLOATaabbox2D BoxPopupNoSmall(FLOAT fHeight) {
+  fHeight *= 0.5f;
   return FLOATaabbox2D(
-    FLOAT2D(0.52f, 0.54f),
-    FLOAT2D(0.70f, 0.59f));
+    FLOAT2D(0.52f, 0.44f + fHeight),
+    FLOAT2D(0.70f, 0.49f + fHeight));
 }
 
 FLOATaabbox2D BoxChangePlayer(INDEX iTable, INDEX iButton) {

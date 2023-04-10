@@ -31,12 +31,15 @@ FLOATaabbox2D BoxPlayerSwitch(FLOAT fRow);
 FLOATaabbox2D BoxPlayerEdit(FLOAT fRow);
 FLOATaabbox2D BoxMediumMiddle(FLOAT fRow);
 FLOATaabbox2D BoxMediumRight(FLOAT fRow);
-FLOATaabbox2D BoxPopup(void);
-FLOATaabbox2D BoxPopupLabel(void);
-FLOATaabbox2D BoxPopupYesLarge(void);
-FLOATaabbox2D BoxPopupNoLarge(void);
-FLOATaabbox2D BoxPopupYesSmall(void);
-FLOATaabbox2D BoxPopupNoSmall(void);
+
+// [Cecil] Height adjustment for popup boxes
+FLOATaabbox2D BoxPopup(FLOAT fHeight);
+FLOATaabbox2D BoxPopupLabel(FLOAT fHeight);
+FLOATaabbox2D BoxPopupYesLarge(FLOAT fHeight);
+FLOATaabbox2D BoxPopupNoLarge(FLOAT fHeight);
+FLOATaabbox2D BoxPopupYesSmall(FLOAT fHeight);
+FLOATaabbox2D BoxPopupNoSmall(FLOAT fHeight);
+
 FLOATaabbox2D BoxInfoTable(INDEX iTable);
 FLOATaabbox2D BoxChangePlayer(INDEX iTable, INDEX iButton);
 FLOATaabbox2D BoxKeyRow(FLOAT fRow);
