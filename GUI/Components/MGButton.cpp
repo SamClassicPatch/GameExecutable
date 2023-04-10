@@ -26,6 +26,7 @@ CMGButton::CMGButton(void) {
   mg_pActivatedFunction = NULL;
   mg_iIndex = 0;
   mg_iCenterI = 0;
+  mg_iCenterJ = -1; // [Cecil] Top
   mg_iTextMode = 1;
   mg_bfsFontSize = BFS_MEDIUM;
   mg_iCursorPos = -1;
@@ -186,15 +187,29 @@ void CMGButton::Render(CDrawPort *pdp) {
       }
     }
 
-    // Align text according to the centering
-    if (mg_iCenterI == -1) {
-      pdp->PutText(strText, box.Min()(1), box.Min()(2), col);
+    // [Cecil] Align text vertically
+    const PIX pixTextHeight = pdp->dp_FontData->GetHeight() * pdp->dp_fTextScaling;
+    PIX pixTextY;
 
-    } else if (mg_iCenterI == +1) {
-      pdp->PutTextR(strText, box.Max()(1), box.Min()(2), col);
+    if (mg_iCenterJ == -1) {
+      pixTextY = box.Min()(2);
+
+    } else if (mg_iCenterJ == +1) {
+      pixTextY = box.Max()(2) - pixTextHeight;
 
     } else {
-      pdp->PutTextC(strText, box.Center()(1), box.Min()(2), col);
+      pixTextY = box.Center()(2) - pixTextHeight * 0.5f;
+    }
+
+    // Align text horizontally
+    if (mg_iCenterI == -1) {
+      pdp->PutText(strText, box.Min()(1), pixTextY, col);
+
+    } else if (mg_iCenterI == +1) {
+      pdp->PutTextR(strText, box.Max()(1), pixTextY, col);
+
+    } else {
+      pdp->PutTextC(strText, box.Center()(1), pixTextY, col);
     }
   }
 

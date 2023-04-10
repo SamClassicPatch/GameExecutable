@@ -28,7 +28,7 @@ class CMGButton : public CMenuGadget {
     CTString mg_strText;
 
   public:
-    INDEX mg_iCenterI;
+    INDEX mg_iCenterI, mg_iCenterJ; // [Cecil] Vertical centering
     FLOAT mg_fTextScale; // [Cecil] Text scaling
     enum ButtonFontSize mg_bfsFontSize;
     BOOL mg_bEditing;
