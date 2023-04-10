@@ -16,7 +16,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // This file contains starter fuctions for all menus.
 
 #include "StdH.h"
-#include <Engine/Build.h>
 
 #include "MenuManager.h"
 #include "MenuStarters.h"
@@ -294,7 +293,7 @@ void JoinNetworkGame(void) {
       _pNetwork->ga_strRequiredMod.ScanF("%250[^\\]\\%s", &strModName, &strModURL);
       _fnmModSelected = CTString(strModName);
       _strModURLSelected = strModURL;
-      if (_strModURLSelected = "") {
+      if (_strModURLSelected == "") {
         _strModURLSelected = "http://www.croteam.com/mods/Old";
       }
       _strModServerSelected.PrintF("%s:%s", GetGameAPI()->GetJoinAddress(), _pShell->GetValue("net_iPort"));
