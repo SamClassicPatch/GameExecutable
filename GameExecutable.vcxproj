@@ -259,6 +259,7 @@
   <ItemGroup>
     <ClCompile Include="Cecil\CecilExtensions.cpp" />
     <ClCompile Include="Cecil\ScreenResolutions.cpp" />
+    <ClCompile Include="Cecil\UpdateCheck.cpp" />
     <ClCompile Include="Cecil\WindowModes.cpp" />
     <ClCompile Include="CmdLine.cpp" />
     <ClCompile Include="Credits.cpp" />
@@ -317,6 +318,7 @@
     <ClInclude Include="Cecil\CecilExtensions.h" />
     <ClInclude Include="Cecil\GuiNode.h" />
     <ClInclude Include="Cecil\ScreenResolutions.h" />
+    <ClInclude Include="Cecil\UpdateCheck.h" />
     <ClInclude Include="Cecil\WindowModes.h" />
     <ClInclude Include="GUI\Components\MenuGadget.h" />
     <ClInclude Include="GUI\Components\MGArrow.h" />

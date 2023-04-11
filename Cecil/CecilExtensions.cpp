@@ -21,6 +21,9 @@ INDEX sam_bBackgroundGameRender = TRUE;
 INDEX sam_bOptionTabs = TRUE;
 INDEX sam_bDecoratedServerNames = TRUE;
 
+INDEX sam_bNotifyAboutUpdates = TRUE;
+INDEX sam_iUpdateReminder = 0;
+
 // Custom initialization
 void CECIL_Init(void) {
   // Initialize the core
@@ -40,4 +43,7 @@ void CECIL_Init(void) {
   _pShell->DeclareSymbol("persistent user INDEX sam_bBackgroundGameRender;", &sam_bBackgroundGameRender);
   _pShell->DeclareSymbol("persistent user INDEX sam_bOptionTabs;",           &sam_bOptionTabs);
   _pShell->DeclareSymbol("persistent user INDEX sam_bDecoratedServerNames;", &sam_bDecoratedServerNames);
+
+  _pShell->DeclareSymbol("persistent user INDEX sam_bNotifyAboutUpdates;", &sam_bNotifyAboutUpdates);
+  _pShell->DeclareSymbol("persistent      INDEX sam_iUpdateReminder;",     &sam_iUpdateReminder);
 };

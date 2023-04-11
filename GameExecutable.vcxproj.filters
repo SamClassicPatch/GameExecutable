@@ -225,6 +225,9 @@
     <ClCompile Include="GUI\Menus\MSelectionList.cpp">
       <Filter>Source Files\GUI\Menus</Filter>
     </ClCompile>
+    <ClCompile Include="Cecil\UpdateCheck.cpp">
+      <Filter>Source Files\Cecil</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdLine.h">
@@ -429,6 +432,9 @@
       <Filter>Header Files\GUI headers\Menus headers</Filter>
     </ClInclude>
     <ClInclude Include="Cecil\GuiNode.h">
+      <Filter>Header Files\Cecil headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Cecil\UpdateCheck.h">
       <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>
   </ItemGroup>

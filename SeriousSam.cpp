@@ -28,14 +28,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "CmdLine.h"
 #include "Credits.h"
 
-// [Cecil] Master server enumiration
+// [Cecil] Classics patch
 #include <CoreLib/Query/QueryManager.h>
-
-// [Cecil] Window modes
-#include "Cecil/WindowModes.h"
-
-// [Cecil] Sound data
 #include <Engine/Sound/SoundData.h>
+
+#include "Cecil/UpdateCheck.h"
+#include "Cecil/WindowModes.h"
 
 // Application state variables
 extern BOOL _bRunning = TRUE;
@@ -1275,6 +1273,12 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
     // when all messages are removed, window has surely changed
     _bWindowChanging = FALSE;
+
+    // [Cecil] Display notification about a new release in the menu
+    if (bMenuActive && !_pInput->IsInputEnabled()) {
+      QueryPatchUpdates();
+      NotifyAboutNewVersion();
+    }
 
     // get real cursor position
     if (GetGameAPI()->GetCompState() != CS_OFF && GetGameAPI()->GetCompState() != CS_ONINBACKGROUND) {
