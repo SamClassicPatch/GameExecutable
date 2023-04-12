@@ -32,6 +32,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <CoreLib/Query/QueryManager.h>
 #include <Engine/Sound/SoundData.h>
 
+#include "Cecil/ScreenResolutions.h"
 #include "Cecil/UpdateCheck.h"
 #include "Cecil/WindowModes.h"
 
@@ -1627,6 +1628,9 @@ void StartNewMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pix
     const INDEX ctConsoleChars = pixSizeI / pixConsoleChar;
     GetAPI()->ReinitConsole(ctConsoleChars - 15, 512);
   }
+
+  // [Cecil] Calculate aspect ratio
+  _fAspectRatio = FLOAT(pixSizeI) / FLOAT(pixSizeJ);
 
   // apply 3D-acc settings
   ApplyGLSettings(FALSE);

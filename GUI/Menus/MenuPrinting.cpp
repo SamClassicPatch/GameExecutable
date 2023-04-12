@@ -18,6 +18,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 #include "ArrowDir.h"
 
+// [Cecil] Classics patch
+#include "Cecil/ScreenResolutions.h"
+
 static const FLOAT _fBigStartJ = 0.25f;
 static const FLOAT _fBigSizeJ = 0.066f;
 static const FLOAT _fMediumSizeJ = 0.04f;
@@ -122,47 +125,53 @@ FLOATaabbox2D BoxMediumRight(FLOAT fRow) {
     FLOAT2D(0.95f, _fBigStartJ + (fRow + 1) * _fMediumSizeJ));
 }
 
+// [Cecil] Horizontal popup positions regardless of the aspect ratio
+static const FLOAT _fPopupW = 0.35f;
+
+#define POPUP_L(Add) (0.5f - (_fPopupW - Add) / _fAspectRatio * (4.0f / 3.0f))
+#define POPUP_R(Add) (0.5f + (_fPopupW - Add) / _fAspectRatio * (4.0f / 3.0f))
+
 // [Cecil] Height adjustment for popup boxes
 FLOATaabbox2D BoxPopup(FLOAT fHeight) {
   fHeight *= 0.5f;
   return FLOATaabbox2D(
-    FLOAT2D(0.2f, 0.5f - fHeight),
-    FLOAT2D(0.8f, 0.5f + fHeight));
+    FLOAT2D(POPUP_L(0.0f), 0.5f - fHeight),
+    FLOAT2D(POPUP_R(0.0f), 0.5f + fHeight));
 }
 
 FLOATaabbox2D BoxPopupLabel(FLOAT fHeight) {
   fHeight *= 0.5f;
   return FLOATaabbox2D(
-    FLOAT2D(0.22f, 0.53f - fHeight),
-    FLOAT2D(0.78f, 0.59f - fHeight));
+    FLOAT2D(POPUP_L(0.02f), 0.53f - fHeight),
+    FLOAT2D(POPUP_R(0.02f), 0.59f - fHeight));
 }
 
 FLOATaabbox2D BoxPopupYesLarge(FLOAT fHeight) {
   fHeight *= 0.5f;
   return FLOATaabbox2D(
-    FLOAT2D(0.30f, 0.41f + fHeight),
-    FLOAT2D(0.48f, 0.47f + fHeight));
+    FLOAT2D(POPUP_L(0.1f),  0.41f + fHeight),
+    FLOAT2D(POPUP_L(0.31f), 0.47f + fHeight));
 }
 
 FLOATaabbox2D BoxPopupNoLarge(FLOAT fHeight) {
   fHeight *= 0.5f;
   return FLOATaabbox2D(
-    FLOAT2D(0.52f, 0.41f + fHeight),
-    FLOAT2D(0.70f, 0.47f + fHeight));
+    FLOAT2D(POPUP_R(0.31f), 0.41f + fHeight),
+    FLOAT2D(POPUP_R(0.1f),  0.47f + fHeight));
 }
 
 FLOATaabbox2D BoxPopupYesSmall(FLOAT fHeight) {
   fHeight *= 0.5f;
   return FLOATaabbox2D(
-    FLOAT2D(0.30f, 0.44f + fHeight),
-    FLOAT2D(0.48f, 0.49f + fHeight));
+    FLOAT2D(POPUP_L(0.1f),  0.44f + fHeight),
+    FLOAT2D(POPUP_L(0.34f), 0.49f + fHeight));
 }
 
 FLOATaabbox2D BoxPopupNoSmall(FLOAT fHeight) {
   fHeight *= 0.5f;
   return FLOATaabbox2D(
-    FLOAT2D(0.52f, 0.44f + fHeight),
-    FLOAT2D(0.70f, 0.49f + fHeight));
+    FLOAT2D(POPUP_R(0.34f), 0.44f + fHeight),
+    FLOAT2D(POPUP_R(0.1f),  0.49f + fHeight));
 }
 
 FLOATaabbox2D BoxChangePlayer(INDEX iTable, INDEX iButton) {

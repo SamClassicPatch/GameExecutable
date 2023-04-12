@@ -28,6 +28,9 @@ extern CAspectRatio _ar16_9;  // Standard widescreen resolutions
 extern CAspectRatio _ar16_10; // Extra widescreen resolutions
 extern CAspectRatio _ar21_9;  // Very wide resolutions
 
+// Aspect ratio of the current resolution
+extern FLOAT _fAspectRatio;
+
 // Prepare arrays with window resolutions
 void PrepareVideoResolutions(void);
 

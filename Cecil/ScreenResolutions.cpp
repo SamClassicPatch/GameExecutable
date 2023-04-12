@@ -24,6 +24,9 @@ CAspectRatio _ar16_9;
 CAspectRatio _ar16_10;
 CAspectRatio _ar21_9;
 
+// Aspect ratio of the current resolution
+FLOAT _fAspectRatio = (4.0f / 3.0f);
+
 // Compare two resolutions
 static int SortResolutions(const void *pRes1, const void *pRes2) {
   const PIX2D &vpix1 = *(const PIX2D *)pRes1;
