@@ -289,6 +289,27 @@ CLevelInfo FindLevelByFileName(const CTFileName &fnm) {
   return CLevelInfo();
 }
 
+// [Cecil] Display list of available levels
+void ListLevels(const CTString &strMatchNames) {
+  INDEX iLevel = 1;
+
+  FOREACHINLIST(CLevelInfo, li_lnNode, _lhAllLevels, itli) {
+    CLevelInfo &li = *itli;
+
+    // Replace slashes for convenience
+    CTString strFile = li.li_fnLevel;
+    IData::ReplaceChar(strFile.str_String, '\\', '/');
+
+    strFile.RemovePrefix("Levels/");
+
+    // Matches the wildcard
+    if (strMatchNames == "" || strFile.Matches(strMatchNames)) {
+      CPrintF("%d. %s\n", iLevel, strFile.str_String);
+      iLevel++;
+    }
+  }
+};
+
 int qsort_CompareDemos(const void *elem1, const void *elem2) {
   const CLevelInfo &li1 = **(CLevelInfo **)elem1;
   const CLevelInfo &li2 = **(CLevelInfo **)elem2;

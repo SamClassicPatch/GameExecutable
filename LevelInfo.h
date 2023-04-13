@@ -50,6 +50,9 @@ CLevelInfo FindLevelByFileName(const CTFileName &fnm);
 // if level doesn't support given flags, find one that does
 void ValidateLevelForFlags(ULONG ulSpawnFlags);
 
+// [Cecil] Display list of available levels
+void ListLevels(const CTString &strMatchNames);
+
 // init list of autoplay demos
 void LoadDemosList(void);
 // clear list of autoplay demos

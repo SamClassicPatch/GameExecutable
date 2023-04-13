@@ -15,6 +15,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
+#include "LevelInfo.h"
+
 // General
 INDEX sam_bPatchVersionLabel = TRUE;
 INDEX sam_bBackgroundGameRender = TRUE;
@@ -46,4 +48,6 @@ void CECIL_Init(void) {
 
   _pShell->DeclareSymbol("persistent user INDEX sam_bNotifyAboutUpdates;", &sam_bNotifyAboutUpdates);
   _pShell->DeclareSymbol("persistent      INDEX sam_iUpdateReminder;",     &sam_iUpdateReminder);
+
+  _pShell->DeclareSymbol("user void ListLevels(CTString);", &ListLevels);
 };
