@@ -145,11 +145,10 @@ static void ExitConfirm(void) {
 }
 
 static void StopCurrentGame(void) {
-  // [Cecil] Stop game for Core
-  GetAPI()->OnGameStop();
-
-  _pGame->StopGame();
+  // [Cecil] Stop game through the API
+  GetGameAPI()->StopGame();
   _gmRunningGameMode = GM_NONE;
+
   StopMenus(TRUE);
   StartMenus("");
 }
@@ -387,12 +386,10 @@ void StartSinglePlayerGame(void) {
   CSesPropsContainer sp;
   _pGame->SetSinglePlayerSession((CSessionProperties &)sp);
 
-  if (_pGame->NewGame(GetGameAPI()->GetCustomLevel(), GetGameAPI()->GetCustomLevel(), (CSessionProperties &)sp)) {
+  // [Cecil] Start game through the API
+  if (GetGameAPI()->NewGame(GetGameAPI()->GetCustomLevel(), GetGameAPI()->GetCustomLevel(), (CSessionProperties &)sp)) {
     StopMenus();
     _gmRunningGameMode = GM_SINGLE_PLAYER;
-
-    // [Cecil] Start game for Core
-    GetAPI()->OnGameStart();
 
   } else {
     _gmRunningGameMode = GM_NONE;

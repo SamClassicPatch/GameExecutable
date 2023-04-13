@@ -308,7 +308,8 @@ void StartNextDemo(void) {
 
     GetGameAPI()->SetFirstLoading(TRUE);
 
-    if (_pGame->NewGame(sam_strIntroLevel, sam_strIntroLevel, (CSessionProperties &)sp)) {
+    // [Cecil] Start game through the API
+    if (GetGameAPI()->NewGame(sam_strIntroLevel, sam_strIntroLevel, (CSessionProperties &)sp)) {
       _gmRunningGameMode = GM_INTRO;
     }
 
@@ -712,7 +713,8 @@ void DoGame(void) {
 
   if ((_gmRunningGameMode == GM_DEMO && _pNetwork->IsDemoPlayFinished())
    || (_gmRunningGameMode == GM_INTRO && _pNetwork->IsGameFinished())) {
-    _pGame->StopGame();
+    // [Cecil] Stop game through the API
+    GetGameAPI()->StopGame();
     _gmRunningGameMode = GM_NONE;
 
     // load next demo
@@ -1055,7 +1057,8 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
       if (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE &&
         (_gmRunningGameMode == GM_DEMO || _gmRunningGameMode == GM_INTRO)) {
-        _pGame->StopGame();
+        // [Cecil] Stop game through the API
+        GetGameAPI()->StopGame();
         _gmRunningGameMode = GM_NONE;
       }
 
@@ -1254,8 +1257,10 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
         // if escape is pressed
         if (bEscape) {
+          // [Cecil] Stop game through the API
+          GetGameAPI()->StopGame();
+
           // stop demo
-          _pGame->StopGame();
           _bInAutoPlayLoop = FALSE;
           _gmRunningGameMode = GM_NONE;
 
@@ -1263,8 +1268,10 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         } else if (bAnyKey && !bTilde) {
           // if not in menu or in console
           if (!bMenuActive && !bMenuRendering && GetGameAPI()->GetConState() == CS_OFF) {
+            // [Cecil] Stop game through the API
+            GetGameAPI()->StopGame();
+
             // skip to next demo
-            _pGame->StopGame();
             _gmRunningGameMode = GM_NONE;
             StartNextDemo();
           }
@@ -1326,7 +1333,9 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
   } // end of main application loop
 
   _pInput->DisableInput();
-  _pGame->StopGame();
+
+  // [Cecil] Stop game through the API
+  GetGameAPI()->StopGame();
 
   if (_fnmModToLoad != "") {
     STARTUPINFOA cif;
