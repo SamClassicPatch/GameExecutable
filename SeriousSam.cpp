@@ -580,30 +580,8 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
 
   // if starting world from command line
   } else if (cmd_strWorld != "") {
-    CPrintF(LOCALIZE("Command line world: '%s'\n"), cmd_strWorld);
-
-    // try to start the game with that level
-    try {
-      if (cmd_iGoToMarker >= 0) {
-        CPrintF(LOCALIZE("Command line marker: %d\n"), cmd_iGoToMarker);
-        CTString strCommand;
-        strCommand.PrintF("cht_iGoToMarker = %d;", cmd_iGoToMarker);
-        _pShell->Execute(strCommand);
-      }
-
-      GetGameAPI()->SetCustomLevel(cmd_strWorld);
-
-      if (cmd_bServer) {
-        extern void StartNetworkGame(void);
-        StartNetworkGame();
-      } else {
-        extern void StartSinglePlayerGame(void);
-        StartSinglePlayerGame();
-      }
-
-    } catch (char *strError) {
-      CPrintF(LOCALIZE("Cannot start '%s': '%s'\n"), cmd_strWorld, strError);
-    }
+    // [Cecil] Start map from the game directory
+    StartMap("..\\" + cmd_strWorld);
 
   // if no relevant starting at command line
   } else {

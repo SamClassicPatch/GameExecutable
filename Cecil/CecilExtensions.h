@@ -29,6 +29,9 @@ extern INDEX sam_bDecoratedServerNames;
 extern INDEX sam_bNotifyAboutUpdates;
 extern INDEX sam_iUpdateReminder;
 
+// Start some level immediately (like on '+level' argument)
+void StartMap(const CTString &strLevel);
+
 // Custom initialization
 void CECIL_Init(void);
 
