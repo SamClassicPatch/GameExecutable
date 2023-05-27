@@ -433,6 +433,12 @@ void InitializeMenus(void) {
     _pGUIM->gmSplitStartMenu.gm_pmgSelectedByDefault = &_pGUIM->gmSplitStartMenu.gm_mgStart;
     _pGUIM->gmSplitStartMenu.SetParentMenu(&_pGUIM->gmSplitScreenMenu);
     InitActionsForSplitStartMenu();
+
+    // [Cecil] Initialize level categories menu
+    _pGUIM->gmLevelCategories.Initialize_t();
+    _pGUIM->gmLevelCategories.gm_strName = "LevelCategories";
+    _pGUIM->gmLevelCategories.gm_pmgSelectedByDefault = &_pGUIM->gmLevelCategories.gm_amgCategories[0];
+
   } catch (char *strError) {
     FatalError(strError);
   }

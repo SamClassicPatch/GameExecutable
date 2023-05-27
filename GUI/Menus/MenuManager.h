@@ -43,6 +43,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MSplitStart.h"
 #include "MVar.h"
 #include "MVideoOptions.h"
+#include "Cecil/MLevelCategories.h" // [Cecil]
 
 class CMenuManager {
   public:
@@ -50,6 +51,7 @@ class CMenuManager {
     CMainMenu gmMainMenu;
     CInGameMenu gmInGameMenu;
     CSinglePlayerMenu gmSinglePlayerMenu;
+    CLevelCategoriesMenu gmLevelCategories; // [Cecil]
     CSinglePlayerNewMenu gmSinglePlayerNewMenu;
     CDisabledMenu gmDisabledFunction;
     CLevelsMenu gmLevelsMenu;

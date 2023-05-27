@@ -318,40 +318,56 @@ void StartSelectServerNET(void) {
 }
 
 // -------- Levels Menu Functions
-void StartSelectLevelFromSingle(void) {
-  CLevelsMenu &gmCurrent = _pGUIM->gmLevelsMenu;
-  gmCurrent.gm_ulSpawnFlags = SPF_SINGLEPLAYER; // [Cecil]
 
-  _pAfterLevelChosen = StartSinglePlayerNewMenuCustom;
-  ChangeToMenu(&gmCurrent);
-  gmCurrent.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
-}
+// [Cecil] Open level or category selection screen
+static void StartSelectLevel(ULONG ulFlags, void (*pAfterChosen)(void), CGameMenu *pgmParent) {
+  // Set levels with appropriate gamemode flags
+  _pGUIM->gmLevelsMenu.gm_ulSpawnFlags = ulFlags;
+
+  // Go to level categories, if there are any
+  CGameMenu *pgmCurrent = &_pGUIM->gmLevelsMenu;
+
+  if (sam_bLevelCategories && _aLevelCategories.Count() != 0) {
+    pgmCurrent = &_pGUIM->gmLevelCategories;
+  }
+
+  _pAfterLevelChosen = pAfterChosen;
+
+  pgmCurrent->SetParentMenu(pgmParent);
+  ChangeToMenu(pgmCurrent);
+};
+
+void StartSelectLevelFromSingle(void) {
+  // [Cecil] Select singleplayer levels
+  StartSelectLevel(SPF_SINGLEPLAYER, &StartSinglePlayerNewMenuCustom, &_pGUIM->gmSinglePlayerMenu);
+};
 
 void StartSelectLevelFromSplit(void) {
   const INDEX iGameType = _pGUIM->gmSplitStartMenu.gm_mgGameType.mg_iSelected;
   const ULONG ulFlags = GetGameAPI()->GetSpawnFlagsForGameTypeSS(iGameType);
 
-  CLevelsMenu &gmCurrent = _pGUIM->gmLevelsMenu;
-  gmCurrent.gm_ulSpawnFlags = ulFlags; // [Cecil]
-
-  void StartSplitStartMenu(void);
-  _pAfterLevelChosen = StartSplitStartMenu;
-  ChangeToMenu(&gmCurrent);
-  gmCurrent.SetParentMenu(&_pGUIM->gmSplitStartMenu);
-}
+  // [Cecil] Select multiplayer levels
+  extern void StartSplitStartMenu(void);
+  StartSelectLevel(ulFlags, &StartSplitStartMenu, &_pGUIM->gmSplitStartMenu);
+};
 
 void StartSelectLevelFromNetwork(void) {
   const INDEX iGameType = _pGUIM->gmNetworkStartMenu.gm_mgGameType.mg_iSelected;
   const ULONG ulFlags = GetGameAPI()->GetSpawnFlagsForGameTypeSS(iGameType);
 
-  CLevelsMenu &gmCurrent = _pGUIM->gmLevelsMenu;
-  gmCurrent.gm_ulSpawnFlags = ulFlags; // [Cecil]
+  // [Cecil] Select multiplayer levels
+  extern void StartNetworkStartMenu(void);
+  StartSelectLevel(ulFlags, &StartNetworkStartMenu, &_pGUIM->gmNetworkStartMenu);
+};
 
-  void StartNetworkStartMenu(void);
-  _pAfterLevelChosen = StartNetworkStartMenu;
+// [Cecil] After choosing a level category
+void StartSelectLevelFromCategory(INDEX iCategory) {
+  CLevelsMenu &gmCurrent = _pGUIM->gmLevelsMenu;
+  gmCurrent.gm_iCategory = iCategory;
+
+  gmCurrent.SetParentMenu(&_pGUIM->gmLevelCategories);
   ChangeToMenu(&gmCurrent);
-  gmCurrent.SetParentMenu(&_pGUIM->gmNetworkStartMenu);
-}
+};
 
 // -------- Players Selection Menu Functions
 void StartSelectPlayersMenuFromSplit(void) {

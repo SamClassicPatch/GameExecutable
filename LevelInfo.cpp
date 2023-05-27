@@ -195,6 +195,9 @@ void ClearLevelsList(void) {
 
 // [Cecil] Check if a level fits a specific category
 static BOOL LevelFitsCategory(const CLevelInfo &li, INDEX iCategory) {
+  // No categories, everything fits in one list
+  if (!sam_bLevelCategories) return TRUE;
+
   const INDEX ct = _aLevelCategories.Count();
 
   if (iCategory < 0 || iCategory >= ct) {
