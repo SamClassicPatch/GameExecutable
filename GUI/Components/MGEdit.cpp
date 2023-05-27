@@ -38,7 +38,6 @@ void CMGEdit::OnActivate(void) {
   }
   ASSERT(mg_pstrToChange != NULL);
   PlayMenuSound(_psdPress);
-  IFeel_PlayEffect("Menu_press");
   mg_iCursorPos = GetText().Length();
   mg_bEditing = TRUE;
   _bEditingString = TRUE;

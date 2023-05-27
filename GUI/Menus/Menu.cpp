@@ -114,6 +114,14 @@ extern void PlayMenuSound(CSoundData *psd, BOOL bOverOtherSounds) {
   if (bOverOtherSounds || (_psoMenuSound != NULL && !_psoMenuSound->IsPlaying())) {
     _psoMenuSound->Play(psd, SOF_NONGAME);
   }
+
+  // [Cecil] Play IFeel effects here
+  if (psd == _psdPress) {
+    IFeel_PlayEffect("Menu_press");
+
+  } else if (psd == _psdSelect) {
+    IFeel_PlayEffect("Menu_select");
+  }
 }
 
 // translate all texts in array for one radio button

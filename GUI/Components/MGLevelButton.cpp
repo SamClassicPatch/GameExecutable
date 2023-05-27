@@ -23,7 +23,6 @@ void CMGLevelButton::OnActivate(void) {
   if (!mg_bEnabled) return;
 
   PlayMenuSound(_psdPress);
-  IFeel_PlayEffect("Menu_press");
   GetGameAPI()->SetCustomLevel(mg_fnmLevel);
   extern void (*_pAfterLevelChosen)(void);
   _pAfterLevelChosen();

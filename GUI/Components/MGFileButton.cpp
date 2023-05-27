@@ -113,7 +113,6 @@ void CMGFileButton::OnActivate(void) {
   }
 
   PlayMenuSound(_psdPress);
-  IFeel_PlayEffect("Menu_press");
 
   // if loading
   if (!_pGUIM->gmLoadSaveMenu.gm_bSave) {

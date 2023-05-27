@@ -41,7 +41,6 @@ CMGButton::CMGButton(void) {
 void CMGButton::OnActivate(void) {
   if (mg_pActivatedFunction != NULL && mg_bEnabled) {
     PlayMenuSound(_psdPress);
-    IFeel_PlayEffect("Menu_press");
     _pmgLastActivatedGadget = this;
     (*mg_pActivatedFunction)();
   }

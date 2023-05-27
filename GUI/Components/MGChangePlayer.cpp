@@ -21,7 +21,6 @@ extern CSoundData *_psdPress;
 
 void CMGChangePlayer::OnActivate(void) {
   PlayMenuSound(_psdPress);
-  IFeel_PlayEffect("Menu_press");
   _iLocalPlayer = mg_iLocalPlayer;
 
   if (GetGameAPI()->GetMenuPlayer(mg_iLocalPlayer) < 0) {
