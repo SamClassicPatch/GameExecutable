@@ -17,6 +17,10 @@ extern CListHead _lhAutoDemos;
 extern CListHead _lhAllLevels;
 extern CListHead _lhFilteredLevels;
 
+// [Cecil] Categories with level lists
+#include <CoreLib/Interfaces/FileFunctions.h>
+extern CStaticArray<CFileList> _aLevelCategories;
+
 class CLevelInfo {
   public:
     // [Cecil] Different level formats
@@ -39,7 +43,7 @@ class CLevelInfo {
 };
 
 // find all levels that match given flags
-void FilterLevels(ULONG ulSpawnFlags);
+void FilterLevels(ULONG ulSpawnFlags, INDEX iCategory); // [Cecil] Level category
 
 // init level-info subsystem
 void LoadLevelsList(void);

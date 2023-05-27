@@ -17,13 +17,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "LevelInfo.h"
 #include <io.h>
 
-// [Cecil] For listing levels
-#include <CoreLib/Interfaces/FileFunctions.h>
-
 CListHead _lhAutoDemos;
 CListHead _lhAllLevels;
 CListHead _lhFilteredLevels;
 extern INDEX sam_bShowAllLevels;
+
+// [Cecil] Categories with level lists
+CStaticArray<CFileList> _aLevelCategories;
 
 CLevelInfo::CLevelInfo(void) {
   li_fnLevel = CTString("Levels\\Default.wld");
@@ -193,8 +193,29 @@ void ClearLevelsList(void) {
   }
 }
 
+// [Cecil] Check if a level fits a specific category
+static BOOL LevelFitsCategory(const CLevelInfo &li, INDEX iCategory) {
+  const INDEX ct = _aLevelCategories.Count();
+
+  if (iCategory < 0 || iCategory >= ct) {
+    // Go through existing categories (if any)
+    for (INDEX i = 0; i < ct; i++) {
+      // If the level already fits any category, it doesn't fit others
+      if (IFiles::MatchesList(_aLevelCategories[i], li.li_fnLevel) != -1) {
+        return FALSE;
+      }
+    }
+
+    // Fits other levels
+    return TRUE;
+  }
+
+  const CFileList &aList = _aLevelCategories[iCategory];
+  return IFiles::MatchesList(aList, li.li_fnLevel) != -1;
+};
+
 // Find all levels that match given flags
-void FilterLevels(ULONG ulSpawnFlags) {
+void FilterLevels(ULONG ulSpawnFlags, INDEX iCategory) {
   // delete list of filtered levels
   {FORDELETELIST(CLevelInfo, li_lnNode, _lhFilteredLevels, itli) {
     delete &itli.Current();
@@ -227,6 +248,9 @@ void FilterLevels(ULONG ulSpawnFlags) {
 
     // if visible
     if (bVisible) {
+      // [Cecil] Skip unfit levels
+      if (!LevelFitsCategory(li, iCategory)) continue;
+
       // make a copy
       CLevelInfo *pliNew = new CLevelInfo;
       *pliNew = li;

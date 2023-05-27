@@ -134,7 +134,7 @@ void CLevelsMenu::FillListItems(void) {
 
 void CLevelsMenu::StartMenu(void) {
   // [Cecil] Filter levels using local spawn flags
-  FilterLevels(gm_ulSpawnFlags);
+  FilterLevels(gm_ulSpawnFlags, gm_iCategory);
 
   // set default parameters for the list
   gm_iListOffset = 0;

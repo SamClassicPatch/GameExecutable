@@ -33,10 +33,16 @@ class CLevelsMenu : public CGameMenu {
     CMGButton gm_mgVisibility; // [Cecil] Level visibility switch
 
     ULONG gm_ulSpawnFlags; // [Cecil] Level visibility flags
+    INDEX gm_iCategory; // [Cecil] Level category
 
     void Initialize_t(void);
     void FillListItems(void);
     void StartMenu(void);
+
+    // [Cecil] Default constructor
+    CLevelsMenu() : CGameMenu(), gm_ulSpawnFlags(0), gm_iCategory(-1)
+    {
+    };
 };
 
 #endif /* include-once check. */
