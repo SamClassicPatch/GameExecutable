@@ -71,8 +71,8 @@ static void DownloadUpdatePrompt(void) {
   const CTString strPrompt(0, TRANS(
     "A new version of Classics Patch is available!\n"
     "   Your version: ^cff3f3f%s^r      Latest version: ^c5fff5f%s^r\n\n"
-    "- \"Remind me later\" will display this again in a week.\n"
-    "- '^cffffffsam_bNotifyAboutUpdates = 0^r' will disable it."
+    "- \"Remind me later\" will show this again in a week.\n"
+    "- '^cffffffsam_bNotifyAboutUpdates = 0^r' completely disables it."
   ), GetAPI()->GetVersion(), _strLatestVersion);
 
   gmCurrent.SetText(strPrompt, TRANS("DOWNLOAD"), TRANS("REMIND ME LATER"));
