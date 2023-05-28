@@ -67,6 +67,7 @@ void CLevelCategoriesMenu::Initialize_t(void) {
 
   // Add extra category with all other levels at the end
   AddCategory(_ctCats, TRANS("OTHER LEVELS"));
+  gm_amgCategories[_ctCats].mg_strTip = TRANS("unsorted user made levels");
 };
 
 // Add category under a specific index
