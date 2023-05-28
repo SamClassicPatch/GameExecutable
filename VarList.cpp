@@ -300,7 +300,7 @@ void LoadVarSettings(const CTFileName &fnmCfg) {
 }
 
 void FlushVarSettings(BOOL bApply) {
-  CStaticStackArray<CTString> astrScheduled;
+  CStringStack astrScheduled;
 
   // [Cecil] For each tab
   for (INDEX iTab = 0; iTab < _aTabs.Count(); iTab++)

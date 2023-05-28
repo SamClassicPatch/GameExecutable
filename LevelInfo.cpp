@@ -149,7 +149,7 @@ void LoadLevelsList(void) {
   CPutString(LOCALIZE("Reading levels directory...\n"));
 
   // list the levels directory with subdirs
-  CDynamicStackArray<CTFileName> afnmDir;
+  CFileList afnmDir;
   IFiles::ListGameFiles(afnmDir, "Levels\\", "*.wld", IFiles::FLF_RECURSIVE | IFiles::FLF_SEARCHCD | IFiles::FLF_SEARCHMOD);
 
   // for each file in the directory
@@ -348,7 +348,7 @@ void LoadDemosList(void) {
   CPutString(LOCALIZE("Reading demos directory...\n"));
 
   // list the levels directory with subdirs
-  CDynamicStackArray<CTFileName> afnmDir;
+  CFileList afnmDir;
   IFiles::ListGameFiles(afnmDir, "Demos\\", "Demos\\Auto-*.dem", IFiles::FLF_RECURSIVE | IFiles::FLF_SEARCHMOD);
 
   // for each file in the directory

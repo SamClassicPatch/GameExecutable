@@ -65,7 +65,7 @@ void CLoadSaveMenu::Initialize_t(void) {
 // Create new buttons with file infos
 void CLoadSaveMenu::CreateButtons(void) {
   // List the directory
-  CDynamicStackArray<CTFileName> afnmDir;
+  CFileList afnmDir;
   IFiles::ListGameFiles(afnmDir, gm_fnmDirectory, "", IFiles::FLF_SEARCHMOD);
   gm_iLastFile = -1;
 

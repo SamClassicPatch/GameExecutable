@@ -16,7 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 #include "Credits.h"
 
-static CStaticStackArray<CTString> _astrCredits;
+static CStringStack _astrCredits;
 static BOOL _bCreditsOn = FALSE;
 
 static PIX pixW = 0;

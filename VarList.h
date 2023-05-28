@@ -44,8 +44,8 @@ class CVarSetting {
     INDEX vs_iOrgValue;
     BOOL vs_bCustom;
     BOOL vs_bHidden; // [Cecil] Hide value string
-    CStaticStackArray<CTString> vs_astrTexts;
-    CStaticStackArray<CTString> vs_astrValues;
+    CStringStack vs_astrTexts;
+    CStringStack vs_astrValues;
     CVarSetting();
     void Clear(void);
     BOOL Validate(void);
