@@ -44,7 +44,22 @@ void CLevelCategoriesMenu::Initialize_t(void) {
 
   // Load category lists
   CFileList aCategories;
-  IFiles::ListGameFiles(aCategories, "Data\\ClassicsPatch\\LevelCategories\\", "*.lst", (_fnmMod != "") ? IFiles::FLF_ONLYMOD : 0);
+  BOOL bLoadFromGame = TRUE;
+
+  // Load from the mod
+  if (_fnmMod != "") {
+    IFiles::ListGameFiles(aCategories, "Data\\ClassicsPatch\\LevelCategories\\", "*.lst", IFiles::FLF_ONLYMOD);
+
+    // Don't load from the game if there are any mod categories
+    if (aCategories.Count() != 0) {
+      bLoadFromGame = FALSE;
+    }
+  }
+
+  // Load from the game
+  if (bLoadFromGame) {
+    IFiles::ListGameFiles(aCategories, "Data\\ClassicsPatch\\LevelCategories\\", "*.lst", 0);
+  }
 
   // Create new categories
   _ctCats = Min(aCategories.Count(), INDEX(MAX_CUSTOM_CATEGORIES));
@@ -59,6 +74,11 @@ void CLevelCategoriesMenu::Initialize_t(void) {
     // Load level list from this category file
     CFileList &aList = _aLevelCategories[i];
     IFiles::LoadStringList(aList, aCategories[i]);
+
+    // No name
+    if (aList.Count() == 0) {
+      aList.Push() = CTString("???");
+    }
 
     // Use first line from the list as the category name
     AddCategory(i, aList[0]);
