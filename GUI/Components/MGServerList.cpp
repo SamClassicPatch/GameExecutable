@@ -35,16 +35,8 @@ void PrintInBox(CDrawPort *pdp, PIX pixI, PIX pixJ, PIX pixSizeI, CTString str, 
     str = str.Undecorated();
   }
 
-  // [Cecil] Keep decreasing amount of characters in a string until it fits within the size limit
-  if (pixSizeI > 0) {
-    CTString strCheck = str.Undecorated();
-
-    while (pdp->GetTextWidth(strCheck) > pixSizeI)
-    {
-      str.TrimRight(IData::GetDecoratedChar(str, strCheck.Length() - 1));
-      strCheck = str.Undecorated();
-    }
-  }
+  // [Cecil] Decrease amount of characters until it fits within the width
+  str.TrimRight(IData::TextFitsInWidth(pdp, pixSizeI, str));
 
   // print text
   pdp->PutText(str, pixI, pixJ, col);
