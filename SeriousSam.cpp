@@ -392,7 +392,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   ShowSplashScreen(hInstance);
 
   // [Cecil] Mark as a game
-  CCoreAPI::SetApplication(CCoreAPI::APP_GAME);
+  CCoreAPI::Setup(CCoreAPI::APP_GAME);
 
 #if CLASSICSPATCH_ENGINEPATCHES
   // [Cecil] Function patches
