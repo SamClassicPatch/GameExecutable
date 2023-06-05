@@ -389,10 +389,14 @@ void LoadAndForceTexture(CTextureObject &to, CTextureObject *&pto, const CTFileN
 
 BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _hInstance = hInstance;
-  ShowSplashScreen(hInstance);
 
   // [Cecil] Mark as a game
   CCoreAPI::Setup(CCoreAPI::APP_GAME);
+
+  // [Cecil] Set DPI awareness
+  SetDPIAwareness();
+
+  ShowSplashScreen(hInstance);
 
 #if CLASSICSPATCH_ENGINEPATCHES
   // [Cecil] Function patches

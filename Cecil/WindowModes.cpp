@@ -18,30 +18,30 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "WindowModes.h"
 #include "MainWindow.h"
 
+// Game application is DPI-aware
+static BOOL _bDPIAware = FALSE;
+
 // Make game application be aware of the DPI scaling on Windows Vista and later
-static BOOL SetDPIAwareness(void) {
-  typedef BOOL (*CSetAwarenessFunc)(void);
+void SetDPIAwareness(void) {
+  // Ignore DPI awareness if it's disabled
+  if (CCoreAPI::GetPropValue("DPIAware") == "0") {
+    return;
+  }
 
   // Load the library
   HMODULE hUser = LoadLibraryA("User32.dll");
 
-  if (hUser == NULL) {
-    return FALSE;
-  }
+  if (hUser == NULL) return;
 
   // Try to find the DPI awareness method
+  typedef BOOL (*CSetAwarenessFunc)(void);
   CSetAwarenessFunc pFunc = (CSetAwarenessFunc)GetProcAddress(hUser, "SetProcessDPIAware");
 
-  if (pFunc == NULL) {
-    return FALSE;
-  }
+  if (pFunc == NULL) return;
 
-  // Execute it
-  return pFunc();
+  // Mark game application as DPI-aware
+  _bDPIAware = pFunc();
 };
-
-// Mark game application as DPI-aware
-static BOOL _bDPIAware = SetDPIAwareness();
 
 // Window mode names
 CTString _astrWindowModes[3] = { "", "", "" };

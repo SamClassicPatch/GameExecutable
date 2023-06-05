@@ -20,6 +20,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   #pragma once
 #endif
 
+// Make game application be aware of the DPI scaling on Windows Vista and later
+void SetDPIAwareness(void);
+
 // Window modes
 enum EWindowModes {
   E_WM_WINDOWED   = 0, // Normal
