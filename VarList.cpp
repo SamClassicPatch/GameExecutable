@@ -83,21 +83,32 @@ void ParseCFG_t(CTStream &strm) {
 
   CListHead &lhAll = tabAll.lhVars;
 
+  // [Cecil] Skip everything until the next gadget
+  BOOL bSkipUntilNext = FALSE;
+
   // repeat
   FOREVER {
     // read one line
     CTString strLine = GetNonEmptyLine_t(strm);
 
-    if (strLine.RemovePrefix("MenuEnd")) {
-      break;
+    // Stop parsing
+    if (strLine.RemovePrefix("MenuEnd")) break;
 
-    } else if (strLine.RemovePrefix("Gadget:")) {
+    // [Cecil] Keep skipping until a new gadget
+    if (bSkipUntilNext && !strLine.HasPrefix("Gadget:")) {
+      continue;
+    }
+
+    if (strLine.RemovePrefix("Gadget:")) {
       pvs = new CVarSetting;
       lhAll.AddTail(pvs->vs_lnNode);
 
       TranslateLine(strLine);
       strLine.TrimSpacesLeft();
       pvs->vs_strName = strLine;
+
+      // [Cecil] Parse this gadget
+      bSkipUntilNext = FALSE;
 
     } else if (strLine.RemovePrefix("Type:")) {
       CheckPVS_t(pvs);
@@ -182,6 +193,21 @@ void ParseCFG_t(CTStream &strm) {
       } else {
         ASSERT(strLine == "Yes");
         pvs->vs_bHidden = TRUE;
+      }
+
+    // [Cecil] Skip adding this option if it doesn't belong to the current game
+    } else if (strLine.RemovePrefix("Games:")) {
+      CheckPVS_t(pvs);
+      strLine.TrimSpacesLeft();
+      strLine.TrimSpacesRight();
+
+      // Discard the setting if the string doesn't contain the current game anywhere
+      if (strLine.FindSubstr(CHOOSE_FOR_GAME("TFE105", "TSE105", "TSE107")) == -1) {
+        bSkipUntilNext = TRUE;
+        pvs->vs_lnNode.Remove();
+
+        delete pvs;
+        pvs = NULL;
       }
 
     } else if (strLine.RemovePrefix("String:")) {
