@@ -17,6 +17,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "VarList.h"
 
+// [Cecil] For listing files
+#include <CoreLib/Interfaces/FileFunctions.h>
+
 // [Cecil] Tabs of options
 CStaticStackArray<CVarTab> _aTabs;
 
@@ -208,6 +211,42 @@ void ParseCFG_t(CTStream &strm) {
 
         delete pvs;
         pvs = NULL;
+      }
+
+    // [Cecil] List files under a specific directory as value options
+    } else if (strLine.RemovePrefix("List:")) {
+      CheckPVS_t(pvs);
+      strLine.TrimSpacesLeft();
+      strLine.TrimSpacesRight();
+
+      // Get directory and the filename pattern from the path
+      CTFileName fnmListPath = strLine;
+      CTString strPattern = fnmListPath.FileName() + fnmListPath.FileExt();
+
+      CFileList afnmDir;
+      IFiles::ListGameFiles(afnmDir, fnmListPath.FileDir(), strPattern, IFiles::FLF_SEARCHMOD);
+
+      // Go through listed files
+      const INDEX ct = afnmDir.Count();
+
+      for (INDEX i = 0; i < ct; i++) {
+        const CTFileName &fnm = afnmDir[i];
+
+        // Set text to the filename by default
+        CTString &strText = pvs->vs_astrTexts.Push();
+
+        try {
+          // Try loading text from the description file nearby
+          strText.Load_t(fnm.NoExt() + ".des");
+
+        } catch (char *strError) {
+          // Just set text to the filename
+          (void)strError;
+          strText = fnm.FileName();
+        }
+
+        // Set value to the filename
+        pvs->vs_astrValues.Push() = fnm;
       }
 
     } else if (strLine.RemovePrefix("String:")) {
