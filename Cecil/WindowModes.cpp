@@ -24,7 +24,7 @@ static BOOL _bDPIAware = FALSE;
 // Make game application be aware of the DPI scaling on Windows Vista and later
 void SetDPIAwareness(void) {
   // Ignore DPI awareness if it's disabled
-  if (CCoreAPI::GetPropValue("DPIAware") == "0") {
+  if (CCoreAPI::GetPropValue("DPIAware", "1") == "0") {
     return;
   }
 
