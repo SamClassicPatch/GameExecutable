@@ -90,17 +90,17 @@ void CMenuGadget::OnMouseOver(PIX pixI, PIX pixJ) {}
 // get current color for the gadget
 COLOR CMenuGadget::GetCurrentColor(void) {
   // use normal colors
-  COLOR colUnselected = LCDGetColor(C_GREEN, "unselected");
-  COLOR colSelected = LCDGetColor(C_WHITE, "selected");
+  COLOR colUnselected = _pGame->LCDGetColor(C_GREEN, "unselected");
+  COLOR colSelected = _pGame->LCDGetColor(C_WHITE, "selected");
   // if disabled
   if (!mg_bEnabled) {
     // use a bit darker colors
-    colUnselected = LCDGetColor(C_dGREEN, "disabled unselected");
-    colSelected = LCDGetColor(C_GRAY, "disabled selected");
+    colUnselected = _pGame->LCDGetColor(C_dGREEN, "disabled unselected");
+    colSelected = _pGame->LCDGetColor(C_GRAY, "disabled selected");
     // if label
     if (mg_bLabel) {
       // use white
-      colUnselected = colSelected = LCDGetColor(C_WHITE, "label");
+      colUnselected = colSelected = _pGame->LCDGetColor(C_WHITE, "label");
     }
   }
   // use unselected color

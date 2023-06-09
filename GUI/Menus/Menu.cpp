@@ -625,8 +625,8 @@ void RenderMouseCursor(CDrawPort *pdp) {
     // don't render cursor
     return;
   }
-  LCDSetDrawport(pdp);
-  LCDDrawPointer(_pixCursorPosI, _pixCursorPosJ);
+  _pGame->LCDSetDrawport(pdp);
+  _pGame->LCDDrawPointer(_pixCursorPosI, _pixCursorPosJ);
 }
 
 BOOL DoMenu(CDrawPort *pdp) {
@@ -674,8 +674,8 @@ BOOL DoMenu(CDrawPort *pdp) {
   // blend background if menu is on
   if (bMenuActive) {
     // clear screen with background texture
-    LCDPrepare(1.0f);
-    LCDSetDrawport(&dpMenu);
+    _pGame->LCDPrepare(1.0f);
+    _pGame->LCDSetDrawport(&dpMenu);
 
     // [Cecil] Show the game a bit in the background
     if (sam_bBackgroundGameRender && _gmRunningGameMode != GM_NONE) {
@@ -684,9 +684,9 @@ BOOL DoMenu(CDrawPort *pdp) {
     } else {
       // do not allow game to show through
       dpMenu.Fill(C_BLACK | 255);
-      LCDRenderClouds1();
-      LCDRenderGrid();
-      LCDRenderClouds2();
+      _pGame->LCDRenderClouds1();
+      _pGame->LCDRenderGrid();
+      _pGame->LCDRenderClouds2();
     }
 
     // [Cecil] Use the same scale for width and height
@@ -773,12 +773,12 @@ BOOL DoMenu(CDrawPort *pdp) {
       if (_toThumbnail.GetData() != NULL) { // show thumbnail with shadow and border
         dpMenu.Fill(pixI0 + pixOfs, pixJ0 + pixOfs, THUMBW * fThumbScaleW, THUMBH * fScale, C_BLACK | 128);
         dpMenu.PutTexture(&_toThumbnail, PIXaabbox2D(PIX2D(pixI0, pixJ0), PIX2D(pixI1, pixJ1)), C_WHITE | 255);
-        dpMenu.DrawBorder(pixI0, pixJ0, THUMBW * fThumbScaleW, THUMBH * fScale, LCDGetColor(C_mdGREEN | 255, "thumbnail border"));
+        dpMenu.DrawBorder(pixI0, pixJ0, THUMBW * fThumbScaleW, THUMBH * fScale, _pGame->LCDGetColor(C_mdGREEN | 255, "thumbnail border"));
       } else {
         dpMenu.SetFont(_pfdDisplayFont);
         dpMenu.SetTextScaling(fScale);
         dpMenu.SetTextAspect(1.0f);
-        dpMenu.PutTextCXY(LOCALIZE("no thumbnail"), (pixI0 + pixI1) / 2, (pixJ0 + pixJ1) / 2, LCDGetColor(C_GREEN | 255, "no thumbnail"));
+        dpMenu.PutTextCXY(LOCALIZE("no thumbnail"), (pixI0 + pixI1) / 2, (pixJ0 + pixJ1) / 2, _pGame->LCDGetColor(C_GREEN | 255, "no thumbnail"));
       }
     }
 
@@ -807,12 +807,12 @@ BOOL DoMenu(CDrawPort *pdp) {
     PIXaabbox2D box = FloatBoxToPixBox(&dpMenu, BoxPopup(pgmCurrentMenu->gm_fPopupSize));
     CDrawPort dpPopup(pdp, box);
     dpPopup.Lock();
-    LCDSetDrawport(&dpPopup);
+    _pGame->LCDSetDrawport(&dpPopup);
     dpPopup.Fill(C_BLACK | 255);
-    LCDRenderClouds1();
-    LCDRenderGrid();
-    //LCDRenderClouds2();
-    LCDScreenBox(LCDGetColor(C_GREEN | 255, "popup box"));
+    _pGame->LCDRenderClouds1();
+    _pGame->LCDRenderGrid();
+    //_pGame->LCDRenderClouds2();
+    _pGame->LCDScreenBox(_pGame->LCDGetColor(C_GREEN | 255, "popup box"));
     dpPopup.Unlock();
     dpMenu.Lock();
   }
@@ -871,7 +871,7 @@ BOOL DoMenu(CDrawPort *pdp) {
     }
     // print the tip
     SetFontMedium(&dpMenu, 1.0f);
-    dpMenu.PutTextC(strTip, pixW * 0.5f, pixH * 0.92f, LCDGetColor(C_WHITE | 255, "tool tip"));
+    dpMenu.PutTextC(strTip, pixW * 0.5f, pixH * 0.92f, _pGame->LCDGetColor(C_WHITE | 255, "tool tip"));
   }
 
   _pGame->ConsolePrintLastLines(&dpMenu);

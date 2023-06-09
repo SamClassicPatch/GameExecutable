@@ -313,7 +313,6 @@
     <ClCompile Include="GUI\Menus\MSplitStart.cpp" />
     <ClCompile Include="GUI\Menus\MVar.cpp" />
     <ClCompile Include="GUI\Menus\MVideoOptions.cpp" />
-    <ClCompile Include="LCDDrawing.cpp" />
     <ClCompile Include="LevelInfo.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClInclude Include="Cecil\CecilExtensions.h" />
@@ -394,7 +393,6 @@
     <ClInclude Include="Credits.h" />
     <ClInclude Include="FileInfo.h" />
     <ClInclude Include="GLSettings.h" />
-    <ClInclude Include="LCDDrawing.h" />
     <ClInclude Include="LevelInfo.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="Resource.h" />

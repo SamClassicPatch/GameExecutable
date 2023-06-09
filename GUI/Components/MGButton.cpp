@@ -77,17 +77,17 @@ void CMGButton::Render(CDrawPort *pdp) {
   COLOR col = GetCurrentColor();
 
   if (mg_bEditing) {
-    col = LCDGetColor(C_GREEN | 0xFF, "editing");
+    col = _pGame->LCDGetColor(C_GREEN | 0xFF, "editing");
   }
 
   COLOR colRectangle = col;
 
   // Get highlighted colors
   if (mg_bHighlighted) {
-    col = LCDGetColor(C_WHITE | 0xFF, "hilited");
+    col = _pGame->LCDGetColor(C_WHITE | 0xFF, "hilited");
 
     if (!mg_bFocused) {
-      colRectangle = LCDGetColor(C_WHITE | 0xFF, "hilited rectangle");
+      colRectangle = _pGame->LCDGetColor(C_WHITE | 0xFF, "hilited rectangle");
     }
   }
 
@@ -135,7 +135,7 @@ void CMGButton::Render(CDrawPort *pdp) {
       pixWidth = box.Size()(1) * _fGadgetSideRatioL + 1;
     }
 
-    pdp->Fill(pixLeft, pixUp, pixWidth, pixHeight, LCDGetColor(C_dGREEN | 0x40, "edit fill"));
+    pdp->Fill(pixLeft, pixUp, pixWidth, pixHeight, _pGame->LCDGetColor(C_dGREEN | 0x40, "edit fill"));
 
   // [Cecil] Hide the button text if not editing
   } else if (mg_bHiddenText) {
@@ -226,7 +226,7 @@ void CMGButton::Render(CDrawPort *pdp) {
       pixY -= pdp->dp_fTextScaling * 2;
     }
 
-    pdp->PutText("|", pixX, pixY, LCDGetColor(C_WHITE | 0xFF, "editing cursor"));
+    pdp->PutText("|", pixX, pixY, _pGame->LCDGetColor(C_WHITE | 0xFF, "editing cursor"));
   }
 }
 

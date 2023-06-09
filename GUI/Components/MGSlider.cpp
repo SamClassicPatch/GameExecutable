@@ -100,8 +100,8 @@ void CMGSlider::Render(CDrawPort *pdp) {
   pdp->PutTextR(GetText(), pixIL, pixJ, col);
 
   // draw box around slider
-  LCDDrawBox(0, -1, PIXaabbox2D(PIX2D(pixIR + 1, pixJ), PIX2D(pixIR + pixISizeR - 2, pixJ + pixJSize - 2)),
-             LCDGetColor(C_GREEN | 255, "slider box"));
+  _pGame->LCDDrawBox(0, -1, PIXaabbox2D(PIX2D(pixIR + 1, pixJ), PIX2D(pixIR + pixISizeR - 2, pixJ + pixJSize - 2)),
+                     _pGame->LCDGetColor(C_GREEN | 255, "slider box"));
 
   // draw filled part of slider
   pdp->Fill(pixIR + 2, pixJ + 1, (pixISizeR - 5) * mg_fFactor, (pixJSize - 4), col);

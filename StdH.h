@@ -19,7 +19,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // [Cecil] Moved from many individual files
 #include <Engine/Base/KeyNames.h>
-#include <LCDDrawing.h> // [Cecil] Use local instead of Game's
 
 // Main game headers
 #include "SeriousSam.h"

@@ -24,7 +24,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MainWindow.h"
 #include "GlSettings.h"
 #include "LevelInfo.h"
-#include "LCDDrawing.h"
 #include "CmdLine.h"
 #include "Credits.h"
 
@@ -489,7 +488,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
 
   _pNetwork->md_strGameID = sam_strGameName;
 
-  LCDInit();
+  _pGame->LCDInit();
 
   if (sam_bFirstStarted) {
     InfoMessage(LOCALIZE(
@@ -616,7 +615,7 @@ void End(void) {
   MainWindow_End();
   DestroyMenus();
   _pGame->End();
-  LCDEnd();
+  _pGame->LCDEnd();
 
   // unlock the directory
   DirectoryLockOff();
@@ -683,7 +682,7 @@ void PrintDisplayModeInfo(void) {
   pdp->SetFont(_pfdDisplayFont);
   pdp->SetTextScaling(fTextScale);
   pdp->SetTextAspect(1.0f);
-  pdp->PutText(strRes, slDPWidth * 0.05f, slDPHeight * 0.85f, LCDGetColor(C_GREEN | 255, "display mode"));
+  pdp->PutText(strRes, slDPWidth * 0.05f, slDPHeight * 0.85f, _pGame->LCDGetColor(C_GREEN | 255, "display mode"));
 }
 
 // Do the main game loop and render screen
@@ -778,7 +777,7 @@ void DoGame(void) {
       pdp->Lock();
 
     } else {
-      pdp->Fill(LCDGetColor(C_dGREEN | CT_OPAQUE, "bcg fill"));
+      pdp->Fill(_pGame->LCDGetColor(C_dGREEN | CT_OPAQUE, "bcg fill"));
     }
 
     // do menu
@@ -1505,7 +1504,7 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
     BOOL bSuccess = FALSE;
 
     if (pdp != NULL && pdp->Lock()) {
-      pdp->Fill(LCDGetColor(C_dGREEN | CT_OPAQUE, "bcg fill"));
+      pdp->Fill(_pGame->LCDGetColor(C_dGREEN | CT_OPAQUE, "bcg fill"));
       pdp->Unlock();
       pvpViewPort->SwapBuffers();
       bSuccess = TRUE;
