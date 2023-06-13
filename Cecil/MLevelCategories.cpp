@@ -71,18 +71,26 @@ void CLevelCategoriesMenu::Initialize_t(void) {
   gm_amgCategories.New(_ctCats + 1); // One more for other levels
 
   for (INDEX i = 0; i < _ctCats; i++) {
-    // Load level list from this category file
-    CFileList &aList = _aLevelCategories[i];
-    IFiles::LoadStringList(aList, aCategories[i]);
+    const CTFileName &fnm = aCategories[i];
 
-    // No name
-    if (aList.Count() == 0) {
-      aList.Push() = CTString("???");
+    // Load level list from this category file
+    IFiles::LoadStringList(_aLevelCategories[i], fnm);
+
+    // Get category name
+    CTString strName = "???";
+
+    try {
+      // Try loading text from the description file nearby
+      strName.Load_t(fnm.NoExt() + ".des");
+
+    } catch (char *strError) {
+      // Just set text to the filename
+      (void)strError;
+      strName = fnm.FileName();
     }
 
     // Use first line from the list as the category name
-    AddCategory(i, aList[0]);
-    aList[0] = CTString("");
+    AddCategory(i, strName);
   }
 
   // Add extra category with all other levels at the end
