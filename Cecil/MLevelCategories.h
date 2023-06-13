@@ -49,7 +49,7 @@ class CLevelCategoriesMenu : public CGameMenu {
     void Initialize_t(void);
 
     // Add category under a specific index
-    void AddCategory(INDEX i, const CTString &strName);
+    void AddCategory(INDEX i, const CTString &strName, const CTString &strTip);
 };
 
 #endif

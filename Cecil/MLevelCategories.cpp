@@ -76,12 +76,20 @@ void CLevelCategoriesMenu::Initialize_t(void) {
     // Load level list from this category file
     IFiles::LoadStringList(_aLevelCategories[i], fnm);
 
-    // Get category name
+    // Get category name and description
     CTString strName = "???";
+    CTString strDesc = "";
 
     try {
       // Try loading text from the description file nearby
       strName.Load_t(fnm.NoExt() + ".des");
+
+      // Separate text into name and description
+      ULONG ulLineBreak = IData::FindChar(strName, '\n');
+
+      if (ulLineBreak != -1) {
+        strName.Split(ulLineBreak + 1, strName, strDesc);
+      }
 
     } catch (char *strError) {
       // Just set text to the filename
@@ -90,20 +98,21 @@ void CLevelCategoriesMenu::Initialize_t(void) {
     }
 
     // Use first line from the list as the category name
-    AddCategory(i, strName);
+    AddCategory(i, strName, strDesc);
   }
 
   // Add extra category with all other levels at the end
-  AddCategory(_ctCats, TRANS("OTHER LEVELS"));
-  gm_amgCategories[_ctCats].mg_strTip = TRANS("unsorted user made levels");
+  AddCategory(_ctCats, TRANS("OTHER LEVELS"), TRANS("unsorted user made levels"));
 };
 
 // Add category under a specific index
-void CLevelCategoriesMenu::AddCategory(INDEX i, const CTString &strName) {
+void CLevelCategoriesMenu::AddCategory(INDEX i, const CTString &strName, const CTString &strTip) {
   CMGLevelCategory &mg = gm_amgCategories[i];
   mg.mg_iCategory = i;
 
   mg.SetText(strName);
+  mg.mg_strTip = strTip;
+
   mg.mg_bfsFontSize = BFS_LARGE;
   mg.mg_boxOnScreen = BoxBigRow(i - 1);
   mg.mg_pActivatedFunction = NULL;
