@@ -44,9 +44,6 @@ BOOL LSLoadSinglePlayer(const CTFileName &fnm) {
     StopMenus();
     _gmRunningGameMode = GM_SINGLE_PLAYER;
 
-    // [Cecil] Load game for Core
-    GetAPI()->OnGameLoad(fnm);
-
   } else {
     _gmRunningGameMode = GM_NONE;
   }
@@ -198,9 +195,6 @@ void StartNetworkLoadGame(void) {
     StopMenus();
     _gmRunningGameMode = GM_NETWORK;
 
-    // [Cecil] Load game for Core
-    GetAPI()->OnGameLoad(_fnGameToLoad);
-
   } else {
     _gmRunningGameMode = GM_NONE;
   }
@@ -217,9 +211,6 @@ void StartSplitScreenGameLoad(void) {
   if (_pGame->LoadGame(_fnGameToLoad)) {
     StopMenus();
     _gmRunningGameMode = GM_SPLIT_SCREEN;
-
-    // [Cecil] Load game for Core
-    GetAPI()->OnGameLoad(_fnGameToLoad);
 
   } else {
     _gmRunningGameMode = GM_NONE;
