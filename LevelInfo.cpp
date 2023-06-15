@@ -53,19 +53,10 @@ BOOL GetLevelInfo(CLevelInfo &li, const CTFileName &fnm) {
     CTFileStream strm;
     strm.Open_t(fnm);
 
-    // [Cecil] Levels from the TFE directory
+    // [Cecil] Mark levels from the TFE directory
     #if TSE_FUSION_MODE
-      if (_fnmCDPath != "") {
-        CTFileName fnmFull;
-
-        // Try checking the archive path
-        if (ExpandFilePath(EFP_READ, fnm, fnmFull) == EFP_BASEZIP) {
-          fnmFull = IUnzip::GetFileArchive(fnm);
-        }
-
-        if (fnmFull.HasPrefix(_fnmCDPath)) {
-          li.li_eFormat = CLevelInfo::E_LF_TFE;
-        }
+      if (_EnginePatches.IsMapFromTFE(fnm)) {
+        li.li_eFormat = CLevelInfo::E_LF_TFE;
       }
     #endif
 
