@@ -162,10 +162,6 @@ BOOL LSLoadNetSettings(const CTFileName &fnm) {
 BOOL LSSaveAnyGame(const CTFileName &fnm) {
   if (_pGame->SaveGame(fnm)) {
     StopMenus();
-
-    // [Cecil] Save game for Core
-    GetAPI()->OnGameSave(fnm);
-
     return TRUE;
   }
 
