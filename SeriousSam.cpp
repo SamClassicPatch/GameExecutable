@@ -694,8 +694,7 @@ void DoGame(void) {
 
   if ((_gmRunningGameMode == GM_DEMO && _pNetwork->IsDemoPlayFinished())
    || (_gmRunningGameMode == GM_INTRO && _pNetwork->IsGameFinished())) {
-    // [Cecil] Stop game through the API
-    GetGameAPI()->StopGame();
+    _pGame->StopGame();
     _gmRunningGameMode = GM_NONE;
 
     // load next demo
@@ -1038,8 +1037,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
       if (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE &&
         (_gmRunningGameMode == GM_DEMO || _gmRunningGameMode == GM_INTRO)) {
-        // [Cecil] Stop game through the API
-        GetGameAPI()->StopGame();
+        _pGame->StopGame();
         _gmRunningGameMode = GM_NONE;
       }
 
@@ -1238,8 +1236,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
         // if escape is pressed
         if (bEscape) {
-          // [Cecil] Stop game through the API
-          GetGameAPI()->StopGame();
+          _pGame->StopGame();
 
           // stop demo
           _bInAutoPlayLoop = FALSE;
@@ -1249,8 +1246,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         } else if (bAnyKey && !bTilde) {
           // if not in menu or in console
           if (!bMenuActive && !bMenuRendering && GetGameAPI()->GetConState() == CS_OFF) {
-            // [Cecil] Stop game through the API
-            GetGameAPI()->StopGame();
+            _pGame->StopGame();
 
             // skip to next demo
             _gmRunningGameMode = GM_NONE;
@@ -1315,8 +1311,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
   _pInput->DisableInput();
 
-  // [Cecil] Stop game through the API
-  GetGameAPI()->StopGame();
+  _pGame->StopGame();
 
   if (_fnmModToLoad != "") {
     STARTUPINFOA cif;

@@ -145,8 +145,7 @@ static void ExitConfirm(void) {
 }
 
 static void StopCurrentGame(void) {
-  // [Cecil] Stop game through the API
-  GetGameAPI()->StopGame();
+  _pGame->StopGame();
   _gmRunningGameMode = GM_NONE;
 
   StopMenus(TRUE);
