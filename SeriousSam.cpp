@@ -165,7 +165,7 @@ static HANDLE _hLock = NULL;
 static CTFileName _fnmLock;
 static void DirectoryLockOn(void) {
   // create lock filename
-  _fnmLock = _fnmApplicationPath + "SeriousSam.loc";
+  _fnmLock = CCoreAPI::AppPath() + "SeriousSam.loc";
 
   // try to open lock file
   _hLock = CreateFileA(
@@ -332,27 +332,6 @@ void StartNextDemo(void) {
 
   if (_gmRunningGameMode == GM_NONE) {
     _bInAutoPlayLoop = FALSE;
-  }
-}
-
-BOOL _bCDPathFound = FALSE;
-
-BOOL FileExistsOnHD(const CTString &strFile) {
-  FILE *f = fopen(_fnmApplicationPath + strFile, "rb");
-  if (f != NULL) {
-    fclose(f);
-    return TRUE;
-
-  } else {
-    return FALSE;
-  }
-}
-
-void TrimString(char *str) {
-  int i = strlen(str);
-
-  if (str[i - 1] == '\n' || str[i - 1] == '\r') {
-    str[i - 1] = 0;
   }
 }
 
@@ -1321,7 +1300,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     const CTString strMod = _fnmModToLoad.FileName();
 
     // [Cecil] Use executable filename
-    CTString strCmd = _fnmApplicationPath + _fnmApplicationExe;
+    CTString strCmd = CCoreAPI::AppPath() + CCoreAPI::AppExe();
     CTString strParam = " +game " + strMod;
 
     // [Cecil] Copy TFE path
@@ -1356,7 +1335,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 /*static void CheckModReload(void) {
   if (_fnmModToLoad != "") {
     // [Cecil] Use executable filename
-    CTString strCommand = _fnmApplicationPath + _fnmApplicationExe;
+    CTString strCommand = CCoreAPI::AppPath() + CCoreAPI::AppExe();
     //+mod " + _fnmModToLoad.FileName() + "\"";
 
     CTString strMod = _fnmModToLoad.FileName();
@@ -1379,7 +1358,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 }*/
 
 static void CheckTeaser(void) {
-  CTFileName fnmTeaser = _fnmApplicationExe.FileDir() + CTString("AfterSam.exe");
+  CTFileName fnmTeaser = CCoreAPI::AppBin() + "AfterSam.exe";
 
   if (fopen(fnmTeaser, "r") != NULL) {
     Sleep(500);
