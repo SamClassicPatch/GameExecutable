@@ -409,8 +409,7 @@ void InitializeMenus(void) {
     _pGUIM->gmNetworkJoinMenu.SetParentMenu(&_pGUIM->gmNetworkMenu);
     InitActionsForNetworkJoinMenu();
 
-    _pGUIM->gmSelectPlayersMenu.gm_bAllowDedicated = FALSE;
-    _pGUIM->gmSelectPlayersMenu.gm_bAllowObserving = FALSE;
+    _pGUIM->gmSelectPlayersMenu.gm_ulConfigFlags = 0;
     _pGUIM->gmSelectPlayersMenu.Initialize_t();
     _pGUIM->gmSelectPlayersMenu.gm_strName = "SelectPlayers";
     _pGUIM->gmSelectPlayersMenu.gm_pmgSelectedByDefault = &_pGUIM->gmSelectPlayersMenu.gm_mgStart;

@@ -1112,7 +1112,11 @@ extern void SelectPlayersFillMenu(void) {
   gmCurrent.gm_mgPlayer2Change.mg_iLocalPlayer = 2;
   gmCurrent.gm_mgPlayer3Change.mg_iLocalPlayer = 3;
 
-  if (gmCurrent.gm_bAllowDedicated && GetGameAPI()->GetMenuSplitCfg() == CGame::SSC_DEDICATED) {
+  // [Cecil] Determine configuration via flags
+  BOOL bDedicated = (gmCurrent.gm_ulConfigFlags & PLCF_DEDICATED);
+  BOOL bObserving = (gmCurrent.gm_ulConfigFlags & PLCF_OBSERVING);
+
+  if (bDedicated && GetGameAPI()->GetMenuSplitCfg() == CGame::SSC_DEDICATED) {
     gmCurrent.gm_mgDedicated.mg_iSelected = 1;
   } else {
     gmCurrent.gm_mgDedicated.mg_iSelected = 0;
@@ -1120,7 +1124,7 @@ extern void SelectPlayersFillMenu(void) {
 
   gmCurrent.gm_mgDedicated.ApplyCurrentSelection();
 
-  if (gmCurrent.gm_bAllowObserving && GetGameAPI()->GetMenuSplitCfg() == CGame::SSC_OBSERVER) {
+  if (bObserving && GetGameAPI()->GetMenuSplitCfg() == CGame::SSC_OBSERVER) {
     gmCurrent.gm_mgObserver.mg_iSelected = 1;
   } else {
     gmCurrent.gm_mgObserver.mg_iSelected = 0;
@@ -1133,31 +1137,38 @@ extern void SelectPlayersFillMenu(void) {
     gmCurrent.gm_mgSplitScreenCfg.ApplyCurrentSelection();
   }
 
-  BOOL bHasDedicated = gmCurrent.gm_bAllowDedicated;
-  BOOL bHasObserver = gmCurrent.gm_bAllowObserving;
   BOOL bHasPlayers = TRUE;
 
-  if (bHasDedicated && gmCurrent.gm_mgDedicated.mg_iSelected) {
-    bHasObserver = FALSE;
+  if (bDedicated && gmCurrent.gm_mgDedicated.mg_iSelected) {
+    bObserving = FALSE;
     bHasPlayers = FALSE;
   }
 
-  if (bHasObserver && gmCurrent.gm_mgObserver.mg_iSelected) {
+  if (bObserving && gmCurrent.gm_mgObserver.mg_iSelected) {
     bHasPlayers = FALSE;
   }
 
-  CMenuGadget *apmg[8];
+  CMenuGadget *apmg[9];
   memset(apmg, 0, sizeof(apmg));
   INDEX i = 0;
 
-  if (bHasDedicated) {
+  // [Cecil] Hide password field by default
+  gmCurrent.gm_mgPassword.Disappear();
+
+  if (bDedicated) {
     gmCurrent.gm_mgDedicated.Appear();
     apmg[i++] = &gmCurrent.gm_mgDedicated;
   } else {
     gmCurrent.gm_mgDedicated.Disappear();
+
+    // [Cecil] Replace dedicated switch with a password field
+    if (gmCurrent.gm_ulConfigFlags & PLCF_PASSWORD) {
+      gmCurrent.gm_mgPassword.Appear();
+      apmg[i++] = &gmCurrent.gm_mgPassword;
+    }
   }
 
-  if (bHasObserver) {
+  if (bObserving) {
     gmCurrent.gm_mgObserver.Appear();
     apmg[i++] = &gmCurrent.gm_mgObserver;
   } else {
@@ -1238,12 +1249,16 @@ extern void SelectPlayersFillMenu(void) {
 extern void SelectPlayersApplyMenu(void) {
   CSelectPlayersMenu &gmCurrent = _pGUIM->gmSelectPlayersMenu;
 
-  if (gmCurrent.gm_bAllowDedicated && gmCurrent.gm_mgDedicated.mg_iSelected) {
+  // [Cecil] Determine configuration via flags
+  const BOOL bDedicated = (gmCurrent.gm_ulConfigFlags & PLCF_DEDICATED);
+  const BOOL bObserving = (gmCurrent.gm_ulConfigFlags & PLCF_OBSERVING);
+
+  if (bDedicated && gmCurrent.gm_mgDedicated.mg_iSelected) {
     GetGameAPI()->SetMenuSplitCfg(CGame::SSC_DEDICATED);
     return;
   }
 
-  if (gmCurrent.gm_bAllowObserving && gmCurrent.gm_mgObserver.mg_iSelected) {
+  if (bObserving && gmCurrent.gm_mgObserver.mg_iSelected) {
     GetGameAPI()->SetMenuSplitCfg(CGame::SSC_OBSERVER);
     return;
   }

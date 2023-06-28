@@ -25,14 +25,22 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "GUI/Components/MGTitle.h"
 #include "GUI/Components/MGTrigger.h"
 
+// [Cecil] Configuration flags
+enum ESelectPlayersConfigFlags {
+  PLCF_DEDICATED = (1 << 0), // Can be set as a dedicated server
+  PLCF_OBSERVING = (1 << 1), // Can connect as an observer
+  PLCF_PASSWORD  = (1 << 2), // Can specify connection password
+};
+
 class CSelectPlayersMenu : public CGameMenu {
   public:
-    BOOL gm_bAllowDedicated;
-    BOOL gm_bAllowObserving;
+    // [Cecil] Mask of configuration flags instead of separate switches
+    ULONG gm_ulConfigFlags;
 
     CMGTitle gm_mgTitle;
 
     CMGTrigger gm_mgDedicated;
+    CMGEdit gm_mgPassword; // [Cecil]
     CMGTrigger gm_mgObserver;
     CMGTrigger gm_mgSplitScreenCfg;
 

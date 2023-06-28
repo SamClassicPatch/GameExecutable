@@ -42,6 +42,20 @@ void CSelectPlayersMenu::Initialize_t(void) {
   gm_mgDedicated.mg_strTip = LOCALIZE("select to start dedicated server");
   gm_mgDedicated.mg_pOnTriggerChange = NULL;
 
+  // [Cecil] Connection password field
+  gm_mgPassword.SetText(cli_strConnectPassword);
+  gm_mgPassword.SetName(TRANS("Password:"));
+  gm_mgPassword.mg_ctMaxStringLen = 100;
+  gm_mgPassword.mg_pstrToChange = &cli_strConnectPassword;
+  gm_mgPassword.mg_bHiddenText = TRUE;
+  gm_mgPassword.mg_boxOnScreen = BoxMediumRow(0);
+  gm_mgPassword.mg_bfsFontSize = BFS_MEDIUM;
+  gm_mgPassword.mg_iCenterI = -1;
+  gm_mgPassword.mg_pmgUp = &gm_mgStart;
+  gm_mgPassword.mg_pmgDown = &gm_mgObserver;
+  gm_mgPassword.mg_strTip = TRANS("enter the password for connecting, observing or VIP access");
+  AddChild(&gm_mgPassword);
+
   TRIGGER_MG(gm_mgObserver, 1, gm_mgDedicated, gm_mgSplitScreenCfg, LOCALIZE("Observer:"), astrNoYes);
   gm_mgObserver.mg_strTip = LOCALIZE("select to join in for observing, not for playing");
   gm_mgObserver.mg_pOnTriggerChange = NULL;

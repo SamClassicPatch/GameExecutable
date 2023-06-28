@@ -373,8 +373,7 @@ void StartSelectLevelFromCategory(INDEX iCategory) {
 void StartSelectPlayersMenuFromSplit(void) {
   CSelectPlayersMenu &gmCurrent = _pGUIM->gmSelectPlayersMenu;
 
-  gmCurrent.gm_bAllowDedicated = FALSE;
-  gmCurrent.gm_bAllowObserving = FALSE;
+  gmCurrent.gm_ulConfigFlags = 0;
   gmCurrent.gm_mgStart.mg_pActivatedFunction = &StartSplitScreenGame;
   gmCurrent.SetParentMenu(&_pGUIM->gmSplitStartMenu);
   ChangeToMenu(&gmCurrent);
@@ -383,8 +382,7 @@ void StartSelectPlayersMenuFromSplit(void) {
 void StartSelectPlayersMenuFromNetwork(void) {
   CSelectPlayersMenu &gmCurrent = _pGUIM->gmSelectPlayersMenu;
 
-  gmCurrent.gm_bAllowDedicated = TRUE;
-  gmCurrent.gm_bAllowObserving = TRUE;
+  gmCurrent.gm_ulConfigFlags = PLCF_DEDICATED | PLCF_OBSERVING;
   gmCurrent.gm_mgStart.mg_pActivatedFunction = &StartNetworkGame;
   gmCurrent.SetParentMenu(&_pGUIM->gmNetworkStartMenu);
   ChangeToMenu(&gmCurrent);
@@ -393,8 +391,7 @@ void StartSelectPlayersMenuFromNetwork(void) {
 void StartSelectPlayersMenuFromNetworkLoad(void) {
   CSelectPlayersMenu &gmCurrent = _pGUIM->gmSelectPlayersMenu;
 
-  gmCurrent.gm_bAllowDedicated = FALSE;
-  gmCurrent.gm_bAllowObserving = TRUE;
+  gmCurrent.gm_ulConfigFlags = PLCF_OBSERVING;
   gmCurrent.gm_mgStart.mg_pActivatedFunction = &StartNetworkLoadGame;
   gmCurrent.SetParentMenu(&_pGUIM->gmLoadSaveMenu);
   ChangeToMenu(&gmCurrent);
@@ -403,8 +400,7 @@ void StartSelectPlayersMenuFromNetworkLoad(void) {
 void StartSelectPlayersMenuFromSplitScreenLoad(void) {
   CSelectPlayersMenu &gmCurrent = _pGUIM->gmSelectPlayersMenu;
 
-  gmCurrent.gm_bAllowDedicated = FALSE;
-  gmCurrent.gm_bAllowObserving = FALSE;
+  gmCurrent.gm_ulConfigFlags = 0;
   gmCurrent.gm_mgStart.mg_pActivatedFunction = &StartSplitScreenGameLoad;
   gmCurrent.SetParentMenu(&_pGUIM->gmLoadSaveMenu);
   ChangeToMenu(&gmCurrent);
@@ -413,8 +409,7 @@ void StartSelectPlayersMenuFromSplitScreenLoad(void) {
 void StartSelectPlayersMenuFromOpen(void) {
   CSelectPlayersMenu &gmCurrent = _pGUIM->gmSelectPlayersMenu;
 
-  gmCurrent.gm_bAllowDedicated = FALSE;
-  gmCurrent.gm_bAllowObserving = TRUE;
+  gmCurrent.gm_ulConfigFlags = PLCF_OBSERVING | PLCF_PASSWORD;
   gmCurrent.gm_mgStart.mg_pActivatedFunction = &JoinNetworkGame;
   gmCurrent.SetParentMenu(&_pGUIM->gmNetworkOpenMenu);
   ChangeToMenu(&gmCurrent);
@@ -431,8 +426,7 @@ void StartSelectPlayersMenuFromOpen(void) {
 void StartSelectPlayersMenuFromServers(void) {
   CSelectPlayersMenu &gmCurrent = _pGUIM->gmSelectPlayersMenu;
 
-  gmCurrent.gm_bAllowDedicated = FALSE;
-  gmCurrent.gm_bAllowObserving = TRUE;
+  gmCurrent.gm_ulConfigFlags = PLCF_OBSERVING | PLCF_PASSWORD;
   gmCurrent.gm_mgStart.mg_pActivatedFunction = &JoinNetworkGame;
   gmCurrent.SetParentMenu(&_pGUIM->gmServersMenu);
   ChangeToMenu(&gmCurrent);
