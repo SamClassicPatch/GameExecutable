@@ -91,7 +91,7 @@ void NotifyAboutNewVersion(void) {
   if (_ulLatestVersion == 0 || !NotifyAboutUpdates()) return;
 
   // Can be updated
-  if (_ulLatestVersion > GetAPI()->ulVersion)
+  if (_ulLatestVersion > CCoreAPI::ulCoreVersion)
   {
     CPrintF(TRANS("New release is available: %s\nDownload it here: %s\n"), _strLatestVersion, _strReleaseLink);
     DownloadUpdatePrompt();
