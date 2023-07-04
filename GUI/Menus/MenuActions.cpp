@@ -1079,6 +1079,7 @@ void InitActionsForNetworkStartMenu() {
 
   gmCurrent.gm_mgLevel.mg_pActivatedFunction = &StartSelectLevelFromNetwork;
   gmCurrent.gm_mgGameOptions.mg_pActivatedFunction = &StartGameOptionsFromNetwork;
+  gmCurrent.gm_mgPatchOptions.mg_pActivatedFunction = &StartPatchServerOptionsFromNetwork; // [Cecil]
   gmCurrent.gm_mgStart.mg_pActivatedFunction = &StartSelectPlayersMenuFromNetwork;
 }
 

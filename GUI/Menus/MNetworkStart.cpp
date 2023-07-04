@@ -80,15 +80,26 @@ void CNetworkStartMenu::Initialize_t(void) {
   gm_mgGameOptions.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgGameOptions.mg_iCenterI = 0;
   gm_mgGameOptions.mg_pmgUp = &gm_mgVisible;
-  gm_mgGameOptions.mg_pmgDown = &gm_mgStart;
+  gm_mgGameOptions.mg_pmgDown = &gm_mgPatchOptions;
   gm_mgGameOptions.mg_strTip = LOCALIZE("adjust game rules");
   gm_mgGameOptions.mg_pActivatedFunction = NULL;
   AddChild(&gm_mgGameOptions);
 
+  // [Cecil] Server options from the patch
+  gm_mgPatchOptions.SetText(TRANS("Server options"));
+  gm_mgPatchOptions.mg_boxOnScreen = BoxMediumRow(9);
+  gm_mgPatchOptions.mg_bfsFontSize = BFS_MEDIUM;
+  gm_mgPatchOptions.mg_iCenterI = 0;
+  gm_mgPatchOptions.mg_pmgUp = &gm_mgGameOptions;
+  gm_mgPatchOptions.mg_pmgDown = &gm_mgStart;
+  gm_mgPatchOptions.mg_strTip = TRANS("adjust server settings from the classics patch");
+  gm_mgPatchOptions.mg_pActivatedFunction = NULL;
+  AddChild(&gm_mgPatchOptions);
+
   // start button
   gm_mgStart.mg_bfsFontSize = BFS_LARGE;
   gm_mgStart.mg_boxOnScreen = BoxBigRow(7);
-  gm_mgStart.mg_pmgUp = &gm_mgGameOptions;
+  gm_mgStart.mg_pmgUp = &gm_mgPatchOptions;
   gm_mgStart.mg_pmgDown = &gm_mgSessionName;
   gm_mgStart.SetText(LOCALIZE("START"));
   AddChild(&gm_mgStart);

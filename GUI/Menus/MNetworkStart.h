@@ -36,6 +36,7 @@ class CNetworkStartMenu : public CGameMenu {
     CMGTrigger gm_mgWaitAllPlayers;
     CMGTrigger gm_mgVisible;
     CMGButton gm_mgGameOptions;
+    CMGButton gm_mgPatchOptions; // [Cecil]
     CMGButton gm_mgStart;
 
     void Initialize_t(void);

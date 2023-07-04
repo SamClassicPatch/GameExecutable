@@ -40,9 +40,11 @@ void StartNetworkSaveMenu(void);
 void StartSplitScreenQuickLoadMenu(void);
 void StartSplitScreenLoadMenu(void);
 void StartSplitScreenSaveMenu(void);
-void StartVarGameOptions(void);
+// [Cecil] Extra arguments for customization
+void StartVarGameOptions(const CTString &strTitle, const CTFileName &fnmConfig, CGameMenu *pgmParentMenu);
 void StartSinglePlayerGameOptions(void);
 void StartGameOptionsFromNetwork(void);
+void StartPatchServerOptionsFromNetwork(void); // [Cecil]
 void StartGameOptionsFromSplitScreen(void);
 void StartRenderingOptionsMenu(void);
 void StartCustomizeKeyboardMenu(void);

@@ -96,33 +96,39 @@ void StartSinglePlayerNewMenu(void) {
   ChangeToMenu(&gmCurrent);
 }
 
-// game options var settings
-void StartVarGameOptions(void) {
+// [Cecil] Extra arguments for customization
+void StartVarGameOptions(const CTString &strTitle, const CTFileName &fnmConfig, CGameMenu *pgmParentMenu) {
   CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
+  gmCurrent.SetParentMenu(pgmParentMenu); // [Cecil]
 
-  gmCurrent.gm_mgTitle.SetName(LOCALIZE("GAME OPTIONS"));
-  gmCurrent.gm_fnmMenuCFG = CTFILENAME("Scripts\\Menu\\GameOptions.cfg");
+  gmCurrent.gm_mgTitle.SetName(strTitle);
+  gmCurrent.gm_fnmMenuCFG = fnmConfig;
   ChangeToMenu(&gmCurrent);
-}
+};
 
 void StartSinglePlayerGameOptions(void) {
-  CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
-
-  gmCurrent.gm_mgTitle.SetName(LOCALIZE("GAME OPTIONS"));
-  gmCurrent.gm_fnmMenuCFG = CTFILENAME("Scripts\\Menu\\SPOptions.cfg");
-  gmCurrent.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
-  ChangeToMenu(&gmCurrent);
-}
+  // [Cecil] More customization
+  DECLARE_CTFILENAME(fnmConfig, "Scripts\\Menu\\SPOptions.cfg");
+  StartVarGameOptions(LOCALIZE("GAME OPTIONS"), fnmConfig, &_pGUIM->gmSinglePlayerMenu);
+};
 
 void StartGameOptionsFromNetwork(void) {
-  StartVarGameOptions();
-  _pGUIM->gmVarMenu.SetParentMenu(&_pGUIM->gmNetworkStartMenu);
-}
+  // [Cecil] More customization
+  DECLARE_CTFILENAME(fnmConfig, "Scripts\\Menu\\GameOptions.cfg");
+  StartVarGameOptions(LOCALIZE("GAME OPTIONS"), fnmConfig, &_pGUIM->gmNetworkStartMenu);
+};
+
+// [Cecil] Open server settings from the patch
+void StartPatchServerOptionsFromNetwork(void) {
+  DECLARE_CTFILENAME(fnmConfig, "Scripts\\ClassicsPatch\\02_ServerSettings.cfg");
+  StartVarGameOptions(LOCALIZE("SERVER OPTIONS"), fnmConfig, &_pGUIM->gmNetworkStartMenu);
+};
 
 void StartGameOptionsFromSplitScreen(void) {
-  StartVarGameOptions();
-  _pGUIM->gmVarMenu.SetParentMenu(&_pGUIM->gmSplitStartMenu);
-}
+  // [Cecil] More customization
+  DECLARE_CTFILENAME(fnmConfig, "Scripts\\Menu\\GameOptions.cfg");
+  StartVarGameOptions(LOCALIZE("GAME OPTIONS"), fnmConfig, &_pGUIM->gmSplitStartMenu);
+};
 
 // rendering options var settings
 void StartRenderingOptionsMenu(void) {
