@@ -20,9 +20,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include <CoreLib/Networking/HttpRequests.h>
 
-// Link to a webpage with the latest release
-static const char *_strReleaseLink = "https://github.com/SamClassicPatch/SuperProject/releases/latest";
-
 // Version of the latest release
 static ULONG _ulLatestVersion = 0;
 static CTString _strLatestVersion;
@@ -30,7 +27,7 @@ static CTString _strLatestVersion;
 // Open web page with the latest release
 static void OpenLatestUpdate(void) {
   extern void RunBrowser(const char *);
-  RunBrowser(_strReleaseLink);
+  RunBrowser(CLASSICSPATCH_URL_LATESTRELEASE);
 };
 
 // Postpone the notification for another week
@@ -93,7 +90,9 @@ void NotifyAboutNewVersion(void) {
   // Can be updated
   if (_ulLatestVersion > CCoreAPI::ulCoreVersion)
   {
-    CPrintF(TRANS("New release is available: %s\nDownload it here: %s\n"), _strLatestVersion, _strReleaseLink);
+    CPrintF(TRANS("New release is available: %s\nDownload it here: %s\n"),
+            _strLatestVersion, CLASSICSPATCH_URL_LATESTRELEASE);
+
     DownloadUpdatePrompt();
   }
 
@@ -105,8 +104,7 @@ static DWORD WINAPI RequestLatestRelease(LPVOID lpParam) {
   Sleep(500);
   CPutString(TRANS("Checking for updates...\n"));
 
-  CHttpResponse aResponse = HttpRequest(L"api.github.com", L"GET",
-    L"/repos/SamClassicPatch/SuperProject/releases/latest", TRUE, NULL);
+  CHttpResponse aResponse = HttpRequest(L"api.github.com", L"GET", CLASSICSPATCH_URL_HTTPREQUEST, TRUE, NULL);
 
   // Turn response into a string
   CTString str(aResponse.sa_Array);
