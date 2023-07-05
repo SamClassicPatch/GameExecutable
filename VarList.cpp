@@ -374,8 +374,9 @@ void FlushVarSettings(BOOL bApply) {
       FOREACHINLIST(CVarSetting, vs_lnNode, _aTabs[iTab].lhVars, itvs) {
         CVarSetting &vs = *itvs;
 
-        // [Cecil] Add scheduled commands for all types
-        BOOL bScheduledCommands = FALSE;
+        // [Cecil] New value to set
+        CTString strNewValue = "";
+        BOOL bNewValue = FALSE;
 
         // [Cecil] Different types
         switch (vs.vs_eType)
@@ -383,17 +384,9 @@ void FlushVarSettings(BOOL bApply) {
           case CVarSetting::E_TOGGLE: {
             // If selected some other value
             if (vs.vs_iValue != vs.vs_iOrgValue) {
-              // Set shell variable to it
-              _pShell->SetValue(vs.vs_strVar, vs.vs_astrValues[vs.vs_iValue]);
-
-              // [Cecil] Execute post-function
-              CShellSymbol *pssVar = _pShell->GetSymbol(vs.vs_strVar, TRUE);
-
-              if (pssVar != NULL && pssVar->ss_pPostFunc != NULL) {
-                pssVar->ss_pPostFunc(pssVar->ss_pvValue);
-              }
-
-              bScheduledCommands = TRUE;
+              // Set to a new value from the list
+              strNewValue = vs.vs_astrValues[vs.vs_iValue];
+              bNewValue = TRUE;
             }
           } break;
 
@@ -402,12 +395,38 @@ void FlushVarSettings(BOOL bApply) {
             ULONG ulOldHash = static_cast<ULONG>(vs.vs_iOrgValue);
 
             if (vs.vs_strValue.GetHash() != ulOldHash) {
-              // Set shell variable to a new string
-              _pShell->SetValue(vs.vs_strVar, vs.vs_strValue);
-
-              bScheduledCommands = TRUE;
+              // Set to a new string
+              strNewValue = vs.vs_strValue;
+              bNewValue = TRUE;
             }
           } break;
+        }
+
+        // [Cecil] Add scheduled commands for all types
+        BOOL bScheduledCommands = FALSE;
+
+        // [Cecil] Try to set a new value and schedule its command if succeeded
+        if (bNewValue) {
+          // Retrieve shell symbol
+          CShellSymbol *pssVar = _pShell->GetSymbol(vs.vs_strVar, TRUE);
+          BOOL bCanSet = TRUE;
+
+          // Execute pre-function to see if allowed to set new value
+          if (pssVar != NULL && pssVar->ss_pPreFunc != NULL) {
+            bCanSet = pssVar->ss_pPreFunc(pssVar->ss_pvValue);
+          }
+
+          if (bCanSet) {
+            // Set shell symbol to it
+            _pShell->SetValue(vs.vs_strVar, strNewValue);
+
+            // Execute post-function
+            if (pssVar != NULL && pssVar->ss_pPostFunc != NULL) {
+              pssVar->ss_pPostFunc(pssVar->ss_pvValue);
+            }
+
+            bScheduledCommands = TRUE;
+          }
         }
 
         // Schedule commands to execute afterwards
