@@ -121,7 +121,7 @@ void StartGameOptionsFromNetwork(void) {
 // [Cecil] Open server settings from the patch
 void StartPatchServerOptionsFromNetwork(void) {
   DECLARE_CTFILENAME(fnmConfig, "Scripts\\ClassicsPatch\\02_ServerSettings.cfg");
-  StartVarGameOptions(LOCALIZE("SERVER OPTIONS"), fnmConfig, &_pGUIM->gmNetworkStartMenu);
+  StartVarGameOptions(TRANS("SERVER OPTIONS"), fnmConfig, &_pGUIM->gmNetworkStartMenu);
 };
 
 void StartGameOptionsFromSplitScreen(void) {
