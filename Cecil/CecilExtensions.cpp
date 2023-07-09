@@ -30,6 +30,12 @@ INDEX sam_bDecoratedServerNames = TRUE;
 INDEX sam_bNotifyAboutUpdates = TRUE;
 INDEX sam_iUpdateReminder = 0;
 
+// Custom connection setting
+static INDEX cli_bCustomPrediction = TRUE;
+static INDEX cli_iCustomBufferActions = 2;
+static INDEX cli_iCustomMinBPS = 50000;
+static INDEX cli_iCustomMaxBPS = 100000;
+
 // Start some level immediately (like on '+level' argument)
 void StartMap(const CTString &strLevel) {
   // Add levels directory and replace the slashes
@@ -98,4 +104,10 @@ void CECIL_Init(void) {
   _pShell->DeclareSymbol("user INDEX cmd_iGoToMarker;", &cmd_iGoToMarker);
   _pShell->DeclareSymbol("user INDEX cmd_bServer;", &cmd_bServer);
   _pShell->DeclareSymbol("user void StartMap(CTString);", &StartMap);
+
+  // Custom connection setting
+  _pShell->DeclareSymbol("persistent user INDEX cli_bCustomPrediction;", &cli_bCustomPrediction);
+  _pShell->DeclareSymbol("persistent user INDEX cli_iCustomBufferActions;", &cli_iCustomBufferActions);
+  _pShell->DeclareSymbol("persistent user INDEX cli_iCustomMinBPS;", &cli_iCustomMinBPS);
+  _pShell->DeclareSymbol("persistent user INDEX cli_iCustomMaxBPS;", &cli_iCustomMaxBPS);
 };
