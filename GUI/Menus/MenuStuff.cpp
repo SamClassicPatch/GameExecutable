@@ -125,21 +125,10 @@ extern CTString astrSoundAPIRadioTexts[] = {
 
 // initialize game type strings table
 void InitGameTypes(void) {
-  // get function that will provide us the info about gametype
-  CShellSymbol *pss = _pShell->GetSymbol("GetGameTypeName", /*bDeclaredOnly=*/TRUE);
-  // if none
-  if (pss == NULL) {
-    // error
-    astrGameTypeRadioTexts[0] = "<???>";
-    ctGameTypeRadioTexts = 1;
-    return;
-  }
-
   // for each mode
   for (ctGameTypeRadioTexts = 0; ctGameTypeRadioTexts < ARRAYCOUNT(astrGameTypeRadioTexts); ctGameTypeRadioTexts++) {
     // get the text
-    CTString (*pFunc)(INDEX) = (CTString(*)(INDEX))pss->ss_pvValue;
-    CTString strMode = pFunc(ctGameTypeRadioTexts);
+    CTString strMode = GetGameAPI()->GetGameTypeNameSS(ctGameTypeRadioTexts);
     // if no mode modes
     if (strMode == "") {
       // stop
@@ -147,6 +136,12 @@ void InitGameTypes(void) {
     }
     // add that mode
     astrGameTypeRadioTexts[ctGameTypeRadioTexts] = strMode;
+  }
+
+  // [Cecil] No game types added
+  if (ctGameTypeRadioTexts == 0) {
+    astrGameTypeRadioTexts[0] = "<???>";
+    ctGameTypeRadioTexts = 1;
   }
 }
 
