@@ -259,8 +259,11 @@ extern CFontData _fdTitle;
 void SetFontTitle(CDrawPort *pdp) {
   pdp->SetFont(&_fdTitle);
 
+  // [Cecil] Disallow fonts bigger than normal by scaling them relative to vanilla
+  const FLOAT fRelScale = ClampUp(32.0f / (FLOAT)_fdTitle.GetHeight(), 1.0f);
+
   // [Cecil] Use height instead of width for text scaling
-  pdp->SetTextScaling(1.25f * HEIGHT_SCALING(pdp));
+  pdp->SetTextScaling(fRelScale * 1.25f * HEIGHT_SCALING(pdp));
   pdp->SetTextAspect(1.0f);
 }
 
@@ -270,18 +273,24 @@ extern CFontData _fdMedium;
 // [Cecil] Added text scale
 void SetFontBig(CDrawPort *pdp, FLOAT fScale) {
   pdp->SetFont(&_fdBig);
-  
+
+  // [Cecil] Disallow fonts bigger than normal by scaling them relative to vanilla
+  const FLOAT fRelScale = ClampUp(32.0f / (FLOAT)_fdBig.GetHeight(), 1.0f);
+
   // [Cecil] Use height instead of width for text scaling
-  pdp->SetTextScaling(fScale * HEIGHT_SCALING(pdp));
+  pdp->SetTextScaling(fRelScale * fScale * HEIGHT_SCALING(pdp));
   pdp->SetTextAspect(1.0f);
 }
 
 // [Cecil] Added text scale
 void SetFontMedium(CDrawPort *pdp, FLOAT fScale) {
   pdp->SetFont(&_fdMedium);
-  
+
+  // [Cecil] Disallow fonts bigger than normal by scaling them relative to vanilla
+  const FLOAT fRelScale = ClampUp(16.0f / (FLOAT)_fdMedium.GetHeight(), 1.0f);
+
   // [Cecil] Use height instead of width for text scaling
-  pdp->SetTextScaling(fScale * HEIGHT_SCALING(pdp));
+  pdp->SetTextScaling(fRelScale * fScale * HEIGHT_SCALING(pdp));
   pdp->SetTextAspect(0.75f);
 }
 
