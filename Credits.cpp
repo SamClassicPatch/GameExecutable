@@ -102,12 +102,7 @@ void Credits_On(INDEX iType) {
 
   } else {
     _fSpeed = 2.0f;
-
-    #if _SE_DEMO || TECHTESTONLY
-      LoadOneFile(CTFILENAME("Data\\Credits_Demo.txt"));
-    #else
-      LoadOneFile(CTFILENAME("Data\\Credits.txt"));
-    #endif
+    LoadOneFile(CTFILENAME("Data\\Credits.txt"));
   }
 
   // if some file was loaded
