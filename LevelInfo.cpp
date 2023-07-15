@@ -89,6 +89,13 @@ BOOL GetLevelInfo(CLevelInfo &li, const CTFileName &fnm) {
       li.li_eFormat = CLevelInfo::E_LF_SSR;
     }
 
+    if (strm.PeekID_t() == CChunkID("Plv0")) {
+      UBYTE aDummy[12];
+      strm.ExpectID_t("Plv0");
+      strm.Read_t(aDummy, sizeof(aDummy));
+      li.li_eFormat = CLevelInfo::E_LF_SSR;
+    }
+
     // read the name
     strm >> li.li_strName;
 
