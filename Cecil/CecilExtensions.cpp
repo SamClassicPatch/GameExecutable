@@ -75,9 +75,9 @@ void StartMap(const CTString &strLevel) {
 };
 
 // Custom initialization
-void CECIL_Init(void) {
+void ClassicsPatch_InitExt(void) {
   // Initialize the core
-  CECIL_InitCore();
+  ClassicsPatch_InitCore();
 
 #if CLASSICSPATCH_ENGINEPATCHES
 

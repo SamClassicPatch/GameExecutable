@@ -34,6 +34,6 @@ extern INDEX sam_iUpdateReminder;
 void StartMap(const CTString &strLevel);
 
 // Custom initialization
-void CECIL_Init(void);
+void ClassicsPatch_InitExt(void);
 
 #endif

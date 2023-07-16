@@ -415,7 +415,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   }
 
   // [Cecil] Custom initialization
-  CECIL_Init();
+  ClassicsPatch_InitExt();
 
   // [Cecil] Translate the mod name
   sam_strModName = TRANSV(sam_strModName);
@@ -581,7 +581,7 @@ void End(void) {
   ClearDemosList();
 
   // [Cecil] Clean up the core
-  CECIL_EndCore();
+  ClassicsPatch_EndCore();
 
   // destroy the main window and its canvas
   if (pvpViewPort != NULL) {
