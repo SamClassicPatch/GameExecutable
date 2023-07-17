@@ -37,7 +37,10 @@ static INDEX cli_iCustomMinBPS = 50000;
 static INDEX cli_iCustomMaxBPS = 100000;
 
 // Start some level immediately (like on '+level' argument)
-void StartMap(const CTString &strLevel) {
+void StartMap(SHELL_FUNC_ARGS) {
+  BEGIN_SHELL_FUNC;
+  const CTString &strLevel = *NEXT_ARG(CTString *);
+
   // Add levels directory and replace the slashes
   CTFileName fnmStart = "Levels\\" + strLevel;
   IData::ReplaceChar(fnmStart.str_String, '/', '\\');

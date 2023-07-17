@@ -58,7 +58,7 @@ CLevelInfo FindLevelByFileName(const CTFileName &fnm);
 void ValidateLevelForFlags(ULONG ulSpawnFlags);
 
 // [Cecil] Display list of available levels
-void ListLevels(const CTString &strMatchNames);
+void ListLevels(SHELL_FUNC_ARGS);
 
 // init list of autoplay demos
 void LoadDemosList(void);

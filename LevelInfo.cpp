@@ -315,7 +315,10 @@ CLevelInfo FindLevelByFileName(const CTFileName &fnm) {
 }
 
 // [Cecil] Display list of available levels
-void ListLevels(const CTString &strMatchNames) {
+void ListLevels(SHELL_FUNC_ARGS) {
+  BEGIN_SHELL_FUNC;
+  const CTString &strMatchNames = *NEXT_ARG(CTString *);
+
   INDEX iLevel = 1;
 
   FOREACHINLIST(CLevelInfo, li_lnNode, _lhAllLevels, itli) {

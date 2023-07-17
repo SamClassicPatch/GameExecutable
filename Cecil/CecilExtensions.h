@@ -31,7 +31,7 @@ extern INDEX sam_bNotifyAboutUpdates;
 extern INDEX sam_iUpdateReminder;
 
 // Start some level immediately (like on '+level' argument)
-void StartMap(const CTString &strLevel);
+void StartMap(SHELL_FUNC_ARGS);
 
 // Custom initialization
 void ClassicsPatch_InitExt(void);

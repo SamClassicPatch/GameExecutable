@@ -133,7 +133,10 @@ CDrawPort *pdpNormal;
 CViewPort *pvpViewPort;
 HINSTANCE _hInstance;
 
-static void PlayDemo(const CTString &strDemoFilename) {
+static void PlayDemo(SHELL_FUNC_ARGS) {
+  BEGIN_SHELL_FUNC;
+  const CTString &strDemoFilename = *NEXT_ARG(CTString *);
+
   _gmMenuGameMode = GM_DEMO;
 
   CTFileName fnDemo = "demos\\" + strDemoFilename + ".dem";
@@ -563,7 +566,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   // if starting world from command line
   } else if (cmd_strWorld != "") {
     // [Cecil] Start map from the game directory
-    StartMap("..\\" + cmd_strWorld);
+    _pShell->Execute(CTString(0, "StartMap(\"%s\");", "..\\\\" + cmd_strWorld));
 
   // if no relevant starting at command line
   } else {
