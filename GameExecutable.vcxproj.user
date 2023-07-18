@@ -8,6 +8,10 @@
     <LocalDebuggerCommand>$(ProjectDir)..\..\Bin\$(TargetFileName)</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_SSR110|Win32'">
+    <LocalDebuggerCommand>$(ProjectDir)..\..\Bin\$(TargetFileName)</LocalDebuggerCommand>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_TSE105|Win32'">
     <LocalDebuggerCommand>$(ProjectDir)..\..\Bin\$(TargetFileName)</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
