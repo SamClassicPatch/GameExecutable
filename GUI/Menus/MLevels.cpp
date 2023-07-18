@@ -105,17 +105,17 @@ void CLevelsMenu::FillListItems(void) {
       gm_mgManualLevel[iInMenu].mg_iInList = iLabel;
 
       // [Cecil] Mark TFE levels
-      if (li.li_eFormat == CLevelInfo::E_LF_TFE) {
+      if (li.li_eFormat == E_LF_TFE) {
         gm_mgManualLevel[iInMenu].mg_strTip = TRANS("This level is from Serious Sam: The First Encounter");
 
       // [Cecil] Levels from other games cannot be played
-      } else if (li.li_eFormat != CLevelInfo::E_LF_CURRENT) {
+      } else if (li.li_eFormat != E_LF_CURRENT) {
         CTString strFormat = "1.50";
 
         if (li.li_eFormat == CLevelInfo::E_LF_SSR) {
           strFormat = "SSR";
         }
-        
+
         CTString strTip;
         strTip.PrintF(TRANS("This is a level in the %s format, it cannot be played!"), strFormat);
 

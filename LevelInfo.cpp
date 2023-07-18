@@ -55,8 +55,8 @@ BOOL GetLevelInfo(CLevelInfo &li, const CTFileName &fnm) {
 
     // [Cecil] Mark levels from the TFE directory
     #if TSE_FUSION_MODE
-      if (_EnginePatches.IsMapFromTFE(fnm)) {
-        li.li_eFormat = CLevelInfo::E_LF_TFE;
+      if (IsFileFromDir(GAME_DIR_TFE, fnm)) {
+        li.li_eFormat = E_LF_TFE;
       }
     #endif
 
@@ -68,7 +68,7 @@ BOOL GetLevelInfo(CLevelInfo &li, const CTFileName &fnm) {
 
     // [Cecil] Levels from other games
     if (iDummy != 10000) {
-      li.li_eFormat = CLevelInfo::E_LF_150;
+      li.li_eFormat = E_LF_150;
     }
 
     strm.ExpectID_t("WRLD"); // 'world'
@@ -83,17 +83,21 @@ BOOL GetLevelInfo(CLevelInfo &li, const CTFileName &fnm) {
 
     // [Cecil] Prevent game from crashing from parsing SSR levels
     if (strm.PeekID_t() == CChunkID("LDRB")) {
-      CTString strDummy;
       strm.ExpectID_t("LDRB");
+
+      CTString strDummy;
       strm >> strDummy;
-      li.li_eFormat = CLevelInfo::E_LF_SSR;
+
+      li.li_eFormat = E_LF_SSR;
     }
 
     if (strm.PeekID_t() == CChunkID("Plv0")) {
-      UBYTE aDummy[12];
       strm.ExpectID_t("Plv0");
+
+      UBYTE aDummy[12];
       strm.Read_t(aDummy, sizeof(aDummy));
-      li.li_eFormat = CLevelInfo::E_LF_SSR;
+
+      li.li_eFormat = E_LF_SSR;
     }
 
     // read the name
@@ -105,7 +109,7 @@ BOOL GetLevelInfo(CLevelInfo &li, const CTFileName &fnm) {
     // [Cecil] Prevent game from crashing from parsing SSR levels
     if (strm.PeekID_t() == CChunkID("SpGM")) {
       strm.ExpectID_t("SpGM");
-      li.li_eFormat = CLevelInfo::E_LF_SSR;
+      li.li_eFormat = E_LF_SSR;
     }
 
     // translate name
@@ -148,7 +152,8 @@ void LoadLevelsList(void) {
 
   // list the levels directory with subdirs
   CFileList afnmDir;
-  IFiles::ListGameFiles(afnmDir, "Levels\\", "*.wld", IFiles::FLF_RECURSIVE | IFiles::FLF_SEARCHCD | IFiles::FLF_SEARCHMOD);
+  IFiles::ListGameFiles(afnmDir, "Levels\\", "*.wld",
+    IFiles::FLF_RECURSIVE | IFiles::FLF_SEARCHMOD | IFiles::FLF_SEARCHCD | IFiles::FLF_SEARCHGAMES);
 
   // for each file in the directory
   for (INDEX i = 0; i < afnmDir.Count(); i++) {
@@ -161,7 +166,7 @@ void LoadLevelsList(void) {
 
     if (GetLevelInfo(li, fnm)) {
       // Mark as a TFE level in the log
-      if (li.li_eFormat == CLevelInfo::E_LF_TFE) {
+      if (li.li_eFormat == E_LF_TFE) {
         CPutString("(TFE) ");
       }
 

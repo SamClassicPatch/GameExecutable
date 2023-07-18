@@ -133,9 +133,12 @@ void ParseCommandLine(CTString strCmd) {
         _fnmMod = "Mods\\" + strMod + "\\";
       }
 
-    // [Cecil] CD path alias for specifying TFE directory
-    } else if (strWord == "+cdpath" || strWord == "+tfe") {
+    } else if (strWord == "+cdpath") {
       _fnmCDPath = GetNextParam();
+
+    // [Cecil] Specify TFE directory
+    } else if (strWord == "+tfe") {
+      GAME_DIR_TFE = GetNextParam();
 
     } else if (strWord == "+password") {
       cmd_strPassword = GetNextParam();

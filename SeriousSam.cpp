@@ -1308,8 +1308,8 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
     // [Cecil] Copy TFE path
     #if TSE_FUSION_MODE
-      if (_fnmCDPath != "") {
-        strParam += CTString(0, " +tfe \"%s\"", _fnmCDPath.str_String);
+      if (GAME_DIR_TFE != "") {
+        strParam += CTString(0, " +tfe \"%s\"", GAME_DIR_TFE.str_String);
       }
     #endif
 
