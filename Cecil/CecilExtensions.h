@@ -29,6 +29,7 @@ extern INDEX sam_bDecoratedServerNames;
 
 extern INDEX sam_bNotifyAboutUpdates;
 extern INDEX sam_iUpdateReminder;
+extern CTString sam_strLastVersionCheck;
 
 // Start some level immediately (like on '+level' argument)
 void StartMap(SHELL_FUNC_ARGS);

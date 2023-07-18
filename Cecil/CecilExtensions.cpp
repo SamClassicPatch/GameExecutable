@@ -29,6 +29,7 @@ INDEX sam_bDecoratedServerNames = TRUE;
 
 INDEX sam_bNotifyAboutUpdates = TRUE;
 INDEX sam_iUpdateReminder = 0;
+CTString sam_strLastVersionCheck = "";
 
 // Custom connection setting
 static INDEX cli_bCustomPrediction = TRUE;
@@ -100,6 +101,7 @@ void ClassicsPatch_InitExt(void) {
 
   _pShell->DeclareSymbol("persistent user INDEX sam_bNotifyAboutUpdates;", &sam_bNotifyAboutUpdates);
   _pShell->DeclareSymbol("persistent      INDEX sam_iUpdateReminder;",     &sam_iUpdateReminder);
+  _pShell->DeclareSymbol("persistent CTString sam_strLastVersionCheck;", &sam_strLastVersionCheck);
 
   _pShell->DeclareSymbol("user void ListLevels(CTString);", &ListLevels);
 

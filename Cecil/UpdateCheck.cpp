@@ -99,10 +99,43 @@ void NotifyAboutNewVersion(void) {
   _ulLatestVersion = 0;
 };
 
-// Request latest release from GitHub
-static DWORD WINAPI RequestLatestRelease(LPVOID lpParam) {
-  Sleep(500);
+// Check for patch updates
+void QueryPatchUpdates(void) {
+  // Check only once
+  static BOOL bChecked = FALSE;
+
+  if (bChecked) return;
+  bChecked = TRUE;
+
+  if (!NotifyAboutUpdates()) return;
+
+  // Request latest release from GitHub
   CPutString(TRANS("Checking for updates...\n"));
+
+  // See if the version has been checked for recently
+  ULONG ulLastCheck = 0;
+  char strLastVersion[32];
+
+  if (sam_strLastVersionCheck.ScanF("%X:'%32[^']'", &ulLastCheck, &strLastVersion) == 2) {
+    time_t iTime;
+    time(&iTime);
+
+    // Return last checked version if the check happened within the last 6 hours
+    ULONG ulInterval = 60 * 60 * 6;
+
+    if (ulLastCheck < iTime + ulInterval) {
+      _strLatestVersion = strLastVersion;
+
+      // Compose a version number out of the version tag
+      ULONG ulRelease = 0;
+      ULONG ulUpdate = 0;
+      ULONG ulPatch = 0;
+      _strLatestVersion.ScanF("%u.%u.%u", &ulRelease, &ulUpdate, &ulPatch);
+
+      _ulLatestVersion = CCoreAPI::MakeVersion(ulRelease, ulUpdate, ulPatch);
+      return;
+    }
+  }
 
   CHttpResponse aResponse = HttpRequest(L"api.github.com", L"GET", CLASSICSPATCH_URL_HTTPREQUEST, TRUE, NULL);
 
@@ -113,7 +146,7 @@ static DWORD WINAPI RequestLatestRelease(LPVOID lpParam) {
   static const CTString strTagKey = "\"tag_name\":\"";
   INDEX iTag = str.FindSubstr(strTagKey);
 
-  if (iTag == -1) return 0;
+  if (iTag == -1) return;
 
   // Trim everything before the tag
   str.TrimLeft(str.Length() - iTag - strTagKey.Length());
@@ -132,23 +165,9 @@ static DWORD WINAPI RequestLatestRelease(LPVOID lpParam) {
 
   _ulLatestVersion = CCoreAPI::MakeVersion(ulRelease, ulUpdate, ulPatch);
 
-  return 0;
-};
+  // Remember which version was checked for and when
+  time_t iTime;
+  time(&iTime);
 
-// Check for patch updates
-void QueryPatchUpdates(void) {
-  // Check only once
-  static BOOL bChecked = FALSE;
-
-  if (bChecked) return;
-  bChecked = TRUE;
-
-  if (!NotifyAboutUpdates()) return;
-
-  DWORD dwThreadId;
-  HANDLE hThread = CreateThread(NULL, 0, RequestLatestRelease, 0, 0, &dwThreadId);
-
-  if (hThread != NULL) {
-    CloseHandle(hThread);
-  }
+  sam_strLastVersionCheck.PrintF("%X:'%s'", (ULONG)iTime, str);
 };
