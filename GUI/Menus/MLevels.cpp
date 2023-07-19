@@ -104,9 +104,13 @@ void CLevelsMenu::FillListItems(void) {
       gm_mgManualLevel[iInMenu].mg_bEnabled = TRUE;
       gm_mgManualLevel[iInMenu].mg_iInList = iLabel;
 
+      // [Cecil] Set button tip for formats that differ from the current one
+      #define SET_FORMAT_TIP(_Tip) \
+        { if (li.li_eFormat != E_LF_CURRENT) gm_mgManualLevel[iInMenu].mg_strTip = TRANS(_Tip); }
+
       // [Cecil] Mark TFE levels
       if (li.li_eFormat == E_LF_TFE) {
-        gm_mgManualLevel[iInMenu].mg_strTip = TRANS("This level is from Serious Sam: The First Encounter");
+        SET_FORMAT_TIP("This level is from Serious Sam: The First Encounter");
 
       // [Cecil] Levels from other games cannot be played
       } else if (li.li_eFormat != E_LF_CURRENT) {
