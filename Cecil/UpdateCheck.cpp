@@ -109,9 +109,6 @@ void QueryPatchUpdates(void) {
 
   if (!NotifyAboutUpdates()) return;
 
-  // Request latest release from GitHub
-  CPutString(TRANS("Checking for updates...\n"));
-
   // See if the version has been checked for recently
   ULONG ulLastCheck = 0;
   char strLastVersion[32];
@@ -137,10 +134,13 @@ void QueryPatchUpdates(void) {
     }
   }
 
+  // Request latest release from GitHub
+  CPutString(TRANS("Checking for updates...\n"));
+
   CHttpResponse aResponse = HttpRequest(L"api.github.com", L"GET", CLASSICSPATCH_URL_HTTPREQUEST, TRUE, NULL);
 
   // Turn response into a string
-  CTString str(aResponse.sa_Array);
+  CTString str(aResponse.c_str());
 
   // Find version tag
   static const CTString strTagKey = "\"tag_name\":\"";
