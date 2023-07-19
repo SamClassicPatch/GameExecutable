@@ -509,7 +509,7 @@ void StartAddonsLoadMenu(void) {
   gmCurrent.gm_iSortType = LSSORT_NAMEUP;
   gmCurrent.gm_bSave = FALSE;
   gmCurrent.gm_bManage = FALSE;
-  gmCurrent.gm_fnmDirectory = CTString("Scripts\\Addons\\");
+  gmCurrent.gm_fnmDirectory = CTString(SCRIPTS_ADDONS_DIR);
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".ini");
   gmCurrent.gm_pAfterFileChosen = &LSLoadAddon;

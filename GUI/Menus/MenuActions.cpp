@@ -914,7 +914,7 @@ static void ApplyAudioOptions(void) {
 
   sam_bAutoAdjustAudio = gmCurrent.gm_mgAudioAutoTrigger.mg_iSelected;
   if (sam_bAutoAdjustAudio) {
-    _pShell->Execute("include \"Scripts\\Addons\\SFX-AutoAdjust.ini\"");
+    _pShell->Execute("include \"" SCRIPTS_ADDONS_DIR "SFX-AutoAdjust.ini\"");
   } else {
     _pShell->SetINDEX("snd_iInterface", gmCurrent.gm_mgAudioAPITrigger.mg_iSelected);
 

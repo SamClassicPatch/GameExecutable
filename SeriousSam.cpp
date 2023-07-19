@@ -484,7 +484,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _pSound->SetFormat((enum CSoundLibrary::SoundFormat)snd_iFormat);
 
   if (sam_bAutoAdjustAudio) {
-    _pShell->Execute("include \"Scripts\\Addons\\SFX-AutoAdjust.ini\"");
+    _pShell->Execute("include \"" SCRIPTS_ADDONS_DIR "SFX-AutoAdjust.ini\"");
   }
 
   // execute script given on command line

@@ -30,6 +30,13 @@ extern BOOL sam_bAutoAdjustAudio;
 // [Cecil] Computer screen resolution
 extern PIX2D _vpixScreenRes;
 
+// [Cecil] Directory with addon scripts
+#if SE1_GAME != SS_REV
+  #define SCRIPTS_ADDONS_DIR "Scripts\\Addons\\"
+#else
+  #define SCRIPTS_ADDONS_DIR "Scripts\\AddonsSE\\"
+#endif
+
 // [Cecil] Different window modes
 extern void StartNewMode(enum GfxAPIType eAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ,
                          enum DisplayDepth eColorDepth, INDEX iWindowMode);
