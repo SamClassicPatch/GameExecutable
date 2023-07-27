@@ -112,13 +112,13 @@ void CLevelsMenu::FillListItems(void) {
       if (li.li_eFormat == E_LF_TFE) {
         SET_FORMAT_TIP("This level is from Serious Sam: The First Encounter");
 
+      // [Cecil] Mark SSR levels
+      } else if (li.li_eFormat == E_LF_SSR) {
+        SET_FORMAT_TIP("This level is from Serious Sam: Revolution");
+
       // [Cecil] Levels from other games cannot be played
       } else if (li.li_eFormat != E_LF_CURRENT) {
         CTString strFormat = "1.50";
-
-        if (li.li_eFormat == CLevelInfo::E_LF_SSR) {
-          strFormat = "SSR";
-        }
 
         CTString strTip;
         strTip.PrintF(TRANS("This is a level in the %s format, it cannot be played!"), strFormat);
