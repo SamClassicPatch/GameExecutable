@@ -18,77 +18,86 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MSinglePlayerNew.h"
 
+// [Cecil] Convert all characters to uppercase
+static inline void ToUpper(CTString &str) {
+  char *pch = str.str_String;
+
+  while (*pch != '\0') {
+    *pch = toupper(*pch);
+    pch++;
+  }
+};
+
 void CSinglePlayerNewMenu::Initialize_t(void) {
   // intialize single player new menu
   gm_mgTitle.SetName(LOCALIZE("NEW GAME"));
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   AddChild(&gm_mgTitle);
 
-  gm_mgTourist.SetText(LOCALIZE("TOURIST"));
-  gm_mgTourist.mg_bfsFontSize = BFS_LARGE;
-  gm_mgTourist.mg_boxOnScreen = BoxBigRow(0.0f);
-  gm_mgTourist.mg_strTip = LOCALIZE("for non-FPS players");
-  AddChild(&gm_mgTourist);
-  gm_mgTourist.mg_pmgUp = &gm_mgSerious;
-  gm_mgTourist.mg_pmgDown = &gm_mgEasy;
-  gm_mgTourist.mg_pActivatedFunction = NULL;
+  // [Cecil] Add up to 16 mod difficulties
+  INDEX ct = ClampUp(CoreVarData().CountDiffs(), (INDEX)16);
 
-  gm_mgEasy.SetText(LOCALIZE("EASY"));
-  gm_mgEasy.mg_bfsFontSize = BFS_LARGE;
-  gm_mgEasy.mg_boxOnScreen = BoxBigRow(1.0f);
-  gm_mgEasy.mg_strTip = LOCALIZE("for unexperienced FPS players");
-  AddChild(&gm_mgEasy);
-  gm_mgEasy.mg_pmgUp = &gm_mgTourist;
-  gm_mgEasy.mg_pmgDown = &gm_mgMedium;
-  gm_mgEasy.mg_pActivatedFunction = NULL;
+  for (INDEX iAdd = 0; iAdd < ct; iAdd++) {
+    // Get difficulty name from the API
+    const CCoreVariables::Difficulty &diff = CoreVarData().GetDiff(iAdd);
 
-  gm_mgMedium.SetText(LOCALIZE("NORMAL"));
-  gm_mgMedium.mg_bfsFontSize = BFS_LARGE;
-  gm_mgMedium.mg_boxOnScreen = BoxBigRow(2.0f);
-  gm_mgMedium.mg_strTip = LOCALIZE("for experienced FPS players");
-  AddChild(&gm_mgMedium);
-  gm_mgMedium.mg_pmgUp = &gm_mgEasy;
-  gm_mgMedium.mg_pmgDown = &gm_mgHard;
-  gm_mgMedium.mg_pActivatedFunction = NULL;
+    // No more difficulties
+    if (diff.strName == "") break;
 
-  gm_mgHard.SetText(LOCALIZE("HARD"));
-  gm_mgHard.mg_bfsFontSize = BFS_LARGE;
-  gm_mgHard.mg_boxOnScreen = BoxBigRow(3.0f);
-  gm_mgHard.mg_strTip = LOCALIZE("for experienced Serious Sam players");
-  AddChild(&gm_mgHard);
-  gm_mgHard.mg_pmgUp = &gm_mgMedium;
-  gm_mgHard.mg_pmgDown = &gm_mgSerious;
-  gm_mgHard.mg_pActivatedFunction = NULL;
+    // Make all uppercase and translate
+    CTString strName = diff.strName;
+    ToUpper(strName);
 
-  gm_mgSerious.SetText(LOCALIZE("SERIOUS"));
-  gm_mgSerious.mg_bfsFontSize = BFS_LARGE;
-  gm_mgSerious.mg_boxOnScreen = BoxBigRow(4.0f);
-  gm_mgSerious.mg_strTip = LOCALIZE("are you serious?");
-  AddChild(&gm_mgSerious);
-  gm_mgSerious.mg_pmgUp = &gm_mgHard;
-  gm_mgSerious.mg_pmgDown = &gm_mgTourist;
-  gm_mgSerious.mg_pActivatedFunction = NULL;
+    // Add new difficulty
+    CMGButton &mg = gm_amgDifficulties.Push();
+    mg.mg_iIndex = iAdd;
+    mg.mg_pActivatedFunction = NULL;
 
-  gm_mgMental.SetText(LOCALIZE("MENTAL"));
-  gm_mgMental.mg_bfsFontSize = BFS_LARGE;
-  gm_mgMental.mg_boxOnScreen = BoxBigRow(5.0f);
-  gm_mgMental.mg_strTip = LOCALIZE("you are not serious!");
-  AddChild(&gm_mgMental);
-  gm_mgMental.mg_pmgUp = &gm_mgSerious;
-  gm_mgMental.mg_pmgDown = &gm_mgTourist;
-  gm_mgMental.mg_pActivatedFunction = NULL;
-  gm_mgMental.mg_bMental = TRUE;
-}
+    mg.SetText(TRANSV(strName));
+    mg.mg_strTip = TRANSV(diff.strTip);
+    mg.mg_bfsFontSize = (ct > 9 ? BFS_MEDIUM : BFS_LARGE);
+    mg.mg_bMental = diff.bFlash; // Text blinking
+
+    AddChild(&mg);
+  }
+
+  // Link buttons together
+  ct = gm_amgDifficulties.Count();
+  BOOL bMediumFont = (ct > 9);
+
+  for (INDEX iLink = 0; iLink < ct; iLink++) {
+    CMGButton &mg = gm_amgDifficulties[iLink];
+
+    // Adjust position
+    if (bMediumFont) {
+      mg.mg_boxOnScreen = BoxMediumRow(iLink - 1);
+    } else {
+      mg.mg_boxOnScreen = BoxBigRow(iLink);
+    }
+
+    mg.mg_pmgUp = &gm_amgDifficulties[(iLink + ct - 1) % ct];
+    mg.mg_pmgDown = &gm_amgDifficulties[(iLink + 1) % ct];
+  }
+};
+
 void CSinglePlayerNewMenu::StartMenu(void) {
   CGameMenu::StartMenu();
-  extern INDEX sam_bMentalActivated;
-  if (sam_bMentalActivated) {
-    gm_mgMental.Appear();
-    gm_mgSerious.mg_pmgDown = &gm_mgMental;
-    gm_mgTourist.mg_pmgUp = &gm_mgMental;
-  } else {
-    gm_mgMental.Disappear();
-    gm_mgSerious.mg_pmgDown = &gm_mgTourist;
-    gm_mgTourist.mg_pmgUp = &gm_mgSerious;
+
+  // [Cecil] Toggle difficulties based on activity
+  const INDEX ct = gm_amgDifficulties.Count();
+
+  for (INDEX i = 0; i < ct; i++) {
+    CMGButton &mg = gm_amgDifficulties[i];
+
+    if (CoreVarData().GetDiff(i).IsActive()) {
+      mg.Appear();
+      gm_amgDifficulties[(i + ct - 1) % ct].mg_pmgDown = &mg;
+      gm_amgDifficulties[(i + 1) % ct].mg_pmgUp = &mg;
+
+    } else {
+      mg.Disappear();
+      gm_amgDifficulties[4].mg_pmgDown = &gm_amgDifficulties[6 % ct];
+      gm_amgDifficulties[6 % ct].mg_pmgUp = &gm_amgDifficulties[4];
+    }
   }
-}
+};

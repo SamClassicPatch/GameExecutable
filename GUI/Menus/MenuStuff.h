@@ -39,8 +39,8 @@ extern CTString astrWeapon[4];
 extern CTString astrComputerInvoke[2];
 extern CTString astrCrosshair[8];
 extern CTString astrMaxPlayersRadioTexts[15];
-extern CTString astrGameTypeRadioTexts[20];
-extern CTString astrDifficultyRadioTexts[6];
+extern CTString astrGameTypeRadioTexts[16];
+extern CTString astrDifficultyRadioTexts[16]; // [Cecil] 16 difficulties
 extern CTString astrSplitScreenRadioTexts[4];
 extern CTString astrDisplayPrefsRadioTexts[4];
 extern CTString astrDisplayAPIRadioTexts[2];

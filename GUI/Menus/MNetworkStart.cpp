@@ -106,9 +106,25 @@ void CNetworkStartMenu::Initialize_t(void) {
   gm_mgStart.mg_pActivatedFunction = NULL;
 }
 
+// [Cecil] Count active difficulties for selection lists
+INDEX CountActiveDifficulties(void) {
+  const INDEX ct = ClampUp(CoreVarData().CountDiffs(), (INDEX)16);
+  INDEX i = 0;
+
+  for (; i < ct; i++) {
+    const CCoreVariables::Difficulty &diff = CoreVarData().GetDiff(i);
+
+    // No more difficulties or inactive
+    if (diff.strName == "" || !diff.IsActive()) break;
+  }
+
+  // At least one
+  return ClampDn(i, (INDEX)1);
+};
+
 void CNetworkStartMenu::StartMenu(void) {
-  extern INDEX sam_bMentalActivated;
-  gm_mgDifficulty.mg_ctTexts = sam_bMentalActivated ? 6 : 5;
+  // [Cecil] Count active difficulties
+  gm_mgDifficulty.mg_ctTexts = CountActiveDifficulties();
 
   gm_mgGameType.mg_iSelected = Clamp(_pShell->GetINDEX("gam_iStartMode"), 0L, ctGameTypeRadioTexts - 1L);
   gm_mgGameType.ApplyCurrentSelection();

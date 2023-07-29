@@ -63,7 +63,7 @@ extern INDEX sam_iGfxAPI = 0; // 0 = OpenGL
 extern INDEX sam_bFirstStarted = FALSE;
 extern FLOAT sam_tmDisplayModeReport = 5.0f;
 extern INDEX sam_bShowAllLevels = FALSE;
-extern INDEX sam_bMentalActivated = FALSE;
+static INDEX sam_bMentalActivated = FALSE;
 
 // Network settings
 extern CTString sam_strNetworkSettings = "";
@@ -301,7 +301,7 @@ void StartNextDemo(void) {
     GetGameAPI()->SetStartSplitCfg(CGame::SSC_PLAY1);
 
     // [Cecil] Use difficulties and game modes from the API
-    _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(2)); // Normal
+    _pShell->SetINDEX("gam_iStartDifficulty", CoreVarData().GetDiff(2).iLevel); // Normal
     _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(0)); // Flyover
 
     // [Cecil] Pass byte container

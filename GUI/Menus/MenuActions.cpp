@@ -345,11 +345,15 @@ extern void SetDemoStartStopRecText(void) {
 extern CTString sam_strTechTestLevel;
 extern CTString sam_strTrainingLevel;
 
-static void StartSinglePlayerGame_Normal(void);
+extern void StartSinglePlayerGame(void);
 static void StartTechTest(void) {
   _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
   GetGameAPI()->SetCustomLevel(sam_strTechTestLevel);
-  StartSinglePlayerGame_Normal();
+
+  // [Cecil] Use difficulties and game modes from the API
+  _pShell->SetINDEX("gam_iStartDifficulty", CoreVarData().GetDiff(2).iLevel);
+  _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
+  StartSinglePlayerGame();
 }
 
 static void StartTraining(void) {
@@ -395,57 +399,26 @@ void StartSinglePlayerGame(void) {
   }
 }
 
-static void StartSinglePlayerGame_Tourist(void) {
-  // [Cecil] Use difficulties and game modes from the API
-  _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(0));
-  _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
-  StartSinglePlayerGame();
-}
+// [Cecil] Start new game based on the selected difficulty button
+static void StartSinglePlayerGameFromDifficulty(void) {
+  CMGButton &mgDiff = (CMGButton &)*_pmgLastActivatedGadget;
 
-static void StartSinglePlayerGame_Easy(void) {
-  // [Cecil] Use difficulties and game modes from the API
-  _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(1));
+  // Use difficulties and game modes from the API
+  _pShell->SetINDEX("gam_iStartDifficulty", CoreVarData().GetDiff(mgDiff.mg_iIndex).iLevel);
   _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
-  StartSinglePlayerGame();
-}
 
-static void StartSinglePlayerGame_Normal(void) {
-  // [Cecil] Use difficulties and game modes from the API
-  _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(2));
-  _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
   StartSinglePlayerGame();
-}
-
-static void StartSinglePlayerGame_Hard(void) {
-  // [Cecil] Use difficulties and game modes from the API
-  _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(3));
-  _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
-  StartSinglePlayerGame();
-}
-
-static void StartSinglePlayerGame_Serious(void) {
-  // [Cecil] Use difficulties and game modes from the API
-  _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(4));
-  _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
-  StartSinglePlayerGame();
-}
-
-static void StartSinglePlayerGame_Mental(void) {
-  // [Cecil] Use difficulties and game modes from the API
-  _pShell->SetINDEX("gam_iStartDifficulty", GetGameAPI()->GetDifficultyIndex(5));
-  _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
-  StartSinglePlayerGame();
-}
+};
 
 void InitActionsForSinglePlayerNewMenu() {
   CSinglePlayerNewMenu &gmCurrent = _pGUIM->gmSinglePlayerNewMenu;
 
-  gmCurrent.gm_mgTourist.mg_pActivatedFunction = &StartSinglePlayerGame_Tourist;
-  gmCurrent.gm_mgEasy.mg_pActivatedFunction = &StartSinglePlayerGame_Easy;
-  gmCurrent.gm_mgMedium.mg_pActivatedFunction = &StartSinglePlayerGame_Normal;
-  gmCurrent.gm_mgHard.mg_pActivatedFunction = &StartSinglePlayerGame_Hard;
-  gmCurrent.gm_mgSerious.mg_pActivatedFunction = &StartSinglePlayerGame_Serious;
-  gmCurrent.gm_mgMental.mg_pActivatedFunction = &StartSinglePlayerGame_Mental;
+  // [Cecil] Set selection function to all difficulties
+  const INDEX ct = gmCurrent.gm_amgDifficulties.Count();
+
+  for (INDEX i = 0; i < ct; i++) {
+    gmCurrent.gm_amgDifficulties[i].mg_pActivatedFunction = &StartSinglePlayerGameFromDifficulty;
+  }
 }
 
 // ------------------------ CPlayerProfileMenu implementation

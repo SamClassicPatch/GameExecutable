@@ -26,12 +26,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 class CSinglePlayerNewMenu : public CGameMenu {
   public:
     CMGTitle gm_mgTitle;
-    CMGButton gm_mgTourist;
-    CMGButton gm_mgEasy;
-    CMGButton gm_mgMedium;
-    CMGButton gm_mgHard;
-    CMGButton gm_mgSerious;
-    CMGButton gm_mgMental;
+
+    // [Cecil] Dynamic mod difficulties
+    CStaticStackArray<CMGButton> gm_amgDifficulties;
 
     void Initialize_t(void);
     void StartMenu(void);

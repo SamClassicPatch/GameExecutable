@@ -68,21 +68,16 @@ extern CTString astrMaxPlayersRadioTexts[] = {
 // here, we just reserve space for up to 16 different game types
 // actual names are added later
 extern CTString astrGameTypeRadioTexts[] = {
-  "", "", "", "", "",
-  "", "", "", "", "",
-  "", "", "", "", "",
-  "", "", "", "", "",
+  "", "", "", "", "", "", "", "",
+  "", "", "", "", "", "", "", "",
 };
 
 extern INDEX ctGameTypeRadioTexts = 1;
 
+// [Cecil] 16 difficulties that are filled later
 extern CTString astrDifficultyRadioTexts[] = {
-  RADIOTRANS("Tourist"),
-  RADIOTRANS("Easy"),
-  RADIOTRANS("Normal"),
-  RADIOTRANS("Hard"),
-  RADIOTRANS("Serious"),
-  RADIOTRANS("Mental"),
+  "", "", "", "", "", "", "", "",
+  "", "", "", "", "", "", "", "",
 };
 
 extern CTString astrSplitScreenRadioTexts[] = {
@@ -142,6 +137,24 @@ void InitGameTypes(void) {
   if (ctGameTypeRadioTexts == 0) {
     astrGameTypeRadioTexts[0] = "<???>";
     ctGameTypeRadioTexts = 1;
+  }
+
+  // [Cecil] Add difficulty names
+  const INDEX ctDiffs = ClampUp(CoreVarData().CountDiffs(), (INDEX)16);
+  INDEX ctAdded = 0;
+
+  for (; ctAdded < ctDiffs; ctAdded++) {
+    const CCoreVariables::Difficulty &diff = CoreVarData().GetDiff(ctAdded);
+
+    // No more difficulties
+    if (diff.strName == "") break;
+
+    astrDifficultyRadioTexts[ctAdded] = diff.strName;
+  }
+
+  // [Cecil] No difficulties added
+  if (ctAdded == 0) {
+    astrDifficultyRadioTexts[0] = "<???>";
   }
 }
 

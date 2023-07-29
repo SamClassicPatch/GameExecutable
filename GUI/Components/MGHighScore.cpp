@@ -46,13 +46,13 @@ void CMGHighScore::Render(CDrawPort *pdp) {
     INDEX iDifficulty = hse.hse_gdDifficulty + 1;
 
     // [Cecil] Invalid difficulty
-    if (iDifficulty < 0 || iDifficulty >= GetGameAPI()->sp_aGameDifficulties.Count()) {
+    if (iDifficulty < 0 || iDifficulty >= CoreVarData().CountDiffs()) {
       strHighScores[i + 1][1] = "---";
       continue;
 
     } else {
       // [Cecil] Get difficulty name from the API
-      strHighScores[i + 1][2] = GetGameAPI()->GetDifficultyName(iDifficulty);
+      strHighScores[i + 1][2] = CoreVarData().GetDiff(iDifficulty).strName;
     }
 
     strHighScores[i + 1][0].PrintF("%d", i + 1);

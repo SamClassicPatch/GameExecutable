@@ -281,7 +281,6 @@ void InitializeMenus(void) {
     TRANSLATERADIOARRAY(astrBitsPerPixelRadioTexts);
     TRANSLATERADIOARRAY(astrFrequencyRadioTexts);
     TRANSLATERADIOARRAY(astrSoundAPIRadioTexts);
-    TRANSLATERADIOARRAY(astrDifficultyRadioTexts);
     TRANSLATERADIOARRAY(astrMaxPlayersRadioTexts);
     TRANSLATERADIOARRAY(astrWeapon);
     TRANSLATERADIOARRAY(astrSplitScreenRadioTexts);
@@ -316,7 +315,7 @@ void InitializeMenus(void) {
 
     _pGUIM->gmSinglePlayerNewMenu.Initialize_t();
     _pGUIM->gmSinglePlayerNewMenu.gm_strName = "SinglePlayerNew";
-    _pGUIM->gmSinglePlayerNewMenu.gm_pmgSelectedByDefault = &_pGUIM->gmSinglePlayerNewMenu.gm_mgMedium;
+    _pGUIM->gmSinglePlayerNewMenu.gm_pmgSelectedByDefault = &_pGUIM->gmSinglePlayerNewMenu.gm_amgDifficulties[0];
     _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
     InitActionsForSinglePlayerNewMenu();
 
