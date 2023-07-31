@@ -23,6 +23,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // [Cecil] Tabs of options
 CStaticStackArray<CVarTab> _aTabs;
 
+// [Cecil] List of opened configs to prevent recursion
+static CDynamicContainer<CTFileStream> _cOpenedConfigs;
+
 CTString _strFile;
 INDEX _ctLines;
 
@@ -77,14 +80,9 @@ void CheckPVS_t(CVarSetting *pvs) {
   }
 }
 
-void ParseCFG_t(CTStream &strm) {
+// [Cecil] All settings list argument
+static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
   CVarSetting *pvs = NULL;
-
-  // [Cecil] All options tab
-  CVarTab &tabAll = _aTabs.Push();
-  tabAll.strName = TRANS("All options");
-
-  CListHead &lhAll = tabAll.lhVars;
 
   // [Cecil] Skip everything until the next gadget
   BOOL bSkipUntilNext = FALSE;
@@ -262,16 +260,55 @@ void ParseCFG_t(CTStream &strm) {
       strLine.TrimSpacesRight();
       pvs->vs_astrValues.Push() = strLine;
 
+    // [Cecil] Include another config in the middle of this one
+    } else if (strLine.RemovePrefix("Include:")) {
+      FixupFileName_t(strLine);
+
+      CTFileStream strmInclude;
+      strmInclude.Open_t(strLine);
+
+      FOREACHINDYNAMICCONTAINER(_cOpenedConfigs, CTFileStream, itstrm) {
+        // This config is already opened
+        if (itstrm->GetDescription() == strmInclude.GetDescription()) {
+          ThrowF_t(TRANS("Config '%s' is included recursively"), strLine.str_String);
+        }
+      }
+
+      // Start new lines and file
+      const INDEX ctRestore = _ctLines;
+      const CTString strRestore = _strFile;
+      _ctLines = 0;
+      _strFile = strLine;
+
+      // Parse included config
+      ParseCFG_t(strmInclude, lhAll);
+
+      // Restore lines and file
+      _ctLines = ctRestore;
+      _strFile = strRestore;
+
     } else {
       ThrowF_t(LOCALIZE("unknown keyword"));
     }
   }
+}
 
-  // [Cecil] Current tab
+// [Cecil] Start parsing the option config
+static void StartConfigParsing(CTStream &strm) {
+  // Create tab with all options
+  CVarTab &tabAll = _aTabs.Push();
+  tabAll.strName = TRANS("All options");
+
+  CListHead &lhAll = tabAll.lhVars;
+
+  // Parse the config
+  ParseCFG_t(strm, lhAll);
+
+  // Current tab
   CVarTab *pCur = NULL;
   BOOL bOnlySeparators = FALSE;
 
-  // [Cecil] Go through each setting
+  // Go through each setting
   FOREACHINLIST(CVarSetting, vs_lnNode, lhAll, itvs) {
     CVarSetting &vs = *itvs;
 
@@ -299,7 +336,7 @@ void ParseCFG_t(CTStream &strm) {
       pCur->lhVars.AddTail(pvsCopy->vs_lnNode);
     }
   }
-}
+};
 
 void LoadVarSettings(const CTFileName &fnmCfg) {
   FlushVarSettings(FALSE);
@@ -309,7 +346,12 @@ void LoadVarSettings(const CTFileName &fnmCfg) {
     strm.Open_t(fnmCfg);
     _ctLines = 0;
     _strFile = fnmCfg;
-    ParseCFG_t(strm);
+
+    // [Cecil] Start parsing the option config
+    _cOpenedConfigs.Clear();
+    _cOpenedConfigs.Add(&strm);
+
+    StartConfigParsing(strm);
 
   } catch (char *strError) {
     CPrintF("%s (%d) : %s\n", (const char *)_strFile, _ctLines, strError);
