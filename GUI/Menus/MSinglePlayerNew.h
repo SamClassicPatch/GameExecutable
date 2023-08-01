@@ -30,6 +30,9 @@ class CSinglePlayerNewMenu : public CGameMenu {
     // [Cecil] Dynamic mod difficulties
     CStaticStackArray<CMGButton> gm_amgDifficulties;
 
+    // [Cecil] Game customization button
+    CMGButton gm_mgCustomize;
+
     void Initialize_t(void);
     void StartMenu(void);
 };

@@ -16,6 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 #include "MenuPrinting.h"
 #include "MenuStuff.h"
+#include "MenuManager.h"
 #include "MSinglePlayerNew.h"
 
 // [Cecil] Convert all characters to uppercase
@@ -26,6 +27,15 @@ static inline void ToUpper(CTString &str) {
     *pch = toupper(*pch);
     pch++;
   }
+};
+
+// [Cecil] Open gameplay customization config
+static void OpenGameplayCustomization(void) {
+  _pGUIM->gmVarMenu.gm_mgTitle.SetName(TRANS("GAME CUSTOMIZATION"));
+  _pGUIM->gmVarMenu.gm_fnmMenuCFG = CTString("Scripts\\ClassicsPatch\\03_GameplaySettings.cfg");
+  _pGUIM->gmVarMenu.SetParentMenu(&_pGUIM->gmSinglePlayerNewMenu);
+
+  ChangeToMenu(&_pGUIM->gmVarMenu);
 };
 
 void CSinglePlayerNewMenu::Initialize_t(void) {
@@ -61,8 +71,24 @@ void CSinglePlayerNewMenu::Initialize_t(void) {
     AddChild(&mg);
   }
 
-  // Link buttons together
+  // Add dummy difficulty button
   ct = gm_amgDifficulties.Count();
+
+  if (ct == 0) {
+    CMGButton &mg = gm_amgDifficulties.Push();
+    mg.SetText(TRANS("INVALID"));
+    mg.mg_strTip = TRANS("this mod has no difficulties set up");
+    mg.mg_bfsFontSize = BFS_LARGE;
+
+    mg.mg_iIndex = 0;
+    mg.mg_pActivatedFunction = NULL;
+    mg.mg_bEnabled = FALSE;
+    AddChild(&mg);
+
+    ct = 1;
+  }
+
+  // Link buttons together
   BOOL bMediumFont = (ct > 9);
 
   for (INDEX iLink = 0; iLink < ct; iLink++) {
@@ -78,6 +104,17 @@ void CSinglePlayerNewMenu::Initialize_t(void) {
     mg.mg_pmgUp = &gm_amgDifficulties[(iLink + ct - 1) % ct];
     mg.mg_pmgDown = &gm_amgDifficulties[(iLink + 1) % ct];
   }
+
+  // [Cecil] Game customization button
+  gm_mgCustomize.SetText(TRANS("Customize game"));
+  gm_mgCustomize.mg_bfsFontSize = BFS_MEDIUM;
+  gm_mgCustomize.mg_boxOnScreen = BoxLeftColumn(15.0f);
+  gm_mgCustomize.mg_iCenterI = -1;
+
+  gm_mgCustomize.mg_pmgRight = &gm_amgDifficulties[0];
+  gm_mgCustomize.mg_pActivatedFunction = &OpenGameplayCustomization;
+
+  AddChild(&gm_mgCustomize);
 };
 
 void CSinglePlayerNewMenu::StartMenu(void) {
