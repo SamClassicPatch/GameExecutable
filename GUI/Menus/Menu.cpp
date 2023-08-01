@@ -240,10 +240,18 @@ void InitializeMenus(void) {
 
   try {
     // initialize and load corresponding fonts
+  #if SE1_GAME != SS_REV
     _fdSmall.Load_t( CTFILENAME("Fonts\\Display3-narrow.fnt"));
     _fdMedium.Load_t(CTFILENAME("Fonts\\Display3-normal.fnt"));
     _fdBig.Load_t(   CTFILENAME("Fonts\\Display3-caps.fnt"));
     _fdTitle.Load_t( CTFILENAME("Fonts\\Title2.fnt"));
+  #else
+    _fdSmall.Load_t( CTFILENAME("Fonts\\Asap.fnt"));
+    _fdMedium.Load_t(CTFILENAME("Fonts\\AsapBig.fnt"));
+    _fdBig.Load_t(   CTFILENAME("Fonts\\AsapBig.fnt"));
+    _fdTitle.Load_t( CTFILENAME("Fonts\\Modern\\Cabin.fnt"));
+  #endif
+
     _fdSmall.SetCharSpacing(-1);
     _fdSmall.SetLineSpacing(0);
     _fdSmall.SetSpaceWidth(0.4f);
