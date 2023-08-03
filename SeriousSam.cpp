@@ -395,6 +395,19 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   // parse command line before initializing engine
   ParseCommandLine(strCmdLine);
 
+  #if SE1_GAME == SS_REV
+    // [Cecil] Rev: Use Steam the same way as in Revolution's EXE
+    if (strCmdLine.FindSubstr("-nosteam") == -1) {
+      if (_pSteam->IsSteamRunning()) {
+        _pSteam->Initialize(FALSE, 227780, "Serious Sam: Revolution");
+
+      } else {
+        // [Cecil] NOTE: Restarts the client but doesn't initialize?
+        _pSteam->RestartSteamIfNecessary();
+      }
+    }
+  #endif
+
   // initialize engine
   SE_InitEngine(sam_strGameName);
 
@@ -772,6 +785,11 @@ void DoGame(void) {
 
     // print display mode info if needed
     PrintDisplayModeInfo();
+
+    #if SE1_GAME == SS_REV
+      // [Cecil] Rev: Render Steam overlay
+      _pSteam->RenderCustomOverlay(pdp);
+    #endif
 
     // render console
     _pGame->ConsoleRender(pdp);
