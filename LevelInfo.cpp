@@ -150,10 +150,16 @@ int qsort_CompareLevels(const void *elem1, const void *elem2) {
 void LoadLevelsList(void) {
   CPutString(LOCALIZE("Reading levels directory...\n"));
 
+  #define LIST_LEVELS_BASE_FLAGS (IFiles::FLF_RECURSIVE | IFiles::FLF_SEARCHCD | IFiles::FLF_SEARCHMOD)
+
   // list the levels directory with subdirs
   CFileList afnmDir;
-  IFiles::ListGameFiles(afnmDir, "Levels\\", "*.wld",
-    IFiles::FLF_RECURSIVE | IFiles::FLF_SEARCHMOD | IFiles::FLF_SEARCHCD | IFiles::FLF_SEARCHGAMES);
+  IFiles::ListGameFiles(afnmDir, "Levels\\", "*.wld", LIST_LEVELS_BASE_FLAGS | IFiles::FLF_SEARCHGAMES);
+
+  #if SE1_GAME == SS_REV
+    // [Cecil] Rev: List downloaded levels
+    IFiles::ListGameFiles(afnmDir, "Downloaded\\Levels\\", "*.wld", LIST_LEVELS_BASE_FLAGS | IFiles::FLF_REUSELIST);
+  #endif
 
   // for each file in the directory
   for (INDEX i = 0; i < afnmDir.Count(); i++) {
