@@ -288,7 +288,6 @@ void JoinNetworkGame(void) {
     _gmRunningGameMode = GM_NETWORK;
   } else {
     if (_pNetwork->ga_strRequiredMod != "") {
-      extern CTFileName _fnmModToLoad;
       extern CTString _strModServerJoin;
       char strModName[256] = {0};
       char strModURL[256] = {0};

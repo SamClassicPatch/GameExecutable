@@ -31,6 +31,10 @@ INDEX sam_bNotifyAboutUpdates = TRUE;
 INDEX sam_iUpdateReminder = 0;
 CTString sam_strLastVersionCheck = "";
 
+// Command line arguments for reloading the current game
+CTString _strRestartCommandLine = "";
+BOOL _bRestartGameClient = FALSE;
+
 // Custom connection setting
 static INDEX cli_bCustomPrediction = TRUE;
 static INDEX cli_iCustomBufferActions = 2;

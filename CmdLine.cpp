@@ -104,6 +104,9 @@ void ParseCommandLine(CTString strCmd) {
   cmd_strOutput = "";
   cmd_strOutput += CTString(0, LOCALIZE("Command line: '%s'\n"), strCmd);
 
+  // [Cecil] Remember command line arguments
+  _strRestartCommandLine = strCmd;
+
   // if no command line
   if (strCmd.Length() == 0) {
     // do nothing

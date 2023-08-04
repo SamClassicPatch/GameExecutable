@@ -1313,7 +1313,29 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
   _pGame->StopGame();
 
-  if (_fnmModToLoad != "") {
+  // [Cecil] Restart current game
+  if (_bRestartGameClient) {
+    STARTUPINFOA cif;
+    ZeroMemory(&cif, sizeof(STARTUPINFOA));
+    PROCESS_INFORMATION pi;
+
+    // Use executable filename
+    CTString strCmd = CCoreAPI::AppPath() + CCoreAPI::AppExe();
+    CTString strParam = " " + _strRestartCommandLine;
+
+    if (!CreateProcessA(strCmd.str_String, strParam.str_String, NULL, NULL, FALSE, CREATE_DEFAULT_ERROR_MODE, NULL, NULL, &cif, &pi)) {
+      // Report error
+      CTString strError;
+      strError.PrintF("Cannot restart the game:\n%s\n", GetWindowsError(GetLastError()));
+
+      MessageBoxA(0, strError, "Serious Sam", MB_OK | MB_ICONERROR);
+    }
+
+    // Disable quit screen
+    _bQuitScreen = FALSE;
+
+  // Load some mod
+  } else if (_fnmModToLoad != "") {
     STARTUPINFOA cif;
     ZeroMemory(&cif, sizeof(STARTUPINFOA));
     PROCESS_INFORMATION pi;
