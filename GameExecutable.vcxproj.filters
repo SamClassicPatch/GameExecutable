@@ -228,6 +228,12 @@
     <ClCompile Include="Cecil\MLevelCategories.cpp">
       <Filter>Source Files\Cecil</Filter>
     </ClCompile>
+    <ClCompile Include="Cecil\MExtras.cpp">
+      <Filter>Source Files\Cecil</Filter>
+    </ClCompile>
+    <ClCompile Include="Cecil\MPatchCredits.cpp">
+      <Filter>Source Files\Cecil</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdLine.h">
@@ -435,6 +441,12 @@
       <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>
     <ClInclude Include="Cecil\MLevelCategories.h">
+      <Filter>Header Files\Cecil headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Cecil\MExtras.h">
+      <Filter>Header Files\Cecil headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Cecil\MPatchCredits.h">
       <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>
   </ItemGroup>

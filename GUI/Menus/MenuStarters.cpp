@@ -531,9 +531,20 @@ void StartModsLoadMenu(void) {
   gmCurrent.gm_fnmExt = CTString(".des");
   gmCurrent.gm_pAfterFileChosen = &LSLoadMod;
 
-  gmCurrent.SetParentMenu(&_pGUIM->gmMainMenu);
+  // [Cecil] Set current menu as the parent menu
+  gmCurrent.SetParentMenu(pgmCurrentMenu);
   ChangeToMenu(&gmCurrent);
 }
+
+// [Cecil] Open extras menu
+void StartExtrasMenu(void) {
+  ChangeToMenu(&_pGUIM->gmExtras);
+};
+
+// [Cecil] Open credits menu
+void StartCreditsMenu(void) {
+  ChangeToMenu(&_pGUIM->gmPatchCredits);
+};
 
 void StartNetworkSettingsMenu(void) {
   CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;

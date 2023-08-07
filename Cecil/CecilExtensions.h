@@ -25,6 +25,7 @@ extern INDEX sam_bPatchVersionLabel;
 extern INDEX sam_bBackgroundGameRender;
 extern INDEX sam_bOptionTabs;
 extern INDEX sam_bLevelCategories;
+extern INDEX sam_bExtrasMenu;
 extern INDEX sam_bDecoratedServerNames;
 
 extern INDEX sam_bNotifyAboutUpdates;

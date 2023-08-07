@@ -292,10 +292,9 @@ void InitActionsForMainMenu() {
   CMainMenu &gmCurrent = _pGUIM->gmMainMenu;
 
   gmCurrent.gm_mgSingle.mg_pActivatedFunction = &StartSinglePlayerMenu;
-  gmCurrent.gm_mgNetwork.mg_pActivatedFunction = StartNetworkMenu;
+  gmCurrent.gm_mgNetwork.mg_pActivatedFunction = &StartNetworkMenu;
   gmCurrent.gm_mgSplitScreen.mg_pActivatedFunction = &StartSplitScreenMenu;
   gmCurrent.gm_mgDemo.mg_pActivatedFunction = &StartDemoLoadMenu;
-  gmCurrent.gm_mgMods.mg_pActivatedFunction = &StartModsLoadMenu;
   gmCurrent.gm_mgHighScore.mg_pActivatedFunction = &StartHighScoreMenu;
   gmCurrent.gm_mgOptions.mg_pActivatedFunction = &StartOptionsMenu;
   gmCurrent.gm_mgQuit.mg_pActivatedFunction = &ExitConfirm;

@@ -44,11 +44,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MVar.h"
 #include "MVideoOptions.h"
 #include "Cecil/MLevelCategories.h" // [Cecil]
+#include "Cecil/MExtras.h" // [Cecil]
+#include "Cecil/MPatchCredits.h" // [Cecil]
 
 class CMenuManager {
   public:
     CConfirmMenu gmConfirmMenu;
     CMainMenu gmMainMenu;
+    CExtrasMenu gmExtras; // [Cecil]
+    CPatchCreditsMenu gmPatchCredits; // [Cecil]
     CInGameMenu gmInGameMenu;
     CSinglePlayerMenu gmSinglePlayerMenu;
     CLevelCategoriesMenu gmLevelCategories; // [Cecil]

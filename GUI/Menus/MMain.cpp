@@ -18,14 +18,27 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MMain.h"
 
+// [Cecil] For menu starting functions
+#include "MenuStarters.h"
+
+// [Cecil] Update extras button
+void CMainMenu::UpdateExtras(void) {
+  // Extras button
+  if (sam_bExtrasMenu) {
+    gm_mgExtras.SetText(TRANS("EXTRAS"));
+    gm_mgExtras.mg_strTip = TRANS("modifications, credits and more");
+    gm_mgExtras.mg_pActivatedFunction = &StartExtrasMenu;
+
+  // Vanilla mods button
+  } else {
+    gm_mgExtras.SetText(LOCALIZE("MODS"));
+    gm_mgExtras.mg_strTip = LOCALIZE("run one of installed game modifications");
+    gm_mgExtras.mg_pActivatedFunction = &StartModsLoadMenu;
+  }
+};
+
 void CMainMenu::Initialize_t(void) {
   // intialize main menu
-  /*
-  gm_mgTitle.SetText("SERIOUS SAM - BETA");  // nothing to see here, kazuya
-  gm_mgTitle.mg_boxOnScreen = BoxTitle();
-  AddChild(& gm_mgTitle.mg_lnNode);
-  */
-
   gm_mgVersionLabel.SetText(sam_strVersion);
   gm_mgVersionLabel.mg_boxOnScreen = BoxVersion();
   gm_mgVersionLabel.mg_bfsFontSize = BFS_MEDIUM;
@@ -76,24 +89,23 @@ void CMainMenu::Initialize_t(void) {
   gm_mgDemo.mg_strTip = LOCALIZE("play a game demo");
   AddChild(&gm_mgDemo);
   gm_mgDemo.mg_pmgUp = &gm_mgSplitScreen;
-  gm_mgDemo.mg_pmgDown = &gm_mgMods;
+  gm_mgDemo.mg_pmgDown = &gm_mgExtras;
   gm_mgDemo.mg_pActivatedFunction = NULL;
 
-  gm_mgMods.SetText(LOCALIZE("MODS"));
-  gm_mgMods.mg_bfsFontSize = BFS_LARGE;
-  gm_mgMods.mg_boxOnScreen = BoxBigRow(4.0f);
-  gm_mgMods.mg_strTip = LOCALIZE("run one of installed game modifications");
-  AddChild(&gm_mgMods);
-  gm_mgMods.mg_pmgUp = &gm_mgDemo;
-  gm_mgMods.mg_pmgDown = &gm_mgHighScore;
-  gm_mgMods.mg_pActivatedFunction = NULL;
+  // [Cecil] Setup extras button
+  UpdateExtras();
+  gm_mgExtras.mg_bfsFontSize = BFS_LARGE;
+  gm_mgExtras.mg_boxOnScreen = BoxBigRow(4.0f);
+  gm_mgExtras.mg_pmgUp = &gm_mgDemo;
+  gm_mgExtras.mg_pmgDown = &gm_mgHighScore;
+  AddChild(&gm_mgExtras);
 
   gm_mgHighScore.SetText(LOCALIZE("HIGH SCORES"));
   gm_mgHighScore.mg_bfsFontSize = BFS_LARGE;
   gm_mgHighScore.mg_boxOnScreen = BoxBigRow(5.0f);
   gm_mgHighScore.mg_strTip = LOCALIZE("view list of top ten best scores");
   AddChild(&gm_mgHighScore);
-  gm_mgHighScore.mg_pmgUp = &gm_mgMods;
+  gm_mgHighScore.mg_pmgUp = &gm_mgExtras;
   gm_mgHighScore.mg_pmgDown = &gm_mgOptions;
   gm_mgHighScore.mg_pActivatedFunction = NULL;
 
@@ -121,6 +133,9 @@ void CMainMenu::StartMenu(void) {
   gm_mgNetwork.mg_bEnabled     = GetGameAPI()->IsMenuEnabledSS("Network");
   gm_mgSplitScreen.mg_bEnabled = GetGameAPI()->IsMenuEnabledSS("Split Screen");
   gm_mgHighScore.mg_bEnabled   = GetGameAPI()->IsMenuEnabledSS("High Score");
+
+  // [Cecil] Update extras button
+  UpdateExtras();
 
   CGameMenu::StartMenu();
 }

@@ -89,6 +89,10 @@ static CTextureObject _toPointer;
 static CTextureObject _toLogoMenuA;
 static CTextureObject _toLogoMenuB;
 
+// [Cecil] Classics Patch logo
+static CTextureObject _toPatchLogo1;
+static CTextureObject _toPatchLogo2;
+
 // -------------- All possible menu entities
 #define BIG_BUTTONS_CT 6
 
@@ -272,12 +276,22 @@ void InitializeMenus(void) {
     _toPointer.SetData_t(CTFILENAME("Textures\\General\\Pointer.tex"));
     _toLogoMenuA.SetData_t(CTFILENAME("Textures\\Logo\\sam_menulogo256a.tex"));
     _toLogoMenuB.SetData_t(CTFILENAME("Textures\\Logo\\sam_menulogo256b.tex"));
+
+    // [Cecil] Classics Patch logo
+    _toPatchLogo1.SetData_t(CTFILENAME("TexturesPatch\\General\\PatchLogo1.tex"));
+    _toPatchLogo2.SetData_t(CTFILENAME("TexturesPatch\\General\\PatchLogo2.tex"));
+
   } catch (char *strError) {
     FatalError(strError);
   }
+
   // force logo textures to be of maximal size
   ((CTextureData *)_toLogoMenuA.GetData())->Force(TEX_CONSTANT);
   ((CTextureData *)_toLogoMenuB.GetData())->Force(TEX_CONSTANT);
+
+  // [Cecil] Classics Patch logo
+  ((CTextureData *)_toPatchLogo1.GetData())->Force(TEX_CONSTANT);
+  ((CTextureData *)_toPatchLogo2.GetData())->Force(TEX_CONSTANT);
 
   // menu's relative placement
   CPlacement3D plRelative = CPlacement3D(FLOAT3D(0.0f, 0.0f, -9.0f), ANGLE3D(0.0f, 0.0f, 0.0f));
@@ -444,6 +458,18 @@ void InitializeMenus(void) {
     _pGUIM->gmLevelCategories.Initialize_t();
     _pGUIM->gmLevelCategories.gm_strName = "LevelCategories";
     _pGUIM->gmLevelCategories.gm_pmgSelectedByDefault = &_pGUIM->gmLevelCategories.gm_amgCategories[0];
+
+    // [Cecil] Initialize extras menu
+    _pGUIM->gmExtras.Initialize_t();
+    _pGUIM->gmExtras.gm_strName = "Extras";
+    _pGUIM->gmExtras.gm_pmgSelectedByDefault = &_pGUIM->gmExtras.gm_mgMods;
+    _pGUIM->gmExtras.SetParentMenu(&_pGUIM->gmMainMenu);
+
+    // [Cecil] Initialize credits menu
+    _pGUIM->gmPatchCredits.Initialize_t();
+    _pGUIM->gmPatchCredits.gm_strName = "ClassicsPatchCredits";
+    _pGUIM->gmPatchCredits.gm_pmgSelectedByDefault = &_pGUIM->gmPatchCredits.gm_amgNames[0];
+    _pGUIM->gmPatchCredits.SetParentMenu(&_pGUIM->gmExtras);
 
   } catch (char *strError) {
     FatalError(strError);
@@ -764,6 +790,19 @@ BOOL DoMenu(CDrawPort *pdp) {
         pixJ1 = pixJ0 + pixLogoHeight * fScale;
         dpMenu.PutTexture(_ptoLogoEAX, PIXaabbox2D(PIX2D(pixI0, pixJ0), PIX2D(pixI1, pixJ1)));
       }
+
+    // [Cecil] Classics Patch credits
+    } else if (pgmCurrentMenu == &_pGUIM->gmPatchCredits) {
+      // Display patch logo at the top
+      FLOAT fResize = Min(dpMenu.GetWidth() / 640.0f, dpMenu.GetHeight() / 480.0f);
+      PIX pixSizeI = 192 * fResize;
+      PIX pixSizeJ = 96 * fResize;
+      PIX pixCenterI = dpMenu.GetWidth() / 2;
+      PIX pixHeightJ = 10 * fResize;
+      dpMenu.PutTexture(&_toPatchLogo1, PIXaabbox2D(
+        PIX2D(pixCenterI - pixSizeI, pixHeightJ), PIX2D(pixCenterI, pixHeightJ + pixSizeJ)));
+      dpMenu.PutTexture(&_toPatchLogo2, PIXaabbox2D(
+        PIX2D(pixCenterI, pixHeightJ), PIX2D(pixCenterI + pixSizeI, pixHeightJ + pixSizeJ)));
     }
 
 #define THUMBW 96
