@@ -231,17 +231,27 @@ void CPlayerProfileMenu::SelectPlayer(INDEX iPlayer) {
     // if there is some
   } else {
     // set the model
+  #if SE1_GAME != SS_REV
     BOOL (*pFunc)(CModelObject *, CPlayerCharacter *, CTString &, BOOL) =
       (BOOL(*)(CModelObject *, CPlayerCharacter *, CTString &, BOOL))pss->ss_pvValue;
+    #define SET_APPEARANCE(_Char) pFunc(&gm_mgModel.mg_moModel, _Char, strName, TRUE)
+
+  #else
+    // [Cecil] Rev: Set team 0
+    BOOL (*pFunc)(CModelObject *, CPlayerCharacter *, INDEX, CTString &, BOOL) =
+      (BOOL(*)(CModelObject *, CPlayerCharacter *, INDEX, CTString &, BOOL))pss->ss_pvValue;
+    #define SET_APPEARANCE(_Char) pFunc(&gm_mgModel.mg_moModel, _Char, 0, strName, TRUE)
+  #endif
+
     CTString strName;
     BOOL bSet;
     if (_gmRunningGameMode != GM_SINGLE_PLAYER && !_bPlayerMenuFromSinglePlayer) {
-      bSet = pFunc(&gm_mgModel.mg_moModel, &pc, strName, TRUE);
+      bSet = SET_APPEARANCE(&pc);
       gm_mgModel.mg_strTip = LOCALIZE("change model for this player");
       gm_mgModel.mg_bEnabled = TRUE;
     } else {
       // cannot change player appearance in single player mode
-      bSet = pFunc(&gm_mgModel.mg_moModel, NULL, strName, TRUE);
+      bSet = SET_APPEARANCE(NULL);
       gm_mgModel.mg_strTip = LOCALIZE("cannot change model for single-player game");
       gm_mgModel.mg_bEnabled = FALSE;
     }
