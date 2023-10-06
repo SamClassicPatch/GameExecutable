@@ -50,9 +50,13 @@ void CMGModel::Render(CDrawPort *pdp) {
 #if CLASSICSPATCH_ENGINEPATCHES
 
   // [Cecil] Adjust FOV for the player model
-  if (_EnginePatches._bUseVerticalFOV) {
+  if (CoreVarData().bAdjustFOV && _EnginePatches._bUseVerticalFOV) {
     // Use screen ratio set in BoxPlayerModel() as the size
     IRender::AdjustVFOV(FLOAT2D(285, 545), pr.FOVL());
+
+  } else {
+    // Use ratio of the entire screen as the size
+    IRender::AdjustHFOV(FLOAT2D(pdp->GetWidth(), pdp->GetHeight()), pr.FOVL());
   }
 
 #endif // CLASSICSPATCH_ENGINEPATCHES
