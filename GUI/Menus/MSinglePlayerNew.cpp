@@ -21,11 +21,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // [Cecil] Convert all characters to uppercase
 static inline void ToUpper(CTString &str) {
-  char *pch = str.str_String;
+  const INDEX ct = str.Length();
 
-  while (*pch != '\0') {
-    *pch = toupper(*pch);
-    pch++;
+  // Only capitalize decorated characters, ignoring characters in color tags
+  for (INDEX i = 0; i < ct; i++) {
+    char &ch = str.str_String[IData::GetDecoratedChar(str, i)];
+    ch = toupper(ch);
   }
 };
 
@@ -50,9 +51,6 @@ void CSinglePlayerNewMenu::Initialize_t(void) {
   for (INDEX iAdd = 0; iAdd < ct; iAdd++) {
     // Get difficulty name from the API
     const CCoreVariables::Difficulty &diff = CoreVarData().GetDiff(iAdd);
-
-    // No more difficulties
-    if (diff.strName == "") break;
 
     // Make all uppercase and translate
     CTString strName = diff.strName;

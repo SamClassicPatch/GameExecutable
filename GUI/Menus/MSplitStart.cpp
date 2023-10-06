@@ -77,7 +77,7 @@ void CSplitStartMenu::StartMenu(void) {
 
   gm_mgGameType.mg_iSelected = Clamp(_pShell->GetINDEX("gam_iStartMode"), 0L, ctGameTypeRadioTexts - 1L);
   gm_mgGameType.ApplyCurrentSelection();
-  gm_mgDifficulty.mg_iSelected = _pShell->GetINDEX("gam_iStartDifficulty") + 1;
+  gm_mgDifficulty.mg_iSelected = CoreVarData().FindDiffByLevel(_pShell->GetINDEX("gam_iStartDifficulty"));
   gm_mgDifficulty.ApplyCurrentSelection();
 
   // [Cecil] Don't allow less players than amount of local ones
@@ -89,7 +89,7 @@ void CSplitStartMenu::StartMenu(void) {
 }
 
 void CSplitStartMenu::EndMenu(void) {
-  _pShell->SetINDEX("gam_iStartDifficulty", gm_mgDifficulty.mg_iSelected - 1);
+  _pShell->SetINDEX("gam_iStartDifficulty", CoreVarData().GetDiff(gm_mgDifficulty.mg_iSelected).iLevel);
   _pShell->SetINDEX("gam_iStartMode", gm_mgGameType.mg_iSelected);
 
   CGameMenu::EndMenu();

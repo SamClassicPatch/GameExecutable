@@ -39,6 +39,8 @@ void CMGHighScore::Render(CDrawPort *pdp) {
   strHighScores[0][4] = LOCALIZE("Kills");
   strHighScores[0][5] = LOCALIZE("Score");
 
+  const INDEX ctDiffs = CoreVarData().CountDiffs();
+
   {for (INDEX i = 0; i < HIGHSCORE_COUNT; i++) {
     CHighScoreEntry &hse = *GetGameAPI()->GetHighScore(i);
 
@@ -46,7 +48,7 @@ void CMGHighScore::Render(CDrawPort *pdp) {
     INDEX iDifficulty = hse.hse_gdDifficulty + 1;
 
     // [Cecil] Invalid difficulty
-    if (iDifficulty < 0 || iDifficulty >= CoreVarData().CountDiffs()) {
+    if (iDifficulty < 0 || iDifficulty >= ctDiffs) {
       strHighScores[i + 1][1] = "---";
       continue;
 

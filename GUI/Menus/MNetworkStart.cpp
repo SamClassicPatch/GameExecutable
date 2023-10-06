@@ -108,7 +108,7 @@ void CNetworkStartMenu::Initialize_t(void) {
 
 // [Cecil] Count active difficulties for selection lists
 INDEX CountActiveDifficulties(void) {
-  const INDEX ct = ClampUp(CoreVarData().CountDiffs(), (INDEX)16);
+  const INDEX ct = ClampUp(INDEX(MAX_GAME_DIFFICULTIES), INDEX(16));
   INDEX i = 0;
 
   for (; i < ct; i++) {
@@ -128,7 +128,7 @@ void CNetworkStartMenu::StartMenu(void) {
 
   gm_mgGameType.mg_iSelected = Clamp(_pShell->GetINDEX("gam_iStartMode"), 0L, ctGameTypeRadioTexts - 1L);
   gm_mgGameType.ApplyCurrentSelection();
-  gm_mgDifficulty.mg_iSelected = _pShell->GetINDEX("gam_iStartDifficulty") + 1;
+  gm_mgDifficulty.mg_iSelected = CoreVarData().FindDiffByLevel(_pShell->GetINDEX("gam_iStartDifficulty"));
   gm_mgDifficulty.ApplyCurrentSelection();
 
   _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1)); // [Cecil] API
@@ -154,7 +154,7 @@ void CNetworkStartMenu::StartMenu(void) {
 }
 
 void CNetworkStartMenu::EndMenu(void) {
-  _pShell->SetINDEX("gam_iStartDifficulty", gm_mgDifficulty.mg_iSelected - 1);
+  _pShell->SetINDEX("gam_iStartDifficulty", CoreVarData().GetDiff(gm_mgDifficulty.mg_iSelected).iLevel);
   _pShell->SetINDEX("gam_iStartMode", gm_mgGameType.mg_iSelected);
   _pShell->SetINDEX("gam_bWaitAllPlayers", gm_mgWaitAllPlayers.mg_iSelected);
   _pShell->SetINDEX("gam_ctMaxPlayers", gm_mgMaxPlayers.mg_iSelected + 2);

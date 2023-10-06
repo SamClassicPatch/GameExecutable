@@ -140,7 +140,7 @@ void InitGameTypes(void) {
   }
 
   // [Cecil] Add difficulty names
-  const INDEX ctDiffs = ClampUp(CoreVarData().CountDiffs(), (INDEX)16);
+  const INDEX ctDiffs = ClampUp(INDEX(MAX_GAME_DIFFICULTIES), INDEX(16));
   INDEX ctAdded = 0;
 
   for (; ctAdded < ctDiffs; ctAdded++) {
