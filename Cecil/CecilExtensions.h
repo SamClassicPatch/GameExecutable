@@ -32,6 +32,8 @@ extern INDEX sam_bNotifyAboutUpdates;
 extern INDEX sam_iUpdateReminder;
 extern CTString sam_strLastVersionCheck;
 
+extern INDEX sam_iShowLevelFormat;
+
 // Command line arguments for reloading the current game
 extern CTString _strRestartCommandLine;
 extern BOOL _bRestartGameClient;

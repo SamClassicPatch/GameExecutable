@@ -32,6 +32,8 @@ INDEX sam_bNotifyAboutUpdates = TRUE;
 INDEX sam_iUpdateReminder = 0;
 CTString sam_strLastVersionCheck = "";
 
+INDEX sam_iShowLevelFormat = -1; // Show all
+
 // Command line arguments for reloading the current game
 CTString _strRestartCommandLine = "";
 BOOL _bRestartGameClient = FALSE;
@@ -108,6 +110,8 @@ void ClassicsPatch_InitExt(void) {
   _pShell->DeclareSymbol("persistent user INDEX sam_bNotifyAboutUpdates;", &sam_bNotifyAboutUpdates);
   _pShell->DeclareSymbol("persistent      INDEX sam_iUpdateReminder;",     &sam_iUpdateReminder);
   _pShell->DeclareSymbol("persistent CTString sam_strLastVersionCheck;", &sam_strLastVersionCheck);
+
+  _pShell->DeclareSymbol("INDEX sam_iShowLevelFormat;", &sam_iShowLevelFormat);
 
   _pShell->DeclareSymbol("user void ListLevels(CTString);", &ListLevels);
 

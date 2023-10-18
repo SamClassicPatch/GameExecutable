@@ -33,6 +33,24 @@ static void ChangeLevelVisibility(void) {
   gmCurrent.StartMenu();
 };
 
+// [Cecil] Toggle level format and reload the menu
+static void ToggleMountedLevels(void) {
+  // Choose level format to show
+  switch (sam_iShowLevelFormat) {
+    case -1:           sam_iShowLevelFormat = E_LF_CURRENT; break;
+  #if TSE_FUSION_MODE
+    case E_LF_CURRENT: sam_iShowLevelFormat = E_LF_TFE; break;
+    case E_LF_TFE:     sam_iShowLevelFormat = E_LF_SSR; break;
+  #endif
+    default:           sam_iShowLevelFormat = -1;
+  }
+
+  // Reload the menu
+  CLevelsMenu &gmCurrent = _pGUIM->gmLevelsMenu;
+  gmCurrent.EndMenu();
+  gmCurrent.StartMenu();
+};
+
 void CLevelsMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.SetName(LOCALIZE("CHOOSE LEVEL"));
@@ -58,7 +76,7 @@ void CLevelsMenu::Initialize_t(void) {
   gm_mgArrowDn.mg_adDirection = AD_DOWN;
   gm_mgArrowDn.mg_boxOnScreen = BoxArrow(AD_DOWN);
   gm_mgArrowDn.mg_pmgRight = &gm_mgManualLevel[LEVELS_ON_SCREEN - 1];
-  gm_mgArrowDn.mg_pmgUp = &gm_mgVisibility;
+  gm_mgArrowDn.mg_pmgUp = &gm_mgLevelFormat;
   AddChild(&gm_mgArrowDn);
 
   gm_ctListVisible = LEVELS_ON_SCREEN;
@@ -67,17 +85,36 @@ void CLevelsMenu::Initialize_t(void) {
   gm_pmgListTop = &gm_mgManualLevel[0];
   gm_pmgListBottom = &gm_mgManualLevel[LEVELS_ON_SCREEN - 1];
 
-  // [Cecil] Level visibility switch
+  // [Cecil] Levels filters
+  gm_mgFiltersLabel.SetText(TRANS("FILTERING"));
+  gm_mgFiltersLabel.mg_bfsFontSize = BFS_MEDIUM;
+  gm_mgFiltersLabel.mg_boxOnScreen = BoxLeftColumn(-1.0f);
+  gm_mgFiltersLabel.mg_iCenterI = -1;
+  gm_mgFiltersLabel.mg_bEnabled = FALSE;
+  gm_mgFiltersLabel.mg_bLabel = TRUE;
+  AddChild(&gm_mgFiltersLabel);
+
+  gm_mgVisibility.mg_strTip = TRANS("toggle visibility of all world files");
   gm_mgVisibility.mg_bfsFontSize = BFS_MEDIUM;
-  gm_mgVisibility.mg_boxOnScreen = BoxLeftColumn(-1.0f);
+  gm_mgVisibility.mg_boxOnScreen = BoxLeftColumn(0.0f);
   gm_mgVisibility.mg_iCenterI = -1;
 
   gm_mgVisibility.mg_pmgRight = &gm_mgManualLevel[0];
   gm_mgVisibility.mg_pmgUp = &gm_mgArrowUp;
-  gm_mgVisibility.mg_pmgDown = &gm_mgArrowDn;
+  gm_mgVisibility.mg_pmgDown = &gm_mgLevelFormat;
   gm_mgVisibility.mg_pActivatedFunction = &ChangeLevelVisibility;
-
   AddChild(&gm_mgVisibility);
+
+  gm_mgLevelFormat.mg_strTip = TRANS("list levels only in a specific world format");
+  gm_mgLevelFormat.mg_bfsFontSize = BFS_MEDIUM;
+  gm_mgLevelFormat.mg_boxOnScreen = BoxLeftColumn(1.0f);
+  gm_mgLevelFormat.mg_iCenterI = -1;
+
+  gm_mgLevelFormat.mg_pmgRight = &gm_mgManualLevel[0];
+  gm_mgLevelFormat.mg_pmgUp = &gm_mgVisibility;
+  gm_mgLevelFormat.mg_pmgDown = &gm_mgArrowDn;
+  gm_mgLevelFormat.mg_pActivatedFunction = &ToggleMountedLevels;
+  AddChild(&gm_mgLevelFormat);
 }
 
 void CLevelsMenu::FillListItems(void) {
@@ -152,7 +189,19 @@ void CLevelsMenu::StartMenu(void) {
   gm_iListWantedItem = 0;
 
   // [Cecil] Set level visibility switch text
-  gm_mgVisibility.SetText(sam_bShowAllLevels ? TRANS("Show visible levels") : TRANS("Show all levels"));
+  gm_mgVisibility.SetText(sam_bShowAllLevels ? TRANS("Show visible") : TRANS("Show all"));
+
+  // [Cecil] Set format switch text
+  CTString strFormat = TRANS("All");
+
+  switch (sam_iShowLevelFormat) {
+    case E_LF_TFE: strFormat = "TFE"; break;
+    case E_LF_TSE: strFormat = "TSE"; break;
+    case E_LF_SSR: strFormat = "SSR"; break;
+  }
+
+  strFormat = TRANS("Format: ") + strFormat;
+  gm_mgLevelFormat.SetText(strFormat);
 
   // for each level
   INDEX i = 0;

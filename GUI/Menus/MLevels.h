@@ -30,7 +30,10 @@ class CLevelsMenu : public CGameMenu {
     CMGLevelButton gm_mgManualLevel[LEVELS_ON_SCREEN];
     CMGArrow gm_mgArrowUp;
     CMGArrow gm_mgArrowDn;
-    CMGButton gm_mgVisibility; // [Cecil] Level visibility switch
+
+    CMGButton gm_mgFiltersLabel; // [Cecil] Filters label
+    CMGButton gm_mgVisibility;   // [Cecil] Level visibility switch
+    CMGButton gm_mgLevelFormat;  // [Cecil] Level format switch
 
     ULONG gm_ulSpawnFlags; // [Cecil] Level visibility flags
     INDEX gm_iCategory; // [Cecil] Level category

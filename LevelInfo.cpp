@@ -260,6 +260,11 @@ void FilterLevels(ULONG ulSpawnFlags, INDEX iCategory) {
 
     // if visible
     if (bVisible) {
+      // [Cecil] Only show levels that fit the format
+      if (sam_iShowLevelFormat != -1) {
+        if (li.li_eFormat != sam_iShowLevelFormat) continue;
+      }
+
       // [Cecil] Skip unfit levels
       if (!LevelFitsCategory(li, iCategory)) continue;
 
