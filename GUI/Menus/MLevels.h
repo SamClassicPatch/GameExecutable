@@ -34,6 +34,7 @@ class CLevelsMenu : public CGameMenu {
     CMGButton gm_mgFiltersLabel; // [Cecil] Filters label
     CMGButton gm_mgVisibility;   // [Cecil] Level visibility switch
     CMGButton gm_mgLevelFormat;  // [Cecil] Level format switch
+    CMGEdit gm_mgTitleFilter;    // [Cecil] Level title filter
 
     ULONG gm_ulSpawnFlags; // [Cecil] Level visibility flags
     INDEX gm_iCategory; // [Cecil] Level category
@@ -41,6 +42,7 @@ class CLevelsMenu : public CGameMenu {
     void Initialize_t(void);
     void FillListItems(void);
     void StartMenu(void);
+    void Think(void); // [Cecil]
 
     // [Cecil] Default constructor
     CLevelsMenu() : CGameMenu(), gm_ulSpawnFlags(0), gm_iCategory(-1)

@@ -22,6 +22,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "GUI/Menus/MenuManager.h"
 extern INDEX sam_bShowAllLevels;
 
+static CTString _strLastTitleFilter = "";
+
 // [Cecil] Toggle level visibility and reload the menu
 static void ChangeLevelVisibility(void) {
   // Toggle visibility
@@ -112,9 +114,20 @@ void CLevelsMenu::Initialize_t(void) {
 
   gm_mgLevelFormat.mg_pmgRight = &gm_mgManualLevel[0];
   gm_mgLevelFormat.mg_pmgUp = &gm_mgVisibility;
-  gm_mgLevelFormat.mg_pmgDown = &gm_mgArrowDn;
+  gm_mgLevelFormat.mg_pmgDown = &gm_mgTitleFilter;
   gm_mgLevelFormat.mg_pActivatedFunction = &ToggleMountedLevels;
   AddChild(&gm_mgLevelFormat);
+
+  gm_mgTitleFilter.mg_strTip = TRANS("display title filter");
+  gm_mgTitleFilter.mg_bfsFontSize = BFS_MEDIUM;
+  gm_mgTitleFilter.mg_boxOnScreen = BoxLeftColumn(2.0f);
+  gm_mgTitleFilter.mg_iCenterI = -1;
+
+  gm_mgTitleFilter.mg_pmgRight = &gm_mgManualLevel[0];
+  gm_mgTitleFilter.mg_pmgUp = &gm_mgLevelFormat;
+  gm_mgTitleFilter.mg_pmgDown = &gm_mgArrowDn;
+  gm_mgTitleFilter.mg_pstrToChange = &sam_strLevelTitleFilter;
+  AddChild(&gm_mgTitleFilter);
 }
 
 void CLevelsMenu::FillListItems(void) {
@@ -180,6 +193,48 @@ void CLevelsMenu::FillListItems(void) {
 }
 
 void CLevelsMenu::StartMenu(void) {
+  // [Cecil] Hide filtering options
+  if (!sam_bLevelFiltering) {
+    gm_mgFiltersLabel.mg_iInList = -2;
+    gm_mgVisibility.mg_iInList = -2;
+    gm_mgLevelFormat.mg_iInList = -2;
+    gm_mgTitleFilter.mg_iInList = -2;
+
+    sam_iShowLevelFormat = -1;
+    sam_strLevelTitleFilter = "";
+
+    _strLastTitleFilter = "";
+    gm_mgTitleFilter.SetText("");
+
+  // [Cecil] Show filtering options
+  } else {
+    gm_mgFiltersLabel.mg_iInList = -1;
+    gm_mgVisibility.mg_iInList = -1;
+    gm_mgLevelFormat.mg_iInList = -1;
+    gm_mgTitleFilter.mg_iInList = -1;
+
+    // Set level visibility switch text
+    gm_mgVisibility.SetText(sam_bShowAllLevels ? TRANS("Show visible") : TRANS("Show all"));
+
+    // Set format switch text
+    CTString strFormat = "???";
+
+    switch (sam_iShowLevelFormat) {
+      case -1: strFormat = TRANS("All"); break;
+      case E_LF_TFE: strFormat = "TFE"; break;
+      case E_LF_TSE: strFormat = "TSE"; break;
+      case E_LF_SSR: strFormat = "SSR"; break;
+      case E_LF_150: strFormat = "1.50"; break;
+    }
+
+    strFormat = TRANS("Format: ") + strFormat;
+    gm_mgLevelFormat.SetText(strFormat);
+
+    // Set title filter
+    _strLastTitleFilter = sam_strLevelTitleFilter;
+    gm_mgTitleFilter.SetText(sam_strLevelTitleFilter);
+  }
+
   // [Cecil] Filter levels using local spawn flags
   FilterLevels(gm_ulSpawnFlags, gm_iCategory);
 
@@ -187,21 +242,6 @@ void CLevelsMenu::StartMenu(void) {
   gm_iListOffset = 0;
   gm_ctListTotal = _lhFilteredLevels.Count();
   gm_iListWantedItem = 0;
-
-  // [Cecil] Set level visibility switch text
-  gm_mgVisibility.SetText(sam_bShowAllLevels ? TRANS("Show visible") : TRANS("Show all"));
-
-  // [Cecil] Set format switch text
-  CTString strFormat = TRANS("All");
-
-  switch (sam_iShowLevelFormat) {
-    case E_LF_TFE: strFormat = "TFE"; break;
-    case E_LF_TSE: strFormat = "TSE"; break;
-    case E_LF_SSR: strFormat = "SSR"; break;
-  }
-
-  strFormat = TRANS("Format: ") + strFormat;
-  gm_mgLevelFormat.SetText(strFormat);
 
   // for each level
   INDEX i = 0;
@@ -220,3 +260,14 @@ void CLevelsMenu::StartMenu(void) {
 
   CGameMenu::StartMenu();
 }
+
+// [Cecil] Update level list
+void CLevelsMenu::Think(void) {
+  // Reload menu upon changing the title filter
+  if (_strLastTitleFilter != sam_strLevelTitleFilter) {
+    _strLastTitleFilter = sam_strLevelTitleFilter;
+
+    EndMenu();
+    StartMenu();
+  }
+};

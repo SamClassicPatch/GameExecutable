@@ -25,6 +25,7 @@ INDEX sam_bPatchVersionLabel = TRUE;
 INDEX sam_bBackgroundGameRender = TRUE;
 INDEX sam_bOptionTabs = TRUE;
 INDEX sam_bLevelCategories = TRUE;
+INDEX sam_bLevelFiltering = TRUE;
 INDEX sam_bExtrasMenu = TRUE;
 INDEX sam_bDecoratedServerNames = TRUE;
 
@@ -32,7 +33,9 @@ INDEX sam_bNotifyAboutUpdates = TRUE;
 INDEX sam_iUpdateReminder = 0;
 CTString sam_strLastVersionCheck = "";
 
+// Level filtering
 INDEX sam_iShowLevelFormat = -1; // Show all
+CTString sam_strLevelTitleFilter = "";
 
 // Command line arguments for reloading the current game
 CTString _strRestartCommandLine = "";
@@ -104,14 +107,13 @@ void ClassicsPatch_InitExt(void) {
   _pShell->DeclareSymbol("persistent user INDEX sam_bBackgroundGameRender;", &sam_bBackgroundGameRender);
   _pShell->DeclareSymbol("persistent user INDEX sam_bOptionTabs;",           &sam_bOptionTabs);
   _pShell->DeclareSymbol("persistent user INDEX sam_bLevelCategories;",      &sam_bLevelCategories);
+  _pShell->DeclareSymbol("persistent user INDEX sam_bLevelFiltering;",       &sam_bLevelFiltering);
   _pShell->DeclareSymbol("persistent user INDEX sam_bExtrasMenu;",           &sam_bExtrasMenu);
   _pShell->DeclareSymbol("persistent user INDEX sam_bDecoratedServerNames;", &sam_bDecoratedServerNames);
 
   _pShell->DeclareSymbol("persistent user INDEX sam_bNotifyAboutUpdates;", &sam_bNotifyAboutUpdates);
   _pShell->DeclareSymbol("persistent      INDEX sam_iUpdateReminder;",     &sam_iUpdateReminder);
   _pShell->DeclareSymbol("persistent CTString sam_strLastVersionCheck;", &sam_strLastVersionCheck);
-
-  _pShell->DeclareSymbol("INDEX sam_iShowLevelFormat;", &sam_iShowLevelFormat);
 
   _pShell->DeclareSymbol("user void ListLevels(CTString);", &ListLevels);
 
