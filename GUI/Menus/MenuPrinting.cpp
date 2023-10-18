@@ -255,6 +255,23 @@ FLOATaabbox2D PixBoxToFloatBox(const CDrawPort *pdp, const PIXaabbox2D &boxP) {
     FLOAT2D(boxP.Max()(1) / fpixW, boxP.Max()(2) / fpixH));
 }
 
+// [Cecil] Determine base text scaling
+static __forceinline FLOAT BaseScaling(CDrawPort *pdp) {
+  FLOAT fBaseScale = CoreVarData().fMenuTextScale;
+
+  // Relative to aspect ratio
+  if (CoreVarData().bProperTextScaling) {
+    fBaseScale *= HEIGHT_SCALING(pdp);
+
+  // Vanilla scaling
+  } else {
+    fBaseScale *= ((FLOAT)pdp->GetWidth() / 640.0f);
+  }
+
+  // Apply wide adjustment multiplier, like in vanilla
+  return fBaseScale * pdp->dp_fWideAdjustment;
+};
+
 extern CFontData _fdTitle;
 void SetFontTitle(CDrawPort *pdp) {
   pdp->SetFont(&_fdTitle);
@@ -263,7 +280,7 @@ void SetFontTitle(CDrawPort *pdp) {
   const FLOAT fRelScale = ClampUp(32.0f / (FLOAT)_fdTitle.GetHeight(), 1.0f);
 
   // [Cecil] Use height instead of width for text scaling
-  pdp->SetTextScaling(fRelScale * 1.25f * HEIGHT_SCALING(pdp));
+  pdp->SetTextScaling(fRelScale * 1.25f * BaseScaling(pdp));
   pdp->SetTextAspect(1.0f);
 }
 
@@ -278,7 +295,7 @@ void SetFontBig(CDrawPort *pdp, FLOAT fScale) {
   const FLOAT fRelScale = ClampUp(32.0f / (FLOAT)_fdBig.GetHeight(), 1.0f);
 
   // [Cecil] Use height instead of width for text scaling
-  pdp->SetTextScaling(fRelScale * fScale * HEIGHT_SCALING(pdp));
+  pdp->SetTextScaling(fRelScale * fScale * BaseScaling(pdp));
   pdp->SetTextAspect(1.0f);
 }
 
@@ -290,7 +307,7 @@ void SetFontMedium(CDrawPort *pdp, FLOAT fScale) {
   const FLOAT fRelScale = ClampUp(16.0f / (FLOAT)_fdMedium.GetHeight(), 1.0f);
 
   // [Cecil] Use height instead of width for text scaling
-  pdp->SetTextScaling(fRelScale * fScale * HEIGHT_SCALING(pdp));
+  pdp->SetTextScaling(fRelScale * fScale * BaseScaling(pdp));
   pdp->SetTextAspect(0.75f);
 }
 
