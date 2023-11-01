@@ -912,6 +912,18 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
   // while it is still running
   while (_bRunning && _fnmModToLoad == "") {
+    // [Cecil] Keep track of held mouse buttons
+    static BOOL _bLHeld = FALSE;
+    static BOOL _bRHeld = FALSE;
+    static BOOL _bMHeld = FALSE;
+
+    // [Cecil] Release all keys if the window loses focus
+    if (GetActiveWindow() != _hwndMain) {
+      _bLHeld = FALSE;
+      _bRHeld = FALSE;
+      _bMHeld = FALSE;
+    }
+
     // while there are any messages in the message queue
     MSG msg;
 
@@ -1136,6 +1148,15 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
       // if menu is active and no input on
       if (bMenuActive && !_pInput->IsInputEnabled()) {
+        // [Cecil] Execute action on mouse button hold
+        if (_bLHeld) {
+          MenuOnMouseHold(VK_LBUTTON);
+        } else if (_bRHeld) {
+          MenuOnMouseHold(VK_RBUTTON);
+        } else if (_bMHeld) {
+          MenuOnMouseHold(VK_MBUTTON);
+        }
+
         // pass keyboard/mouse messages to menu
         if (msg.message == WM_KEYDOWN) {
           MenuOnKeyDown(msg.wParam);
@@ -1143,8 +1164,39 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         } else if (msg.message == WM_LBUTTONDOWN || msg.message == WM_LBUTTONDBLCLK) {
           MenuOnKeyDown(VK_LBUTTON);
 
+          // [Cecil] Hold LMB
+          _bLHeld = TRUE;
+          SetCapture(_hwndMain);
+
         } else if (msg.message == WM_RBUTTONDOWN || msg.message == WM_RBUTTONDBLCLK) {
           MenuOnKeyDown(VK_RBUTTON);
+
+          // [Cecil] Hold RMB
+          _bRHeld = TRUE;
+          SetCapture(_hwndMain);
+
+        // [Cecil] Press MMB
+        } else if (msg.message == WM_MBUTTONDOWN || msg.message == WM_MBUTTONDBLCLK) {
+          MenuOnKeyDown(VK_MBUTTON);
+
+          // Hold MMB
+          _bMHeld = TRUE;
+          SetCapture(_hwndMain);
+
+        // [Cecil] Release held LMB
+        } else if (msg.message == WM_LBUTTONUP) {
+          _bLHeld = FALSE;
+          ReleaseCapture();
+
+        // [Cecil] Release held RMB
+        } else if (msg.message == WM_RBUTTONUP) {
+          _bRHeld = FALSE;
+          ReleaseCapture();
+
+        // [Cecil] Release held MMB
+        } else if (msg.message == WM_MBUTTONUP) {
+          _bMHeld = FALSE;
+          ReleaseCapture();
 
         } else if (msg.message == WM_MOUSEMOVE) {
           MenuOnMouseMove(LOWORD(msg.lParam), HIWORD(msg.lParam));

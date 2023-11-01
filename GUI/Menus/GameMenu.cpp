@@ -296,6 +296,24 @@ BOOL CGameMenu::OnKeyDown(int iVKey) {
   return FALSE;
 }
 
+// [Cecil] Process held mouse buttons
+BOOL CGameMenu::OnMouseHeld(int iVKey) {
+  // Find curently active gadget
+  CMenuGadget *pmgActive = NULL;
+
+  FOREACHNODE(CMenuGadget, pgmCurrentMenu->GetChildren(), itmg) {
+    if (itmg->mg_bFocused) {
+      pmgActive = &itmg.Current();
+    }
+  }
+
+  // None found
+  if (pmgActive == NULL) return FALSE;
+
+  // Let the gadget process it
+  return pmgActive->OnMouseHeld(iVKey);
+};
+
 void CGameMenu::StartMenu(void) {
   // for each menu gadget in menu
   FOREACHNODE(CMenuGadget, GetChildren(), itmg) {

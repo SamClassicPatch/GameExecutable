@@ -28,6 +28,7 @@ void InitializeMenus(void);
 void DestroyMenus(void);
 void MenuGoToParent(void); // [Cecil] Declared here
 void MenuOnKeyDown(int iVKey);
+void MenuOnMouseHold(int iVKey); // [Cecil]
 void MenuOnChar(MSG msg);
 void MenuOnMouseMove(PIX pixI, PIX pixJ);
 void MenuOnLMBDown(void);

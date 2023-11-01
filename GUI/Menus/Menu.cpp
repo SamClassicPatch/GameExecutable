@@ -539,6 +539,16 @@ void MenuOnKeyDown(int iVKey) {
   }
 }
 
+// [Cecil] Holding any mouse button
+void MenuOnMouseHold(int iVKey) {
+  // Only accept mouse buttons
+  ASSERT(iVKey == VK_LBUTTON || iVKey == VK_RBUTTON || iVKey == VK_MBUTTON);
+
+  if (_pmgUnderCursor != NULL) {
+    pgmCurrentMenu->OnMouseHeld(iVKey);
+  }
+};
+
 void MenuOnChar(MSG msg) {
   // check if mouse buttons used
   _bMouseUsedLast = FALSE;

@@ -58,6 +58,11 @@ BOOL CMenuGadget::OnKeyDown(int iVKey) {
   return FALSE;
 }
 
+// [Cecil] Process held mouse buttons
+BOOL CMenuGadget::OnMouseHeld(int iVKey) {
+  return FALSE;
+};
+
 BOOL CMenuGadget::OnChar(MSG msg) {
   // key is not handled
   return FALSE;
