@@ -152,6 +152,21 @@ BOOL CMGVarButton::OnKeyDown(int iVKey)
   return CMenuGadget::OnKeyDown(iVKey);
 }
 
+// [Cecil] Adjust the slider by holding a button
+BOOL CMGVarButton::OnMouseHeld(int iVKey)
+{
+  if (iVKey != VK_LBUTTON) return FALSE;
+
+  // Forward the key if it's a toggleable slider without a custom value
+  if (mg_pvsVar != NULL && mg_pvsVar->vs_eType == CVarSetting::E_TOGGLE
+   && mg_pvsVar->vs_iSlider && !mg_pvsVar->vs_bCustom)
+  {
+    OnKeyDown(iVKey);
+  }
+
+  return FALSE;
+};
+
 void CMGVarButton::Render(CDrawPort *pdp) {
   if (mg_pvsVar == NULL) {
     return;

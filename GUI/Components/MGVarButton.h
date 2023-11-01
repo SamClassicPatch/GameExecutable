@@ -27,6 +27,7 @@ class CMGVarButton : public CMGEdit {
     class CVarSetting *mg_pvsVar;
     PIXaabbox2D GetSliderBox(void);
     BOOL OnKeyDown(int iVKey);
+    BOOL OnMouseHeld(int iVKey); // [Cecil]
     void Render(CDrawPort *pdp);
     BOOL IsSeparator(void);
     BOOL IsEnabled(void);

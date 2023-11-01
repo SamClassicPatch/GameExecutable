@@ -40,7 +40,7 @@ static INDEX _ctResolutions = 0;
 static CTString *_astrResolutionTexts = NULL;
 static CDisplayMode *_admResolutionModes = NULL;
 
-#define VOLUME_STEPS 50
+#define VOLUME_STEPS 100
 
 // make description for a given resolution
 static CTString GetResolutionDescription(CDisplayMode &dm) {
