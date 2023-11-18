@@ -155,9 +155,11 @@ void CVarMenu::FillListItems(void) {
 void CVarMenu::StartMenu(void) {
   LoadVarSettings(gm_fnmMenuCFG);
 
-  // [Cecil] Add tab buttons
-  if (sam_bOptionTabs) {
-    for (INDEX iTab = 0; iTab < _aTabs.Count(); iTab++) {
+  // [Cecil] Add tab buttons (if more than just "All options")
+  const INDEX ctTabs = _aTabs.Count();
+
+  if (sam_bOptionTabs && ctTabs > 1) {
+    for (INDEX iTab = 0; iTab < ctTabs; iTab++) {
       const CVarTab &tab = _aTabs[iTab];
 
       CMGButton &mgTab = gm_agmTabs.Push();
