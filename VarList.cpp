@@ -130,6 +130,13 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
     } else if (strLine.RemovePrefix("Schedule:")) {
       CheckPVS_t(pvs);
       FixupFileName_t(strLine);
+
+      // [Cecil] This variable is now used as a shell command, so schedule inclusion of a script
+      pvs->vs_strSchedule.PrintF("include \"%s\";", strLine);
+
+    // [Cecil] Schedule an inline command instead of a script
+    } else if (strLine.RemovePrefix("Command:")) {
+      CheckPVS_t(pvs);
       pvs->vs_strSchedule = strLine;
 
     } else if (strLine.RemovePrefix("Tip:")) {
@@ -499,9 +506,7 @@ void FlushVarSettings(BOOL bApply) {
   _aTabs.Clear();
 
   for (INDEX i = 0; i < astrScheduled.Count(); i++) {
-    CTString strCmd;
-    strCmd.PrintF("include \"%s\"", astrScheduled[i]);
-    _pShell->Execute(strCmd);
+    _pShell->Execute(astrScheduled[i]);
   }
 }
 

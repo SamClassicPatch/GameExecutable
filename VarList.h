@@ -37,7 +37,7 @@ class CVarSetting {
     CTString vs_strTip;
     CTString vs_strVar;
     CTString vs_strFilter;
-    CTFileName vs_strSchedule;
+    CTString vs_strSchedule; // [Cecil] Repurposed as a shell command
     INDEX vs_iValue;
     CTString vs_strValue; // [Cecil] String value
     INDEX vs_ctValues;
