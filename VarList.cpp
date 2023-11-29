@@ -371,7 +371,7 @@ static void StartConfigParsing(CTStream &strm) {
   BOOL bOnlySeparators = FALSE;
 
   // Go through each setting
-  FOREACHINLIST(CVarSetting, vs_lnNode, lhAll, itvs) {
+  {FOREACHINLIST(CVarSetting, vs_lnNode, lhAll, itvs) {
     CVarSetting &vs = *itvs;
 
     // It's a separator
@@ -397,6 +397,17 @@ static void StartConfigParsing(CTStream &strm) {
       CVarSetting *pvsCopy = new CVarSetting(vs);
       pCur->lhVars.AddTail(pvsCopy->vs_lnNode);
     }
+  }}
+
+  // Remove the last tab if it only consists of separators
+  if (bOnlySeparators) {
+    CListHead &lhLast = _aTabs[_aTabs.Count() - 1].lhVars;
+
+    {FORDELETELIST(CVarSetting, vs_lnNode, lhLast, itvs) {
+      delete &*itvs;
+    }}
+
+    _aTabs.Pop();
   }
 };
 
