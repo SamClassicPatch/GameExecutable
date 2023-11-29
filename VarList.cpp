@@ -218,6 +218,61 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
         pvs = NULL;
       }
 
+    // [Cecil] Skip adding this option if it doesn't belong to the current mod
+    } else if (strLine.RemovePrefix("Mods:")) {
+      CheckPVS_t(pvs);
+      strLine.TrimSpacesLeft();
+      strLine.TrimSpacesRight();
+
+      // Invert the condition at the end (belongs to any mod that isn't listed)
+      const BOOL bInvert = strLine.RemovePrefix("!");
+
+      // Separate the line into a list of mods
+      CStaticStackArray<CTString> astrMods;
+      IData::GetStrings(astrMods, strLine, ' ');
+
+      // Check current mod out of available mods for the setting
+      const INDEX ctMods = astrMods.Count();
+      BOOL bSkip = TRUE;
+
+      // Get mod directory name by removing last slash and "Mods\\"
+      CTString strCurrentMod = "";
+
+      if (_fnmMod != "") {
+        strCurrentMod = _fnmMod;
+        strCurrentMod.str_String[strCurrentMod.Length() - 1] = '\0';
+        strCurrentMod.RemovePrefix("Mods\\");
+      }
+
+      for (INDEX i = 0; i < ctMods; i++) {
+        const CTString &strMod = astrMods[i];
+
+        // Special condition for the custom mod
+        if (strMod == "ClassicsPatchMod") {
+          // All is fine
+          if (CCoreAPI::IsCustomModActive()) {
+            bSkip = FALSE;
+            break;
+          }
+
+        // Current mod matches one of the listed mods
+        } else if (strMod == strCurrentMod) {
+          bSkip = FALSE;
+          break;
+        }
+      }
+
+      if (bInvert) bSkip = !bSkip;
+
+      // Discard the setting
+      if (bSkip) {
+        bSkipUntilNext = TRUE;
+        pvs->vs_lnNode.Remove();
+
+        delete pvs;
+        pvs = NULL;
+      }
+
     // [Cecil] List files under a specific directory as value options
     } else if (strLine.RemovePrefix("List:")) {
       CheckPVS_t(pvs);
