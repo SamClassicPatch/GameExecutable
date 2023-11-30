@@ -999,6 +999,10 @@ void ChangeToMenu(CGameMenu *pgmNewMenu) {
   // [Cecil] Reset gadget under the cursor
   _pmgUnderCursor = NULL;
 
+  // [Cecil] Reset held mouse buttons
+  extern void ReleaseHeldMouseButtons(void);
+  ReleaseHeldMouseButtons();
+
   if (pgmCurrentMenu != NULL) {
     if (pgmNewMenu->gm_fPopupSize <= 0.0f) { // [Cecil]
       pgmCurrentMenu->EndMenu();
