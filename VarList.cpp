@@ -247,8 +247,16 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
       for (INDEX i = 0; i < ctMods; i++) {
         const CTString &strMod = astrMods[i];
 
+        // Special condition for vanilla game
+        if (strMod == "/NoMod/") {
+          // Not even a custom mod
+          if (_fnmMod == "" && !CCoreAPI::IsCustomModActive()) {
+            bSkip = FALSE;
+            break;
+          }
+
         // Special condition for the custom mod
-        if (strMod == "ClassicsPatchMod") {
+        } else if (strMod == "ClassicsPatchMod") {
           // All is fine
           if (CCoreAPI::IsCustomModActive()) {
             bSkip = FALSE;
