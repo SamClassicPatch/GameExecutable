@@ -127,6 +127,16 @@ extern CTextureObject *_ptoLogoEAX = NULL;
 
 ENGINE_API extern INDEX snd_iFormat;
 
+// [Cecil] Set new LCD drawport for Game
+void SetDrawportForGame(CDrawPort *pdpSet) {
+  _pGame->LCDSetDrawport(pdpSet);
+
+  // Adjust aspect ratio for the menu
+  if (CoreVarData().bProperTextScaling) {
+    pdpSet->dp_fWideAdjustment = ((FLOAT)pdpSet->GetHeight() / (FLOAT)pdpSet->GetWidth()) * (4.0f / 3.0f);
+  }
+};
+
 // Main window canvas
 CDrawPort *pdp;
 CDrawPort *pdpNormal;

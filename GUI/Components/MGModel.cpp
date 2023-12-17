@@ -35,7 +35,7 @@ void CMGModel::Render(CDrawPort *pdp) {
   dpModel.Lock();
   dpModel.FillZBuffer(1.0f);
 
-  _pGame->LCDSetDrawport(&dpModel);
+  SetDrawportForGame(&dpModel);
   // clear menu here
   dpModel.Fill(C_BLACK | 255);
   _pGame->LCDRenderClouds1();
@@ -114,7 +114,7 @@ void CMGModel::Render(CDrawPort *pdp) {
 
   pdp->Unlock();
   pdp->Lock();
-  _pGame->LCDSetDrawport(pdp);
+  SetDrawportForGame(pdp);
 
   // print the model name
   {

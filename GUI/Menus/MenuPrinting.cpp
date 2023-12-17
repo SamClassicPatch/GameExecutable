@@ -257,19 +257,8 @@ FLOATaabbox2D PixBoxToFloatBox(const CDrawPort *pdp, const PIXaabbox2D &boxP) {
 
 // [Cecil] Determine base text scaling
 static __forceinline FLOAT BaseScaling(CDrawPort *pdp) {
-  FLOAT fBaseScale = CoreVarData().fMenuTextScale;
-
-  // Relative to aspect ratio
-  if (CoreVarData().bProperTextScaling) {
-    fBaseScale *= HEIGHT_SCALING(pdp);
-
-  // Vanilla scaling
-  } else {
-    fBaseScale *= ((FLOAT)pdp->GetWidth() / 640.0f);
-  }
-
-  // Apply wide adjustment multiplier, like in vanilla
-  return fBaseScale * pdp->dp_fWideAdjustment;
+  // Custom text scale multiplied by vanilla scaling
+  return CoreVarData().fMenuTextScale * ((FLOAT)pdp->GetWidth() / 640.0f) * pdp->dp_fWideAdjustment;
 };
 
 extern CFontData _fdTitle;

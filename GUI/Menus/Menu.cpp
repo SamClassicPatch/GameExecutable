@@ -666,7 +666,7 @@ void RenderMouseCursor(CDrawPort *pdp) {
     // don't render cursor
     return;
   }
-  _pGame->LCDSetDrawport(pdp);
+  SetDrawportForGame(pdp);
   _pGame->LCDDrawPointer(_pixCursorPosI, _pixCursorPosJ);
 }
 
@@ -716,7 +716,7 @@ BOOL DoMenu(CDrawPort *pdp) {
   if (bMenuActive) {
     // clear screen with background texture
     _pGame->LCDPrepare(1.0f);
-    _pGame->LCDSetDrawport(&dpMenu);
+    SetDrawportForGame(&dpMenu);
 
     // [Cecil] Show the game a bit in the background
     if (sam_bBackgroundGameRender && _gmRunningGameMode != GM_NONE) {
@@ -861,7 +861,7 @@ BOOL DoMenu(CDrawPort *pdp) {
     PIXaabbox2D box = FloatBoxToPixBox(&dpMenu, BoxPopup(pgmCurrentMenu->gm_fPopupSize));
     CDrawPort dpPopup(pdp, box);
     dpPopup.Lock();
-    _pGame->LCDSetDrawport(&dpPopup);
+    SetDrawportForGame(&dpPopup);
     dpPopup.Fill(C_BLACK | 255);
     _pGame->LCDRenderClouds1();
     _pGame->LCDRenderGrid();

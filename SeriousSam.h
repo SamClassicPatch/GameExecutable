@@ -44,3 +44,6 @@ extern void StartNewMode(enum GfxAPIType eAPI, INDEX iAdapter, PIX pixSizeI, PIX
 struct KeyData {
   char *kd_strASCII;
 };
+
+// [Cecil] Set new LCD drawport for Game
+void SetDrawportForGame(CDrawPort *pdpSet);
