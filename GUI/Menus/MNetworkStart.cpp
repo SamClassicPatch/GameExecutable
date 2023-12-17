@@ -62,8 +62,20 @@ void CNetworkStartMenu::Initialize_t(void) {
   gm_mgLevel.mg_pActivatedFunction = NULL;
   AddChild(&gm_mgLevel);
 
+  // [Cecil] Create entries for each max players configuration (other than 1)
+  const INDEX ctMaxPlayersEntries = CORE_MAX_GAME_PLAYERS - 1;
+
+  if (astrMaxPlayersRadioTexts == NULL) {
+    astrMaxPlayersRadioTexts = new CTString[ctMaxPlayersEntries];
+
+    for (INDEX i = 0; i < ctMaxPlayersEntries; i++) {
+      astrMaxPlayersRadioTexts[i].PrintF("%d", i + 2);
+    }
+  }
+
   // max players trigger
   TRIGGER_MG(gm_mgMaxPlayers, 5, gm_mgLevel, gm_mgWaitAllPlayers, LOCALIZE("Max players:"), astrMaxPlayersRadioTexts);
+  gm_mgMaxPlayers.mg_ctTexts = ctMaxPlayersEntries; // [Cecil] Update amount of entries
   gm_mgMaxPlayers.mg_strTip = LOCALIZE("choose maximum allowed number of players");
 
   // wait all players trigger
@@ -134,7 +146,9 @@ void CNetworkStartMenu::StartMenu(void) {
   _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1)); // [Cecil] API
 
   INDEX ctMaxPlayers = _pShell->GetINDEX("gam_ctMaxPlayers");
-  if (ctMaxPlayers < 2 || ctMaxPlayers > 16) {
+
+  // [Cecil] 16 -> CORE_MAX_GAME_PLAYERS
+  if (ctMaxPlayers < 2 || ctMaxPlayers > CORE_MAX_GAME_PLAYERS) {
     ctMaxPlayers = 2;
     _pShell->SetINDEX("gam_ctMaxPlayers", ctMaxPlayers);
   }

@@ -48,23 +48,9 @@ extern CTString astrCrosshair[] = {
   "Textures\\Interface\\Crosshairs\\Crosshair7.tex",
 };
 
-extern CTString astrMaxPlayersRadioTexts[] = {
-  RADIOTRANS("2"),
-  RADIOTRANS("3"),
-  RADIOTRANS("4"),
-  RADIOTRANS("5"),
-  RADIOTRANS("6"),
-  RADIOTRANS("7"),
-  RADIOTRANS("8"),
-  RADIOTRANS("9"),
-  RADIOTRANS("10"),
-  RADIOTRANS("11"),
-  RADIOTRANS("12"),
-  RADIOTRANS("13"),
-  RADIOTRANS("14"),
-  RADIOTRANS("15"),
-  RADIOTRANS("16"),
-};
+// [Cecil] Uninitialized dynamic array
+extern CTString *astrMaxPlayersRadioTexts = NULL;
+
 // here, we just reserve space for up to 16 different game types
 // actual names are added later
 extern CTString astrGameTypeRadioTexts[] = {

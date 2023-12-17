@@ -303,7 +303,6 @@ void InitializeMenus(void) {
     TRANSLATERADIOARRAY(astrBitsPerPixelRadioTexts);
     TRANSLATERADIOARRAY(astrFrequencyRadioTexts);
     TRANSLATERADIOARRAY(astrSoundAPIRadioTexts);
-    TRANSLATERADIOARRAY(astrMaxPlayersRadioTexts);
     TRANSLATERADIOARRAY(astrWeapon);
     TRANSLATERADIOARRAY(astrSplitScreenRadioTexts);
 
