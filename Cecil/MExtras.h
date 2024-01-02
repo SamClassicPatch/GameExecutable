@@ -28,7 +28,8 @@ class CExtrasMenu : public CGameMenu {
   public:
     CMGTitle gm_mgTitle;
     CMGButton gm_mgMods;
-    CMGButton gm_mgCredits;
+    CMGButton gm_mgPatchCredits;
+    CMGButton gm_mgGameCredits;
     CMGButton gm_mgRestart;
 
     // Initialize extras

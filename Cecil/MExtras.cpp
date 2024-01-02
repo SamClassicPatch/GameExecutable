@@ -15,6 +15,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
+#include "Credits.h"
 #include "MExtras.h"
 #include "GUI/Menus/MenuPrinting.h"
 #include "GUI/Menus/MenuStarters.h"
@@ -24,6 +25,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 static void RestartGame(void) {
   _bRunning = FALSE;
   _bRestartGameClient = TRUE;
+};
+
+// Display game credits
+static void StartGameCreditsMenu(void) {
+  // Renders credits until the end or any input
+  extern void QuitScreenLoop(void);
+  QuitScreenLoop();
+
+  Credits_Off();
 };
 
 // Initialize extras
@@ -38,26 +48,36 @@ void CExtrasMenu::Initialize_t(void) {
   gm_mgMods.mg_boxOnScreen = BoxBigRow(2.0f);
 
   gm_mgMods.mg_pmgUp = &gm_mgRestart;
-  gm_mgMods.mg_pmgDown = &gm_mgCredits;
+  gm_mgMods.mg_pmgDown = &gm_mgPatchCredits;
   gm_mgMods.mg_pActivatedFunction = &StartModsLoadMenu;
   AddChild(&gm_mgMods);
 
-  gm_mgCredits.SetText(TRANS("CREDITS"));
-  gm_mgCredits.mg_strTip = TRANS("credits for Classics Patch");
-  gm_mgCredits.mg_bfsFontSize = BFS_LARGE;
-  gm_mgCredits.mg_boxOnScreen = BoxBigRow(3.0f);
+  gm_mgPatchCredits.SetText(TRANS("PATCH CREDITS"));
+  gm_mgPatchCredits.mg_strTip = TRANS("credits for Classics Patch");
+  gm_mgPatchCredits.mg_bfsFontSize = BFS_LARGE;
+  gm_mgPatchCredits.mg_boxOnScreen = BoxBigRow(3.0f);
 
-  gm_mgCredits.mg_pmgUp = &gm_mgMods;
-  gm_mgCredits.mg_pmgDown = &gm_mgRestart;
-  gm_mgCredits.mg_pActivatedFunction = &StartCreditsMenu;
-  AddChild(&gm_mgCredits);
+  gm_mgPatchCredits.mg_pmgUp = &gm_mgMods;
+  gm_mgPatchCredits.mg_pmgDown = &gm_mgGameCredits;
+  gm_mgPatchCredits.mg_pActivatedFunction = &StartPatchCreditsMenu;
+  AddChild(&gm_mgPatchCredits);
+
+  gm_mgGameCredits.SetText(TRANS("GAME CREDITS"));
+  gm_mgGameCredits.mg_strTip = TRANS("credits for the game or a mod");
+  gm_mgGameCredits.mg_bfsFontSize = BFS_LARGE;
+  gm_mgGameCredits.mg_boxOnScreen = BoxBigRow(4.0f);
+
+  gm_mgGameCredits.mg_pmgUp = &gm_mgPatchCredits;
+  gm_mgGameCredits.mg_pmgDown = &gm_mgRestart;
+  gm_mgGameCredits.mg_pActivatedFunction = &StartGameCreditsMenu;
+  AddChild(&gm_mgGameCredits);
 
   gm_mgRestart.SetText(TRANS("RESTART"));
   gm_mgRestart.mg_strTip = TRANS("reload current game or mod immediately");
   gm_mgRestart.mg_bfsFontSize = BFS_LARGE;
-  gm_mgRestart.mg_boxOnScreen = BoxBigRow(4.0f);
+  gm_mgRestart.mg_boxOnScreen = BoxBigRow(5.0f);
 
-  gm_mgRestart.mg_pmgUp = &gm_mgCredits;
+  gm_mgRestart.mg_pmgUp = &gm_mgGameCredits;
   gm_mgRestart.mg_pmgDown = &gm_mgMods;
   gm_mgRestart.mg_pActivatedFunction = &RestartGame;
   AddChild(&gm_mgRestart);

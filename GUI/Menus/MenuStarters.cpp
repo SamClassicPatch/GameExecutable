@@ -542,7 +542,7 @@ void StartExtrasMenu(void) {
 };
 
 // [Cecil] Open credits menu
-void StartCreditsMenu(void) {
+void StartPatchCreditsMenu(void) {
   ChangeToMenu(&_pGUIM->gmPatchCredits);
 };
 
