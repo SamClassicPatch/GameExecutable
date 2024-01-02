@@ -28,9 +28,15 @@ static PIX pixLineHeight;
 static CTString strEmpty;
 static FLOAT _fSpeed = 2.0f;
 
+// [Cecil] Current credits offset
+static FLOAT _fOffset = 0.0f;
+
 static BOOL _bUseRealTime = FALSE;
 static CTimerValue _tvStart;
 static FLOAT _tmStart;
+
+// [Cecil] When the last update occurred
+static FLOAT _tmLast = 0.0f;
 
 FLOAT GetTime(void) {
   if (!_bUseRealTime) {
@@ -116,6 +122,10 @@ void Credits_On(INDEX iType) {
       _bUseRealTime = TRUE;
       _tvStart = _pTimer->GetHighPrecisionTimer();
     }
+
+    // [Cecil] Reset
+    _tmLast = 0.0f;
+    _fOffset = 0.0f;
   }
 }
 
@@ -141,6 +151,10 @@ FLOAT Credits_Render(CDrawPort *pdp) {
 
   FLOAT fTime = GetTime();
 
+  // [Cecil] Difference since last update
+  const FLOAT fTimeDiff = fTime - _tmLast;
+  _tmLast = fTime;
+
   pixW = dpWide.GetWidth();
   pixH = dpWide.GetHeight();
 
@@ -150,12 +164,13 @@ FLOAT Credits_Render(CDrawPort *pdp) {
   dpWide.SetFont(_pfdDisplayFont);
   pixLineHeight = floor(20 * fResolutionScaling);
 
-  const FLOAT fLinesPerSecond = _fSpeed;
-  FLOAT fOffset = fTime * fLinesPerSecond;
-  INDEX ctLinesOnScreen = pixH / pixLineHeight;
-  INDEX iLine1 = fOffset;
+  // [Cecil] Add offset each frame
+  _fOffset += fTimeDiff * _fSpeed;
 
-  pixJ = iLine1 * pixLineHeight - fOffset * pixLineHeight;
+  INDEX ctLinesOnScreen = pixH / pixLineHeight;
+  INDEX iLine1 = _fOffset;
+
+  pixJ = iLine1 * pixLineHeight - _fOffset * pixLineHeight;
   iLine1 -= ctLinesOnScreen;
 
   INDEX ctLines = _astrCredits.Count();
@@ -186,3 +201,18 @@ FLOAT Credits_Render(CDrawPort *pdp) {
     return 1;
   }
 }
+
+// [Cecil] Change scroll speed
+void Credits_Speed(FLOAT fSetSpeed, INDEX iDir) {
+  if (iDir == 0) {
+    _fSpeed = fSetSpeed;
+
+  } else if (iDir < 0) {
+    _fSpeed -= fSetSpeed;
+
+  } else if (iDir > 0) {
+    _fSpeed += fSetSpeed;
+  }
+
+  _fSpeed = Clamp(_fSpeed, 0.0f, 20.0f);
+};

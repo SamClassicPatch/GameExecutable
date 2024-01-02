@@ -15,6 +15,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #define APPLICATION_NAME "SeriousSam"
 
+// [Cecil] Moved from SeriousSam.cpp
+#ifndef WM_MOUSEWHEEL
+  #define WM_MOUSEWHEEL 0x020A
+#endif
+
 extern HINSTANCE _hInstance;
 extern BOOL _bRunning, _bQuitScreen;
 

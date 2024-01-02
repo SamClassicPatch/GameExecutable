@@ -894,8 +894,18 @@ void QuitScreenLoop(void) {
     MSG msg;
 
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+      // [Cecil] Change credits scroll speed
+      if (msg.message == WM_MOUSEWHEEL) {
+        SWORD swDir = SWORD(UWORD(HIWORD(msg.wParam)));
+
+        if (swDir > 0) {
+          Credits_Speed(2, -1);
+        } else if (swDir < 0) {
+          Credits_Speed(2, +1);
+        }
+
       // if it is not a keyboard or mouse message
-      if (msg.message == WM_LBUTTONDOWN || msg.message == WM_RBUTTONDOWN || msg.message == WM_KEYDOWN) {
+      } else if (msg.message == WM_LBUTTONDOWN || msg.message == WM_RBUTTONDOWN || msg.message == WM_KEYDOWN) {
         return;
       }
     }
@@ -1215,10 +1225,6 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
         } else if (msg.message == WM_MOUSEMOVE) {
           MenuOnMouseMove(LOWORD(msg.lParam), HIWORD(msg.lParam));
-
-          #ifndef WM_MOUSEWHEEL
-          #define WM_MOUSEWHEEL 0x020A
-          #endif
 
         } else if (msg.message == WM_MOUSEWHEEL) {
           SWORD swDir = SWORD(UWORD(HIWORD(msg.wParam)));

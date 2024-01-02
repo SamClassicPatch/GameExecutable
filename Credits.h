@@ -26,4 +26,7 @@ void Credits_Off(void);
 // render credits to given drawport
 FLOAT Credits_Render(CDrawPort *pdp);
 
+// [Cecil] Change scroll speed
+void Credits_Speed(FLOAT fSetSpeed, INDEX iDir);
+
 #endif /* include-once check. */
