@@ -963,6 +963,7 @@ void InitActionsForAudioOptionsMenu() {
 // ------------------------ CVarMenu implementation
 static void VarApply(void) {
   CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
+  gmCurrent.gm_bApplying = TRUE; // [Cecil] Applying changes
 
   FlushVarSettings(TRUE);
   gmCurrent.EndMenu();

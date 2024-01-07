@@ -35,6 +35,9 @@ class CVarMenu : public CGameMenu {
     CMGArrow gm_mgArrowUp;
     CMGArrow gm_mgArrowDn;
 
+    // [Cecil] Set when applying option changes
+    BOOL gm_bApplying;
+
     // [Cecil] Option tabs
     CStaticStackArray<CMGButton> gm_agmTabs;
     INDEX gm_iTab; // Currently selected tab

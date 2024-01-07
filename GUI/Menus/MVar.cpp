@@ -25,23 +25,26 @@ extern CMenuGadget *_pmgUnderCursor;
 
 extern BOOL _bVarChanged;
 
-// [Cecil] Switch to another options tab
-static void SelectOptionsTab(void) {
+// [Cecil] Current position before applying changes
+static INDEX _iLastWantedItem = 0;
+static INDEX _iLastTab = 0;
+
+// [Cecil] Switch to a specific options tab
+static void SwitchOptionsTab(INDEX iNewTab) {
   // Tabs are disabled
   if (!sam_bOptionTabs) return;
 
-  CMGButton &mgTab = (CMGButton &)*_pmgLastActivatedGadget;
   CVarMenu &gm = _pGUIM->gmVarMenu;
 
   // Same tab
-  if (gm.gm_iTab == mgTab.mg_iIndex) {
+  if (gm.gm_iTab == iNewTab) {
     return;
   }
 
   _pmgUnderCursor = NULL;
 
   // Select a new tab
-  gm.gm_iTab = mgTab.mg_iIndex;
+  gm.gm_iTab = iNewTab;
 
   // Disable current tab button
   for (INDEX iTab = 0; iTab < gm.gm_agmTabs.Count(); iTab++) {
@@ -52,11 +55,19 @@ static void SelectOptionsTab(void) {
   // Reload menu
   gm.gm_iListOffset = 0;
   gm.gm_ctListTotal = _aTabs[gm.gm_iTab].lhVars.Count();
-  gm.gm_iListWantedItem = 0;
+  gm.gm_iListWantedItem = _iLastWantedItem;
   gm.CGameMenu::StartMenu();
 };
 
+// [Cecil] Switch to another options tab
+static void SelectOptionsTab(void) {
+  CMGButton &mgTab = (CMGButton &)*_pmgLastActivatedGadget;
+  SwitchOptionsTab(mgTab.mg_iIndex);
+};
+
 void CVarMenu::Initialize_t(void) {
+  gm_bApplying = FALSE; // [Cecil] Reset
+
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.SetName("");
   AddChild(&gm_mgTitle);
@@ -186,14 +197,33 @@ void CVarMenu::StartMenu(void) {
   // [Cecil] Reset current tab
   gm_iTab = 0;
 
-  // set default parameters for the list
-  gm_iListOffset = 0;
-  gm_ctListTotal = _aTabs[gm_iTab].lhVars.Count();
-  gm_iListWantedItem = 0;
-  CGameMenu::StartMenu();
+  // [Cecil] Select last tab
+  if (_iLastTab != 0) {
+    SwitchOptionsTab(_iLastTab);
+
+  } else {
+    // set default parameters for the list
+    gm_iListOffset = 0;
+    gm_ctListTotal = _aTabs[gm_iTab].lhVars.Count();
+    gm_iListWantedItem = _iLastWantedItem;
+
+    CGameMenu::StartMenu();
+  }
+
+  // [Cecil] Reset state before applying
+  gm_bApplying = FALSE;
+  _iLastWantedItem = 0;
+  _iLastTab = 0;
 }
 
 void CVarMenu::EndMenu(void) {
+  // [Cecil] Remember state before applying
+  if (gm_bApplying) {
+    // Recalculate gm_iListWantedItem for scrolling back after applying
+    _iLastWantedItem = gm_iListOffset + gm_ctListVisible / 2;
+    _iLastTab = gm_iTab;
+  }
+
   // disable all items first
   for (INDEX i = 0; i < VARS_ON_SCREEN; i++) {
     gm_mgVar[i].mg_bEnabled = FALSE;
