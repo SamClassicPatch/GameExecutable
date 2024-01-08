@@ -47,6 +47,12 @@ static INDEX cli_iCustomBufferActions = 2;
 static INDEX cli_iCustomMinBPS = 50000;
 static INDEX cli_iCustomMaxBPS = 100000;
 
+// Restart the game client
+void RestartGame(void) {
+  _bRunning = FALSE;
+  _bRestartGameClient = TRUE;
+};
+
 // Start some level immediately (like on '+level' argument)
 void StartMap(SHELL_FUNC_ARGS) {
   BEGIN_SHELL_FUNC;
@@ -115,6 +121,7 @@ void ClassicsPatch_InitExt(void) {
   _pShell->DeclareSymbol("persistent      INDEX sam_iUpdateReminder;",     &sam_iUpdateReminder);
   _pShell->DeclareSymbol("persistent CTString sam_strLastVersionCheck;", &sam_strLastVersionCheck);
 
+  _pShell->DeclareSymbol("user void Restart(void);", &RestartGame);
   _pShell->DeclareSymbol("user void ListLevels(CTString);", &ListLevels);
 
   // Commands for starting maps

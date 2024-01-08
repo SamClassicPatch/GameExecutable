@@ -21,12 +21,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "GUI/Menus/MenuStarters.h"
 #include "GUI/Menus/MenuManager.h"
 
-// Restart the game client
-static void RestartGame(void) {
-  _bRunning = FALSE;
-  _bRestartGameClient = TRUE;
-};
-
 // Display game credits
 static void StartGameCreditsMenu(void) {
   // Renders credits until the end or any input

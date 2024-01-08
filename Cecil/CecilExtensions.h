@@ -41,6 +41,9 @@ extern CTString sam_strLevelTitleFilter;
 extern CTString _strRestartCommandLine;
 extern BOOL _bRestartGameClient;
 
+// Restart the game client
+void RestartGame(void);
+
 // Start some level immediately (like on '+level' argument)
 void StartMap(SHELL_FUNC_ARGS);
 
