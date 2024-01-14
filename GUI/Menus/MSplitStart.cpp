@@ -81,7 +81,7 @@ void CSplitStartMenu::StartMenu(void) {
   gm_mgDifficulty.ApplyCurrentSelection();
 
   // [Cecil] Don't allow less players than amount of local ones
-  const INDEX ctMinPlayers = ClampDn(_pShell->GetINDEX("gam_ctMaxPlayers"), GetGameAPI()->GetLocalPlayerCount());
+  const INDEX ctMinPlayers = ClampDn(_pShell->GetINDEX("gam_ctMaxPlayers"), MAX_GAME_LOCAL_PLAYERS);
   _pShell->SetINDEX("gam_ctMaxPlayers", ctMinPlayers);
 
   UpdateSplitLevel(0);

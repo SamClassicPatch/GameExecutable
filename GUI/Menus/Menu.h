@@ -45,6 +45,9 @@ extern void PlayMenuSound(CSoundData *psd, BOOL bOverOtherSounds = TRUE);
 #define LEVELS_ON_SCREEN  17 // [Cecil] 16 -> 17
 #define VARS_ON_SCREEN    16 // [Cecil] 14 -> 16
 
+// [Cecil] Amount of supported local players
+#define MAX_GAME_LOCAL_PLAYERS Min(GetGameAPI()->GetLocalPlayerCount(), (INDEX)4)
+
 extern CListHead _lhServers;
 
 extern INDEX _iLocalPlayer;

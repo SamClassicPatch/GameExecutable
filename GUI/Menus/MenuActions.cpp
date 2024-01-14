@@ -1062,7 +1062,7 @@ static INDEX FindUnusedPlayer(void) {
   INDEX iPlayer = 0;
   for (; iPlayer < GetGameAPI()->GetProfileCount(); iPlayer++) {
     BOOL bUsed = FALSE;
-    for (INDEX iLocal = 0; iLocal < GetGameAPI()->GetLocalPlayerCount(); iLocal++) {
+    for (INDEX iLocal = 0; iLocal < MAX_GAME_LOCAL_PLAYERS; iLocal++) {
       if (ai[iLocal] == iPlayer) {
         bUsed = TRUE;
         break;
@@ -1149,7 +1149,7 @@ extern void SelectPlayersFillMenu(void) {
     gmCurrent.gm_mgObserver.Disappear();
   }
 
-  for (INDEX iLocal = 0; iLocal < GetGameAPI()->GetLocalPlayerCount(); iLocal++) {
+  for (INDEX iLocal = 0; iLocal < MAX_GAME_LOCAL_PLAYERS; iLocal++) {
     if (ai[iLocal] < 0 || ai[iLocal] >= GetGameAPI()->GetProfileCount()) {
       ai[iLocal] = 0;
     }
