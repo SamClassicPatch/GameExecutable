@@ -30,6 +30,7 @@ class CExtrasMenu : public CGameMenu {
     CMGButton gm_mgMods;
     CMGButton gm_mgPatchCredits;
     CMGButton gm_mgGameCredits;
+    CMGButton gm_mgDocs;
     CMGButton gm_mgRestart;
 
     // Initialize extras
