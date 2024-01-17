@@ -1709,8 +1709,12 @@ void StartNewMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pix
     GetAPI()->ReinitConsole(ctConsoleChars - 15, 512);
   }
 
-  // [Cecil] Calculate aspect ratio
-  _fAspectRatio = FLOAT(pixSizeI) / FLOAT(pixSizeJ);
+  // [Cecil] Calculate aspect ratio (half the width for dualhead resolutions)
+  if (pdp->IsDualHead()) {
+    _fAspectRatio = FLOAT(pixSizeI * 0.5f) / FLOAT(pixSizeJ);
+  } else {
+    _fAspectRatio = FLOAT(pixSizeI) / FLOAT(pixSizeJ);
+  }
 
   // apply 3D-acc settings
   ApplyGLSettings(FALSE);
