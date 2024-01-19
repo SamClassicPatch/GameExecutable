@@ -29,6 +29,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // [Cecil] Classics patch
 #include <CoreLib/Query/QueryManager.h>
+#include <CoreLib/Networking/Modules/VotingSystem.h>
 #include <Engine/Sound/SoundData.h>
 
 #include "Cecil/ScreenResolutions.h"
@@ -723,6 +724,9 @@ void DoGame(void) {
     // just handle broadcast messages
     _pNetwork->GameInactive();
   }
+
+  // [Cecil] Update current vote
+  IVotingSystem::UpdateVote();
 
   if (sam_iStartCredits > 0) {
     Credits_On(sam_iStartCredits);
