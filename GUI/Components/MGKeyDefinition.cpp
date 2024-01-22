@@ -23,6 +23,7 @@ extern BOOL _bDefiningKey;
 
 CMGKeyDefinition::CMGKeyDefinition(void) {
   mg_iState = DOING_NOTHING;
+  mg_pControls = NULL; // [Cecil]
 }
 
 void CMGKeyDefinition::OnActivate(void) {
@@ -54,7 +55,7 @@ void CMGKeyDefinition::SetBindingNames(BOOL bDefining) {
   // find the button
   INDEX ict = 0;
   INDEX iDik = 0;
-  FOREACHINLIST(CButtonAction, ba_lnNode, GetGameAPI()->GetControlsActions(), itba) {
+  FOREACHINLIST(CButtonAction, ba_lnNode, GetGameAPI()->GetActions(mg_pControls), itba) {
     if (ict == mg_iControlNumber) {
       CButtonAction &ba = *itba;
       // get the current bindings and names
@@ -109,7 +110,7 @@ void CMGKeyDefinition::Disappear(void) {
 void CMGKeyDefinition::DefineKey(INDEX iDik) {
   // for each button in controls
   INDEX ict = 0;
-  FOREACHINLIST(CButtonAction, ba_lnNode, GetGameAPI()->GetControlsActions(), itba) {
+  FOREACHINLIST(CButtonAction, ba_lnNode, GetGameAPI()->GetActions(mg_pControls), itba) {
     CButtonAction &ba = *itba;
     // if it is this one
     if (ict == mg_iControlNumber) {

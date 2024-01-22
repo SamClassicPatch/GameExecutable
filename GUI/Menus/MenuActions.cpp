@@ -533,6 +533,7 @@ void InitActionsForControlsMenu() {
   gmCurrent.gm_mgButtons.mg_pActivatedFunction = &StartCustomizeKeyboardMenu;
   gmCurrent.gm_mgAdvanced.mg_pActivatedFunction = &StartCustomizeAxisMenu;
   gmCurrent.gm_mgPredefined.mg_pActivatedFunction = &StartControlsLoadMenu;
+  gmCurrent.gm_mgCommon.mg_pActivatedFunction = &StartCustomizeCommonControlsMenu; // [Cecil]
 }
 
 // ------------------------ CCustomizeAxisMenu implementation

@@ -26,6 +26,9 @@ class CMGKeyDefinition : public CMenuGadget {
     INDEX mg_iState;
     INDEX mg_iControlNumber;
 
+    // [Cecil] Controls for editing passed from CCustomizeKeyboardMenu
+    CControls *mg_pControls;
+
   // [Cecil] Private strings
   private:
     CTString mg_strLabel;

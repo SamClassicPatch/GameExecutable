@@ -48,6 +48,7 @@ void StartPatchServerOptionsFromNetwork(void); // [Cecil]
 void StartGameOptionsFromSplitScreen(void);
 void StartRenderingOptionsMenu(void);
 void StartCustomizeKeyboardMenu(void);
+void StartCustomizeCommonControlsMenu(void); // [Cecil]
 void StartCustomizeAxisMenu(void);
 void StartOptionsMenu(void);
 void StartCurrentLoadMenu();

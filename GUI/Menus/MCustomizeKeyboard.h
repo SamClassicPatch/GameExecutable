@@ -31,10 +31,16 @@ class CCustomizeKeyboardMenu : public CGameMenu {
     CMGArrow gm_mgArrowUp;
     CMGArrow gm_mgArrowDn;
 
+    // [Cecil] Controls that are currently being edited
+    CControls *gm_pControls;
+
     void Initialize_t(void);
     void StartMenu(void);
     void EndMenu(void);
     void FillListItems(void);
+
+    // [Cecil] Set current controls for the menu and the keys
+    void SetControls(CControls *pctrl);
 };
 
 #endif /* include-once check. */

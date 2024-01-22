@@ -39,7 +39,7 @@ void CControlsMenu::Initialize_t(void) {
   gm_mgButtons.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgButtons.mg_iCenterI = 0;
   AddChild(&gm_mgButtons);
-  gm_mgButtons.mg_pmgUp = &gm_mgPredefined;
+  gm_mgButtons.mg_pmgUp = &gm_mgCommon;
   gm_mgButtons.mg_pmgDown = &gm_mgAdvanced;
   gm_mgButtons.mg_pActivatedFunction = NULL;
   gm_mgButtons.mg_strTip = LOCALIZE("customize buttons in current controls");
@@ -76,9 +76,20 @@ void CControlsMenu::Initialize_t(void) {
   gm_mgPredefined.mg_bfsFontSize = BFS_MEDIUM;
   AddChild(&gm_mgPredefined);
   gm_mgPredefined.mg_pmgUp = &gm_mgIFeelTrigger;
-  gm_mgPredefined.mg_pmgDown = &gm_mgButtons;
+  gm_mgPredefined.mg_pmgDown = &gm_mgCommon;
   gm_mgPredefined.mg_pActivatedFunction = NULL;
   gm_mgPredefined.mg_strTip = LOCALIZE("load one of several predefined control settings");
+
+  // [Cecil] Common controls
+  gm_mgCommon.SetText(TRANS("CUSTOMIZE COMMON CONTROLS"));
+  gm_mgCommon.mg_strTip = TRANS("customize buttons in common game controls");
+  gm_mgCommon.mg_boxOnScreen = BoxMediumRow(11);
+  gm_mgCommon.mg_bfsFontSize = BFS_MEDIUM;
+  gm_mgCommon.mg_iCenterI = 0;
+  gm_mgCommon.mg_pmgUp = &gm_mgPredefined;
+  gm_mgCommon.mg_pmgDown = &gm_mgButtons;
+  gm_mgCommon.mg_pActivatedFunction = NULL;
+  AddChild(&gm_mgCommon);
 }
 
 void CControlsMenu::StartMenu(void) {

@@ -37,6 +37,7 @@ class CControlsMenu : public CGameMenu {
     CMGTrigger gm_mgIFeelTrigger;
     CMGButton gm_mgPredefined;
     CMGButton gm_mgAdvanced;
+    CMGButton gm_mgCommon; // [Cecil] Common controls
 
     void Initialize_t(void);
     void StartMenu(void);

@@ -25,12 +25,15 @@ void CCustomizeKeyboardMenu::FillListItems(void) {
     gm_mgKey[i].mg_iInList = -2;
   }
 
+  // [Cecil] Current actions
+  CListHead &lhActions = GetGameAPI()->GetActions(gm_pControls);
+
   BOOL bHasFirst = FALSE;
   BOOL bHasLast = FALSE;
   // set diks to key buttons
   INDEX iLabel = 0;
-  INDEX ctLabels = GetGameAPI()->GetControlsActions().Count();
-  FOREACHINLIST(CButtonAction, ba_lnNode, GetGameAPI()->GetControlsActions(), itAct) {
+  INDEX ctLabels = lhActions.Count();
+  FOREACHINLIST(CButtonAction, ba_lnNode, lhActions, itAct) {
     INDEX iInMenu = iLabel - gm_iListOffset;
     if ((iLabel >= gm_iListOffset) && (iLabel < (gm_iListOffset + gm_ctListVisible))) {
       bHasFirst |= (iLabel == 0);
@@ -84,17 +87,42 @@ void CCustomizeKeyboardMenu::Initialize_t(void) {
   gm_pmgArrowDn = &gm_mgArrowDn;
   gm_pmgListTop = &gm_mgKey[0];
   gm_pmgListBottom = &gm_mgKey[KEYS_ON_SCREEN - 1];
+
+  // [Cecil] No controls yet
+  gm_pControls = NULL;
 }
+
+// [Cecil] Set current controls for the menu and the keys
+void CCustomizeKeyboardMenu::SetControls(CControls *pctrl) {
+  gm_pControls = pctrl;
+
+  // Pass controls to key gadgets
+  for (INDEX i = 0; i < KEYS_ON_SCREEN; i++) {
+    gm_mgKey[i].mg_pControls = pctrl;
+  }
+};
 
 void CCustomizeKeyboardMenu::StartMenu(void) {
   ControlsMenuOn();
   gm_iListOffset = 0;
-  gm_ctListTotal = GetGameAPI()->GetControlsActions().Count();
+  gm_ctListTotal = GetGameAPI()->GetActions(gm_pControls).Count(); // [Cecil] Current actions
   gm_iListWantedItem = 0;
   CGameMenu::StartMenu();
 }
 
 void CCustomizeKeyboardMenu::EndMenu(void) {
   ControlsMenuOff();
+
+  // [Cecil] Reload common controls
+  if (gm_pControls == GetGameAPI()->pctrlCommon) {
+    try {
+      gm_pControls->Save_t(GAME_COMMON_CONTROLS_PATH);
+      gm_pControls->Load_t(GAME_COMMON_CONTROLS_PATH);
+
+    } catch (char *strError) {
+      CPrintF(TRANS("Cannot reload common controls:\n%s\n"), strError);
+    }
+  }
+
   CGameMenu::EndMenu();
 }

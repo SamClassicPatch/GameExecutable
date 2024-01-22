@@ -141,8 +141,16 @@ void StartRenderingOptionsMenu(void) {
 }
 
 void StartCustomizeKeyboardMenu(void) {
+  // [Cecil] Set extra controls for editing player controls
+  _pGUIM->gmCustomizeKeyboardMenu.SetControls(GetGameAPI()->GetControls());
   ChangeToMenu(&_pGUIM->gmCustomizeKeyboardMenu);
 }
+
+// [Cecil] Start customization of common controls
+void StartCustomizeCommonControlsMenu(void) {
+  _pGUIM->gmCustomizeKeyboardMenu.SetControls(GetGameAPI()->pctrlCommon);
+  ChangeToMenu(&_pGUIM->gmCustomizeKeyboardMenu);
+};
 
 void StartCustomizeAxisMenu(void) {
   ChangeToMenu(&_pGUIM->gmCustomizeAxisMenu);
