@@ -65,7 +65,7 @@ void CCustomizeKeyboardMenu::Initialize_t(void) {
     INDEX iPrev = (gm_ctListVisible + iLabel - 1) % KEYS_ON_SCREEN;
     INDEX iNext = (iLabel + 1) % KEYS_ON_SCREEN;
     // initialize label entities
-    gm_mgKey[iLabel].mg_boxOnScreen = BoxKeyRow(iLabel);
+    gm_mgKey[iLabel].mg_boxOnScreen = BoxKeyRow(iLabel - 1.0f);
     // initialize label gadgets
     gm_mgKey[iLabel].mg_pmgUp = &gm_mgKey[iPrev];
     gm_mgKey[iLabel].mg_pmgDown = &gm_mgKey[iNext];
