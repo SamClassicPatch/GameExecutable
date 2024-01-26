@@ -1423,13 +1423,6 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     CTString strCmd = CCoreAPI::AppPath() + CCoreAPI::AppExe();
     CTString strParam = " +game " + strMod;
 
-    // [Cecil] Copy TFE path
-    #if TSE_FUSION_MODE
-      if (GAME_DIR_TFE != "") {
-        strParam += CTString(0, " +tfe \"%s\"", GAME_DIR_TFE.str_String);
-      }
-    #endif
-
     if (_strModServerJoin != "") {
       strParam += " +connect " + _strModServerJoin + " +quickjoin";
     }

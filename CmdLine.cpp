@@ -139,10 +139,6 @@ void ParseCommandLine(CTString strCmd) {
     } else if (strWord == "+cdpath") {
       _fnmCDPath = GetNextParam();
 
-    // [Cecil] Specify TFE directory
-    } else if (strWord == "+tfe") {
-      GAME_DIR_TFE = GetNextParam();
-
     } else if (strWord == "+password") {
       cmd_strPassword = GetNextParam();
 
