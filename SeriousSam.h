@@ -29,7 +29,8 @@ extern INDEX sam_iScreenSizeJ;
 extern INDEX sam_iDisplayDepth;
 extern INDEX sam_iDisplayAdapter;
 extern INDEX sam_iGfxAPI;
-extern INDEX sam_iVideoSetup; // 0 == speed, 1 == normal, 2 == quality, 3 == custom
+// [Cecil] 0 - speed; 1 - normal; 2 - quality; 3 - extreme; >4 - custom
+extern INDEX sam_iVideoSetup;
 extern BOOL sam_bAutoAdjustAudio;
 
 // [Cecil] Computer screen resolution

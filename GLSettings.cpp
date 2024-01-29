@@ -15,9 +15,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 
+#include "GUI/Menus/MenuStuff.h"
+
 // List of settings data
 static CListHead _lhSettings;
-extern INDEX sam_iVideoSetup; // 0 = speed, 1 = normal, 2 = quality, 3 = custom
+extern INDEX sam_iVideoSetup;
 
 class CSettingsEntry {
   public:
@@ -41,21 +43,14 @@ BOOL CSettingsEntry::Matches(const CTString &strRenderer) const {
 }
 
 const char *RenderingPreferencesDescription(int iMode) {
-  // [Cecil] Replaced with an array
-  static const CTString astrModes[] = {
-    LOCALIZE("speed"),
-    LOCALIZE("normal"),
-    LOCALIZE("quality"),
-    LOCALIZE("custom"),
-  };
+  ASSERT(iMode >= 0 && iMode <= _iDisplayPrefsLastOpt);
 
-  ASSERT(iMode >= 0 && iMode <= 3);
-
-  if (iMode < 0 || iMode > 3) {
+  if (iMode < 0 || iMode > _iDisplayPrefsLastOpt) {
     iMode = 0;
   }
 
-  return astrModes[iMode];
+  // [Cecil] Reuse radio array
+  return astrDisplayPrefsRadioTexts[iMode];
 }
 
 void InitGLSettings(void) {
@@ -156,18 +151,23 @@ extern void ApplyGLSettings(BOOL bForce) {
   }
 
   // clamp rendering preferences (just to be on the safe side)
-  sam_iVideoSetup = Clamp(sam_iVideoSetup, 0L, 3L);
+  sam_iVideoSetup = Clamp(sam_iVideoSetup, 0L, _iDisplayPrefsLastOpt);
   CPrintF(LOCALIZE("Mode: %s\n"), RenderingPreferencesDescription(sam_iVideoSetup));
 
   // if not in custom mode
   if (sam_iVideoSetup < 3) {
     // execute the script
     CTString strCmd;
-    strCmd.PrintF("include \"Scripts\\GLSettings\\%s\"", CTString(pse->se_fnmScript));
+    strCmd.PrintF("include \"Scripts\\GLSettings\\%s\"", pse->se_fnmScript.str_String);
     _pShell->Execute(strCmd);
 
     // refresh textures
     _pShell->Execute("RefreshTextures();");
+
+  // [Cecil] Extreme quality
+  } else if (sam_iVideoSetup == 3) {
+    _pShell->Execute("include \"Scripts\\Addons\\Extreme.ini\"");
+    _pShell->Execute("mdl_iLODDisappear = 1;"); // Fix for non-disappearing items
   }
 
   // done

@@ -79,7 +79,7 @@ static INDEX _iDisplayModeChangeFlag = 0;
 static TIME _tmDisplayModeChanged = 100.0f; // when display mode was last changed
 
 // Rendering preferences for automatic settings
-extern INDEX sam_iVideoSetup = 1; // 0 = speed, 1 = normal, 2 = quality, 3 = custom
+extern INDEX sam_iVideoSetup = 1;
 
 // Automatic adjustment of audio quality
 extern BOOL sam_bAutoAdjustAudio = TRUE;

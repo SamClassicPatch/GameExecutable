@@ -42,11 +42,14 @@ extern CTString *astrMaxPlayersRadioTexts; // [Cecil] Dynamic array
 extern CTString astrGameTypeRadioTexts[16];
 extern CTString astrDifficultyRadioTexts[16]; // [Cecil] 16 difficulties
 extern CTString astrSplitScreenRadioTexts[4];
-extern CTString astrDisplayPrefsRadioTexts[4];
+extern CTString astrDisplayPrefsRadioTexts[5]; // [Cecil] 4 -> 5
 extern CTString astrDisplayAPIRadioTexts[2];
 extern CTString astrBitsPerPixelRadioTexts[3];
 extern CTString astrFrequencyRadioTexts[4];
 extern CTString astrSoundAPIRadioTexts[3];
+
+// [Cecil] Last option in video preferences (Custom)
+static const INDEX _iDisplayPrefsLastOpt = ARRAYCOUNT(astrDisplayPrefsRadioTexts) - 1;
 
 void InitGameTypes(void);
 

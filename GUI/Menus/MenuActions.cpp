@@ -666,8 +666,10 @@ extern void UpdateVideoOptionsButtons(INDEX iSelected) {
     .ga_adaAdapter[gmCurrent.gm_mgDisplayAdaptersTrigger.mg_iSelected];
 
   // number of available preferences is higher if video setup is custom
-  gmCurrent.gm_mgDisplayPrefsTrigger.mg_ctTexts = 3;
-  if (sam_iVideoSetup == 3) {
+  gmCurrent.gm_mgDisplayPrefsTrigger.mg_ctTexts = _iDisplayPrefsLastOpt; // [Cecil] Excludes "Custom"
+
+  // Include "Custom" if it's selected
+  if (sam_iVideoSetup == _iDisplayPrefsLastOpt) {
     gmCurrent.gm_mgDisplayPrefsTrigger.mg_ctTexts++;
   }
 
@@ -734,7 +736,7 @@ extern void InitVideoOptionsButtons(void) {
   FillResolutionsList();
   SizeToResolution(vScreen, gmCurrent.gm_mgResolutionsTrigger.mg_iSelected);
 
-  gmCurrent.gm_mgDisplayPrefsTrigger.mg_iSelected = Clamp(int(sam_iVideoSetup), 0, 3);
+  gmCurrent.gm_mgDisplayPrefsTrigger.mg_iSelected = Clamp(sam_iVideoSetup, 0L, _iDisplayPrefsLastOpt);
 
   gmCurrent.gm_mgWindowModeTrigger.ApplyCurrentSelection();
   gmCurrent.gm_mgDisplayPrefsTrigger.ApplyCurrentSelection();
@@ -767,8 +769,8 @@ static void ApplyVideoOptions(void) {
 
   // setup preferences
   extern INDEX _iLastPreferences;
-  if (sam_iVideoSetup == 3) {
-    _iLastPreferences = 3;
+  if (sam_iVideoSetup == _iDisplayPrefsLastOpt) {
+    _iLastPreferences = _iDisplayPrefsLastOpt;
   }
   sam_iVideoSetup = gmCurrent.gm_mgDisplayPrefsTrigger.mg_iSelected;
 
