@@ -47,6 +47,7 @@ FLOATaabbox2D BoxArrow(enum ArrowDir ad);
 FLOATaabbox2D BoxBack(void);
 FLOATaabbox2D BoxNext(void);
 FLOATaabbox2D BoxLeftColumn(FLOAT fRow);
+FLOATaabbox2D BoxRightColumn(FLOAT fRow); // [Cecil]
 FLOATaabbox2D BoxNoUp(FLOAT fRow);
 FLOATaabbox2D BoxNoDown(FLOAT fRow);
 FLOATaabbox2D BoxPlayerModel(void);

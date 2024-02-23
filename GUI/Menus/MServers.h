@@ -32,6 +32,7 @@ class CServersMenu : public CGameMenu {
     CMGTitle gm_mgTitle;
     CMGServerList gm_mgList;
     CMGButton gm_mgRefresh;
+    CMGButton gm_mgMasterServer; // [Cecil] Master server switch
 
     void Initialize_t(void);
     void StartMenu(void);

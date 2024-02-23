@@ -17,9 +17,68 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 #include "MServers.h"
 
+#include "GUI/Menus/MenuManager.h"
+
 CTString _strServerFilter[7];
 CMGButton mgServerColumn[7];
 CMGEdit mgServerFilter[7];
+
+// [Cecil] Available master servers
+static const char *_astrServerNames[] = {
+  "333networks",
+  "The Errorist Network",
+  "GoneSpy",
+  "42amsterdam",
+};
+
+static const char *_astrServerValues[] = {
+  "333networks.com",
+  "master.errorist.eu",
+  "master.gonespy.com",
+  "42amsterdam.net",
+};
+
+static const INDEX _ctMS = ARRAYCOUNT(_astrServerValues);
+
+#define INVALID_MS_BUTTON LOCALIZE("Custom")
+
+// [Cecil] Find index of the current master server
+static INDEX GetCurrentMasterServer(void) {
+  static CSymbolPtr pstrLegacyMS("ms_strLegacyMS");
+
+  // Fail-safe
+  if (pstrLegacyMS.Exists())
+  {
+    for (INDEX i = 0; i < _ctMS; i++) {
+      if (_astrServerValues[i] == pstrLegacyMS.GetString()) return i;
+    }
+  }
+
+  // Past the limit
+  return -1;
+};
+
+// [Cecil] Select new master server
+static void SwitchMasterServer(void) {
+  static CSymbolPtr pstrLegacyMS("ms_strLegacyMS");
+  CMGButton &mgServer = _pGUIM->gmServersMenu.gm_mgMasterServer;
+
+  // Fail-safe
+  if (!pstrLegacyMS.Exists()) {
+    mgServer.SetText(INVALID_MS_BUTTON);
+    return;
+  }
+
+  // Find index of the current master server
+  INDEX i = GetCurrentMasterServer();
+
+  // Get the next one and wrap it around (if current one is -1, starts from the beginning)
+  i = (i + 1) % _ctMS;
+
+  // Set button name and master server
+  mgServer.SetText(_astrServerNames[i]);
+  pstrLegacyMS.GetString() = _astrServerValues[i];
+};
 
 void CServersMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
@@ -56,9 +115,20 @@ void CServersMenu::Initialize_t(void) {
   gm_mgRefresh.mg_boxOnScreen = BoxLeftColumn(15.0);
   gm_mgRefresh.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgRefresh.mg_iCenterI = -1;
+  gm_mgRefresh.mg_pmgUp = &gm_mgList;
   gm_mgRefresh.mg_pmgDown = &gm_mgList;
   gm_mgRefresh.mg_pActivatedFunction = NULL;
   AddChild(&gm_mgRefresh);
+
+  // [Cecil] Master server switch
+  gm_mgMasterServer.mg_strTip = TRANS("switch master server for the Legacy protocol");
+  gm_mgMasterServer.mg_boxOnScreen = BoxRightColumn(15.0);
+  gm_mgMasterServer.mg_bfsFontSize = BFS_MEDIUM;
+  gm_mgMasterServer.mg_iCenterI = +1;
+  gm_mgMasterServer.mg_pmgUp = &gm_mgList;
+  gm_mgMasterServer.mg_pmgDown = &gm_mgList;
+  gm_mgMasterServer.mg_pActivatedFunction = &SwitchMasterServer;
+  AddChild(&gm_mgMasterServer);
 
   CTString astrColumns[7];
   mgServerColumn[0].SetText(LOCALIZE("Server"));
@@ -94,6 +164,15 @@ void CServersMenu::Initialize_t(void) {
 void CServersMenu::StartMenu(void) {
   extern void RefreshServerList(void);
   RefreshServerList();
+
+  // [Cecil] Select current master server name
+  INDEX i = GetCurrentMasterServer();
+
+  if (i == -1) {
+    gm_mgMasterServer.SetText(INVALID_MS_BUTTON);
+  } else {
+    gm_mgMasterServer.SetText(_astrServerNames[i]);
+  }
 
   CGameMenu::StartMenu();
 }

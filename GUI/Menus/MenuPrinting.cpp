@@ -231,6 +231,13 @@ FLOATaabbox2D BoxLeftColumn(FLOAT fRow) {
     FLOAT2D(0.15f, _fBigStartJ + (fRow + 1) * _fMediumSizeJ));
 }
 
+// [Cecil]
+FLOATaabbox2D BoxRightColumn(FLOAT fRow) {
+  return FLOATaabbox2D(
+    FLOAT2D(0.85f, _fBigStartJ + fRow * _fMediumSizeJ),
+    FLOAT2D(0.98f, _fBigStartJ + (fRow + 1) * _fMediumSizeJ));
+};
+
 FLOATaabbox2D BoxPlayerModel(void) {
   return FLOATaabbox2D(FLOAT2D(0.68f, 0.235f), FLOAT2D(0.965f, 0.78f));
 }
