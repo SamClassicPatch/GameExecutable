@@ -1160,7 +1160,18 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
           }
 
         } else if (msg.message == WM_CHAR) {
-          _pGame->ConsoleChar(msg);
+          // [Cecil] Set computer locale for validating non-latin characters (handle Tab as intended)
+          if (msg.wParam != VK_TAB) {
+            setlocale(LC_ALL, "");
+          }
+
+          // [Cecil] TEMP: Ignore non-printable 'yo' cyrillic character in Windows-1251
+          if (GetACP() != 1251 || (msg.wParam != 0xA8 && msg.wParam != 0xB8)) {
+            _pGame->ConsoleChar(msg);
+          }
+
+          // [Cecil] Restore locale
+          setlocale(LC_ALL, "C");
         }
 
         if (msg.message == WM_LBUTTONDOWN
