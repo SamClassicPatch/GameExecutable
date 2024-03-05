@@ -83,7 +83,9 @@ int CompareSessions(const void *pv0, const void *pv1) {
     case 2: iResult = Sgn(ns0.ns_tmPing - ns1.ns_tmPing); break;
     case 3: iResult = Sgn(ns0.ns_ctPlayers - ns1.ns_ctPlayers); break;
     case 4: iResult = stricmp(ns0.ns_strGameType, ns1.ns_strGameType); break;
+  #if SE1_GAME != SS_REV
     case 5: iResult = stricmp(ns0.ns_strMod, ns1.ns_strMod); break;
+  #endif
     case 6: iResult = stricmp(ns0.ns_strVer, ns1.ns_strVer); break;
   }
 
@@ -129,7 +131,9 @@ void SortAndFilterServers(void) {
       if (strcmp(strCompare, "=") == 0 && !(ns.ns_ctPlayers == iPlayers)) continue;
     }
     if (_strServerFilter[4] != "" && !ns.ns_strGameType.Matches("*" + _strServerFilter[4] + "*")) continue;
+  #if SE1_GAME != SS_REV
     if (_strServerFilter[5] != "" && !ns.ns_strMod.Matches("*" + _strServerFilter[5] + "*")) continue;
+  #endif
     if (_strServerFilter[6] != "" && !ns.ns_strVer.Matches("*" + _strServerFilter[6] + "*")) continue;
 
     CNetworkSession *pnsNew = new CNetworkSession;
@@ -293,10 +297,11 @@ void CMGServerList::Render(CDrawPort *pdp) {
 
       CTString strPing(0, "%4d", INDEX(ns.ns_tmPing * 1000));
       CTString strPlayersCt(0, "%2d/%2d", ns.ns_ctPlayers, ns.ns_ctMaxPlayers);
-      CTString strMod = ns.ns_strMod;
-      if (strMod == "") {
-        strMod = sam_strGameName;
-      }
+      CTString strMod = sam_strGameName;
+
+    #if SE1_GAME != SS_REV
+      if (ns.ns_strMod != "") strMod = ns.ns_strMod;
+    #endif
 
       // [Cecil] Arranged in an array
       const CTString astrEntries[7] = {

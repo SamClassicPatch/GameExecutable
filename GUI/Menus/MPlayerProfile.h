@@ -35,8 +35,10 @@ class CPlayerProfileMenu : public CGameMenu {
     CMGButton gm_mgNumber[8];
     CMGButton gm_mgNameLabel;
     CMGEdit gm_mgNameField;
+  #if SE1_GAME != SS_REV
     CMGButton gm_mgTeamLabel;
     CMGEdit gm_mgTeam;
+  #endif
     CMGButton gm_mgCustomizeControls;
     CMGTrigger gm_mgCrosshair;
     CMGTrigger gm_mgWeaponSelect;

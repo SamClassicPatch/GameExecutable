@@ -73,11 +73,12 @@ void CPlayerProfileMenu::Initialize_t(void) {
   gm_mgNameField.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgNameField.mg_iCenterI = -1;
   gm_mgNameField.mg_pmgUp = &gm_mgNumber[0];
-  gm_mgNameField.mg_pmgDown = &gm_mgTeam;
+  gm_mgNameField.mg_pmgDown = &gm_mgCrosshair; // [Cecil] Rev: Above crosshair selection
   gm_mgNameField.mg_pmgRight = &gm_mgModel;
   gm_mgNameField.mg_strTip = LOCALIZE("rename currently active player");
   AddChild(&gm_mgNameField);
 
+#if SE1_GAME != SS_REV
   gm_mgTeamLabel.SetText(LOCALIZE("TEAM:"));
   gm_mgTeamLabel.mg_boxOnScreen = BoxMediumLeft(2.25f);
   gm_mgTeamLabel.mg_bfsFontSize = BFS_MEDIUM;
@@ -90,19 +91,26 @@ void CPlayerProfileMenu::Initialize_t(void) {
   gm_mgTeam.mg_boxOnScreen = BoxPlayerEdit(2.25f);
   gm_mgTeam.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgTeam.mg_iCenterI = -1;
-  gm_mgTeam.mg_pmgUp = gm_mgNameField.mg_pmgUp = &gm_mgNumber[0];
-
+  gm_mgTeam.mg_pmgUp = &gm_mgNameField; // [Cecil] Below name field
   gm_mgTeam.mg_pmgDown = &gm_mgCrosshair;
   gm_mgTeam.mg_pmgRight = &gm_mgModel;
   //gm_mgTeam.mg_strTip = LOCALIZE("teamplay is disabled in this version");
   gm_mgTeam.mg_strTip = LOCALIZE("enter team name, if playing in team");
   AddChild(&gm_mgTeam);
+#endif
 
-  TRIGGER_MG(gm_mgCrosshair, 4.0, gm_mgTeam, gm_mgWeaponSelect, LOCALIZE("CROSSHAIR"), astrCrosshair);
+  // [Cecil] Rev: Below name field
+  TRIGGER_MG(gm_mgCrosshair, 4.0, gm_mgNameField, gm_mgWeaponSelect, LOCALIZE("CROSSHAIR"), astrCrosshair);
   gm_mgCrosshair.mg_bVisual = TRUE;
   gm_mgCrosshair.mg_boxOnScreen = BoxPlayerSwitch(5.0f);
   gm_mgCrosshair.mg_iCenterI = -1;
   gm_mgCrosshair.mg_pOnTriggerChange = NULL;
+
+#if SE1_GAME != SS_REV
+  // [Cecil] Put team field in-between name and crosshair after setting up for Revolution
+  gm_mgNameField.mg_pmgDown = &gm_mgTeam;
+  gm_mgCrosshair.mg_pmgUp = &gm_mgTeam;
+#endif
 
   TRIGGER_MG(gm_mgWeaponSelect, 4.0, gm_mgCrosshair, gm_mgWeaponHide, LOCALIZE("AUTO SELECT WEAPON"), astrWeapon);
   gm_mgWeaponSelect.mg_boxOnScreen = BoxPlayerSwitch(6.0f);
@@ -190,8 +198,11 @@ void CPlayerProfileMenu::SelectPlayer(INDEX iPlayer) {
   }
   gm_mgNameField.mg_pstrToChange = &pc.pc_strName;
   gm_mgNameField.SetText(*gm_mgNameField.mg_pstrToChange);
+
+#if SE1_GAME != SS_REV
   gm_mgTeam.mg_pstrToChange = &pc.pc_strTeam;
   gm_mgTeam.SetText(*gm_mgTeam.mg_pstrToChange);
+#endif
 
   CPlayerSettings *pps = (CPlayerSettings *)pc.pc_aubAppearance;
 

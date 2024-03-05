@@ -129,7 +129,13 @@ void CInGameMenu::StartMenu(void) {
   extern void SetDemoStartStopRecText();
   SetDemoStartStopRecText();
 
-  if (_gmRunningGameMode == GM_SINGLE_PLAYER) {
+  // [Cecil] Check if player name should be displayed on the pause menu
+  BOOL bPlayerName = (_gmRunningGameMode == GM_SINGLE_PLAYER);
+#if SE1_GAME == SS_REV
+  bPlayerName |= _pNetwork->IsServer();
+#endif
+
+  if (bPlayerName) {
     CPlayerCharacter &pc = *GetGameAPI()->GetPlayerCharacter(GetGameAPI()->GetPlayerForSP());
 
     CTString strPlayer;
@@ -138,32 +144,32 @@ void CInGameMenu::StartMenu(void) {
     gm_mgLabel1.SetText(strPlayer);
     gm_mgLabel2.SetText("");
 
-  } else {
-    if (_pNetwork->IsServer()) {
-      CTString strHost, strAddress;
-      CTString strHostName;
-      _pNetwork->GetHostName(strHost, strAddress);
-      if (strHost == "") {
-        strHostName = LOCALIZE("<not started yet>");
-      } else {
-        strHostName = strHost + " (" + strAddress + ")";
-      }
-
-      gm_mgLabel1.SetText(LOCALIZE("Address: ") + strHostName);
-      gm_mgLabel2.SetText("");
-
+#if SE1_GAME != SS_REV
+  } else if (_pNetwork->IsServer()) {
+    CTString strHost, strAddress;
+    CTString strHostName;
+    _pNetwork->GetHostName(strHost, strAddress);
+    if (strHost == "") {
+      strHostName = LOCALIZE("<not started yet>");
     } else {
-      CTString strConfig;
-      strConfig = LOCALIZE("<not adjusted>");
-      extern CTString sam_strNetworkSettings;
-      if (sam_strNetworkSettings != "") {
-        LoadStringVar(CTFileName(sam_strNetworkSettings).NoExt() + ".des", strConfig);
-        strConfig.OnlyFirstLine();
-      }
-
-      gm_mgLabel1.SetText(LOCALIZE("Connected to: ") + GetGameAPI()->GetJoinAddress());
-      gm_mgLabel2.SetText(LOCALIZE("Connection: ") + strConfig);
+      strHostName = strHost + " (" + strAddress + ")";
     }
+
+    gm_mgLabel1.SetText(LOCALIZE("Address: ") + strHostName);
+    gm_mgLabel2.SetText("");
+#endif
+
+  } else {
+    CTString strConfig;
+    strConfig = LOCALIZE("<not adjusted>");
+    extern CTString sam_strNetworkSettings;
+    if (sam_strNetworkSettings != "") {
+      LoadStringVar(CTFileName(sam_strNetworkSettings).NoExt() + ".des", strConfig);
+      strConfig.OnlyFirstLine();
+    }
+
+    gm_mgLabel1.SetText(LOCALIZE("Connected to: ") + GetGameAPI()->GetJoinAddress());
+    gm_mgLabel2.SetText(LOCALIZE("Connection: ") + strConfig);
   }
 
   CGameMenu::StartMenu();
