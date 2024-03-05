@@ -422,6 +422,9 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   // initialize engine
   SE_InitEngine(sam_strGameName);
 
+  // [Cecil] Custom initialization
+  ClassicsPatch_InitExt();
+
   SE_LoadDefaultFonts();
 
   // now print the output of command line parsing
@@ -440,9 +443,6 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   } catch (char *strError) {
     FatalError("%s", strError);
   }
-
-  // [Cecil] Custom initialization
-  ClassicsPatch_InitExt();
 
   // [Cecil] Translate the mod name
   sam_strModName = TRANSV(sam_strModName);
