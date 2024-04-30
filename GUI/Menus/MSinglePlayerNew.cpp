@@ -105,6 +105,7 @@ void CSinglePlayerNewMenu::Initialize_t(void) {
 
   // [Cecil] Game customization button
   gm_mgCustomize.SetText(TRANS("Customize game"));
+  gm_mgCustomize.mg_strTip = TRANS("^cff5f5fWARNING: Gameplay extensions are incompatible with vanilla game!");
   gm_mgCustomize.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgCustomize.mg_boxOnScreen = BoxLeftColumn(15.0f);
   gm_mgCustomize.mg_iCenterI = -1;
