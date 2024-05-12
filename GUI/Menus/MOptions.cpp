@@ -53,7 +53,7 @@ void COptionsMenu::Initialize_t(void) {
   gm_mgNetworkOptions.mg_bfsFontSize = BFS_LARGE;
   gm_mgNetworkOptions.mg_boxOnScreen = BoxBigRow(3.0f);
   gm_mgNetworkOptions.mg_pmgUp = &gm_mgPlayerProfileOptions;
-  gm_mgNetworkOptions.mg_pmgDown = &gm_mgCustomOptions;
+  gm_mgNetworkOptions.mg_pmgDown = &gm_mgPatchOptions;
   gm_mgNetworkOptions.SetText(LOCALIZE("NETWORK CONNECTION"));
   gm_mgNetworkOptions.mg_strTip = LOCALIZE("choose your connection parameters");
   AddChild(&gm_mgNetworkOptions);
