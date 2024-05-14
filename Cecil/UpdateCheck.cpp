@@ -26,7 +26,6 @@ static CTString _strLatestVersion;
 
 // Open web page with the latest release
 static void OpenLatestUpdate(void) {
-  extern void RunBrowser(const char *);
   RunBrowser(CLASSICSPATCH_URL_LATESTRELEASE);
 };
 

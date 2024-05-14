@@ -20,7 +20,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "GUI/Menus/MenuStarters.h"
 
 extern CMenuGadget *_pmgLastActivatedGadget;
-extern void RunBrowser(const char *);
 
 // Random quote index
 static INDEX _iRandomQuote = 0;

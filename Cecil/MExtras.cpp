@@ -34,8 +34,7 @@ static void StartGameCreditsMenu(void) {
 
 // Open documentation
 static void OpenWiki(void) {
-  extern void RunBrowser(const char *);
-  RunBrowser(URL_WIKI);
+  RunBrowser(URL_WIKI, TRUE);
 };
 
 static void OpenWikiConfirm(void) {

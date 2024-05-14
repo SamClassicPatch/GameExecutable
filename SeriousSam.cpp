@@ -351,7 +351,12 @@ void StartNextDemo(void) {
 }
 
 // Run web browser and view an url
-void RunBrowser(const char *strUrl) {
+void RunBrowser(const char *strUrl, BOOL bUseSteamOverlay) {
+  // [Cecil] Try web browser in Steam overlay
+  if (bUseSteamOverlay) {
+    if (GetSteamAPI()->OpenWebPage(strUrl)) return;
+  }
+
   int iResult = (int)ShellExecuteA(_hwndMain, "OPEN", strUrl, NULL, NULL, SW_SHOWMAXIMIZED);
 
   if (iResult < 32) {

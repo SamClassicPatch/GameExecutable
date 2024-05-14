@@ -43,6 +43,9 @@ extern PIX2D _vpixScreenRes;
   #define SCRIPTS_ADDONS_DIR "Scripts\\AddonsSE\\"
 #endif
 
+// [Cecil] Declared here to be widely accessible
+void RunBrowser(const char *strUrl, BOOL bUseSteamOverlay = FALSE);
+
 // [Cecil] Different window modes
 extern void StartNewMode(enum GfxAPIType eAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ,
                          enum DisplayDepth eColorDepth, INDEX iWindowMode);
