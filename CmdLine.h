@@ -29,6 +29,11 @@ extern CTString cmd_strOutput;   // output from parsing command line
 extern BOOL cmd_bServer;         // set to run as server
 extern BOOL cmd_bQuickJoin;      // do not ask for players and network settings
 
-void ParseCommandLine(CTString strCmd);
+// [Cecil] On game launch flag
+void ParseCommandLine(CTString strCmd, BOOL bOnLaunch);
+
+// [Cecil] Execute commands set by the command line
+// Returns TRUE if a new game has been started as a result
+BOOL ExecuteCommandLine(void);
 
 #endif /* include-once check. */

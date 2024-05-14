@@ -100,12 +100,8 @@ CTString GetNextParam(void) {
 }
 
 // Parse command line parameters and set results to static variables
-void ParseCommandLine(CTString strCmd) {
-  cmd_strOutput = "";
-  cmd_strOutput += CTString(0, LOCALIZE("Command line: '%s'\n"), strCmd);
-
-  // [Cecil] Remember command line arguments
-  _strRestartCommandLine = strCmd;
+void ParseCommandLine(CTString strCmd, BOOL bOnLaunch) {
+  cmd_strOutput = CTString(0, LOCALIZE("Command line: '%s'\n"), strCmd);
 
   // if no command line
   if (strCmd.Length() == 0) {
@@ -130,15 +126,6 @@ void ParseCommandLine(CTString strCmd) {
     } else if (strWord == "+quickjoin") {
       cmd_bQuickJoin = TRUE;
 
-    } else if (strWord == "+game") {
-      CTString strMod = GetNextParam();
-      if (strMod != "SeriousSam") { // (we ignore default mod - always use base dir in that case)
-        _fnmMod = "Mods\\" + strMod + "\\";
-      }
-
-    } else if (strWord == "+cdpath") {
-      _fnmCDPath = GetNextParam();
-
     } else if (strWord == "+password") {
       cmd_strPassword = GetNextParam();
 
@@ -156,17 +143,76 @@ void ParseCommandLine(CTString strCmd) {
         strPort.ScanF(":%d", &cmd_iPort);
       }
 
-    } else if (strWord == "+script") {
-      cmd_strScript = GetNextParam();
-
     } else if (strWord == "+goto") {
       GetNextParam().ScanF("%d", &cmd_iGoToMarker);
 
-    } else if (strWord == "+logfile") {
-      _strLogFile = GetNextParam();
+    // [Cecil] Commands only on launch
+    } else if (bOnLaunch) {
+      if (strWord == "+game") {
+        CTString strMod = GetNextParam();
+        if (strMod != "SeriousSam") { // (we ignore default mod - always use base dir in that case)
+          _fnmMod = "Mods\\" + strMod + "\\";
+        }
+
+      } else if (strWord == "+cdpath") {
+        _fnmCDPath = GetNextParam();
+
+      } else if (bOnLaunch && strWord == "+script") {
+        cmd_strScript = GetNextParam();
+
+      } else if (bOnLaunch && strWord == "+logfile") {
+        _strLogFile = GetNextParam();
+
+      } else {
+        // [Cecil] This is the first time I seriously use goto in C++ in my entire life
+        goto UnknownOption;
+      }
 
     } else {
+    UnknownOption:
       cmd_strOutput += CTString(0, LOCALIZE("  Unknown option: '%s'\n"), strWord);
     }
   }
 }
+
+// [Cecil] Execute commands set by the command line
+BOOL ExecuteCommandLine(void) {
+  if (cmd_strPassword != "") {
+    _pShell->SetString("net_strConnectPassword", cmd_strPassword);
+  }
+
+  // If connecting to server from command line
+  if (cmd_strServer != "") {
+    CTString strPort = "";
+
+    if (cmd_iPort > 0) {
+      _pShell->SetINDEX("net_iPort", cmd_iPort);
+      strPort.PrintF(":%d", cmd_iPort);
+    }
+
+    CPrintF(LOCALIZE("Command line connection: '%s%s'\n"), cmd_strServer, strPort);
+
+    // Go to join menu
+    GetGameAPI()->SetJoinAddress(cmd_strServer);
+
+    if (cmd_bQuickJoin) {
+      extern void JoinNetworkGame(void);
+      JoinNetworkGame();
+
+    } else {
+      StartMenus("join");
+    }
+
+  // If starting world from command line
+  } else if (cmd_strWorld != "") {
+    // [Cecil] Start map from the game directory (passes "..\\Levels\\ExampleWorld.wld" into StartMap() command)
+    _pShell->Execute(CTString(0, "StartMap(\"%s\");", "..\\\\" + cmd_strWorld));
+
+  // Hasn't started anything
+  } else {
+    return FALSE;
+  }
+
+  // Started a new game
+  return TRUE;
+};

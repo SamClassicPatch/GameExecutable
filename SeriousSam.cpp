@@ -403,8 +403,11 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   MainWindow_Init();
   OpenMainWindowInvisible();
 
+  // [Cecil] Remember command line arguments
+  _strRestartCommandLine = strCmdLine;
+
   // parse command line before initializing engine
-  ParseCommandLine(strCmdLine);
+  ParseCommandLine(strCmdLine, TRUE);
 
   #if SE1_GAME == SS_REV
     // [Cecil] Rev: Use Steam the same way as in Revolution's EXE
@@ -561,39 +564,9 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
 
   HideSplashScreen();
 
-  if (cmd_strPassword != "") {
-    _pShell->SetString("net_strConnectPassword", cmd_strPassword);
-  }
-
-  // if connecting to server from command line
-  if (cmd_strServer != "") {
-    CTString strPort = "";
-
-    if (cmd_iPort > 0) {
-      _pShell->SetINDEX("net_iPort", cmd_iPort);
-      strPort.PrintF(":%d", cmd_iPort);
-    }
-
-    CPrintF(LOCALIZE("Command line connection: '%s%s'\n"), cmd_strServer, strPort);
-
-    // go to join menu
-    GetGameAPI()->SetJoinAddress(cmd_strServer);
-
-    if (cmd_bQuickJoin) {
-      extern void JoinNetworkGame(void);
-      JoinNetworkGame();
-
-    } else {
-      StartMenus("join");
-    }
-
-  // if starting world from command line
-  } else if (cmd_strWorld != "") {
-    // [Cecil] Start map from the game directory
-    _pShell->Execute(CTString(0, "StartMap(\"%s\");", "..\\\\" + cmd_strWorld));
-
-  // if no relevant starting at command line
-  } else {
+  // [Cecil] If nothing has been started by the command line
+  if (!ExecuteCommandLine()) {
+    // Start playing demos
     StartNextDemo();
   }
 
