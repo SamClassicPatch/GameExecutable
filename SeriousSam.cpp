@@ -245,11 +245,12 @@ void UpdatePauseState(void) {
   const INDEX iConState = GetGameAPI()->GetConState();
   const INDEX iCompState = GetGameAPI()->GetCompState();
 
-  BOOL bShouldPause = (_gmRunningGameMode == GM_SINGLE_PLAYER) && (bMenuActive ||
+  // [Cecil] Check Steam overlay
+  BOOL bShouldPause = (bMenuActive || GetSteamAPI()->IsOverlayOn() ||
                        iConState  == CS_ON || iConState  == CS_TURNINGON || iConState  == CS_TURNINGOFF ||
                        iCompState == CS_ON || iCompState == CS_TURNINGON || iCompState == CS_TURNINGOFF);
 
-  _pNetwork->SetLocalPause(bShouldPause);
+  _pNetwork->SetLocalPause(_gmRunningGameMode == GM_SINGLE_PLAYER && bShouldPause);
 }
 
 // Limit current frame rate if neeeded
@@ -1319,6 +1320,17 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
     // when all messages are removed, window has surely changed
     _bWindowChanging = FALSE;
+
+    // [Cecil] Join game via a friend
+    CTString &strSteamJoinCommand = GetSteamAPI()->strJoinCommandMidGame;
+
+    if (strSteamJoinCommand != "") {
+      CPrintF(TRANS("Joining a game via Steam: %s\n"), strSteamJoinCommand);
+      ParseCommandLine(strSteamJoinCommand, FALSE);
+      ExecuteCommandLine();
+
+      strSteamJoinCommand = "";
+    }
 
     // [Cecil] Display notification about a new release in the menu
     if (bMenuActive && !_pInput->IsInputEnabled()) {
