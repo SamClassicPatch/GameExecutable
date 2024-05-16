@@ -724,6 +724,9 @@ void DoGame(void) {
 
   // redraw the view
   if (!IsIconic(_hwndMain) && pdp != NULL && pdp->Lock()) {
+    // [Cecil] Set drawport that will be used for custom Steam screenshots
+    GetSteamAPI()->SetScreenshotHook(pdp);
+
     // [Cecil] Keep rendering the game in the background while in menu
     BOOL bRenderGame = (!bMenuActive || sam_bBackgroundGameRender);
 
@@ -795,6 +798,10 @@ void DoGame(void) {
 
     // show
     pvpViewPort->SwapBuffers();
+
+  // [Cecil] Reset drawport for screenshots
+  } else {
+    GetSteamAPI()->SetScreenshotHook(NULL);
   }
 }
 
