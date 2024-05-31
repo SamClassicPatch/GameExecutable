@@ -48,7 +48,7 @@ void CLevelCategoriesMenu::Initialize_t(void) {
 
   // Load from the mod
   if (_fnmMod != "") {
-    IFiles::ListGameFiles(aCategories, "Data\\ClassicsPatch\\LevelCategories\\", "*.lst", IFiles::FLF_ONLYMOD);
+    ListGameFiles(aCategories, "Data\\ClassicsPatch\\LevelCategories\\", "*.lst", FLF_ONLYMOD);
 
     // Don't load from the game if there are any mod categories
     if (aCategories.Count() != 0) {
@@ -58,7 +58,7 @@ void CLevelCategoriesMenu::Initialize_t(void) {
 
   // Load from the game
   if (bLoadFromGame) {
-    IFiles::ListGameFiles(aCategories, "Data\\ClassicsPatch\\LevelCategories\\", "*.lst", 0);
+    ListGameFiles(aCategories, "Data\\ClassicsPatch\\LevelCategories\\", "*.lst", 0);
   }
 
   // Create new categories

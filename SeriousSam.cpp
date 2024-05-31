@@ -36,6 +36,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Cecil/UpdateCheck.h"
 #include "Cecil/WindowModes.h"
 
+#include <locale.h>
+
 // Application state variables
 extern BOOL _bRunning = TRUE;
 extern BOOL _bQuitScreen = TRUE;
@@ -179,7 +181,7 @@ static HANDLE _hLock = NULL;
 static CTFileName _fnmLock;
 static void DirectoryLockOn(void) {
   // create lock filename
-  _fnmLock = CCoreAPI::AppPath() + "SeriousSam.loc";
+  _fnmLock = IDir::AppPath() + "SeriousSam.loc";
 
   // try to open lock file
   _hLock = CreateFileA(
@@ -1416,7 +1418,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     PROCESS_INFORMATION pi;
 
     // Use executable filename
-    CTString strCmd = CCoreAPI::AppPath() + CCoreAPI::AppExe();
+    CTString strCmd = IDir::AppPath() + IDir::AppExe();
     CTString strParam = " " + _strRestartCommandLine;
 
     if (!CreateProcessA(strCmd.str_String, strParam.str_String, NULL, NULL, FALSE, CREATE_DEFAULT_ERROR_MODE, NULL, NULL, &cif, &pi)) {
@@ -1439,7 +1441,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     const CTString strMod = _fnmModToLoad.FileName();
 
     // [Cecil] Use executable filename
-    CTString strCmd = CCoreAPI::AppPath() + CCoreAPI::AppExe();
+    CTString strCmd = IDir::AppPath() + IDir::AppExe();
     CTString strParam = " +game " + strMod;
 
     if (_strModServerJoin != "") {
@@ -1467,7 +1469,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 /*static void CheckModReload(void) {
   if (_fnmModToLoad != "") {
     // [Cecil] Use executable filename
-    CTString strCommand = CCoreAPI::AppPath() + CCoreAPI::AppExe();
+    CTString strCommand = IDir::AppPath() + IDir::AppExe();
     //+mod " + _fnmModToLoad.FileName() + "\"";
 
     CTString strMod = _fnmModToLoad.FileName();
@@ -1490,7 +1492,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 }*/
 
 static void CheckTeaser(void) {
-  CTFileName fnmTeaser = CCoreAPI::AppBin() + "AfterSam.exe";
+  CTFileName fnmTeaser = IDir::AppBin() + "AfterSam.exe";
 
   if (fopen(fnmTeaser, "r") != NULL) {
     Sleep(500);

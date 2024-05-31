@@ -76,7 +76,7 @@ void CMGFileButton::SaveYes(void) {
 }
 
 void CMGFileButton::DoLoad(void) {
-#ifdef _DEBUG
+#ifndef NDEBUG
   // [Cecil] Check for saving state if currently in load/save menu
   if (GetParent() == &_pGUIM->gmLoadSaveMenu) {
     ASSERT(!_pGUIM->gmLoadSaveMenu.gm_bSave);

@@ -17,9 +17,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "VarList.h"
 
-// [Cecil] For listing files
-#include <CoreLib/Interfaces/FileFunctions.h>
-
 // [Cecil] Tabs of options
 CStaticStackArray<CVarTab> _aTabs;
 
@@ -292,7 +289,7 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
       CTString strPattern = fnmListPath.FileName() + fnmListPath.FileExt();
 
       CFileList afnmDir;
-      IFiles::ListGameFiles(afnmDir, fnmListPath.FileDir(), strPattern, IFiles::FLF_SEARCHMOD);
+      ListGameFiles(afnmDir, fnmListPath.FileDir(), strPattern, FLF_SEARCHMOD);
 
       // Go through listed files
       const INDEX ct = afnmDir.Count();

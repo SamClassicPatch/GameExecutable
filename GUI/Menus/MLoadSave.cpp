@@ -18,9 +18,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MLoadSave.h"
 
-// [Cecil] For listing saves
-#include <CoreLib/Interfaces/FileFunctions.h>
-
 void CLoadSaveMenu::Initialize_t(void) {
   gm_pgmNextMenu = NULL;
 
@@ -66,7 +63,7 @@ void CLoadSaveMenu::Initialize_t(void) {
 void CLoadSaveMenu::CreateButtons(void) {
   // List the directory
   CFileList afnmDir;
-  IFiles::ListGameFiles(afnmDir, gm_fnmDirectory, "", IFiles::FLF_SEARCHMOD);
+  ListGameFiles(afnmDir, gm_fnmDirectory, "", FLF_SEARCHMOD);
   gm_iLastFile = -1;
 
   // For each file in the directory

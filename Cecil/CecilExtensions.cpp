@@ -18,8 +18,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "CmdLine.h"
 #include "LevelInfo.h"
 
-#include <CoreLib/Interfaces/DataFunctions.h>
-
 // General
 INDEX sam_bPatchVersionLabel = TRUE;
 INDEX sam_bBackgroundGameRender = TRUE;

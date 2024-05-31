@@ -17,9 +17,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MGServerList.h"
 #include "MGEdit.h"
 
-// [Cecil] Data methods
-#include <CoreLib/Interfaces/DataFunctions.h>
-
 extern CSoundData *_psdSelect;
 extern CSoundData *_psdPress;
 

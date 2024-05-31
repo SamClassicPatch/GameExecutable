@@ -434,9 +434,6 @@
     <ClInclude Include="GUI\Menus\MSelectionList.h">
       <Filter>Header Files\GUI headers\Menus headers</Filter>
     </ClInclude>
-    <ClInclude Include="Cecil\GuiNode.h">
-      <Filter>Header Files\Cecil headers</Filter>
-    </ClInclude>
     <ClInclude Include="Cecil\UpdateCheck.h">
       <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>

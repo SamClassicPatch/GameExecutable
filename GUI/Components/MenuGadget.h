@@ -22,7 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 
 // [Cecil] Nodes
-#include "Cecil/GuiNode.h"
+#include <Extras/XGizmo/Objects/LinkedNode.h>
 
 #define DOING_NOTHING 0
 #define PRESS_KEY_WAITING 1
@@ -34,7 +34,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 extern FLOAT _fGadgetSideRatioL;
 extern FLOAT _fGadgetSideRatioR;
 
-class CMenuGadget : public CGuiNode {
+class CMenuGadget : public CLinkedNode {
   public:
     FLOATaabbox2D mg_boxOnScreen;
     BOOL mg_bVisible;

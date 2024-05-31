@@ -150,15 +150,15 @@ int qsort_CompareLevels(const void *elem1, const void *elem2) {
 void LoadLevelsList(void) {
   CPutString(LOCALIZE("Reading levels directory...\n"));
 
-  #define LIST_LEVELS_BASE_FLAGS (IFiles::FLF_RECURSIVE | IFiles::FLF_SEARCHCD | IFiles::FLF_SEARCHMOD)
+  #define LIST_LEVELS_BASE_FLAGS (FLF_RECURSIVE | FLF_SEARCHCD | FLF_SEARCHMOD)
 
   // list the levels directory with subdirs
   CFileList afnmDir;
-  IFiles::ListGameFiles(afnmDir, "Levels\\", "*.wld", LIST_LEVELS_BASE_FLAGS | IFiles::FLF_SEARCHGAMES);
+  ListGameFiles(afnmDir, "Levels\\", "*.wld", LIST_LEVELS_BASE_FLAGS | FLF_SEARCHGAMES);
 
   #if SE1_GAME == SS_REV
     // [Cecil] Rev: List downloaded levels
-    IFiles::ListGameFiles(afnmDir, "Downloaded\\Levels\\", "*.wld", LIST_LEVELS_BASE_FLAGS | IFiles::FLF_REUSELIST);
+    ListGameFiles(afnmDir, "Downloaded\\Levels\\", "*.wld", LIST_LEVELS_BASE_FLAGS | FLF_REUSELIST);
   #endif
 
   // for each file in the directory
@@ -386,7 +386,7 @@ void LoadDemosList(void) {
 
   // list the levels directory with subdirs
   CFileList afnmDir;
-  IFiles::ListGameFiles(afnmDir, "Demos\\", "Demos\\Auto-*.dem", IFiles::FLF_RECURSIVE | IFiles::FLF_SEARCHMOD);
+  ListGameFiles(afnmDir, "Demos\\", "Demos\\Auto-*.dem", FLF_RECURSIVE | FLF_SEARCHMOD);
 
   // for each file in the directory
   for (INDEX i = 0; i < afnmDir.Count(); i++) {

@@ -18,7 +18,6 @@ extern CListHead _lhAllLevels;
 extern CListHead _lhFilteredLevels;
 
 // [Cecil] Categories with level lists
-#include <CoreLib/Interfaces/FileFunctions.h>
 extern CStaticArray<CFileList> _aLevelCategories;
 
 class CLevelInfo {
