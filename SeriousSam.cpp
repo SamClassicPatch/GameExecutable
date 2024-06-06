@@ -135,7 +135,7 @@ void SetDrawportForGame(CDrawPort *pdpSet) {
   _pGame->LCDSetDrawport(pdpSet);
 
   // Adjust aspect ratio for the menu
-  if (CoreVarData().bProperTextScaling) {
+  if (IConfig::mod[k_EModDataProps_ProperTextScaling]) {
     pdpSet->dp_fWideAdjustment = ((FLOAT)pdpSet->GetHeight() / (FLOAT)pdpSet->GetWidth()) * (4.0f / 3.0f);
   }
 };
@@ -315,7 +315,7 @@ void StartNextDemo(void) {
     GetGameAPI()->SetStartSplitCfg(CGame::SSC_PLAY1);
 
     // [Cecil] Use difficulties and game modes from the API
-    _pShell->SetINDEX("gam_iStartDifficulty", CoreVarData().GetDiff(2).iLevel); // Normal
+    _pShell->SetINDEX("gam_iStartDifficulty", ClassicsModData_GetDiff(2)->m_iLevel); // Normal
     _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(0)); // Flyover
 
     // [Cecil] Pass byte container
@@ -391,14 +391,14 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _hInstance = hInstance;
 
   // [Cecil] Mark as a game
-  CCoreAPI::Setup(CCoreAPI::APP_GAME);
+  ClassicsPatch_Setup(k_EClassicsPatchAppType_Game);
 
   // [Cecil] Set DPI awareness
   SetDPIAwareness();
 
   ShowSplashScreen(hInstance);
 
-#if CLASSICSPATCH_ENGINEPATCHES
+#if _PATCHCONFIG_ENGINEPATCHES
   // [Cecil] Function patches
   _EnginePatches.FileSystem();
 #endif
@@ -501,7 +501,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _pShell->DeclareSymbol("INDEX sam_iStartCredits;", &sam_iStartCredits);
 
   // [Cecil] Load Game library as a module
-  GetAPI()->LoadGameLib("Data\\SeriousSam.gms");
+  GetPluginAPI()->LoadGameLib("Data\\SeriousSam.gms");
 
   _pNetwork->md_strGameID = sam_strGameName;
 
@@ -558,7 +558,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   LoadDemosList();
 
   // [Cecil] Load in-game plugins
-  GetAPI()->LoadPlugins(PLF_GAME);
+  GetPluginAPI()->LoadPlugins(k_EPluginFlagGame);
 
   // apply application mode
   StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,
@@ -589,7 +589,7 @@ void End(void) {
   ClearDemosList();
 
   // [Cecil] Clean up the core
-  ClassicsPatch_EndCore();
+  ClassicsPatch_Shutdown();
 
   // destroy the main window and its canvas
   if (pvpViewPort != NULL) {
@@ -734,14 +734,14 @@ void DoGame(void) {
 
     if (_gmRunningGameMode != GM_NONE && bRenderGame) {
       // [Cecil] Call API before redrawing the game
-      GetAPI()->OnPreDraw(pdp);
+      IHooks::OnPreDraw(pdp);
 
       // [Cecil] Don't wait for server while playing demos (removes "Waiting for server to continue" message)
       if (_pNetwork->IsPlayingDemo()) {
         _pNetwork->ga_sesSessionState.ses_bWaitingForServer = FALSE;
       }
 
-    #if CLASSICSPATCH_ENGINEPATCHES
+    #if _PATCHCONFIG_ENGINEPATCHES
       // [Cecil] Don't listen to in-game sounds if rendering the game in the menu
       _EnginePatches._bNoListening = bMenuActive;
     #endif
@@ -754,7 +754,7 @@ void DoGame(void) {
       _pGame->ComputerRender(pdp);
 
       // [Cecil] Call API after redrawing the game
-      GetAPI()->OnPostDraw(pdp);
+      IHooks::OnPostDraw(pdp);
 
       pdp->Unlock();
 
@@ -793,7 +793,7 @@ void DoGame(void) {
     _pGame->ConsoleRender(pdp);
 
     // [Cecil] Call API every render frame
-    GetAPI()->OnFrame(pdp);
+    IHooks::OnFrame(pdp);
 
     // done with all
     pdp->Unlock();
@@ -1398,7 +1398,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     UpdatePauseState();
 
     // notify game whether menu is active
-    GetGameAPI()->SetMenuState(bMenuActive);
+    GetGameAPI()->SetMenuState(!!bMenuActive);
 
     // do the main game loop and render screen
     DoGame();
@@ -1724,7 +1724,7 @@ void StartNewMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pix
     // [Cecil] Resize console horizontally to fit as many characters as possible
     const PIX pixConsoleChar = (_pfdConsoleFont->GetWidth() + _pfdConsoleFont->GetCharSpacing());
     const INDEX ctConsoleChars = pixSizeI / pixConsoleChar;
-    GetAPI()->ReinitConsole(ctConsoleChars - 15, 512);
+    ICore::ReinitConsole(ctConsoleChars - 15, 512);
   }
 
   // [Cecil] Calculate aspect ratio (half the width for dualhead resolutions)

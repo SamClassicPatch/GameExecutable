@@ -127,16 +127,16 @@ void InitGameTypes(void) {
   }
 
   // [Cecil] Add difficulty names
-  const INDEX ctDiffs = ClampUp(INDEX(MAX_GAME_DIFFICULTIES), INDEX(16));
+  const INDEX ctDiffs = ClampUp(ClassicsModData_DiffArrayLength(), (int)ARRAYCOUNT(astrDifficultyRadioTexts));
   INDEX ctAdded = 0;
 
   for (; ctAdded < ctDiffs; ctAdded++) {
-    const CCoreVariables::Difficulty &diff = CoreVarData().GetDiff(ctAdded);
+    CTString strDiff = ClassicsModData_GetDiff(ctAdded)->m_strName;
 
     // No more difficulties
-    if (diff.strName == "") break;
+    if (strDiff == "") break;
 
-    astrDifficultyRadioTexts[ctAdded] = diff.strName;
+    astrDifficultyRadioTexts[ctAdded] = strDiff;
   }
 
   // [Cecil] No difficulties added

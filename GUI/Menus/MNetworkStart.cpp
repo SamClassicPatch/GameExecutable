@@ -28,10 +28,10 @@ void CNetworkStartMenu::Initialize_t(void) {
   AddChild(&gm_mgTitle);
 
   // session name edit box
-  gm_mgSessionName.SetText(GetGameAPI()->GetSessionName());
+  gm_mgSessionName.SetText(GetGameAPI()->SessionName());
   gm_mgSessionName.SetName(LOCALIZE("Session name:"));
   gm_mgSessionName.mg_ctMaxStringLen = 25;
-  gm_mgSessionName.mg_pstrToChange = (CTString *)&GetGameAPI()->GetSessionName();
+  gm_mgSessionName.mg_pstrToChange = &GetGameAPI()->SessionName();
   gm_mgSessionName.mg_boxOnScreen = BoxMediumRow(1);
   gm_mgSessionName.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgSessionName.mg_iCenterI = -1;
@@ -63,7 +63,7 @@ void CNetworkStartMenu::Initialize_t(void) {
   AddChild(&gm_mgLevel);
 
   // [Cecil] Create entries for each max players configuration (other than 1)
-  const INDEX ctMaxPlayersEntries = CORE_MAX_GAME_PLAYERS - 1;
+  const INDEX ctMaxPlayersEntries = ICore::MAX_GAME_PLAYERS - 1;
 
   if (astrMaxPlayersRadioTexts == NULL) {
     astrMaxPlayersRadioTexts = new CTString[ctMaxPlayersEntries];
@@ -120,14 +120,12 @@ void CNetworkStartMenu::Initialize_t(void) {
 
 // [Cecil] Count active difficulties for selection lists
 INDEX CountActiveDifficulties(void) {
-  const INDEX ct = ClampUp(INDEX(MAX_GAME_DIFFICULTIES), INDEX(16));
+  const INDEX ct = ClampUp(ClassicsModData_DiffArrayLength(), (int)ARRAYCOUNT(astrDifficultyRadioTexts));
   INDEX i = 0;
 
   for (; i < ct; i++) {
-    const CCoreVariables::Difficulty &diff = CoreVarData().GetDiff(i);
-
-    // No more difficulties or inactive
-    if (diff.strName == "" || !diff.IsActive()) break;
+    // No more active difficulties
+    if (!ClassicsModData_IsDiffActive(i)) break;
   }
 
   // At least one
@@ -140,15 +138,15 @@ void CNetworkStartMenu::StartMenu(void) {
 
   gm_mgGameType.mg_iSelected = Clamp(_pShell->GetINDEX("gam_iStartMode"), 0L, ctGameTypeRadioTexts - 1L);
   gm_mgGameType.ApplyCurrentSelection();
-  gm_mgDifficulty.mg_iSelected = CoreVarData().FindDiffByLevel(_pShell->GetINDEX("gam_iStartDifficulty"));
+  gm_mgDifficulty.mg_iSelected = ClassicsModData_FindDiffByLevel(_pShell->GetINDEX("gam_iStartDifficulty"));
   gm_mgDifficulty.ApplyCurrentSelection();
 
   _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1)); // [Cecil] API
 
   INDEX ctMaxPlayers = _pShell->GetINDEX("gam_ctMaxPlayers");
 
-  // [Cecil] 16 -> CORE_MAX_GAME_PLAYERS
-  if (ctMaxPlayers < 2 || ctMaxPlayers > CORE_MAX_GAME_PLAYERS) {
+  // [Cecil] 16 -> ICore::MAX_GAME_PLAYERS
+  if (ctMaxPlayers < 2 || ctMaxPlayers > ICore::MAX_GAME_PLAYERS) {
     ctMaxPlayers = 2;
     _pShell->SetINDEX("gam_ctMaxPlayers", ctMaxPlayers);
   }
@@ -168,7 +166,7 @@ void CNetworkStartMenu::StartMenu(void) {
 }
 
 void CNetworkStartMenu::EndMenu(void) {
-  _pShell->SetINDEX("gam_iStartDifficulty", CoreVarData().GetDiff(gm_mgDifficulty.mg_iSelected).iLevel);
+  _pShell->SetINDEX("gam_iStartDifficulty", ClassicsModData_GetDiff(gm_mgDifficulty.mg_iSelected)->m_iLevel);
   _pShell->SetINDEX("gam_iStartMode", gm_mgGameType.mg_iSelected);
   _pShell->SetINDEX("gam_bWaitAllPlayers", gm_mgWaitAllPlayers.mg_iSelected);
   _pShell->SetINDEX("gam_ctMaxPlayers", gm_mgMaxPlayers.mg_iSelected + 2);

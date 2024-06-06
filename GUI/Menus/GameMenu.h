@@ -19,9 +19,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #pragma once
 #endif
 
-// [Cecil] Nodes
-#include <Extras/XGizmo/Objects/LinkedNode.h>
-
 class CGameMenu : public CLinkedNode {
   public:
     FLOAT gm_fPopupSize; // [Cecil] Considered a popup if the size is bigger than 0 (replacing 'gm_bPopup')

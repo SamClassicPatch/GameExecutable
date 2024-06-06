@@ -193,7 +193,7 @@ BOOL ExecuteCommandLine(void) {
     CPrintF(LOCALIZE("Command line connection: '%s%s'\n"), cmd_strServer, strPort);
 
     // Go to join menu
-    GetGameAPI()->SetJoinAddress(cmd_strServer);
+    GetGameAPI()->JoinAddress() = cmd_strServer;
 
     if (cmd_bQuickJoin) {
       extern void JoinNetworkGame(void);

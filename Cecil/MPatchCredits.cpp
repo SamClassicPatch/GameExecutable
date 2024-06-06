@@ -104,7 +104,7 @@ static void SourceCodeClick(void) {
 // Initialize extras
 void CPatchCreditsMenu::Initialize_t(void) {
   // Patch label
-  gm_mgPatchName.SetText("Serious Sam Classics Patch v" + GetAPI()->GetVersion());
+  gm_mgPatchName.SetText(CTString(0, "Serious Sam Classics Patch v%s", ClassicsCore_GetVersionName()));
   gm_mgPatchName.mg_boxOnScreen = BoxMediumRow(0.0f);
   gm_mgPatchName.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgPatchName.mg_iCenterI = 0;

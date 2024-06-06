@@ -39,7 +39,7 @@ void CMGHighScore::Render(CDrawPort *pdp) {
   strHighScores[0][4] = LOCALIZE("Kills");
   strHighScores[0][5] = LOCALIZE("Score");
 
-  const INDEX ctDiffs = CoreVarData().CountDiffs();
+  const INDEX ctDiffs = ClassicsModData_CountNamedDiffs();
 
   {for (INDEX i = 0; i < HIGHSCORE_COUNT; i++) {
     CHighScoreEntry &hse = *GetGameAPI()->GetHighScore(i);
@@ -54,7 +54,7 @@ void CMGHighScore::Render(CDrawPort *pdp) {
 
     } else {
       // [Cecil] Get difficulty name from the API
-      strHighScores[i + 1][2] = CoreVarData().GetDiff(iDifficulty).strName;
+      strHighScores[i + 1][2] = ClassicsModData_GetDiff(iDifficulty)->m_strName;
     }
 
     strHighScores[i + 1][0].PrintF("%d", i + 1);

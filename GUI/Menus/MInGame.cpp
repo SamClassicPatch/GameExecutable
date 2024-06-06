@@ -168,7 +168,7 @@ void CInGameMenu::StartMenu(void) {
       strConfig.OnlyFirstLine();
     }
 
-    gm_mgLabel1.SetText(LOCALIZE("Connected to: ") + GetGameAPI()->GetJoinAddress());
+    gm_mgLabel1.SetText(LOCALIZE("Connected to: ") + GetGameAPI()->JoinAddress());
     gm_mgLabel2.SetText(LOCALIZE("Connection: ") + strConfig);
   }
 

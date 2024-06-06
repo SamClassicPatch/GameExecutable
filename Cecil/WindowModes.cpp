@@ -24,7 +24,7 @@ static BOOL _bDPIAware = FALSE;
 // Make game application be aware of the DPI scaling on Windows Vista and later
 void SetDPIAwareness(void) {
   // Ignore DPI awareness if it's disabled
-  if (!CCoreAPI::Props().bDPIAware) return;
+  if (!IConfig::global[k_EConfigProps_DPIAware]) return;
 
   // Load the library
   HMODULE hUser = LoadLibraryA("User32.dll");

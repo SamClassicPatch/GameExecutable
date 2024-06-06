@@ -265,7 +265,7 @@ FLOATaabbox2D PixBoxToFloatBox(const CDrawPort *pdp, const PIXaabbox2D &boxP) {
 // [Cecil] Determine base text scaling
 static __forceinline FLOAT BaseScaling(CDrawPort *pdp) {
   // Custom text scale multiplied by vanilla scaling
-  return CoreVarData().fMenuTextScale * ((FLOAT)pdp->GetWidth() / 640.0f) * pdp->dp_fWideAdjustment;
+  return IConfig::mod[k_EModDataProps_MenuTextScale].GetFloat() * ((FLOAT)pdp->GetWidth() / 640.0f) * pdp->dp_fWideAdjustment;
 };
 
 extern CFontData _fdTitle;

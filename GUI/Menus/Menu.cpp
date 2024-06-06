@@ -672,7 +672,7 @@ void RenderMouseCursor(CDrawPort *pdp) {
 
 BOOL DoMenu(CDrawPort *pdp) {
   // [Cecil] Keep trying to disable GameSpy until it falls through
-  GetAPI()->DisableGameSpy();
+  ICore::DisableGameSpy();
 
   pdp->Unlock();
   CDrawPort dpMenu(pdp, TRUE);
@@ -782,7 +782,7 @@ BOOL DoMenu(CDrawPort *pdp) {
 
         const PIX pixPatchX = dpMenu.GetWidth() - 16;
         const PIX pixPatchY = dpMenu.GetHeight() - _pfdConsoleFont->fd_pixCharHeight;
-        const CTString strPatch = "Serious Sam Classics Patch v" + GetAPI()->GetVersion();
+        const CTString strPatch(0, "Serious Sam Classics Patch v%s", ClassicsCore_GetVersionName());
 
         dpMenu.PutTextR(strPatch, pixPatchX, pixPatchY, 0xFFFFFFFF);
       }

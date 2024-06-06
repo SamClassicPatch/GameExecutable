@@ -21,7 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <CoreLib/Networking/HttpRequests.h>
 
 // Version of the latest release
-static ULONG _ulLatestVersion = 0;
+static PatchVer_t _ulLatestVersion = 0;
 static CTString _strLatestVersion;
 
 // Open web page with the latest release
@@ -69,7 +69,7 @@ static void DownloadUpdatePrompt(void) {
     "   Your version: ^cff3f3f%s^r      Latest version: ^c5fff5f%s^r\n\n"
     "- \"Remind me later\" will show this again in a week.\n"
     "- '^cffffffsam_bNotifyAboutUpdates = 0^r' completely disables it."
-  ), GetAPI()->GetVersion(), _strLatestVersion);
+  ), ClassicsCore_GetVersionName(), _strLatestVersion);
 
   gmCurrent.SetText(strPrompt, TRANS("DOWNLOAD"), TRANS("REMIND ME LATER"));
   gmCurrent.BeSmall(0.3f);
@@ -87,7 +87,7 @@ void NotifyAboutNewVersion(void) {
   if (_ulLatestVersion == 0 || !NotifyAboutUpdates()) return;
 
   // Can be updated
-  if (_ulLatestVersion > CCoreAPI::ulCoreVersion)
+  if (_ulLatestVersion > ClassicsCore_GetVersion())
   {
     CPrintF(TRANS("New release is available: %s\nDownload it here: %s\n"),
             _strLatestVersion, CLASSICSPATCH_URL_LATESTRELEASE);
@@ -128,7 +128,7 @@ void QueryPatchUpdates(void) {
       ULONG ulPatch = 0;
       _strLatestVersion.ScanF("%u.%u.%u", &ulRelease, &ulUpdate, &ulPatch);
 
-      _ulLatestVersion = CCoreAPI::MakeVersion(ulRelease, ulUpdate, ulPatch);
+      _ulLatestVersion = MakeVersion(ulRelease, ulUpdate, ulPatch);
       return;
     }
   }
@@ -159,7 +159,7 @@ void QueryPatchUpdates(void) {
   ULONG ulPatch = 0;
   str.ScanF("%u.%u.%u", &ulRelease, &ulUpdate, &ulPatch);
 
-  _ulLatestVersion = CCoreAPI::MakeVersion(ulRelease, ulUpdate, ulPatch);
+  _ulLatestVersion = MakeVersion(ulRelease, ulUpdate, ulPatch);
 
   // Remember which version was checked for and when
   time_t iTime;

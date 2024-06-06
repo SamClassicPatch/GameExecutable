@@ -350,7 +350,7 @@ static void StartTechTest(void) {
   GetGameAPI()->SetCustomLevel(sam_strTechTestLevel);
 
   // [Cecil] Use difficulties and game modes from the API
-  _pShell->SetINDEX("gam_iStartDifficulty", CoreVarData().GetDiff(2).iLevel);
+  _pShell->SetINDEX("gam_iStartDifficulty", ClassicsModData_GetDiff(2)->m_iLevel);
   _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
   StartSinglePlayerGame();
 }
@@ -403,7 +403,7 @@ static void StartSinglePlayerGameFromDifficulty(void) {
   CMGButton &mgDiff = (CMGButton &)*_pmgLastActivatedGadget;
 
   // Use difficulties and game modes from the API
-  _pShell->SetINDEX("gam_iStartDifficulty", CoreVarData().GetDiff(mgDiff.mg_iIndex).iLevel);
+  _pShell->SetINDEX("gam_iStartDifficulty", ClassicsModData_GetDiff(mgDiff.mg_iIndex)->m_iLevel);
   _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
 
   StartSinglePlayerGame();

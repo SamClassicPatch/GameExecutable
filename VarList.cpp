@@ -247,7 +247,7 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
         // Special condition for vanilla game
         if (strMod == "/NoMod/") {
           // Not even a custom mod
-          if (_fnmMod == "" && !CCoreAPI::IsCustomModActive()) {
+          if (_fnmMod == "" && !ClassicsCore_IsCustomModActive()) {
             bSkip = FALSE;
             break;
           }
@@ -255,7 +255,7 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
         // Special condition for the custom mod
         } else if (strMod == "ClassicsPatchMod") {
           // All is fine
-          if (CCoreAPI::IsCustomModActive()) {
+          if (ClassicsCore_IsCustomModActive()) {
             bSkip = FALSE;
             break;
           }

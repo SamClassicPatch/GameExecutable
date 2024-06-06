@@ -95,16 +95,16 @@ void StartMap(SHELL_FUNC_ARGS) {
 // Custom initialization
 void ClassicsPatch_InitExt(void) {
   // Initialize the core
-  ClassicsPatch_InitCore();
+  ClassicsPatch_Init();
 
-#if CLASSICSPATCH_ENGINEPATCHES
+#if _PATCHCONFIG_ENGINEPATCHES
 
   // Function patches
   CPutString("--- Sam: Intercepting Engine functions ---\n");
   _EnginePatches.CorePatches();
   CPutString("--- Done! ---\n");
 
-#endif // CLASSICSPATCH_ENGINEPATCHES
+#endif // _PATCHCONFIG_ENGINEPATCHES
 
   // Custom symbols
   _pShell->DeclareSymbol("persistent user INDEX sam_bPatchVersionLabel;",    &sam_bPatchVersionLabel);

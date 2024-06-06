@@ -269,7 +269,7 @@ void StartNetworkGame(void) {
   _pGame->SetMultiPlayerSession((CSessionProperties &)sp);
 
   // [Cecil] Start game through the API
-  if (GetGameAPI()->NewGame(GetGameAPI()->GetSessionName(), fnWorld, (CSessionProperties &)sp)) {
+  if (GetGameAPI()->NewGame(GetGameAPI()->SessionName(), fnWorld, (CSessionProperties &)sp)) {
     StopMenus();
     _gmRunningGameMode = GM_NETWORK;
 
@@ -291,7 +291,7 @@ void JoinNetworkGame(void) {
   GetGameAPI()->SetStartPlayersFromMenuPlayers();
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_CLIENT);
-  if (_pGame->JoinGame(CNetworkSession(GetGameAPI()->GetJoinAddress()))) {
+  if (_pGame->JoinGame(CNetworkSession(GetGameAPI()->JoinAddress()))) {
     StopMenus();
     _gmRunningGameMode = GM_NETWORK;
   } else {
@@ -305,7 +305,7 @@ void JoinNetworkGame(void) {
       if (_strModURLSelected == "") {
         _strModURLSelected = "http://www.croteam.com/mods/Old";
       }
-      _strModServerSelected.PrintF("%s:%s", GetGameAPI()->GetJoinAddress(), _pShell->GetValue("net_iPort"));
+      _strModServerSelected.PrintF("%s:%s", GetGameAPI()->JoinAddress(), _pShell->GetValue("net_iPort"));
       extern void ModConnectConfirm(void);
       ModConnectConfirm();
     }

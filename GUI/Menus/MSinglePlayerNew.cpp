@@ -46,14 +46,15 @@ void CSinglePlayerNewMenu::Initialize_t(void) {
   AddChild(&gm_mgTitle);
 
   // [Cecil] Add up to 16 mod difficulties
-  INDEX ct = ClampUp(CoreVarData().CountDiffs(), (INDEX)16);
+  INDEX ct = ClampUp(ClassicsModData_CountNamedDiffs(), (int)ARRAYCOUNT(astrDifficultyRadioTexts));
 
-  for (INDEX iAdd = 0; iAdd < ct; iAdd++) {
-    // Get difficulty name from the API
-    const CCoreVariables::Difficulty &diff = CoreVarData().GetDiff(iAdd);
+  for (INDEX iAdd = 0; iAdd < ct; iAdd++)
+  {
+    const ModDifficulty_t &diff = *ClassicsModData_GetDiff(iAdd);
 
-    // Make all uppercase and translate
-    CTString strName = diff.strName;
+    // Make name all uppercase and translate both strings
+    CTString strName = diff.m_strName;
+    CTString strTip = diff.m_strTip;
     ToUpper(strName);
 
     // Add new difficulty
@@ -62,9 +63,9 @@ void CSinglePlayerNewMenu::Initialize_t(void) {
     mg.mg_pActivatedFunction = NULL;
 
     mg.SetText(TRANSV(strName));
-    mg.mg_strTip = TRANSV(diff.strTip);
+    mg.mg_strTip = TRANSV(strTip);
     mg.mg_bfsFontSize = (ct > 9 ? BFS_MEDIUM : BFS_LARGE);
-    mg.mg_bMental = diff.bFlash; // Text blinking
+    mg.mg_bMental = diff.m_bFlash; // Text blinking
 
     AddChild(&mg);
   }
@@ -125,7 +126,7 @@ void CSinglePlayerNewMenu::StartMenu(void) {
   for (INDEX i = 0; i < ct; i++) {
     CMGButton &mg = gm_amgDifficulties[i];
 
-    if (CoreVarData().GetDiff(i).IsActive()) {
+    if (ClassicsModData_IsDiffActive(i)) {
       mg.Appear();
       gm_amgDifficulties[(i + ct - 1) % ct].mg_pmgDown = &mg;
       gm_amgDifficulties[(i + 1) % ct].mg_pmgUp = &mg;

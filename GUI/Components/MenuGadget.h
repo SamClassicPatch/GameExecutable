@@ -21,9 +21,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "MenuPrinting.h"
 
-// [Cecil] Nodes
-#include <Extras/XGizmo/Objects/LinkedNode.h>
-
 #define DOING_NOTHING 0
 #define PRESS_KEY_WAITING 1
 #define RELEASE_RETURN_WAITING 2

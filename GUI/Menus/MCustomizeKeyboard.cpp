@@ -116,8 +116,8 @@ void CCustomizeKeyboardMenu::EndMenu(void) {
   // [Cecil] Reload common controls
   if (gm_pControls == GetGameAPI()->pctrlCommon) {
     try {
-      gm_pControls->Save_t(GAME_COMMON_CONTROLS_PATH);
-      gm_pControls->Load_t(GAME_COMMON_CONTROLS_PATH);
+      gm_pControls->Save_t(gam_strCommonControlsFile);
+      gm_pControls->Load_t(gam_strCommonControlsFile);
 
     } catch (char *strError) {
       CPrintF(TRANS("Cannot reload common controls:\n%s\n"), strError);
