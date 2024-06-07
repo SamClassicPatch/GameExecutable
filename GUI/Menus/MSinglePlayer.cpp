@@ -144,7 +144,7 @@ void CSinglePlayerMenu::StartMenu(void) {
 
   CGameMenu::StartMenu();
 
-  CPlayerCharacter &pc = *GetGameAPI()->GetPlayerCharacter(GetGameAPI()->GetPlayerForSP());
+  CPlayerCharacter &pc = *GetGameAPI()->GetPlayerCharacter(GetGameAPI()->GetProfileForSP());
 
   CTString strPlayer;
   strPlayer.PrintF(LOCALIZE("Player: %s\n"), pc.GetNameForPrinting());

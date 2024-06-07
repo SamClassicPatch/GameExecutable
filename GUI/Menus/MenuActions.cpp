@@ -379,8 +379,8 @@ void StartSinglePlayerGame(void) {
   GetGameAPI()->SetStartSplitCfg(CGame::SSC_PLAY1);
 
   // [Cecil] Reset start player indices
-  GetGameAPI()->ResetStartPlayers();
-  GetGameAPI()->SetStartPlayer(0, GetGameAPI()->GetPlayerForSP());
+  GetGameAPI()->ResetStartProfiles();
+  GetGameAPI()->SetProfileForStart(0, GetGameAPI()->GetProfileForSP());
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
 

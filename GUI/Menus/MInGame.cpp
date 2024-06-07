@@ -136,7 +136,7 @@ void CInGameMenu::StartMenu(void) {
 #endif
 
   if (bPlayerName) {
-    CPlayerCharacter &pc = *GetGameAPI()->GetPlayerCharacter(GetGameAPI()->GetPlayerForSP());
+    CPlayerCharacter &pc = *GetGameAPI()->GetPlayerCharacter(GetGameAPI()->GetProfileForSP());
 
     CTString strPlayer;
     strPlayer.PrintF(LOCALIZE("Player: %s"), pc.GetNameForPrinting());

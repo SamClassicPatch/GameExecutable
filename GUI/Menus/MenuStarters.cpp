@@ -234,7 +234,7 @@ void StartSplitScreenGame(void) {
   GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
   // [Cecil] Set start players from menu players
-  GetGameAPI()->SetStartPlayersFromMenuPlayers();
+  GetGameAPI()->SetStartProfilesFromMenuProfiles();
 
   CTFileName fnWorld = GetGameAPI()->GetCustomLevel();
 
@@ -258,7 +258,7 @@ void StartNetworkGame(void) {
   GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
   // [Cecil] Set start players from menu players
-  GetGameAPI()->SetStartPlayersFromMenuPlayers();
+  GetGameAPI()->SetStartProfilesFromMenuProfiles();
 
   CTFileName fnWorld = GetGameAPI()->GetCustomLevel();
 
@@ -288,7 +288,7 @@ void JoinNetworkGame(void) {
   GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
   // [Cecil] Set start players from menu players
-  GetGameAPI()->SetStartPlayersFromMenuPlayers();
+  GetGameAPI()->SetStartProfilesFromMenuProfiles();
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_CLIENT);
   if (_pGame->JoinGame(CNetworkSession(GetGameAPI()->JoinAddress()))) {
@@ -611,7 +611,7 @@ void StartSinglePlayerQuickLoadMenu(void) {
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
   gmCurrent.gm_bManage = TRUE;
-  gmCurrent.gm_fnmDirectory.PrintF("SaveGame\\Player%d\\Quick\\", GetGameAPI()->GetPlayerForSP());
+  gmCurrent.gm_fnmDirectory.PrintF("SaveGame\\Player%d\\Quick\\", GetGameAPI()->GetProfileForSP());
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".sav");
   gmCurrent.gm_pAfterFileChosen = &LSLoadSinglePlayer;
@@ -631,7 +631,7 @@ void StartSinglePlayerLoadMenu(void) {
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = FALSE;
   gmCurrent.gm_bManage = TRUE;
-  gmCurrent.gm_fnmDirectory.PrintF("SaveGame\\Player%d\\", GetGameAPI()->GetPlayerForSP());
+  gmCurrent.gm_fnmDirectory.PrintF("SaveGame\\Player%d\\", GetGameAPI()->GetProfileForSP());
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".sav");
   gmCurrent.gm_pAfterFileChosen = &LSLoadSinglePlayer;
@@ -661,7 +661,7 @@ void StartSinglePlayerSaveMenu(void) {
   gmCurrent.gm_iSortType = LSSORT_FILEDN;
   gmCurrent.gm_bSave = TRUE;
   gmCurrent.gm_bManage = TRUE;
-  gmCurrent.gm_fnmDirectory.PrintF("SaveGame\\Player%d\\", GetGameAPI()->GetPlayerForSP());
+  gmCurrent.gm_fnmDirectory.PrintF("SaveGame\\Player%d\\", GetGameAPI()->GetProfileForSP());
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmBaseName = CTString("SaveGame");
   gmCurrent.gm_fnmExt = CTString(".sav");

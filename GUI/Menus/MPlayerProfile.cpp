@@ -192,9 +192,9 @@ void CPlayerProfileMenu::SelectPlayer(INDEX iPlayer) {
   iPlayer = Clamp(iPlayer, INDEX(0), GetGameAPI()->GetProfileCount() - (INDEX)1);
 
   if (_iLocalPlayer >= 0 && _iLocalPlayer < MAX_GAME_LOCAL_PLAYERS) {
-    GetGameAPI()->SetMenuPlayer(_iLocalPlayer, iPlayer);
+    GetGameAPI()->SetProfileForMenu(_iLocalPlayer, iPlayer);
   } else {
-    GetGameAPI()->SetPlayerForSP(iPlayer);
+    GetGameAPI()->SetProfileForSP(iPlayer);
   }
   gm_mgNameField.mg_pstrToChange = &pc.pc_strName;
   gm_mgNameField.SetText(*gm_mgNameField.mg_pstrToChange);
@@ -296,7 +296,7 @@ void CPlayerProfileMenu::StartMenu(void) {
     INDEX iFirstEnabled = 0;
     {for (INDEX ilp = 0; ilp < MAX_GAME_LOCAL_PLAYERS; ilp++) {
       // [Cecil] Access local players through the API
-      const INDEX iPlayerIndex = GetGameAPI()->GetLocalPlayerIndex(ilp);
+      const INDEX iPlayerIndex = GetGameAPI()->GetProfileFromLocalPlayer(ilp);
 
       if (GetGameAPI()->IsLocalPlayerActive(ilp)) {
         gm_mgNumber[iPlayerIndex].mg_bEnabled = TRUE;

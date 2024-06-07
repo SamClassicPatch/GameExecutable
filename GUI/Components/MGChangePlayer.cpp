@@ -23,8 +23,8 @@ void CMGChangePlayer::OnActivate(void) {
   PlayMenuSound(_psdPress);
   _iLocalPlayer = mg_iLocalPlayer;
 
-  if (GetGameAPI()->GetMenuPlayer(mg_iLocalPlayer) < 0) {
-    GetGameAPI()->SetMenuPlayer(mg_iLocalPlayer, 0);
+  if (GetGameAPI()->GetProfileForMenu(mg_iLocalPlayer) < 0) {
+    GetGameAPI()->SetProfileForMenu(mg_iLocalPlayer, 0);
   }
 
   _pGUIM->gmPlayerProfile.gm_piCurrentPlayer = &GetGameAPI()->aiMenuLocalPlayers[mg_iLocalPlayer];
@@ -36,7 +36,7 @@ void CMGChangePlayer::OnActivate(void) {
 }
 
 void CMGChangePlayer::SetPlayerText(void) {
-  INDEX iPlayer = GetGameAPI()->GetMenuPlayer(mg_iLocalPlayer);
+  INDEX iPlayer = GetGameAPI()->GetProfileForMenu(mg_iLocalPlayer);
   CPlayerCharacter &pc = *GetGameAPI()->GetPlayerCharacter(iPlayer);
 
   if (iPlayer < 0 || iPlayer >= GetGameAPI()->GetProfileCount()) {

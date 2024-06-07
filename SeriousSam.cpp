@@ -308,8 +308,8 @@ void StartNextDemo(void) {
     _gmRunningGameMode = GM_NONE;
 
     // [Cecil] Reset start player indices
-    GetGameAPI()->ResetStartPlayers();
-    GetGameAPI()->SetStartPlayer(0, 0);
+    GetGameAPI()->ResetStartProfiles();
+    GetGameAPI()->SetProfileForStart(0, 0);
 
     GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
     GetGameAPI()->SetStartSplitCfg(CGame::SSC_PLAY1);
@@ -335,7 +335,7 @@ void StartNextDemo(void) {
     GetGameAPI()->SetStartSplitCfg(CGame::SSC_OBSERVER);
 
     // [Cecil] Reset start player indices
-    GetGameAPI()->ResetStartPlayers();
+    GetGameAPI()->ResetStartProfiles();
 
     // play the demo
     GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);

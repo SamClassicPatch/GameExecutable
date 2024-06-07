@@ -35,8 +35,8 @@ BOOL LSLoadSinglePlayer(const CTFileName &fnm) {
   GetGameAPI()->SetStartSplitCfg(CGame::SSC_PLAY1);
 
   // [Cecil] Reset start player indices
-  GetGameAPI()->ResetStartPlayers();
-  GetGameAPI()->SetStartPlayer(0, GetGameAPI()->GetPlayerForSP());
+  GetGameAPI()->ResetStartProfiles();
+  GetGameAPI()->SetProfileForStart(0, GetGameAPI()->GetProfileForSP());
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
 
@@ -183,7 +183,7 @@ void StartNetworkLoadGame(void) {
   GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
   // [Cecil] Set start players from menu players
-  GetGameAPI()->SetStartPlayersFromMenuPlayers();
+  GetGameAPI()->SetStartProfilesFromMenuProfiles();
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_SERVER);
 
@@ -200,7 +200,7 @@ void StartSplitScreenGameLoad(void) {
   GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
 
   // [Cecil] Set start players from menu players
-  GetGameAPI()->SetStartPlayersFromMenuPlayers();
+  GetGameAPI()->SetStartProfilesFromMenuProfiles();
 
   GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
 
