@@ -588,9 +588,6 @@ void End(void) {
   ClearLevelsList();
   ClearDemosList();
 
-  // [Cecil] Clean up the core
-  ClassicsPatch_Shutdown();
-
   // destroy the main window and its canvas
   if (pvpViewPort != NULL) {
     _pGfx->DestroyWindowCanvas(pvpViewPort);
@@ -603,6 +600,9 @@ void End(void) {
   DestroyMenus();
   _pGame->End();
   _pGame->LCDEnd();
+
+  // [Cecil] Clean up the core
+  ClassicsPatch_Shutdown();
 
   // unlock the directory
   DirectoryLockOff();
