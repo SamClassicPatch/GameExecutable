@@ -89,6 +89,10 @@ void CControlsMenu::Initialize_t(void) {
   gm_mgCommon.mg_pmgUp = &gm_mgPredefined;
   gm_mgCommon.mg_pmgDown = &gm_mgButtons;
   gm_mgCommon.mg_pActivatedFunction = NULL;
+
+  // Disable the button if common controls haven't been hooked
+  gm_mgCommon.mg_bEnabled = (GetGameAPI()->pctrlCommon != NULL);
+
   AddChild(&gm_mgCommon);
 }
 
