@@ -29,7 +29,6 @@ extern INDEX sam_bLevelFiltering;
 extern INDEX sam_bExtrasMenu;
 extern INDEX sam_bDecoratedServerNames;
 
-extern INDEX sam_bNotifyAboutUpdates;
 extern INDEX sam_iUpdateReminder;
 extern CTString sam_strLastVersionCheck;
 

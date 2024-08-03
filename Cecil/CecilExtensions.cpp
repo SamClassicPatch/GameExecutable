@@ -27,7 +27,6 @@ INDEX sam_bLevelFiltering = TRUE;
 INDEX sam_bExtrasMenu = TRUE;
 INDEX sam_bDecoratedServerNames = TRUE;
 
-INDEX sam_bNotifyAboutUpdates = TRUE;
 INDEX sam_iUpdateReminder = 0;
 CTString sam_strLastVersionCheck = "";
 
@@ -115,8 +114,7 @@ void ClassicsPatch_InitExt(void) {
   _pShell->DeclareSymbol("persistent user INDEX sam_bExtrasMenu;",           &sam_bExtrasMenu);
   _pShell->DeclareSymbol("persistent user INDEX sam_bDecoratedServerNames;", &sam_bDecoratedServerNames);
 
-  _pShell->DeclareSymbol("persistent user INDEX sam_bNotifyAboutUpdates;", &sam_bNotifyAboutUpdates);
-  _pShell->DeclareSymbol("persistent      INDEX sam_iUpdateReminder;",     &sam_iUpdateReminder);
+  _pShell->DeclareSymbol("persistent INDEX sam_iUpdateReminder;", &sam_iUpdateReminder);
   _pShell->DeclareSymbol("persistent CTString sam_strLastVersionCheck;", &sam_strLastVersionCheck);
 
   _pShell->DeclareSymbol("user void Restart(void);", &RestartGame);
