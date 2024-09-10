@@ -252,6 +252,7 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
             break;
           }
 
+      #if _PATCHCONFIG_CUSTOM_MOD
         // Special condition for the custom mod
         } else if (strMod == "ClassicsPatchMod") {
           // All is fine
@@ -259,6 +260,7 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
             bSkip = FALSE;
             break;
           }
+      #endif
 
         // Current mod matches one of the listed mods
         } else if (strMod == strCurrentMod) {
