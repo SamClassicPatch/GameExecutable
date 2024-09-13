@@ -17,7 +17,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 #include "MenuStuff.h"
 #include "MPlayerProfile.h"
-#include "GUI/Menus/MenuManager.h"
+
+static void PPOnPlayerSelect(void) {
+  ASSERT(_pmgLastActivatedGadget != NULL);
+  if (_pmgLastActivatedGadget->mg_bEnabled) {
+    _pGUIM->gmPlayerProfile.SelectPlayer(((CMGButton *)_pmgLastActivatedGadget)->mg_iIndex);
+  }
+};
 
 #define ADD_SELECT_PLAYER_MG(index, mg, mgprev, mgnext, me) \
   mg.mg_iIndex = index; \
@@ -35,9 +41,123 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern BOOL _bPlayerMenuFromSinglePlayer;
 extern CTString _strLastPlayerAppearance;
-extern void PPOnPlayerSelect(void);
+
+static void ChangeCrosshair(INDEX iNew) {
+  INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
+  pps->ps_iCrossHairType = iNew - 1;
+};
+
+static void ChangeWeaponSelect(INDEX iNew) {
+  INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
+  pps->ps_iWeaponAutoSelect = iNew;
+};
+
+static void ChangeWeaponHide(INDEX iNew) {
+  INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
+  if (iNew) {
+    pps->ps_ulFlags |= PSF_HIDEWEAPON;
+  } else {
+    pps->ps_ulFlags &= ~PSF_HIDEWEAPON;
+  }
+};
+
+static void Change3rdPerson(INDEX iNew) {
+  INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
+  if (iNew) {
+    pps->ps_ulFlags |= PSF_PREFER3RDPERSON;
+  } else {
+    pps->ps_ulFlags &= ~PSF_PREFER3RDPERSON;
+  }
+};
+
+static void ChangeQuotes(INDEX iNew) {
+  INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
+  if (iNew) {
+    pps->ps_ulFlags &= ~PSF_NOQUOTES;
+  } else {
+    pps->ps_ulFlags |= PSF_NOQUOTES;
+  }
+};
+
+static void ChangeAutoSave(INDEX iNew) {
+  INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
+  if (iNew) {
+    pps->ps_ulFlags |= PSF_AUTOSAVE;
+  } else {
+    pps->ps_ulFlags &= ~PSF_AUTOSAVE;
+  }
+};
+
+static void ChangeCompDoubleClick(INDEX iNew) {
+  INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
+  if (iNew) {
+    pps->ps_ulFlags &= ~PSF_COMPSINGLECLICK;
+  } else {
+    pps->ps_ulFlags |= PSF_COMPSINGLECLICK;
+  }
+};
+
+static void ChangeViewBobbing(INDEX iNew) {
+  INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
+  if (iNew) {
+    pps->ps_ulFlags &= ~PSF_NOBOBBING;
+  } else {
+    pps->ps_ulFlags |= PSF_NOBOBBING;
+  }
+};
+
+static void ChangeSharpTurning(INDEX iNew) {
+  INDEX iPlayer = *_pGUIM->gmPlayerProfile.gm_piCurrentPlayer;
+  CPlayerSettings *pps = (CPlayerSettings *)GetGameAPI()->GetPlayerCharacter(iPlayer)->pc_aubAppearance;
+  if (iNew) {
+    pps->ps_ulFlags |= PSF_SHARPTURNING;
+  } else {
+    pps->ps_ulFlags &= ~PSF_SHARPTURNING;
+  }
+};
+
+static BOOL LSLoadPlayerModel(const CTFileName &fnm) {
+  // get base filename
+  CTString strBaseName = fnm.FileName();
+  // set it for current player
+  CPlayerCharacter &pc = *GetGameAPI()->GetPlayerCharacter(*_pGUIM->gmPlayerProfile.gm_piCurrentPlayer);
+  CPlayerSettings *pps = (CPlayerSettings *)pc.pc_aubAppearance;
+  memset(pps->ps_achModelFile, 0, sizeof(pps->ps_achModelFile));
+  strncpy(pps->ps_achModelFile, strBaseName, sizeof(pps->ps_achModelFile));
+
+  MenuGoToParent();
+  return TRUE;
+};
+
+static void StartPlayerModelLoadMenu(void) {
+  CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
+
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("CHOOSE MODEL"));
+  gmCurrent.gm_bAllowThumbnails = TRUE;
+  gmCurrent.gm_iSortType = LSSORT_FILEUP;
+  gmCurrent.gm_bSave = FALSE;
+  gmCurrent.gm_bManage = FALSE;
+  gmCurrent.gm_fnmDirectory = CTString("Models\\Player\\");
+  gmCurrent.gm_strSelected = _strLastPlayerAppearance;
+  gmCurrent.gm_fnmExt = CTString(".amc");
+  gmCurrent.gm_pAfterFileChosen = &LSLoadPlayerModel;
+  gmCurrent.gm_mgNotes.SetText("");
+
+  ChangeToMenu(&gmCurrent);
+};
 
 void CPlayerProfileMenu::Initialize_t(void) {
+  gm_strName = "PlayerProfile";
+  gm_pmgSelectedByDefault = &gm_mgNameField;
+
   // intialize player and controls menu
   _bPlayerMenuFromSinglePlayer = FALSE;
   gm_mgProfileTitle.mg_boxOnScreen = BoxTitle();
@@ -104,7 +224,7 @@ void CPlayerProfileMenu::Initialize_t(void) {
   gm_mgCrosshair.mg_bVisual = TRUE;
   gm_mgCrosshair.mg_boxOnScreen = BoxPlayerSwitch(5.0f);
   gm_mgCrosshair.mg_iCenterI = -1;
-  gm_mgCrosshair.mg_pOnTriggerChange = NULL;
+  gm_mgCrosshair.mg_pOnTriggerChange = &ChangeCrosshair;
 
 #if SE1_GAME != SS_REV
   // [Cecil] Put team field in-between name and crosshair after setting up for Revolution
@@ -115,49 +235,49 @@ void CPlayerProfileMenu::Initialize_t(void) {
   TRIGGER_MG(gm_mgWeaponSelect, 4.0, gm_mgCrosshair, gm_mgWeaponHide, LOCALIZE("AUTO SELECT WEAPON"), astrWeapon);
   gm_mgWeaponSelect.mg_boxOnScreen = BoxPlayerSwitch(6.0f);
   gm_mgWeaponSelect.mg_iCenterI = -1;
-  gm_mgWeaponSelect.mg_pOnTriggerChange = NULL;
+  gm_mgWeaponSelect.mg_pOnTriggerChange = &ChangeWeaponSelect;
 
   TRIGGER_MG(gm_mgWeaponHide, 4.0, gm_mgWeaponSelect, gm_mg3rdPerson, LOCALIZE("HIDE WEAPON MODEL"), astrNoYes);
   gm_mgWeaponHide.mg_boxOnScreen = BoxPlayerSwitch(7.0f);
   gm_mgWeaponHide.mg_iCenterI = -1;
-  gm_mgWeaponHide.mg_pOnTriggerChange = NULL;
+  gm_mgWeaponHide.mg_pOnTriggerChange = &ChangeWeaponHide;
 
   TRIGGER_MG(gm_mg3rdPerson, 4.0, gm_mgWeaponHide, gm_mgQuotes, LOCALIZE("PREFER 3RD PERSON VIEW"), astrNoYes);
   gm_mg3rdPerson.mg_boxOnScreen = BoxPlayerSwitch(8.0f);
   gm_mg3rdPerson.mg_iCenterI = -1;
-  gm_mg3rdPerson.mg_pOnTriggerChange = NULL;
+  gm_mg3rdPerson.mg_pOnTriggerChange = &Change3rdPerson;
 
   TRIGGER_MG(gm_mgQuotes, 4.0, gm_mg3rdPerson, gm_mgAutoSave, LOCALIZE("VOICE QUOTES"), astrNoYes);
   gm_mgQuotes.mg_boxOnScreen = BoxPlayerSwitch(9.0f);
   gm_mgQuotes.mg_iCenterI = -1;
-  gm_mgQuotes.mg_pOnTriggerChange = NULL;
+  gm_mgQuotes.mg_pOnTriggerChange = &ChangeQuotes;
 
   TRIGGER_MG(gm_mgAutoSave, 4.0, gm_mgQuotes, gm_mgCompDoubleClick, LOCALIZE("AUTO SAVE"), astrNoYes);
   gm_mgAutoSave.mg_boxOnScreen = BoxPlayerSwitch(10.0f);
   gm_mgAutoSave.mg_iCenterI = -1;
-  gm_mgAutoSave.mg_pOnTriggerChange = NULL;
+  gm_mgAutoSave.mg_pOnTriggerChange = &ChangeAutoSave;
 
   TRIGGER_MG(gm_mgCompDoubleClick, 4.0, gm_mgAutoSave, gm_mgSharpTurning, LOCALIZE("INVOKE COMPUTER"), astrComputerInvoke);
   gm_mgCompDoubleClick.mg_boxOnScreen = BoxPlayerSwitch(11.0f);
   gm_mgCompDoubleClick.mg_iCenterI = -1;
-  gm_mgCompDoubleClick.mg_pOnTriggerChange = NULL;
+  gm_mgCompDoubleClick.mg_pOnTriggerChange = &ChangeCompDoubleClick;
 
   TRIGGER_MG(gm_mgSharpTurning, 4.0, gm_mgCompDoubleClick, gm_mgViewBobbing, LOCALIZE("SHARP TURNING"), astrNoYes);
   gm_mgSharpTurning.mg_boxOnScreen = BoxPlayerSwitch(12.0f);
   gm_mgSharpTurning.mg_iCenterI = -1;
-  gm_mgSharpTurning.mg_pOnTriggerChange = NULL;
+  gm_mgSharpTurning.mg_pOnTriggerChange = &ChangeSharpTurning;
 
   TRIGGER_MG(gm_mgViewBobbing, 4.0, gm_mgSharpTurning, gm_mgCustomizeControls, LOCALIZE("VIEW BOBBING"), astrNoYes);
   gm_mgViewBobbing.mg_boxOnScreen = BoxPlayerSwitch(13.0f);
   gm_mgViewBobbing.mg_iCenterI = -1;
-  gm_mgViewBobbing.mg_pOnTriggerChange = NULL;
+  gm_mgViewBobbing.mg_pOnTriggerChange = &ChangeViewBobbing;
 
   gm_mgCustomizeControls.SetText(LOCALIZE("CUSTOMIZE CONTROLS"));
   gm_mgCustomizeControls.mg_boxOnScreen = BoxMediumLeft(14.5f);
   gm_mgCustomizeControls.mg_bfsFontSize = BFS_MEDIUM;
   gm_mgCustomizeControls.mg_iCenterI = -1;
   gm_mgCustomizeControls.mg_pmgUp = &gm_mgViewBobbing;
-  gm_mgCustomizeControls.mg_pActivatedFunction = NULL;
+  gm_mgCustomizeControls.mg_pActivatedFunction = &CControlsMenu::ChangeTo;
   gm_mgCustomizeControls.mg_pmgDown = &gm_mgNumber[0];
   gm_mgCustomizeControls.mg_pmgRight = &gm_mgModel;
   gm_mgCustomizeControls.mg_strTip = LOCALIZE("customize controls for this player");
@@ -165,7 +285,7 @@ void CPlayerProfileMenu::Initialize_t(void) {
 
   gm_mgModel.mg_boxOnScreen = BoxPlayerModel();
   gm_mgModel.mg_pmgLeft = &gm_mgNameField;
-  gm_mgModel.mg_pActivatedFunction = NULL;
+  gm_mgModel.mg_pActivatedFunction = &StartPlayerModelLoadMenu;
   gm_mgModel.mg_pmgDown = &gm_mgNameField;
   gm_mgModel.mg_pmgLeft = &gm_mgNameField;
   gm_mgModel.mg_strTip = LOCALIZE("change model for this player");

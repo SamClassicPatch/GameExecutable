@@ -18,6 +18,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "WindowModes.h"
 #include "MainWindow.h"
 
+// Aspect ratio of the current resolution
+FLOAT _fAspectRatio = (4.0f / 3.0f);
+
 // Game application is DPI-aware
 static BOOL _bDPIAware = FALSE;
 
@@ -40,9 +43,6 @@ void SetDPIAwareness(void) {
   // Mark game application as DPI-aware
   _bDPIAware = pFunc();
 };
-
-// Window mode names
-CTString _astrWindowModes[3] = { "", "", "" };
 
 // Open the main application window in borderless mode
 void OpenMainWindowBorderless(PIX pixSizeI, PIX pixSizeJ) {

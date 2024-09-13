@@ -18,7 +18,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MCustomizeAxis.h"
 
+void PreChangeAxis(INDEX iDummy) {
+  _pGUIM->gmCustomizeAxisMenu.ApplyActionSettings();
+};
+
+void PostChangeAxis(INDEX iDummy) {
+  _pGUIM->gmCustomizeAxisMenu.ObtainActionSettings();
+};
+
 void CCustomizeAxisMenu::Initialize_t(void) {
+  gm_strName = "CustomizeAxis";
+  gm_pmgSelectedByDefault = &gm_mgActionTrigger;
+
   // intialize axis menu
   gm_mgTitle.SetName(LOCALIZE("CUSTOMIZE AXIS"));
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
@@ -33,8 +44,8 @@ void CCustomizeAxisMenu::Initialize_t(void) {
   gm_mgActionTrigger.mg_astrTexts = new CTString[AXIS_ACTIONS_CT];
   gm_mgActionTrigger.mg_ctTexts = AXIS_ACTIONS_CT;
 
-  gm_mgActionTrigger.mg_pPreTriggerChange = NULL;
-  gm_mgActionTrigger.mg_pOnTriggerChange = NULL;
+  gm_mgActionTrigger.mg_pPreTriggerChange = &PreChangeAxis;
+  gm_mgActionTrigger.mg_pOnTriggerChange = &PostChangeAxis;
 
   // for all available axis type controlers
   for (INDEX iControler = 0; iControler < AXIS_ACTIONS_CT; iControler++) {
@@ -146,3 +157,8 @@ void CCustomizeAxisMenu::EndMenu(void) {
   ApplyActionSettings();
   CGameMenu::EndMenu();
 }
+
+// [Cecil] Change to the menu
+void CCustomizeAxisMenu::ChangeTo(void) {
+  ChangeToMenu(&_pGUIM->gmCustomizeAxisMenu);
+};

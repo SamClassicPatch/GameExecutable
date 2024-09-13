@@ -18,7 +18,24 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MNetworkJoin.h"
 
+static void StartSelectServerLAN(void) {
+  CServersMenu &gmCurrent = _pGUIM->gmServersMenu;
+
+  gmCurrent.m_bInternet = FALSE;
+  ChangeToMenu(&gmCurrent);
+};
+
+static void StartSelectServerNET(void) {
+  CServersMenu &gmCurrent = _pGUIM->gmServersMenu;
+
+  gmCurrent.m_bInternet = TRUE;
+  ChangeToMenu(&gmCurrent);
+};
+
 void CNetworkJoinMenu::Initialize_t(void) {
+  gm_strName = "NetworkJoin";
+  gm_pmgSelectedByDefault = &gm_mgLAN;
+
   // title
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.SetName(LOCALIZE("JOIN GAME"));
@@ -31,7 +48,7 @@ void CNetworkJoinMenu::Initialize_t(void) {
   gm_mgLAN.SetText(LOCALIZE("SEARCH LAN"));
   gm_mgLAN.mg_strTip = LOCALIZE("search local network for servers");
   AddChild(&gm_mgLAN);
-  gm_mgLAN.mg_pActivatedFunction = NULL;
+  gm_mgLAN.mg_pActivatedFunction = &StartSelectServerLAN;
 
   gm_mgNET.mg_bfsFontSize = BFS_LARGE;
   gm_mgNET.mg_boxOnScreen = BoxBigRow(2.0f);
@@ -40,7 +57,7 @@ void CNetworkJoinMenu::Initialize_t(void) {
   gm_mgNET.SetText(LOCALIZE("SEARCH INTERNET"));
   gm_mgNET.mg_strTip = LOCALIZE("search internet for servers");
   AddChild(&gm_mgNET);
-  gm_mgNET.mg_pActivatedFunction = NULL;
+  gm_mgNET.mg_pActivatedFunction = &StartSelectServerNET;
 
   gm_mgOpen.mg_bfsFontSize = BFS_LARGE;
   gm_mgOpen.mg_boxOnScreen = BoxBigRow(3.0f);
@@ -49,5 +66,10 @@ void CNetworkJoinMenu::Initialize_t(void) {
   gm_mgOpen.SetText(LOCALIZE("SPECIFY SERVER"));
   gm_mgOpen.mg_strTip = LOCALIZE("type in server address to connect to");
   AddChild(&gm_mgOpen);
-  gm_mgOpen.mg_pActivatedFunction = NULL;
+  gm_mgOpen.mg_pActivatedFunction = &CNetworkOpenMenu::ChangeTo;
 }
+
+// [Cecil] Change to the menu
+void CNetworkJoinMenu::ChangeTo(void) {
+  ChangeToMenu(&_pGUIM->gmNetworkJoinMenu);
+};

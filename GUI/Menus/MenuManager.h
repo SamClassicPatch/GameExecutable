@@ -19,7 +19,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #pragma once
 #endif
 
-#include "MAudioOptions.h"
 #include "MConfirm.h"
 #include "MControls.h"
 #include "MCustomizeAxis.h"
@@ -41,13 +40,17 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MSplitScreen.h"
 #include "MSplitStart.h"
 #include "MVar.h"
-#include "MVideoOptions.h"
 #include "Cecil/MLevelCategories.h" // [Cecil]
 #include "Cecil/MExtras.h" // [Cecil]
 #include "Cecil/MPatchCredits.h" // [Cecil]
 
 class CMenuManager {
   public:
+    // [Cecil] List of previously visited menus
+    // Each time the "Back" button is pressed, it pops the last menu and switches
+    // to it, otherwise returns to the game (if it's active) or to the main menu
+    CStaticStackArray<CGameMenu *> aVisitedMenus;
+
     CConfirmMenu gmConfirmMenu;
     CMainMenu gmMainMenu;
     CExtrasMenu gmExtras; // [Cecil]
@@ -66,8 +69,6 @@ class CMenuManager {
     CServersMenu gmServersMenu;
     CCustomizeAxisMenu gmCustomizeAxisMenu;
     COptionsMenu gmOptionsMenu;
-    CVideoOptionsMenu gmVideoOptionsMenu;
-    CAudioOptionsMenu gmAudioOptionsMenu;
     CNetworkMenu gmNetworkMenu;
     CNetworkJoinMenu gmNetworkJoinMenu;
     CNetworkStartMenu gmNetworkStartMenu;

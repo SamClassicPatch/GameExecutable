@@ -23,11 +23,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "LevelInfo.h"
 #include "VarList.h"
 #include "FileInfo.h"
-#include "MenuManager.h"
 
-#include "MenuActions.h"
 #include "MenuStuff.h"
-#include "MenuStarters.h"
 
 // macros for translating radio button text arrays
 #define TRANSLATERADIOARRAY(array) TranslateRadioTexts(array, ARRAYCOUNT(array))
@@ -60,7 +57,7 @@ void (*_pAfterLevelChosen)(void);
 
 // functions for init actions
 
-void FixupBackButton(CGameMenu *pgm);
+static void FixupBackButton(CGameMenu *pgm);
 
 // mouse cursor position
 extern PIX _pixCursorPosI = 0;
@@ -108,7 +105,7 @@ static CTextureObject _toPatchLogo2;
 CGameMenu *pgmCurrentMenu = NULL;
 
 // global back button
-CMGButton mgBack;
+CMGButton _mgBack;
 
 // -------- console variable adjustment menu
 extern BOOL _bVarChanged = FALSE;
@@ -159,7 +156,7 @@ void ClearThumbnail(void) {
   _pShell->Execute("FreeUnusedStock();");
 }
 
-void StartMenus(char *str) {
+void StartMenus(const char *str) {
   _tmMenuLastTickDone = _pTimer->GetRealTimeTick();
   // disable printing of last lines
   CON_DiscardLastLineTimes();
@@ -174,14 +171,19 @@ void StartMenus(char *str) {
     }
   }
 
-  // start main menu, or last active one
+  // Restore last active menu
   if (pgmCurrentMenu != NULL) {
     ChangeToMenu(pgmCurrentMenu);
+
   } else {
+    // [Cecil] Reset visited menus
+    _pGUIM->aVisitedMenus.PopAll();
+
+    // Start the main menu
     if (_gmRunningGameMode == GM_NONE) {
-      ChangeToMenu(&_pGUIM->gmMainMenu);
+      CMainMenu::ChangeTo();
     } else {
-      ChangeToMenu(&_pGUIM->gmInGameMenu);
+      CInGameMenu::ChangeTo();
     }
   }
 
@@ -189,29 +191,25 @@ void StartMenus(char *str) {
   const CTString strMenu = str;
 
   if (strMenu == "load") {
+    extern void StartCurrentLoadMenu(void);
     StartCurrentLoadMenu();
-    _pGUIM->gmLoadSaveMenu.SetParentMenu(NULL);
 
   } else if (strMenu == "save") {
+    extern void StartCurrentSaveMenu(void);
     StartCurrentSaveMenu();
-    _pGUIM->gmLoadSaveMenu.SetParentMenu(NULL);
     FixupBackButton(&_pGUIM->gmLoadSaveMenu);
 
   } else if (strMenu == "controls") {
-    void StartControlsMenuFromOptions(void);
-    StartControlsMenuFromOptions();
-    _pGUIM->gmControls.SetParentMenu(NULL);
+    CControlsMenu::ChangeTo();
     FixupBackButton(&_pGUIM->gmControls);
 
   } else if (strMenu == "join") {
-    void StartSelectPlayersMenuFromOpen(void);
+    extern void StartSelectPlayersMenuFromOpen(void);
     StartSelectPlayersMenuFromOpen();
-    _pGUIM->gmSelectPlayersMenu.SetParentMenu(&_pGUIM->gmMainMenu);
     FixupBackButton(&_pGUIM->gmSelectPlayersMenu);
 
   } else if (strMenu == "hiscore") {
-    ChangeToMenu(&_pGUIM->gmHighScoreMenu);
-    _pGUIM->gmHighScoreMenu.SetParentMenu(&_pGUIM->gmMainMenu);
+    CHighScoreMenu::ChangeTo();
     FixupBackButton(&_pGUIM->gmHighScoreMenu);
   }
 
@@ -234,9 +232,10 @@ void StopMenus(BOOL bGoToRoot /*=TRUE*/) {
   }
 }
 
-BOOL IsMenusInRoot(void) {
-  return pgmCurrentMenu == NULL || pgmCurrentMenu == &_pGUIM->gmMainMenu || pgmCurrentMenu == &_pGUIM->gmInGameMenu;
-}
+// [Cecil] Check if it's a root menu
+BOOL IsMenuRoot(class CGameMenu *pgm) {
+  return pgm == NULL || pgm == &_pGUIM->gmMainMenu || pgm == &_pGUIM->gmInGameMenu;
+};
 
 // ------------------------ Global menu function implementation
 void InitializeMenus(void) {
@@ -298,11 +297,7 @@ void InitializeMenus(void) {
   try {
     TRANSLATERADIOARRAY(astrNoYes);
     TRANSLATERADIOARRAY(astrComputerInvoke);
-    TRANSLATERADIOARRAY(astrDisplayAPIRadioTexts);
     TRANSLATERADIOARRAY(astrDisplayPrefsRadioTexts);
-    TRANSLATERADIOARRAY(astrBitsPerPixelRadioTexts);
-    TRANSLATERADIOARRAY(astrFrequencyRadioTexts);
-    TRANSLATERADIOARRAY(astrSoundAPIRadioTexts);
     TRANSLATERADIOARRAY(astrWeapon);
     TRANSLATERADIOARRAY(astrSplitScreenRadioTexts);
 
@@ -311,159 +306,32 @@ void InitializeMenus(void) {
 
     // ------------------- Initialize menus
     _pGUIM->gmConfirmMenu.Initialize_t();
-    _pGUIM->gmConfirmMenu.gm_strName = "Confirm";
-    _pGUIM->gmConfirmMenu.gm_pmgSelectedByDefault = &_pGUIM->gmConfirmMenu.gm_mgConfirmYes;
-    _pGUIM->gmConfirmMenu.SetParentMenu(NULL);
-    InitActionsForConfirmMenu();
-
     _pGUIM->gmMainMenu.Initialize_t();
-    _pGUIM->gmMainMenu.gm_strName = "Main";
-    _pGUIM->gmMainMenu.gm_pmgSelectedByDefault = &_pGUIM->gmMainMenu.gm_mgSingle;
-    _pGUIM->gmMainMenu.SetParentMenu(NULL);
-    InitActionsForMainMenu();
-
     _pGUIM->gmInGameMenu.Initialize_t();
-    _pGUIM->gmInGameMenu.gm_strName = "InGame";
-    _pGUIM->gmInGameMenu.gm_pmgSelectedByDefault = &_pGUIM->gmInGameMenu.gm_mgQuickLoad;
-    _pGUIM->gmInGameMenu.SetParentMenu(NULL);
-    InitActionsForInGameMenu();
-
     _pGUIM->gmSinglePlayerMenu.Initialize_t();
-    _pGUIM->gmSinglePlayerMenu.gm_strName = "SinglePlayer";
-    _pGUIM->gmSinglePlayerMenu.gm_pmgSelectedByDefault = &_pGUIM->gmSinglePlayerMenu.gm_mgNewGame;
-    _pGUIM->gmSinglePlayerMenu.SetParentMenu(&_pGUIM->gmMainMenu);
-    InitActionsForSinglePlayerMenu();
-
     _pGUIM->gmSinglePlayerNewMenu.Initialize_t();
-    _pGUIM->gmSinglePlayerNewMenu.gm_strName = "SinglePlayerNew";
-    _pGUIM->gmSinglePlayerNewMenu.gm_pmgSelectedByDefault = &_pGUIM->gmSinglePlayerNewMenu.gm_amgDifficulties[0];
-    _pGUIM->gmSinglePlayerNewMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
-    InitActionsForSinglePlayerNewMenu();
-
     _pGUIM->gmPlayerProfile.Initialize_t();
-    _pGUIM->gmPlayerProfile.gm_strName = "PlayerProfile";
-    _pGUIM->gmPlayerProfile.gm_pmgSelectedByDefault = &_pGUIM->gmPlayerProfile.gm_mgNameField;
-    InitActionsForPlayerProfileMenu();
-
     _pGUIM->gmControls.Initialize_t();
-    _pGUIM->gmControls.gm_strName = "Controls";
-    _pGUIM->gmControls.gm_pmgSelectedByDefault = &_pGUIM->gmControls.gm_mgButtons;
-    InitActionsForControlsMenu();
-
-    // warning! parent menu has to be set inside button activate function from where
-    // Load/Save menu is called
     _pGUIM->gmLoadSaveMenu.Initialize_t();
-    _pGUIM->gmLoadSaveMenu.gm_strName = "LoadSave";
-    _pGUIM->gmLoadSaveMenu.gm_pmgSelectedByDefault = &_pGUIM->gmLoadSaveMenu.gm_amgButton[0];
-
     _pGUIM->gmHighScoreMenu.Initialize_t();
-    _pGUIM->gmHighScoreMenu.gm_strName = "HighScore";
-    _pGUIM->gmHighScoreMenu.gm_pmgSelectedByDefault = &mgBack;
-
     _pGUIM->gmCustomizeKeyboardMenu.Initialize_t();
-    _pGUIM->gmCustomizeKeyboardMenu.gm_strName = "CustomizeKeyboard";
-    _pGUIM->gmCustomizeKeyboardMenu.gm_pmgSelectedByDefault = &_pGUIM->gmCustomizeKeyboardMenu.gm_mgKey[0];
-    _pGUIM->gmCustomizeKeyboardMenu.SetParentMenu(&_pGUIM->gmControls);
-
     _pGUIM->gmCustomizeAxisMenu.Initialize_t();
-    _pGUIM->gmCustomizeAxisMenu.gm_strName = "CustomizeAxis";
-    _pGUIM->gmCustomizeAxisMenu.gm_pmgSelectedByDefault = &_pGUIM->gmCustomizeAxisMenu.gm_mgActionTrigger;
-    _pGUIM->gmCustomizeAxisMenu.SetParentMenu(&_pGUIM->gmControls);
-    InitActionsForCustomizeAxisMenu();
-
     _pGUIM->gmOptionsMenu.Initialize_t();
-    _pGUIM->gmOptionsMenu.gm_strName = "Options";
-    _pGUIM->gmOptionsMenu.gm_pmgSelectedByDefault = &_pGUIM->gmOptionsMenu.gm_mgVideoOptions;
-    _pGUIM->gmOptionsMenu.SetParentMenu(&_pGUIM->gmMainMenu);
-    InitActionsForOptionsMenu();
-
-    _pGUIM->gmVideoOptionsMenu.Initialize_t();
-    _pGUIM->gmVideoOptionsMenu.gm_strName = "VideoOptions";
-    _pGUIM->gmVideoOptionsMenu.gm_pmgSelectedByDefault = &_pGUIM->gmVideoOptionsMenu.gm_mgDisplayAPITrigger;
-    _pGUIM->gmVideoOptionsMenu.SetParentMenu(&_pGUIM->gmOptionsMenu);
-    InitActionsForVideoOptionsMenu();
-
-    _pGUIM->gmAudioOptionsMenu.Initialize_t();
-    _pGUIM->gmAudioOptionsMenu.gm_strName = "AudioOptions";
-    _pGUIM->gmAudioOptionsMenu.gm_pmgSelectedByDefault = &_pGUIM->gmAudioOptionsMenu.gm_mgFrequencyTrigger;
-    _pGUIM->gmAudioOptionsMenu.SetParentMenu(&_pGUIM->gmOptionsMenu);
-    InitActionsForAudioOptionsMenu();
-
     _pGUIM->gmLevelsMenu.Initialize_t();
-    _pGUIM->gmLevelsMenu.gm_strName = "Levels";
-    _pGUIM->gmLevelsMenu.gm_pmgSelectedByDefault = &_pGUIM->gmLevelsMenu.gm_mgManualLevel[0];
-    _pGUIM->gmLevelsMenu.SetParentMenu(&_pGUIM->gmSinglePlayerMenu);
-
     _pGUIM->gmVarMenu.Initialize_t();
-    _pGUIM->gmVarMenu.gm_strName = "Var";
-    _pGUIM->gmVarMenu.gm_pmgSelectedByDefault = &_pGUIM->gmVarMenu.gm_mgVar[0];
-    _pGUIM->gmVarMenu.SetParentMenu(&_pGUIM->gmNetworkStartMenu);
-    InitActionsForVarMenu();
-
     _pGUIM->gmServersMenu.Initialize_t();
-    _pGUIM->gmServersMenu.gm_strName = "Servers";
-    _pGUIM->gmServersMenu.gm_pmgSelectedByDefault = &_pGUIM->gmServersMenu.gm_mgList;
-    _pGUIM->gmServersMenu.SetParentMenu(&_pGUIM->gmNetworkOpenMenu);
-    InitActionsForServersMenu();
-
     _pGUIM->gmNetworkMenu.Initialize_t();
-    _pGUIM->gmNetworkMenu.gm_strName = "Network";
-    _pGUIM->gmNetworkMenu.gm_pmgSelectedByDefault = &_pGUIM->gmNetworkMenu.gm_mgJoin;
-    _pGUIM->gmNetworkMenu.SetParentMenu(&_pGUIM->gmMainMenu);
-    InitActionsForNetworkMenu();
-
     _pGUIM->gmNetworkStartMenu.Initialize_t();
-    _pGUIM->gmNetworkStartMenu.gm_strName = "NetworkStart";
-    _pGUIM->gmNetworkStartMenu.gm_pmgSelectedByDefault = &_pGUIM->gmNetworkStartMenu.gm_mgStart;
-    _pGUIM->gmNetworkStartMenu.SetParentMenu(&_pGUIM->gmNetworkMenu);
-    InitActionsForNetworkStartMenu();
-
     _pGUIM->gmNetworkJoinMenu.Initialize_t();
-    _pGUIM->gmNetworkJoinMenu.gm_strName = "NetworkJoin";
-    _pGUIM->gmNetworkJoinMenu.gm_pmgSelectedByDefault = &_pGUIM->gmNetworkJoinMenu.gm_mgLAN;
-    _pGUIM->gmNetworkJoinMenu.SetParentMenu(&_pGUIM->gmNetworkMenu);
-    InitActionsForNetworkJoinMenu();
-
-    _pGUIM->gmSelectPlayersMenu.gm_ulConfigFlags = 0;
     _pGUIM->gmSelectPlayersMenu.Initialize_t();
-    _pGUIM->gmSelectPlayersMenu.gm_strName = "SelectPlayers";
-    _pGUIM->gmSelectPlayersMenu.gm_pmgSelectedByDefault = &_pGUIM->gmSelectPlayersMenu.gm_mgStart;
-    InitActionsForSelectPlayersMenu();
-
     _pGUIM->gmNetworkOpenMenu.Initialize_t();
-    _pGUIM->gmNetworkOpenMenu.gm_strName = "NetworkOpen";
-    _pGUIM->gmNetworkOpenMenu.gm_pmgSelectedByDefault = &_pGUIM->gmNetworkOpenMenu.gm_mgJoin;
-    _pGUIM->gmNetworkOpenMenu.SetParentMenu(&_pGUIM->gmNetworkJoinMenu);
-    InitActionsForNetworkOpenMenu();
-
     _pGUIM->gmSplitScreenMenu.Initialize_t();
-    _pGUIM->gmSplitScreenMenu.gm_strName = "SplitScreen";
-    _pGUIM->gmSplitScreenMenu.gm_pmgSelectedByDefault = &_pGUIM->gmSplitScreenMenu.gm_mgStart;
-    _pGUIM->gmSplitScreenMenu.SetParentMenu(&_pGUIM->gmMainMenu);
-    InitActionsForSplitScreenMenu();
-
     _pGUIM->gmSplitStartMenu.Initialize_t();
-    _pGUIM->gmSplitStartMenu.gm_strName = "SplitStart";
-    _pGUIM->gmSplitStartMenu.gm_pmgSelectedByDefault = &_pGUIM->gmSplitStartMenu.gm_mgStart;
-    _pGUIM->gmSplitStartMenu.SetParentMenu(&_pGUIM->gmSplitScreenMenu);
-    InitActionsForSplitStartMenu();
 
-    // [Cecil] Initialize level categories menu
+    // [Cecil] Initialize new menus
     _pGUIM->gmLevelCategories.Initialize_t();
-    _pGUIM->gmLevelCategories.gm_strName = "LevelCategories";
-    _pGUIM->gmLevelCategories.gm_pmgSelectedByDefault = &_pGUIM->gmLevelCategories.gm_amgCategories[0];
-
-    // [Cecil] Initialize extras menu
     _pGUIM->gmExtras.Initialize_t();
-    _pGUIM->gmExtras.gm_strName = "Extras";
-    _pGUIM->gmExtras.gm_pmgSelectedByDefault = &_pGUIM->gmExtras.gm_mgMods;
-    _pGUIM->gmExtras.SetParentMenu(&_pGUIM->gmMainMenu);
-
-    // [Cecil] Initialize credits menu
     _pGUIM->gmPatchCredits.Initialize_t();
-    _pGUIM->gmPatchCredits.gm_strName = "ClassicsPatchCredits";
-    _pGUIM->gmPatchCredits.gm_pmgSelectedByDefault = &_pGUIM->gmPatchCredits.gm_amgNames[0];
-    _pGUIM->gmPatchCredits.SetParentMenu(&_pGUIM->gmExtras);
 
   } catch (char *strError) {
     FatalError(strError);
@@ -483,8 +351,8 @@ void DestroyMenus(void) {
 
 // go to parent menu if possible
 void MenuGoToParent(void) {
-  // if there is no parent menu
-  if (pgmCurrentMenu->GetParentMenu() == NULL) {
+  // [Cecil] No more visited menus
+  if (_pGUIM->aVisitedMenus.Count() == 0) {
     // if in game
     if (_gmRunningGameMode != GM_NONE) {
       // exit menus
@@ -492,12 +360,12 @@ void MenuGoToParent(void) {
       // if no game is running
     } else {
       // go to main menu
-      ChangeToMenu(&_pGUIM->gmMainMenu);
+      CMainMenu::ChangeTo();
     }
-    // if there is some parent menu
+
+  // [Cecil] No next menu - return to the previous menu
   } else {
-    // go to parent menu
-    ChangeToMenu(pgmCurrentMenu->GetParentMenu());
+    ChangeToMenu(NULL);
   }
 }
 
@@ -782,14 +650,14 @@ BOOL DoMenu(CDrawPort *pdp) {
         dpMenu.PutTextR(strPatch, pixPatchX, pixPatchY, 0xFFFFFFFF);
       }
 
-    } else if (pgmCurrentMenu == &_pGUIM->gmAudioOptionsMenu) {
+    } else if (pgmCurrentMenu->gm_strName == "AudioOptions") {
       if (_ptoLogoEAX != NULL) {
         CTextureData &td = (CTextureData &)*_ptoLogoEAX->GetData();
         const INDEX iSize = 95;
         const PIX pixLogoWidth = iSize;
         const PIX pixLogoHeight = iSize * td.GetHeight() / td.GetWidth();
         pixI0 = (pixR - pixLogoWidth - 35) * fScale;
-        pixJ0 = (480 - pixLogoHeight - 7) * fScale;
+        pixJ0 = (480 - pixLogoHeight - 35) * fScale;
         pixI1 = pixI0 + pixLogoWidth * fScale;
         pixJ1 = pixJ0 + pixLogoHeight * fScale;
         dpMenu.PutTexture(_ptoLogoEAX, PIXaabbox2D(PIX2D(pixI0, pixJ0), PIX2D(pixI1, pixJ1)));
@@ -837,15 +705,32 @@ BOOL DoMenu(CDrawPort *pdp) {
 
   // if this is popup menu
   if (pgmCurrentMenu->gm_fPopupSize > 0.0f) { // [Cecil]
-    // render parent menu first
-    if (pgmCurrentMenu->GetParentMenu() != NULL) {
-      _pGame->MenuPreRenderMenu(pgmCurrentMenu->GetParentMenu()->gm_strName);
-      FOREACHNODE(CMenuGadget, pgmCurrentMenu->GetParentMenu()->GetChildren(), itmg) {
+    // [Cecil] Render last visited proper menu
+    CGameMenu *pgmLast = NULL;
+
+    // Go from the end
+    INDEX iMenu = _pGUIM->aVisitedMenus.Count();
+
+    while (--iMenu >= 0) {
+      CGameMenu *pgmVisited = _pGUIM->aVisitedMenus[iMenu];
+
+      // Not a popup menu
+      if (pgmVisited->gm_fPopupSize <= 0.0f) {
+        pgmLast = pgmVisited;
+        break;
+      }
+    }
+
+    if (pgmLast != NULL) {
+      _pGame->MenuPreRenderMenu(pgmLast->gm_strName);
+
+      FOREACHNODE(CMenuGadget, pgmLast->GetChildren(), itmg) {
         if (itmg->mg_bVisible) {
           itmg->Render(&dpMenu);
         }
       }
-      _pGame->MenuPostRenderMenu(pgmCurrentMenu->GetParentMenu()->gm_strName);
+
+      _pGame->MenuPostRenderMenu(pgmLast->gm_strName);
     }
 
     // gray it out
@@ -937,7 +822,7 @@ void MenuBack(void) {
   MenuGoToParent();
 }
 
-extern void FixupBackButton(CGameMenu *pgm) {
+void FixupBackButton(CGameMenu *pgm) {
   BOOL bResume = FALSE;
   BOOL bHasBack = TRUE;
 
@@ -945,45 +830,48 @@ extern void FixupBackButton(CGameMenu *pgm) {
     bHasBack = FALSE;
   }
 
-  if (pgm->GetParentMenu() == NULL) {
-    if (_gmRunningGameMode == GM_NONE) {
-      bHasBack = FALSE;
-    } else {
+  if (_pGUIM->aVisitedMenus.Count() == 0) {
+    if (_gmRunningGameMode != GM_NONE) {
       bResume = TRUE;
+
+    // [Cecil] Only remove the back button in root menus
+    } else if (IsMenuRoot(pgm)) {
+      bHasBack = FALSE;
     }
   }
+
   if (!bHasBack) {
-    mgBack.Disappear();
+    _mgBack.Disappear();
     return;
   }
 
   if (bResume) {
-    mgBack.SetText(LOCALIZE("RESUME"));
-    mgBack.mg_strTip = LOCALIZE("return to game");
+    _mgBack.SetText(LOCALIZE("RESUME"));
+    _mgBack.mg_strTip = LOCALIZE("return to game");
   } else {
     if (_bVarChanged) {
-      mgBack.SetText(LOCALIZE("CANCEL"));
-      mgBack.mg_strTip = LOCALIZE("cancel changes");
+      _mgBack.SetText(LOCALIZE("CANCEL"));
+      _mgBack.mg_strTip = LOCALIZE("cancel changes");
     } else {
-      mgBack.SetText(LOCALIZE("BACK"));
-      mgBack.mg_strTip = LOCALIZE("return to previous menu");
+      _mgBack.SetText(LOCALIZE("BACK"));
+      _mgBack.mg_strTip = LOCALIZE("return to previous menu");
     }
   }
 
-  mgBack.mg_iCenterI = -1;
-  mgBack.mg_bfsFontSize = BFS_LARGE;
-  mgBack.mg_boxOnScreen = BoxBack();
-  mgBack.mg_boxOnScreen = BoxLeftColumn(16.5f);
-  pgm->AddChild(&mgBack);
+  _mgBack.mg_iCenterI = -1;
+  _mgBack.mg_bfsFontSize = BFS_LARGE;
+  _mgBack.mg_boxOnScreen = BoxBack();
+  _mgBack.mg_boxOnScreen = BoxLeftColumn(16.5f);
+  pgm->AddChild(&_mgBack);
 
-  mgBack.mg_pmgLeft =
-  mgBack.mg_pmgRight =
-  mgBack.mg_pmgUp =
-  mgBack.mg_pmgDown = pgm->gm_pmgSelectedByDefault;
+  _mgBack.mg_pmgLeft =
+  _mgBack.mg_pmgRight =
+  _mgBack.mg_pmgUp =
+  _mgBack.mg_pmgDown = pgm->gm_pmgSelectedByDefault;
 
-  mgBack.mg_pActivatedFunction = &MenuBack;
+  _mgBack.mg_pActivatedFunction = &MenuBack;
 
-  mgBack.Appear();
+  _mgBack.Appear();
 }
 
 void ChangeToMenu(CGameMenu *pgmNewMenu) {
@@ -997,6 +885,24 @@ void ChangeToMenu(CGameMenu *pgmNewMenu) {
   extern void ReleaseHeldMouseButtons(void);
   ReleaseHeldMouseButtons();
 
+  // [Cecil] If no new menu specified
+  if (pgmNewMenu == NULL) {
+    // Simply return to the previous one
+    ASSERT(_pGUIM->aVisitedMenus.Count() != 0);
+    pgmNewMenu = _pGUIM->aVisitedMenus.Pop();
+
+  // Otherwise remember this menu before changing from it
+  } else if (pgmCurrentMenu != NULL && pgmCurrentMenu != pgmNewMenu) {
+    _pGUIM->aVisitedMenus.Add(pgmCurrentMenu);
+  }
+
+  ASSERT(pgmNewMenu != NULL);
+
+  // [Cecil] Reset visited menus if returning to any root menu, just in case
+  if (IsMenuRoot(pgmNewMenu)) {
+    _pGUIM->aVisitedMenus.PopAll();
+  }
+
   if (pgmCurrentMenu != NULL) {
     if (pgmNewMenu->gm_fPopupSize <= 0.0f) { // [Cecil]
       pgmCurrentMenu->EndMenu();
@@ -1006,13 +912,16 @@ void ChangeToMenu(CGameMenu *pgmNewMenu) {
       }
     }
   }
+
   pgmNewMenu->StartMenu();
+
   if (pgmNewMenu->gm_pmgSelectedByDefault) {
-    if (mgBack.mg_bFocused) {
-      mgBack.OnKillFocus();
+    if (_mgBack.mg_bFocused) {
+      _mgBack.OnKillFocus();
     }
     pgmNewMenu->gm_pmgSelectedByDefault->OnSetFocus();
   }
+
   FixupBackButton(pgmNewMenu);
   pgmCurrentMenu = pgmNewMenu;
 }

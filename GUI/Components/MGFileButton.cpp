@@ -15,7 +15,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 #include "MGFileButton.h"
-#include "GUI/Menus/MenuManager.h"
 
 extern CSoundData *_psdPress;
 
@@ -53,8 +52,10 @@ void OnFileSaveOK(void) {
 void CMGFileButton::DoSave(void) {
   if (FileExistsForWriting(mg_fnm)) {
     _pmgFileToSave = this;
-    extern void SaveConfirm(void);
-    SaveConfirm();
+
+    extern void OnFileSaveOK(void);
+    CConfirmMenu::ChangeTo(LOCALIZE("OVERWRITE?"), &OnFileSaveOK, NULL, TRUE);
+
   } else {
     SaveYes();
   }
@@ -87,10 +88,6 @@ void CMGFileButton::DoLoad(void) {
   if (!FileExists(mg_fnm)) {
     // Do nothing
     return;
-  }
-
-  if (_pGUIM->gmLoadSaveMenu.gm_pgmNextMenu != NULL) {
-    _pGUIM->gmLoadSaveMenu.SetParentMenu(_pGUIM->gmLoadSaveMenu.gm_pgmNextMenu);
   }
 
   // [Cecil] Call loading function from the parent

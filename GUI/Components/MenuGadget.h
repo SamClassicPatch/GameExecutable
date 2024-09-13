@@ -73,4 +73,6 @@ enum ButtonFontSize {
   BFS_LARGE = 2,
 };
 
+extern CMenuGadget *_pmgLastActivatedGadget;
+
 #endif /* include-once check. */

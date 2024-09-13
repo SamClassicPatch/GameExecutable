@@ -16,7 +16,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 
 #include "UpdateCheck.h"
-#include "GUI/Menus/MenuManager.h"
 
 #include <CoreLib/Networking/HttpRequests.h>
 
@@ -59,11 +58,6 @@ static BOOL NotifyAboutUpdates(void) {
 
 // Prompt to download the latest release
 static void DownloadUpdatePrompt(void) {
-  CConfirmMenu &gmCurrent = _pGUIM->gmConfirmMenu;
-
-  gmCurrent._pConfimedYes = &OpenLatestUpdate;
-  gmCurrent._pConfimedNo = &PostponeNotification;
-
   const CTString strPrompt(0, TRANS(
     "A new version of Classics Patch is available!\n"
     "   Your version: ^cff3f3f%s^r      Latest version: ^c5fff5f%s^r\n\n"
@@ -71,14 +65,8 @@ static void DownloadUpdatePrompt(void) {
     "- Use '^cffffffNotifyAboutUpdates^r' config property to toggle it."
   ), ClassicsCore_GetVersionName(), _strLatestVersion);
 
-  gmCurrent.SetText(strPrompt, TRANS("DOWNLOAD"), TRANS("REMIND ME LATER"));
-  gmCurrent.BeSmall(0.3f);
-
-  if (pgmCurrentMenu != &gmCurrent) {
-    gmCurrent.SetParentMenu(pgmCurrentMenu);
-  }
-
-  ChangeToMenu(&gmCurrent);
+  CConfirmMenu::ChangeTo(strPrompt, &OpenLatestUpdate, &PostponeNotification, FALSE,
+    TRANS("DOWNLOAD"), TRANS("REMIND ME LATER"), 0.3f);
 };
 
 // Display notification about a new release

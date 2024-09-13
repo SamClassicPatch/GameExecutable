@@ -22,8 +22,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 // Select levels from this category
 void CMGLevelCategory::OnActivate(void) {
-  extern void StartSelectLevelFromCategory(INDEX);
-  StartSelectLevelFromCategory(mg_iCategory);
+  CLevelsMenu &gmCurrent = _pGUIM->gmLevelsMenu;
+  gmCurrent.gm_iCategory = mg_iCategory;
+
+  ChangeToMenu(&gmCurrent);
 
   extern CSoundData *_psdPress;
   PlayMenuSound(_psdPress);
@@ -38,6 +40,8 @@ static INDEX _ctCats = 0;
 
 // Initialize categories
 void CLevelCategoriesMenu::Initialize_t(void) {
+  gm_strName = "LevelCategories";
+
   gm_mgTitle.SetName(TRANS("CHOOSE CATEGORY"));
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   AddChild(&gm_mgTitle);
@@ -103,6 +107,8 @@ void CLevelCategoriesMenu::Initialize_t(void) {
 
   // Add extra category with all other levels at the end
   AddCategory(_ctCats, TRANS("OTHER LEVELS"), TRANS("unsorted user made levels"));
+
+  gm_pmgSelectedByDefault = &gm_amgCategories[0];
 };
 
 // Add category under a specific index

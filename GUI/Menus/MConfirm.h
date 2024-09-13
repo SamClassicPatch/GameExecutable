@@ -24,15 +24,18 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 class CConfirmMenu : public CGameMenu {
   public:
+    typedef void (*CConfirmFunc)(void);
+
+  public:
     CMGButton gm_mgConfirmLabel;
     CMGButton gm_mgConfirmYes;
     CMGButton gm_mgConfirmNo;
 
-    void (*_pConfimedYes)(void);
-    void (*_pConfimedNo)(void);
+    CConfirmFunc _pConfirmedYes;
+    CConfirmFunc _pConfirmedNo;
 
     // [Cecil] Constructor
-    CConfirmMenu() : CGameMenu(), _pConfimedYes(NULL), _pConfimedNo(NULL)
+    CConfirmMenu() : CGameMenu(), _pConfirmedYes(NULL), _pConfirmedNo(NULL)
     {
     };
 
@@ -46,6 +49,10 @@ class CConfirmMenu : public CGameMenu {
 
     // [Cecil] Set label and button text
     void SetText(const CTString &strLabel, const CTString &strYes = "", const CTString &strNo = "");
+
+    // [Cecil] Change to the menu
+    static void ChangeTo(const CTString &strLabel, CConfirmFunc pFuncYes, CConfirmFunc pFuncNo,
+      BOOL bBigLabel, const CTString &strYes = "", const CTString &strNo = "", FLOAT fHeight = 0.2f);
 };
 
 #endif /* include-once check. */

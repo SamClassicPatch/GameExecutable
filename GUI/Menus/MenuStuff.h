@@ -43,10 +43,6 @@ extern CTString astrGameTypeRadioTexts[16];
 extern CTString astrDifficultyRadioTexts[16]; // [Cecil] 16 difficulties
 extern CTString astrSplitScreenRadioTexts[4];
 extern CTString astrDisplayPrefsRadioTexts[5]; // [Cecil] 4 -> 5
-extern CTString astrDisplayAPIRadioTexts[2];
-extern CTString astrBitsPerPixelRadioTexts[3];
-extern CTString astrFrequencyRadioTexts[4];
-extern CTString astrSoundAPIRadioTexts[3];
 
 // [Cecil] Last option in video preferences (Custom)
 static const INDEX _iDisplayPrefsLastOpt = ARRAYCOUNT(astrDisplayPrefsRadioTexts) - 1;
@@ -58,10 +54,8 @@ int qsort_CompareFileInfos_NameDn(const void *elem1, const void *elem2);
 int qsort_CompareFileInfos_FileUp(const void *elem1, const void *elem2);
 int qsort_CompareFileInfos_FileDn(const void *elem1, const void *elem2);
 
-INDEX APIToSwitch(enum GfxAPIType gat);
-enum GfxAPIType SwitchToAPI(INDEX i);
-INDEX DepthToSwitch(enum DisplayDepth dd);
-enum DisplayDepth SwitchToDepth(INDEX i);
+GfxAPIType NormalizeGfxAPI(INDEX i);
+DisplayDepth NormalizeDepth(INDEX i);
 
 void ControlsMenuOn();
 void ControlsMenuOff();

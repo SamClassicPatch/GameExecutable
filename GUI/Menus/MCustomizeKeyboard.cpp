@@ -54,6 +54,9 @@ void CCustomizeKeyboardMenu::FillListItems(void) {
 }
 
 void CCustomizeKeyboardMenu::Initialize_t(void) {
+  gm_strName = "CustomizeKeyboard";
+  gm_pmgSelectedByDefault = &gm_mgKey[0];
+
   // intialize Audio options menu
   gm_mgTitle.SetName(LOCALIZE("CUSTOMIZE BUTTONS"));
   gm_mgTitle.mg_boxOnScreen = BoxTitle();

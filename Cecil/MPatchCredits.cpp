@@ -17,9 +17,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "MPatchCredits.h"
 #include "GUI/Menus/MenuPrinting.h"
-#include "GUI/Menus/MenuStarters.h"
-
-extern CMenuGadget *_pmgLastActivatedGadget;
 
 // Random quote index
 static INDEX _iRandomQuote = 0;
@@ -103,6 +100,9 @@ static void SourceCodeClick(void) {
 
 // Initialize extras
 void CPatchCreditsMenu::Initialize_t(void) {
+  gm_strName = "ClassicsPatchCredits";
+  gm_pmgSelectedByDefault = &gm_amgNames[0];
+
   // Patch label
   gm_mgPatchName.SetText(CTString(0, "Serious Sam Classics Patch v%s", ClassicsCore_GetVersionName()));
   gm_mgPatchName.mg_boxOnScreen = BoxMediumRow(0.0f);

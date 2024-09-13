@@ -35,6 +35,9 @@ class COptionsMenu : public CGameMenu {
     CMGButton gm_mgAddonOptions;
 
     void Initialize_t(void);
+
+    // [Cecil] Change to the menu
+    static void ChangeTo(void);
 };
 
 #endif /* include-once check. */

@@ -26,6 +26,7 @@ extern BOOL _bRunning, _bQuitScreen;
 extern INDEX sam_iWindowMode; // [Cecil] Different window modes
 extern INDEX sam_iScreenSizeI;
 extern INDEX sam_iScreenSizeJ;
+extern CTString sam_strResolution; // [Cecil] Custom resolution
 extern INDEX sam_iDisplayDepth;
 extern INDEX sam_iDisplayAdapter;
 extern INDEX sam_iGfxAPI;
@@ -47,8 +48,7 @@ extern PIX2D _vpixScreenRes;
 void RunBrowser(const char *strUrl, BOOL bUseSteamOverlay = FALSE);
 
 // [Cecil] Different window modes
-extern void StartNewMode(enum GfxAPIType eAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ,
-                         enum DisplayDepth eColorDepth, INDEX iWindowMode);
+void StartNewMode(GfxAPIType eAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ, DisplayDepth eColorDepth, INDEX iWindowMode);
 
 struct KeyData {
   char *kd_strASCII;

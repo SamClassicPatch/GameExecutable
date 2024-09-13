@@ -19,15 +19,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MVar.h"
 
 // [Cecil] For tab switching
-#include "GUI/Menus/MenuManager.h"
-extern CMenuGadget *_pmgLastActivatedGadget;
 extern CMenuGadget *_pmgUnderCursor;
 
 extern BOOL _bVarChanged;
-
-// [Cecil] Current position before applying changes
-static INDEX _iLastWantedItem = 0;
-static INDEX _iLastTab = 0;
 
 // [Cecil] Switch to a specific options tab
 static void SwitchOptionsTab(INDEX iNewTab) {
@@ -55,7 +49,7 @@ static void SwitchOptionsTab(INDEX iNewTab) {
   // Reload menu
   gm.gm_iListOffset = 0;
   gm.gm_ctListTotal = _aTabs[gm.gm_iTab].lhVars.Count();
-  gm.gm_iListWantedItem = _iLastWantedItem;
+  gm.gm_iListWantedItem = gm.gm_iLastListWantedItem;
   gm.CGameMenu::StartMenu();
 };
 
@@ -65,7 +59,18 @@ static void SelectOptionsTab(void) {
   SwitchOptionsTab(mgTab.mg_iIndex);
 };
 
+static void VarApply(void) {
+  CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
+  gmCurrent.gm_bApplying = TRUE; // [Cecil] Applying changes
+
+  FlushVarSettings(TRUE);
+  gmCurrent.EndMenu();
+  gmCurrent.StartMenu();
+};
+
 void CVarMenu::Initialize_t(void) {
+  gm_strName = "Var";
+  gm_pmgSelectedByDefault = &gm_mgVar[0];
   gm_bApplying = FALSE; // [Cecil] Reset
 
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
@@ -99,7 +104,7 @@ void CVarMenu::Initialize_t(void) {
   gm_mgApply.SetText(LOCALIZE("APPLY"));
   gm_mgApply.mg_strTip = LOCALIZE("apply changes");
   AddChild(&gm_mgApply);
-  gm_mgApply.mg_pActivatedFunction = NULL;
+  gm_mgApply.mg_pActivatedFunction = &VarApply;
 
   AddChild(&gm_mgArrowUp);
   AddChild(&gm_mgArrowDn);
@@ -118,6 +123,8 @@ void CVarMenu::Initialize_t(void) {
 
   // [Cecil] First tab
   gm_iTab = 0;
+  gm_iLastListWantedItem = 0;
+  gm_iLastTab = 0;
 }
 
 void CVarMenu::FillListItems(void) {
@@ -198,30 +205,30 @@ void CVarMenu::StartMenu(void) {
   gm_iTab = 0;
 
   // [Cecil] Select last tab
-  if (_iLastTab != 0) {
-    SwitchOptionsTab(_iLastTab);
+  if (gm_iLastTab != 0) {
+    SwitchOptionsTab(gm_iLastTab);
 
   } else {
     // set default parameters for the list
     gm_iListOffset = 0;
     gm_ctListTotal = _aTabs[gm_iTab].lhVars.Count();
-    gm_iListWantedItem = _iLastWantedItem;
+    gm_iListWantedItem = gm_iLastListWantedItem;
 
     CGameMenu::StartMenu();
   }
 
   // [Cecil] Reset state before applying
   gm_bApplying = FALSE;
-  _iLastWantedItem = 0;
-  _iLastTab = 0;
+  gm_iLastListWantedItem = 0;
+  gm_iLastTab = 0;
 }
 
 void CVarMenu::EndMenu(void) {
   // [Cecil] Remember state before applying
   if (gm_bApplying) {
     // Recalculate gm_iListWantedItem for scrolling back after applying
-    _iLastWantedItem = gm_iListOffset + gm_ctListVisible / 2;
-    _iLastTab = gm_iTab;
+    gm_iLastListWantedItem = gm_iListOffset + gm_ctListVisible / 2;
+    gm_iLastTab = gm_iTab;
   }
 
   // disable all items first
@@ -244,3 +251,11 @@ void CVarMenu::EndMenu(void) {
 void CVarMenu::Think(void) {
   gm_mgApply.mg_bEnabled = _bVarChanged;
 }
+
+// [Cecil] Change to the menu
+void CVarMenu::ChangeTo(const CTString &strTitle, const CTFileName &fnmConfig, const CTString &strMenu) {
+  _pGUIM->gmVarMenu.gm_mgTitle.SetName(strTitle);
+  _pGUIM->gmVarMenu.gm_fnmMenuCFG = fnmConfig;
+  _pGUIM->gmVarMenu.gm_strName = strMenu;
+  ChangeToMenu(&_pGUIM->gmVarMenu);
+};

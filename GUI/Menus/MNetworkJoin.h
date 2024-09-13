@@ -31,6 +31,9 @@ class CNetworkJoinMenu : public CGameMenu {
     CMGButton gm_mgOpen;
 
     void Initialize_t(void);
+
+    // [Cecil] Change to the menu
+    static void ChangeTo(void);
 };
 
 #endif /* include-once check. */

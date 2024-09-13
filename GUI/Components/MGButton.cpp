@@ -20,8 +20,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern CSoundData *_psdPress;
 
-extern CMenuGadget *_pmgLastActivatedGadget;
-
 CMGButton::CMGButton(void) {
   mg_pActivatedFunction = NULL;
   mg_iIndex = 0;

@@ -19,9 +19,76 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MNetworkStart.h"
 
-extern void UpdateNetworkLevel(INDEX iDummy);
+static void UpdateNetworkLevel(INDEX iDummy) {
+  const INDEX iGameType = _pGUIM->gmNetworkStartMenu.gm_mgGameType.mg_iSelected;
+  const ULONG ulFlags = GetGameAPI()->GetSpawnFlagsForGameTypeSS(iGameType);
+  ValidateLevelForFlags(ulFlags);
+
+  _pGUIM->gmNetworkStartMenu.gm_mgLevel.SetText(FindLevelByFileName(GetGameAPI()->GetCustomLevel()).li_strName);
+};
+
+static void StartSelectLevelFromNetwork(void) {
+  const INDEX iGameType = _pGUIM->gmNetworkStartMenu.gm_mgGameType.mg_iSelected;
+  const ULONG ulFlags = GetGameAPI()->GetSpawnFlagsForGameTypeSS(iGameType);
+
+  // [Cecil] Select multiplayer levels
+  extern void StartSelectLevel(ULONG ulFlags, void (*pAfterChosen)(void), CGameMenu *pgmParent);
+  StartSelectLevel(ulFlags, &CNetworkStartMenu::ChangeTo, &_pGUIM->gmNetworkStartMenu);
+};
+
+static void StartGameOptionsFromNetwork(void) {
+  static DECLARE_CTFILENAME(fnmConfig, "Scripts\\Menu\\GameOptions.cfg");
+  CVarMenu::ChangeTo(LOCALIZE("GAME OPTIONS"), fnmConfig);
+};
+
+// [Cecil] Open server settings from the patch
+static void StartPatchServerOptionsFromNetwork(void) {
+  static DECLARE_CTFILENAME(fnmConfig, "Scripts\\ClassicsPatch\\02_ServerSettings.cfg");
+  CVarMenu::ChangeTo(TRANS("SERVER OPTIONS"), fnmConfig);
+};
+
+void StartNetworkGame(void) {
+  GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
+
+  // [Cecil] Set start players from menu players
+  GetGameAPI()->SetStartProfilesFromMenuProfiles();
+
+  CTFileName fnWorld = GetGameAPI()->GetCustomLevel();
+
+  GetGameAPI()->SetNetworkProvider(CGameAPI::NP_SERVER);
+  
+  // [Cecil] Pass byte container
+  CSesPropsContainer sp;
+  _pGame->SetMultiPlayerSession((CSessionProperties &)sp);
+
+  // [Cecil] Start game through the API
+  if (GetGameAPI()->NewGame(GetGameAPI()->SessionName(), fnWorld, (CSessionProperties &)sp)) {
+    StopMenus();
+    _gmRunningGameMode = GM_NETWORK;
+
+    // if starting a dedicated server
+    if (GetGameAPI()->GetMenuSplitCfg() == CGame::SSC_DEDICATED) {
+      // pull down the console
+      extern INDEX sam_bToggleConsole;
+      sam_bToggleConsole = TRUE;
+    }
+  } else {
+    _gmRunningGameMode = GM_NONE;
+  }
+};
+
+static void StartSelectPlayersMenuFromNetwork(void) {
+  CSelectPlayersMenu &gmCurrent = _pGUIM->gmSelectPlayersMenu;
+
+  gmCurrent.gm_ulConfigFlags = PLCF_DEDICATED | PLCF_OBSERVING;
+  gmCurrent.gm_mgStart.mg_pActivatedFunction = &StartNetworkGame;
+  ChangeToMenu(&gmCurrent);
+};
 
 void CNetworkStartMenu::Initialize_t(void) {
+  gm_strName = "NetworkStart";
+  gm_pmgSelectedByDefault = &gm_mgStart;
+
   // title
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.SetName(LOCALIZE("START SERVER"));
@@ -59,7 +126,7 @@ void CNetworkStartMenu::Initialize_t(void) {
   gm_mgLevel.mg_pmgUp = &gm_mgDifficulty;
   gm_mgLevel.mg_pmgDown = &gm_mgMaxPlayers;
   gm_mgLevel.mg_strTip = LOCALIZE("choose the level to start");
-  gm_mgLevel.mg_pActivatedFunction = NULL;
+  gm_mgLevel.mg_pActivatedFunction = &StartSelectLevelFromNetwork;
   AddChild(&gm_mgLevel);
 
   // [Cecil] Create entries for each max players configuration (other than 1)
@@ -94,7 +161,7 @@ void CNetworkStartMenu::Initialize_t(void) {
   gm_mgGameOptions.mg_pmgUp = &gm_mgVisible;
   gm_mgGameOptions.mg_pmgDown = &gm_mgPatchOptions;
   gm_mgGameOptions.mg_strTip = LOCALIZE("adjust game rules");
-  gm_mgGameOptions.mg_pActivatedFunction = NULL;
+  gm_mgGameOptions.mg_pActivatedFunction = &StartGameOptionsFromNetwork;
   AddChild(&gm_mgGameOptions);
 
   // [Cecil] Server options from the patch
@@ -105,7 +172,7 @@ void CNetworkStartMenu::Initialize_t(void) {
   gm_mgPatchOptions.mg_pmgUp = &gm_mgGameOptions;
   gm_mgPatchOptions.mg_pmgDown = &gm_mgStart;
   gm_mgPatchOptions.mg_strTip = TRANS("adjust server settings from the classics patch");
-  gm_mgPatchOptions.mg_pActivatedFunction = NULL;
+  gm_mgPatchOptions.mg_pActivatedFunction = &StartPatchServerOptionsFromNetwork;
   AddChild(&gm_mgPatchOptions);
 
   // start button
@@ -115,7 +182,7 @@ void CNetworkStartMenu::Initialize_t(void) {
   gm_mgStart.mg_pmgDown = &gm_mgSessionName;
   gm_mgStart.SetText(LOCALIZE("START"));
   AddChild(&gm_mgStart);
-  gm_mgStart.mg_pActivatedFunction = NULL;
+  gm_mgStart.mg_pActivatedFunction = &StartSelectPlayersMenuFromNetwork;
 }
 
 // [Cecil] Count active difficulties for selection lists
@@ -174,3 +241,8 @@ void CNetworkStartMenu::EndMenu(void) {
 
   CGameMenu::EndMenu();
 }
+
+// [Cecil] Change to the menu
+void CNetworkStartMenu::ChangeTo(void) {
+  ChangeToMenu(&_pGUIM->gmNetworkStartMenu);
+};

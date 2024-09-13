@@ -18,10 +18,15 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "Credits.h"
 #include "MExtras.h"
 #include "GUI/Menus/MenuPrinting.h"
-#include "GUI/Menus/MenuStarters.h"
-#include "GUI/Menus/MenuManager.h"
 
 #define URL_WIKI CLASSICSPATCH_URL_PROJECT "/wiki"
+
+extern void StartModsLoadMenu(void);
+
+// Open credits menu
+static void StartPatchCreditsMenu(void) {
+  ChangeToMenu(&_pGUIM->gmPatchCredits);
+};
 
 // Display game credits
 static void StartGameCreditsMenu(void) {
@@ -38,32 +43,21 @@ static void OpenWiki(void) {
 };
 
 static void OpenWikiConfirm(void) {
-  CConfirmMenu &gm = _pGUIM->gmConfirmMenu;
-
-  gm._pConfimedYes = &OpenWiki;
-  gm._pConfimedNo = NULL;
-
   CTString strPrompt = TRANS("The following link will open in your web browser:\n");
-  gm.SetText(strPrompt + URL_WIKI, TRANS("PROCEED"), TRANS("CANCEL"));
-  gm.SetParentMenu(&_pGUIM->gmExtras);
-  gm.BeSmall();
-  ChangeToMenu(&gm);
+  strPrompt += URL_WIKI;
+
+  CConfirmMenu::ChangeTo(strPrompt, &OpenWiki, NULL, FALSE, TRANS("PROCEED"), TRANS("CANCEL"));
 };
 
 static void RestartGameConfirm(void) {
-  CConfirmMenu &gm = _pGUIM->gmConfirmMenu;
-
-  gm._pConfimedYes = &RestartGame;
-  gm._pConfimedNo = NULL;
-
-  gm.SetText(LOCALIZE("ARE YOU SERIOUS?"));
-  gm.SetParentMenu(&_pGUIM->gmExtras);
-  gm.BeLarge();
-  ChangeToMenu(&gm);
+  CConfirmMenu::ChangeTo(LOCALIZE("ARE YOU SERIOUS?"), &RestartGame, NULL, TRUE);
 };
 
 // Initialize extras
 void CExtrasMenu::Initialize_t(void) {
+  gm_strName = "Extras";
+  gm_pmgSelectedByDefault = &gm_mgMods;
+
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.SetName(TRANS("EXTRAS"));
   AddChild(&gm_mgTitle);

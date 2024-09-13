@@ -19,9 +19,66 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MSplitStart.h"
 
-extern void UpdateSplitLevel(INDEX iDummy);
+static void UpdateSplitLevel(INDEX iDummy) {
+  CSplitStartMenu &gmCurrent = _pGUIM->gmSplitStartMenu;
+
+  const INDEX iGameType = gmCurrent.gm_mgGameType.mg_iSelected;
+  const ULONG ulFlags = GetGameAPI()->GetSpawnFlagsForGameTypeSS(iGameType);
+  ValidateLevelForFlags(ulFlags);
+
+  gmCurrent.gm_mgLevel.SetText(FindLevelByFileName(GetGameAPI()->GetCustomLevel()).li_strName);
+};
+
+static void StartSelectLevelFromSplit(void) {
+  const INDEX iGameType = _pGUIM->gmSplitStartMenu.gm_mgGameType.mg_iSelected;
+  const ULONG ulFlags = GetGameAPI()->GetSpawnFlagsForGameTypeSS(iGameType);
+
+  // [Cecil] Select multiplayer levels
+  extern void StartSelectLevel(ULONG ulFlags, void (*pAfterChosen)(void), CGameMenu *pgmParent);
+  StartSelectLevel(ulFlags, &CSplitStartMenu::ChangeTo, &_pGUIM->gmSplitStartMenu);
+};
+
+static void StartGameOptionsFromSplitScreen(void) {
+  static DECLARE_CTFILENAME(fnmConfig, "Scripts\\Menu\\GameOptions.cfg");
+  CVarMenu::ChangeTo(LOCALIZE("GAME OPTIONS"), fnmConfig);
+};
+
+static void StartSplitScreenGame(void) {
+  GetGameAPI()->SetStartSplitCfg(GetGameAPI()->GetMenuSplitCfg());
+
+  // [Cecil] Set start players from menu players
+  GetGameAPI()->SetStartProfilesFromMenuProfiles();
+
+  CTFileName fnWorld = GetGameAPI()->GetCustomLevel();
+
+  GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
+
+  // [Cecil] Pass byte container
+  CSesPropsContainer sp;
+  _pGame->SetMultiPlayerSession((CSessionProperties &)sp);
+
+  // [Cecil] Start game through the API
+  if (GetGameAPI()->NewGame(fnWorld.FileName(), fnWorld, (CSessionProperties &)sp)) {
+    StopMenus();
+    _gmRunningGameMode = GM_SPLIT_SCREEN;
+
+  } else {
+    _gmRunningGameMode = GM_NONE;
+  }
+};
+
+static void StartSelectPlayersMenuFromSplit(void) {
+  CSelectPlayersMenu &gmCurrent = _pGUIM->gmSelectPlayersMenu;
+
+  gmCurrent.gm_ulConfigFlags = 0;
+  gmCurrent.gm_mgStart.mg_pActivatedFunction = &StartSplitScreenGame;
+  ChangeToMenu(&gmCurrent);
+}
 
 void CSplitStartMenu::Initialize_t(void) {
+  gm_strName = "SplitStart";
+  gm_pmgSelectedByDefault = &gm_mgStart;
+
   // intialize split screen menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.SetName(LOCALIZE("START SPLIT SCREEN"));
@@ -46,7 +103,7 @@ void CSplitStartMenu::Initialize_t(void) {
   gm_mgLevel.mg_pmgUp = &gm_mgDifficulty;
   gm_mgLevel.mg_pmgDown = &gm_mgOptions;
   gm_mgLevel.mg_strTip = LOCALIZE("choose the level to start");
-  gm_mgLevel.mg_pActivatedFunction = NULL;
+  gm_mgLevel.mg_pActivatedFunction = &StartSelectLevelFromSplit;
   AddChild(&gm_mgLevel);
 
   // options button
@@ -57,7 +114,7 @@ void CSplitStartMenu::Initialize_t(void) {
   gm_mgOptions.mg_pmgUp = &gm_mgLevel;
   gm_mgOptions.mg_pmgDown = &gm_mgStart;
   gm_mgOptions.mg_strTip = LOCALIZE("adjust game rules");
-  gm_mgOptions.mg_pActivatedFunction = NULL;
+  gm_mgOptions.mg_pActivatedFunction = &StartGameOptionsFromSplitScreen;
   AddChild(&gm_mgOptions);
 
   // start button
@@ -67,7 +124,7 @@ void CSplitStartMenu::Initialize_t(void) {
   gm_mgStart.mg_pmgDown = &gm_mgGameType;
   gm_mgStart.SetText(LOCALIZE("START"));
   AddChild(&gm_mgStart);
-  gm_mgStart.mg_pActivatedFunction = NULL;
+  gm_mgStart.mg_pActivatedFunction = &StartSelectPlayersMenuFromSplit;
 }
 
 void CSplitStartMenu::StartMenu(void) {
@@ -94,3 +151,8 @@ void CSplitStartMenu::EndMenu(void) {
 
   CGameMenu::EndMenu();
 }
+
+// [Cecil] Change to the menu
+void CSplitStartMenu::ChangeTo(void) {
+  ChangeToMenu(&_pGUIM->gmSplitStartMenu);
+};

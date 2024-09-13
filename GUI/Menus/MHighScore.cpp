@@ -17,7 +17,12 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 #include "MHighScore.h"
 
+extern CMGButton _mgBack;
+
 void CHighScoreMenu::Initialize_t(void) {
+  gm_strName = "HighScore";
+  gm_pmgSelectedByDefault = &_mgBack;
+
   gm_mgHScore.mg_boxOnScreen = FLOATaabbox2D(FLOAT2D(0, 0), FLOAT2D(1, 0.5));
   AddChild(&gm_mgHScore);
 
@@ -25,3 +30,8 @@ void CHighScoreMenu::Initialize_t(void) {
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   AddChild(&gm_mgTitle);
 }
+
+// [Cecil] Change to the menu
+void CHighScoreMenu::ChangeTo(void) {
+  ChangeToMenu(&_pGUIM->gmHighScoreMenu);
+};

@@ -22,7 +22,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 class CGameMenu : public CLinkedNode {
   public:
     FLOAT gm_fPopupSize; // [Cecil] Considered a popup if the size is bigger than 0 (replacing 'gm_bPopup')
-    const char *gm_strName; // menu name (for mod interface only)
+    CTString gm_strName; // menu name (for mod interface only)
     class CMenuGadget *gm_pmgSelectedByDefault;
     class CMenuGadget *gm_pmgArrowUp;
     class CMenuGadget *gm_pmgArrowDn;
@@ -45,16 +45,6 @@ class CGameMenu : public CLinkedNode {
     virtual BOOL OnMouseHeld(int iVKey); // [Cecil]
     virtual BOOL OnChar(MSG msg);
     virtual void Think(void);
-
-    // [Cecil] Get parent menu
-    inline CGameMenu *GetParentMenu(void) {
-      return (CGameMenu *)GetParent();
-    };
-
-    // [Cecil] Set parent menu (as just a reference)
-    inline void SetParentMenu(CGameMenu *pgmParent) {
-      m_pParent = pgmParent;
-    };
 };
 
 #endif /* include-once check. */

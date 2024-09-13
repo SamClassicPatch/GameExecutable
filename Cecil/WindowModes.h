@@ -30,10 +30,10 @@ enum EWindowModes {
   E_WM_FULLSCREEN = 2,
 };
 
-// Window mode names
-extern CTString _astrWindowModes[3];
-
 // Open the main application window in borderless mode
 void OpenMainWindowBorderless(PIX pixSizeI, PIX pixSizeJ);
+
+// Aspect ratio of the current resolution
+extern FLOAT _fAspectRatio;
 
 #endif

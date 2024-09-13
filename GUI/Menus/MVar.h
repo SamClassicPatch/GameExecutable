@@ -42,11 +42,18 @@ class CVarMenu : public CGameMenu {
     CStaticStackArray<CMGButton> gm_agmTabs;
     INDEX gm_iTab; // Currently selected tab
 
+    // [Cecil] Current position before applying changes
+    INDEX gm_iLastListWantedItem;
+    INDEX gm_iLastTab;
+
     void Initialize_t(void);
     void FillListItems(void);
     void StartMenu(void);
     void EndMenu(void);
     void Think(void);
+
+    // [Cecil] Change to the menu
+    static void ChangeTo(const CTString &strTitle, const CTFileName &fnmConfig, const CTString &strMenu = "Var");
 };
 
 #endif /* include-once check. */

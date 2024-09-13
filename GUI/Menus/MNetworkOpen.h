@@ -38,6 +38,9 @@ class CNetworkOpenMenu : public CGameMenu {
     void Initialize_t(void);
     void StartMenu(void);
     void EndMenu(void);
+
+    // [Cecil] Change to the menu
+    static void ChangeTo(void);
 };
 
 #endif /* include-once check. */

@@ -19,7 +19,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MLevels.h"
 
 // [Cecil] For menu reloading
-#include "GUI/Menus/MenuManager.h"
 extern INDEX sam_bShowAllLevels;
 
 static CTString _strLastTitleFilter = "";
@@ -54,6 +53,9 @@ static void ToggleMountedLevels(void) {
 };
 
 void CLevelsMenu::Initialize_t(void) {
+  gm_strName = "Levels";
+  gm_pmgSelectedByDefault = &gm_mgManualLevel[0];
+
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.SetName(LOCALIZE("CHOOSE LEVEL"));
   AddChild(&gm_mgTitle);

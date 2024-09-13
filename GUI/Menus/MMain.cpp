@@ -18,8 +18,40 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MMain.h"
 
-// [Cecil] For menu starting functions
-#include "MenuStarters.h"
+extern CTFileName _fnmModToLoad;
+extern CTFileName _fnmModSelected;
+
+// [Cecil] Open extras menu
+static void StartExtrasMenu(void) {
+  ChangeToMenu(&_pGUIM->gmExtras);
+};
+
+static void ModLoadYes(void) {
+  _fnmModToLoad = _fnmModSelected;
+};
+
+static BOOL LSLoadMod(const CTFileName &fnm) {
+  _fnmModSelected = fnm;
+  CConfirmMenu::ChangeTo(LOCALIZE("LOAD THIS MOD?"), &ModLoadYes, NULL, TRUE);
+  return TRUE;
+};
+
+void StartModsLoadMenu(void) {
+  CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
+
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("CHOOSE MOD"));
+  gmCurrent.gm_bAllowThumbnails = TRUE;
+  gmCurrent.gm_iSortType = LSSORT_NAMEUP;
+  gmCurrent.gm_bSave = FALSE;
+  gmCurrent.gm_bManage = FALSE;
+  gmCurrent.gm_fnmDirectory = CTString("Mods\\");
+  gmCurrent.gm_strSelected = CTString("");
+  gmCurrent.gm_fnmExt = CTString(".des");
+  gmCurrent.gm_pAfterFileChosen = &LSLoadMod;
+
+  // [Cecil] Set current menu as the parent menu
+  ChangeToMenu(&gmCurrent);
+};
 
 // [Cecil] Update extras button
 void CMainMenu::UpdateExtras(void) {
@@ -37,7 +69,63 @@ void CMainMenu::UpdateExtras(void) {
   }
 };
 
+static CTFileName _fnDemoToPlay;
+
+void StartDemoPlay(void) {
+  GetGameAPI()->SetStartSplitCfg(CGame::SSC_OBSERVER);
+  // play the demo
+  GetGameAPI()->SetNetworkProvider(CGameAPI::NP_LOCAL);
+  if (_pGame->StartDemoPlay(_fnDemoToPlay)) {
+    // exit menu and pull up the console
+    StopMenus();
+    if (GetGameAPI()->GetConState() != CS_OFF) {
+      GetGameAPI()->SetConState(CS_TURNINGOFF);
+    }
+    _gmRunningGameMode = GM_DEMO;
+  } else {
+    _gmRunningGameMode = GM_NONE;
+  }
+};
+
+BOOL LSLoadDemo(const CTFileName &fnm) {
+  // call local players menu
+  _fnDemoToPlay = fnm;
+  StartDemoPlay();
+  return TRUE;
+};
+
+static void StartDemoLoadMenu(void) {
+  CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
+
+  _gmMenuGameMode = GM_DEMO;
+
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("PLAY DEMO"));
+  gmCurrent.gm_bAllowThumbnails = TRUE;
+  gmCurrent.gm_iSortType = LSSORT_FILEDN;
+  gmCurrent.gm_bSave = FALSE;
+  gmCurrent.gm_bManage = TRUE;
+  gmCurrent.gm_fnmDirectory = CTString("Demos\\");
+  gmCurrent.gm_strSelected = CTString("");
+  gmCurrent.gm_fnmExt = CTString(".dem");
+  gmCurrent.gm_pAfterFileChosen = &LSLoadDemo;
+  gmCurrent.gm_mgNotes.SetText("");
+
+  ChangeToMenu(&gmCurrent);
+};
+
+static void ExitGame(void) {
+  _bRunning = FALSE;
+  _bQuitScreen = TRUE;
+};
+
+void ExitConfirm(void) {
+  CConfirmMenu::ChangeTo(LOCALIZE("ARE YOU SERIOUS?"), &ExitGame, NULL, TRUE);
+};
+
 void CMainMenu::Initialize_t(void) {
+  gm_strName = "Main";
+  gm_pmgSelectedByDefault = &gm_mgSingle;
+
   // intialize main menu
   gm_mgVersionLabel.SetText(sam_strVersion);
   gm_mgVersionLabel.mg_boxOnScreen = BoxVersion();
@@ -63,7 +151,7 @@ void CMainMenu::Initialize_t(void) {
   AddChild(&gm_mgSingle);
   gm_mgSingle.mg_pmgUp = &gm_mgQuit;
   gm_mgSingle.mg_pmgDown = &gm_mgNetwork;
-  gm_mgSingle.mg_pActivatedFunction = NULL;
+  gm_mgSingle.mg_pActivatedFunction = &CSinglePlayerMenu::ChangeTo;
 
   gm_mgNetwork.SetText(LOCALIZE("NETWORK"));
   gm_mgNetwork.mg_bfsFontSize = BFS_LARGE;
@@ -72,7 +160,7 @@ void CMainMenu::Initialize_t(void) {
   AddChild(&gm_mgNetwork);
   gm_mgNetwork.mg_pmgUp = &gm_mgSingle;
   gm_mgNetwork.mg_pmgDown = &gm_mgSplitScreen;
-  gm_mgNetwork.mg_pActivatedFunction = NULL;
+  gm_mgNetwork.mg_pActivatedFunction = &CNetworkMenu::ChangeTo;
 
   gm_mgSplitScreen.SetText(LOCALIZE("SPLIT SCREEN"));
   gm_mgSplitScreen.mg_bfsFontSize = BFS_LARGE;
@@ -81,7 +169,7 @@ void CMainMenu::Initialize_t(void) {
   AddChild(&gm_mgSplitScreen);
   gm_mgSplitScreen.mg_pmgUp = &gm_mgNetwork;
   gm_mgSplitScreen.mg_pmgDown = &gm_mgDemo;
-  gm_mgSplitScreen.mg_pActivatedFunction = NULL;
+  gm_mgSplitScreen.mg_pActivatedFunction = &CSplitScreenMenu::ChangeTo;
 
   gm_mgDemo.SetText(LOCALIZE("DEMO"));
   gm_mgDemo.mg_bfsFontSize = BFS_LARGE;
@@ -90,7 +178,7 @@ void CMainMenu::Initialize_t(void) {
   AddChild(&gm_mgDemo);
   gm_mgDemo.mg_pmgUp = &gm_mgSplitScreen;
   gm_mgDemo.mg_pmgDown = &gm_mgExtras;
-  gm_mgDemo.mg_pActivatedFunction = NULL;
+  gm_mgDemo.mg_pActivatedFunction = &StartDemoLoadMenu;
 
   // [Cecil] Setup extras button
   UpdateExtras();
@@ -107,7 +195,7 @@ void CMainMenu::Initialize_t(void) {
   AddChild(&gm_mgHighScore);
   gm_mgHighScore.mg_pmgUp = &gm_mgExtras;
   gm_mgHighScore.mg_pmgDown = &gm_mgOptions;
-  gm_mgHighScore.mg_pActivatedFunction = NULL;
+  gm_mgHighScore.mg_pActivatedFunction = &CHighScoreMenu::ChangeTo;
 
   gm_mgOptions.SetText(LOCALIZE("OPTIONS"));
   gm_mgOptions.mg_bfsFontSize = BFS_LARGE;
@@ -116,7 +204,7 @@ void CMainMenu::Initialize_t(void) {
   AddChild(&gm_mgOptions);
   gm_mgOptions.mg_pmgUp = &gm_mgHighScore;
   gm_mgOptions.mg_pmgDown = &gm_mgQuit;
-  gm_mgOptions.mg_pActivatedFunction = NULL;
+  gm_mgOptions.mg_pActivatedFunction = &COptionsMenu::ChangeTo;
 
   gm_mgQuit.SetText(LOCALIZE("QUIT"));
   gm_mgQuit.mg_bfsFontSize = BFS_LARGE;
@@ -125,7 +213,7 @@ void CMainMenu::Initialize_t(void) {
   AddChild(&gm_mgQuit);
   gm_mgQuit.mg_pmgUp = &gm_mgOptions;
   gm_mgQuit.mg_pmgDown = &gm_mgSingle;
-  gm_mgQuit.mg_pActivatedFunction = NULL;
+  gm_mgQuit.mg_pActivatedFunction = &ExitConfirm;
 }
 
 void CMainMenu::StartMenu(void) {
@@ -139,3 +227,8 @@ void CMainMenu::StartMenu(void) {
 
   CGameMenu::StartMenu();
 }
+
+// [Cecil] Change to the menu
+void CMainMenu::ChangeTo(void) {
+  ChangeToMenu(&_pGUIM->gmMainMenu);
+};

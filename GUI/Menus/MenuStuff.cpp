@@ -81,30 +81,6 @@ extern CTString astrDisplayPrefsRadioTexts[] = {
   RADIOTRANS("Custom"),
 };
 
-extern CTString astrDisplayAPIRadioTexts[] = {
-  RADIOTRANS("OpenGL"),
-  RADIOTRANS("Direct3D"),
-};
-
-extern CTString astrBitsPerPixelRadioTexts[] = {
-  RADIOTRANS("Desktop"),
-  RADIOTRANS("16 BPP"),
-  RADIOTRANS("32 BPP"),
-};
-
-extern CTString astrFrequencyRadioTexts[] = {
-  RADIOTRANS("No sound"),
-  RADIOTRANS("11kHz"),
-  RADIOTRANS("22kHz"),
-  RADIOTRANS("44kHz"),
-};
-
-extern CTString astrSoundAPIRadioTexts[] = {
-  RADIOTRANS("WaveOut"),
-  RADIOTRANS("DirectSound"),
-  RADIOTRANS("EAX"),
-};
-
 // initialize game type strings table
 void InitGameTypes(void) {
   // for each mode
@@ -169,43 +145,24 @@ int qsort_CompareFileInfos_FileDn(const void *elem1, const void *elem2) {
   return -strcmp(fi1.fi_fnFile, fi2.fi_fnFile);
 }
 
-INDEX APIToSwitch(enum GfxAPIType gat) {
-  switch (gat) {
-    case GAT_OGL: return 0;
-#ifdef SE1_D3D
-    case GAT_D3D: return 1;
-#endif // SE1_D3D
-    default: ASSERT(FALSE); return 0;
-  }
-}
-
-enum GfxAPIType SwitchToAPI(INDEX i) {
+GfxAPIType NormalizeGfxAPI(INDEX i) {
   switch (i) {
-    case 0: return GAT_OGL;
+    case GAT_OGL: return GAT_OGL;
 #ifdef SE1_D3D
-    case 1: return GAT_D3D;
+    case GAT_D3D: return GAT_D3D;
 #endif // SE1_D3D
     default: ASSERT(FALSE); return GAT_OGL;
   }
 }
 
-INDEX DepthToSwitch(enum DisplayDepth dd) {
-  switch (dd) {
-    case DD_DEFAULT: return 0;
-    case DD_16BIT: return 1;
-    case DD_32BIT: return 2;
-    default: ASSERT(FALSE); return 0;
-  }
-}
-
-enum DisplayDepth SwitchToDepth(INDEX i) {
+DisplayDepth NormalizeDepth(INDEX i) {
   switch (i) {
-    case 0: return DD_DEFAULT;
-    case 1: return DD_16BIT;
-    case 2: return DD_32BIT;
+    case DD_DEFAULT: return DD_DEFAULT;
+    case DD_16BIT:   return DD_16BIT;
+    case DD_32BIT:   return DD_32BIT;
     default: ASSERT(FALSE); return DD_DEFAULT;
   }
-}
+};
 
 // controls that are currently customized
 CTFileName _fnmControlsToCustomize = CTString("");

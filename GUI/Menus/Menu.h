@@ -33,9 +33,9 @@ void MenuOnChar(MSG msg);
 void MenuOnMouseMove(PIX pixI, PIX pixJ);
 void MenuOnLMBDown(void);
 BOOL DoMenu(CDrawPort *pdp); // returns TRUE if still active, FALSE if should quit
-void StartMenus(char *str = "");
+void StartMenus(const char *str = "");
 void StopMenus(BOOL bGoToRoot = TRUE);
-BOOL IsMenusInRoot(void);
+BOOL IsMenuRoot(class CGameMenu *pgm); // [Cecil] Check if it's a root menu
 void ChangeToMenu(class CGameMenu *pgmNew);
 
 // [Cecil] Flag for playing over other sounds

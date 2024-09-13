@@ -20,7 +20,52 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern CTFileName _fnmControlsToCustomize;
 
+static void StartCustomizeKeyboardMenu(void) {
+  // [Cecil] Set extra controls for editing player controls
+  _pGUIM->gmCustomizeKeyboardMenu.SetControls(GetGameAPI()->GetControls());
+  ChangeToMenu(&_pGUIM->gmCustomizeKeyboardMenu);
+}
+
+// [Cecil] Start customization of common controls
+static void StartCustomizeCommonControlsMenu(void) {
+  _pGUIM->gmCustomizeKeyboardMenu.SetControls(GetGameAPI()->pctrlCommon);
+  ChangeToMenu(&_pGUIM->gmCustomizeKeyboardMenu);
+};
+
+static BOOL LSLoadControls(const CTFileName &fnm) {
+  try {
+    ControlsMenuOn();
+    GetGameAPI()->GetControls()->Load_t(fnm);
+    ControlsMenuOff();
+  } catch (char *strError) {
+    CPrintF("%s", strError);
+  }
+
+  MenuGoToParent();
+  return TRUE;
+};
+
+static void StartControlsLoadMenu(void) {
+  CLoadSaveMenu &gmCurrent = _pGUIM->gmLoadSaveMenu;
+
+  gmCurrent.gm_mgTitle.SetName(LOCALIZE("LOAD CONTROLS"));
+  gmCurrent.gm_bAllowThumbnails = FALSE;
+  gmCurrent.gm_iSortType = LSSORT_FILEUP;
+  gmCurrent.gm_bSave = FALSE;
+  gmCurrent.gm_bManage = FALSE;
+  gmCurrent.gm_fnmDirectory = CTString("Controls\\");
+  gmCurrent.gm_strSelected = CTString("");
+  gmCurrent.gm_fnmExt = CTString(".ctl");
+  gmCurrent.gm_pAfterFileChosen = &LSLoadControls;
+  gmCurrent.gm_mgNotes.SetText("");
+
+  ChangeToMenu(&gmCurrent);
+};
+
 void CControlsMenu::Initialize_t(void) {
+  gm_strName = "Controls";
+  gm_pmgSelectedByDefault = &gm_mgButtons;
+
   // intialize player and controls menu
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.SetName(LOCALIZE("CONTROLS"));
@@ -41,7 +86,7 @@ void CControlsMenu::Initialize_t(void) {
   AddChild(&gm_mgButtons);
   gm_mgButtons.mg_pmgUp = &gm_mgCommon;
   gm_mgButtons.mg_pmgDown = &gm_mgAdvanced;
-  gm_mgButtons.mg_pActivatedFunction = NULL;
+  gm_mgButtons.mg_pActivatedFunction = &StartCustomizeKeyboardMenu;
   gm_mgButtons.mg_strTip = LOCALIZE("customize buttons in current controls");
 
   gm_mgAdvanced.SetText(LOCALIZE("ADVANCED JOYSTICK SETUP"));
@@ -51,7 +96,7 @@ void CControlsMenu::Initialize_t(void) {
   AddChild(&gm_mgAdvanced);
   gm_mgAdvanced.mg_pmgUp = &gm_mgButtons;
   gm_mgAdvanced.mg_pmgDown = &gm_mgSensitivity;
-  gm_mgAdvanced.mg_pActivatedFunction = NULL;
+  gm_mgAdvanced.mg_pActivatedFunction = &CCustomizeAxisMenu::ChangeTo;
   gm_mgAdvanced.mg_strTip = LOCALIZE("adjust advanced settings for joystick axis");
 
   gm_mgSensitivity.mg_boxOnScreen = BoxMediumRow(4.5);
@@ -77,7 +122,7 @@ void CControlsMenu::Initialize_t(void) {
   AddChild(&gm_mgPredefined);
   gm_mgPredefined.mg_pmgUp = &gm_mgIFeelTrigger;
   gm_mgPredefined.mg_pmgDown = &gm_mgCommon;
-  gm_mgPredefined.mg_pActivatedFunction = NULL;
+  gm_mgPredefined.mg_pActivatedFunction = &StartControlsLoadMenu;
   gm_mgPredefined.mg_strTip = LOCALIZE("load one of several predefined control settings");
 
   // [Cecil] Common controls
@@ -88,7 +133,7 @@ void CControlsMenu::Initialize_t(void) {
   gm_mgCommon.mg_iCenterI = 0;
   gm_mgCommon.mg_pmgUp = &gm_mgPredefined;
   gm_mgCommon.mg_pmgDown = &gm_mgButtons;
-  gm_mgCommon.mg_pActivatedFunction = NULL;
+  gm_mgCommon.mg_pActivatedFunction = &StartCustomizeCommonControlsMenu;
 
   // Disable the button if common controls haven't been hooked
   gm_mgCommon.mg_bEnabled = (GetGameAPI()->pctrlCommon != NULL);
@@ -164,3 +209,8 @@ void CControlsMenu::ApplyActionSettings(void) {
   _pShell->SetFLOAT("inp_fIFeelGain", bIFeel ? 1.0f : 0.0f);
   ctrls.CalculateInfluencesForAllAxis();
 }
+
+// [Cecil] Change to the menu
+void CControlsMenu::ChangeTo(void) {
+  ChangeToMenu(&_pGUIM->gmControls);
+};

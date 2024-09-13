@@ -37,6 +37,9 @@ class CServersMenu : public CGameMenu {
     void Initialize_t(void);
     void StartMenu(void);
     void Think(void);
+
+    // [Cecil] Change to the menu
+    static void ChangeTo(void);
 };
 
 #endif /* include-once check. */

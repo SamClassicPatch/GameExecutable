@@ -23,7 +23,30 @@ static void ResetPopup(CConfirmMenu *pgm, FLOAT fHeight) {
   pgm->gm_mgConfirmLabel.mg_boxOnScreen = BoxPopupLabel(fHeight);
 };
 
+static void ConfirmYes(void) {
+  CConfirmMenu &gmCurrent = _pGUIM->gmConfirmMenu;
+
+  if (gmCurrent._pConfirmedYes != NULL) {
+    gmCurrent._pConfirmedYes();
+  }
+
+  MenuGoToParent();
+};
+
+static void ConfirmNo(void) {
+  CConfirmMenu &gmCurrent = _pGUIM->gmConfirmMenu;
+
+  if (gmCurrent._pConfirmedNo != NULL) {
+    gmCurrent._pConfirmedNo();
+  }
+
+  MenuGoToParent();
+};
+
 void CConfirmMenu::Initialize_t(void) {
+  gm_strName = "Confirm";
+  gm_pmgSelectedByDefault = &gm_mgConfirmYes;
+
   const FLOAT fHeight = 0.2f;
 
   AddChild(&gm_mgConfirmLabel);
@@ -32,20 +55,20 @@ void CConfirmMenu::Initialize_t(void) {
 
   AddChild(&gm_mgConfirmYes);
   gm_mgConfirmYes.mg_boxOnScreen = BoxPopupYesLarge(fHeight);
-  gm_mgConfirmYes.mg_pActivatedFunction = NULL;
+  gm_mgConfirmYes.mg_pActivatedFunction = &ConfirmYes;
   gm_mgConfirmYes.mg_pmgLeft = gm_mgConfirmYes.mg_pmgRight = &gm_mgConfirmNo;
   gm_mgConfirmYes.mg_iCenterI = 1;
   gm_mgConfirmYes.mg_bfsFontSize = BFS_LARGE;
 
   AddChild(&gm_mgConfirmNo);
   gm_mgConfirmNo.mg_boxOnScreen = BoxPopupNoLarge(fHeight);
-  gm_mgConfirmNo.mg_pActivatedFunction = NULL;
+  gm_mgConfirmNo.mg_pActivatedFunction = &ConfirmNo;
   gm_mgConfirmNo.mg_pmgLeft = gm_mgConfirmNo.mg_pmgRight = &gm_mgConfirmYes;
   gm_mgConfirmNo.mg_iCenterI = -1;
   gm_mgConfirmNo.mg_bfsFontSize = BFS_LARGE;
 
-  _pConfimedYes = NULL;
-  _pConfimedNo = NULL;
+  _pConfirmedYes = NULL;
+  _pConfirmedNo = NULL;
 
   ResetPopup(this, fHeight);
   SetText("");
@@ -102,3 +125,22 @@ BOOL CConfirmMenu::OnKeyDown(int iVKey) {
   }
   return CGameMenu::OnKeyDown(iVKey);
 }
+
+// [Cecil] Change to the menu
+void CConfirmMenu::ChangeTo(const CTString &strLabel, CConfirmFunc pFuncYes, CConfirmFunc pFuncNo,
+  BOOL bBigLabel, const CTString &strYes, const CTString &strNo, FLOAT fHeight)
+{
+  CConfirmMenu &gm = _pGUIM->gmConfirmMenu;
+
+  gm._pConfirmedYes = pFuncYes;
+  gm._pConfirmedNo = pFuncNo;
+  gm.SetText(strLabel, strYes, strNo);
+
+  if (bBigLabel) {
+    gm.BeLarge(fHeight);
+  } else {
+    gm.BeSmall(fHeight);
+  }
+
+  ChangeToMenu(&gm);
+};

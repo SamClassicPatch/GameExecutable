@@ -29,6 +29,9 @@ class CHighScoreMenu : public CGameMenu {
     CMGHighScore gm_mgHScore;
 
     void Initialize_t(void);
+
+    // [Cecil] Change to the menu
+    static void ChangeTo(void);
 };
 
 #endif /* include-once check. */

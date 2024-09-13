@@ -27,12 +27,13 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "CmdLine.h"
 #include "Credits.h"
 
+#include "GUI/Menus/MenuStuff.h"
+
 // [Cecil] Classics patch
 #include <CoreLib/Query/QueryManager.h>
 #include <CoreLib/Networking/Modules/VotingSystem.h>
 #include <Engine/Sound/SoundData.h>
 
-#include "Cecil/ScreenResolutions.h"
 #include "Cecil/UpdateCheck.h"
 #include "Cecil/WindowModes.h"
 
@@ -60,6 +61,7 @@ extern FLOAT sam_fPlayerOffset = 0.0f;
 extern INDEX sam_iWindowMode = 0; // [Cecil] Different window modes
 extern INDEX sam_iScreenSizeI = 1024; // current size of the window
 extern INDEX sam_iScreenSizeJ = 768;  // current size of the window
+extern CTString sam_strResolution = "1024x768"; // [Cecil] Custom resolution
 extern INDEX sam_iDisplayDepth = 0; // 0 = default, 1 = 16bit, 2 = 32bit
 extern INDEX sam_iDisplayAdapter = 0;
 extern INDEX sam_iGfxAPI = 0; // 0 = OpenGL
@@ -162,10 +164,109 @@ static void ApplyRenderingPreferences(void) {
   ApplyGLSettings(TRUE);
 }
 
-extern void ApplyVideoMode(void) {
-  StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,
-               (enum DisplayDepth)sam_iDisplayDepth, sam_iWindowMode);
+static void ApplyVideoMode(void) {
+  StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ, (DisplayDepth)sam_iDisplayDepth, sam_iWindowMode);
 }
+
+// [Cecil] FIXME: Reverting changes only seem to revert screen resolution and nothing else!
+static INDEX sam_old_iWindowMode; // [Cecil] Different window modes
+static INDEX sam_old_iScreenSizeI;
+static INDEX sam_old_iScreenSizeJ;
+static CTString sam_old_strResolution; // [Cecil] Custom resolution
+static INDEX sam_old_iDisplayDepth;
+static INDEX sam_old_iDisplayAdapter;
+static INDEX sam_old_iGfxAPI;
+static INDEX sam_old_iVideoSetup; // 0 = speed, 1 = normal, 2 = quality, 3 = custom
+
+// [Cecil] Methods for applying new video and audio options
+static void RevertVideoSettings(void) {
+  // restore previous variables
+  sam_iWindowMode = sam_old_iWindowMode;
+  sam_iScreenSizeI = sam_old_iScreenSizeI;
+  sam_iScreenSizeJ = sam_old_iScreenSizeJ;
+  sam_strResolution = sam_old_strResolution;
+  sam_iDisplayDepth = sam_old_iDisplayDepth;
+  sam_iDisplayAdapter = sam_old_iDisplayAdapter;
+  sam_iGfxAPI = sam_old_iGfxAPI;
+  sam_iVideoSetup = sam_old_iVideoSetup;
+
+  // update the video mode
+  ApplyVideoMode();
+};
+
+static void ApplyVideoOptions(void) {
+  // Remember old video settings
+  sam_old_iWindowMode = sam_iWindowMode;
+  sam_old_iScreenSizeI = sam_iScreenSizeI;
+  sam_old_iScreenSizeJ = sam_iScreenSizeJ;
+  sam_old_strResolution = sam_strResolution;
+  sam_old_iDisplayDepth = sam_iDisplayDepth;
+  sam_old_iDisplayAdapter = sam_iDisplayAdapter;
+  sam_old_iGfxAPI = sam_iGfxAPI;
+  sam_old_iVideoSetup = sam_iVideoSetup;
+
+  const GfxAPIType eAPI = NormalizeGfxAPI(sam_iGfxAPI);
+  const INDEX iAdapter = sam_iDisplayAdapter;
+  DisplayDepth eDisplayDepth = NormalizeDepth(sam_iDisplayDepth);
+  INDEX iWindowMode = Clamp(sam_iWindowMode, (INDEX)E_WM_WINDOWED, (INDEX)E_WM_FULLSCREEN);
+
+  // setup preferences
+  extern INDEX _iLastPreferences;
+  if (sam_iVideoSetup == _iDisplayPrefsLastOpt) {
+    _iLastPreferences = _iDisplayPrefsLastOpt;
+  }
+
+  // force fullscreen mode if needed
+  CDisplayAdapter &da = _pGfx->gl_gaAPI[sam_iGfxAPI].ga_adaAdapter[sam_iDisplayAdapter];
+
+  if (da.da_ulFlags & DAF_FULLSCREENONLY) {
+    iWindowMode = E_WM_FULLSCREEN;
+  }
+
+  if (da.da_ulFlags & DAF_16BITONLY) {
+    eDisplayDepth = DD_16BIT;
+  }
+
+  // force window to always be in default colors
+  if (iWindowMode != E_WM_FULLSCREEN) {
+    eDisplayDepth = DD_DEFAULT;
+  }
+
+  // [Cecil] Get resolution from the custom string
+  PIX iW, iH;
+
+  if (sam_strResolution.ScanF("%dx%d", &iW, &iH) != 2) {
+    iW = 1024;
+    iH = 768;
+  }
+
+  StartNewMode(eAPI, iAdapter, iW, iH, eDisplayDepth, iWindowMode);
+
+  // FIXUP: keyboard focus lost when going from full screen to window mode
+  // due to WM_MOUSEMOVE being sent
+  extern BOOL _bMouseUsedLast;
+  extern CMenuGadget *_pmgUnderCursor;
+  _bMouseUsedLast = FALSE;
+  _pmgUnderCursor = _pGUIM->gmConfirmMenu.gm_pmgSelectedByDefault;
+
+  CConfirmMenu::ChangeTo(LOCALIZE("KEEP THIS SETTING?"), NULL, &RevertVideoSettings, TRUE);
+};
+
+static void ApplyAudioOptions(void) {
+  if (sam_bAutoAdjustAudio) {
+    _pShell->Execute("include \"" SCRIPTS_ADDONS_DIR "SFX-AutoAdjust.ini\"");
+
+  } else {
+    switch (snd_iFormat) {
+      case 1: _pSound->SetFormat(CSoundLibrary::SF_11025_16); break;
+      case 2: _pSound->SetFormat(CSoundLibrary::SF_22050_16); break;
+      case 3: _pSound->SetFormat(CSoundLibrary::SF_44100_16); break;
+      default: _pSound->SetFormat(CSoundLibrary::SF_NONE);
+    }
+  }
+
+  snd_iFormat = _pSound->GetFormat();
+};
 
 static void BenchMark(void) {
   _pGfx->Benchmark(pvpViewPort, pdp);
@@ -466,6 +567,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _pShell->DeclareSymbol("persistent INDEX sam_iWindowMode;",   &sam_iWindowMode); // [Cecil] Window modes
   _pShell->DeclareSymbol("persistent INDEX sam_iScreenSizeI;",  &sam_iScreenSizeI);
   _pShell->DeclareSymbol("persistent INDEX sam_iScreenSizeJ;",  &sam_iScreenSizeJ);
+  _pShell->DeclareSymbol("persistent CTString sam_strResolution;", &sam_strResolution); // [Cecil] Custom resolution
   _pShell->DeclareSymbol("persistent INDEX sam_iDisplayDepth;", &sam_iDisplayDepth);
   _pShell->DeclareSymbol("persistent INDEX sam_iDisplayAdapter;", &sam_iDisplayAdapter);
   _pShell->DeclareSymbol("persistent INDEX sam_iGfxAPI;",         &sam_iGfxAPI);
@@ -499,6 +601,10 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _pShell->DeclareSymbol("user INDEX sam_bMenuHiScore;",  &sam_bMenuHiScore);
   _pShell->DeclareSymbol("user INDEX sam_bToggleConsole;",&sam_bToggleConsole);
   _pShell->DeclareSymbol("INDEX sam_iStartCredits;", &sam_iStartCredits);
+
+  // [Cecil] Custom commands for option menus
+  _pShell->DeclareSymbol("void ApplyVideoOptions(void);", &ApplyVideoOptions);
+  _pShell->DeclareSymbol("void ApplyAudioOptions(void);", &ApplyAudioOptions);
 
   // [Cecil] Load Game library as a module
   GetPluginAPI()->LoadGameLib("Data\\SeriousSam.gms");
@@ -561,8 +667,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   GetPluginAPI()->LoadPlugins(k_EPluginFlagGame);
 
   // apply application mode
-  StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,
-               (enum DisplayDepth)sam_iDisplayDepth, sam_iWindowMode);
+  ApplyVideoMode();
 
   // set default mode reporting
   if (sam_bFirstStarted) {
@@ -999,8 +1104,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
             if (sam_iWindowMode == E_WM_FULLSCREEN) {
               ShowWindow(_hwndMain, SW_SHOWNORMAL);
               // set the display mode once again
-              StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,
-                           (enum DisplayDepth)sam_iDisplayDepth, sam_iWindowMode);
+              ApplyVideoMode();
             // if not in full screen
             } else {
               // restore window
@@ -1018,8 +1122,8 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
             _bReconsiderInput = TRUE;
 
             // go to full screen
-            StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,
-                         (enum DisplayDepth)sam_iDisplayDepth, TRUE);
+            sam_iWindowMode = E_WM_FULLSCREEN;
+            ApplyVideoMode();
             ShowWindow(_hwndMain, SW_SHOWNORMAL);
             break;
         }
@@ -1028,8 +1132,8 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
       // toggle full-screen on alt-enter
       if (msg.message == WM_SYSKEYDOWN && msg.wParam == VK_RETURN && !IsIconic(_hwndMain)) {
         // [Cecil] Switch between windowed and fullscreen
-        StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ,
-                     (enum DisplayDepth)sam_iDisplayDepth, (sam_iWindowMode != E_WM_FULLSCREEN ? E_WM_FULLSCREEN : E_WM_WINDOWED));
+        sam_iWindowMode = (sam_iWindowMode != E_WM_FULLSCREEN ? E_WM_FULLSCREEN : E_WM_WINDOWED);
+        ApplyVideoMode();
       }
 
       // if application should stop
@@ -1097,7 +1201,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         }
 
       } else {
-        if (bMenuForced && bMenuToggle && pgmCurrentMenu->GetParentMenu() == NULL) {
+        if (bMenuForced && bMenuToggle && _pGUIM->aVisitedMenus.Count() == 0) {
           // delete key down message so menu would not exit because of it
           msg.message = WM_NULL;
         }
@@ -1106,7 +1210,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
       // if neither menu nor console is running
       if (!bMenuActive && (GetGameAPI()->GetConState() == CS_OFF || GetGameAPI()->GetConState() == CS_TURNINGOFF)) {
         // if current menu is not root
-        if (!IsMenusInRoot()) {
+        if (!IsMenuRoot(pgmCurrentMenu)) {
           // start current menu
           StartMenus();
         }
@@ -1528,10 +1632,14 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
   CDisplayMode dmTmp;
   dmTmp.dm_ddDepth = eColorDepth;
 
-  // [Cecil] Window mode name
-  CTString strWindowMode = _astrWindowModes[eWindowMode];
+  // [Cecil] Pick window mode name
+  const char *astrWindowModes[3] = {
+    TRANS("Window"),
+    TRANS("Borderless"),
+    TRANS("Fullscreen"),
+  };
 
-  CPrintF(LOCALIZE("  Starting display mode: %dx%dx%s (%s)\n"), pixSizeI, pixSizeJ, dmTmp.DepthString(), strWindowMode);
+  CPrintF(LOCALIZE("  Starting display mode: %dx%dx%s (%s)\n"), pixSizeI, pixSizeJ, dmTmp.DepthString(), astrWindowModes[eWindowMode]);
 
   // mark to start ignoring window size/position messages until settled down
   _bWindowChanging = TRUE;
@@ -1644,6 +1752,7 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
     sam_iWindowMode = eWindowMode; // [Cecil]
     sam_iScreenSizeI = pixSizeI;
     sam_iScreenSizeJ = pixSizeJ;
+    sam_strResolution.PrintF("%dx%d", sam_iScreenSizeI, sam_iScreenSizeJ); // [Cecil]
     sam_iDisplayDepth = eColorDepth;
     sam_iDisplayAdapter = iAdapter;
     sam_iGfxAPI = eGfxAPI;
@@ -1676,8 +1785,7 @@ const INDEX aDefaultModes[][3] = {
 const INDEX ctDefaultModes = ARRAYCOUNT(aDefaultModes);
 
 // [Cecil] Different window modes
-void StartNewMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ,
-                  enum DisplayDepth eColorDepth, INDEX iWindowMode) {
+void StartNewMode(GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ, DisplayDepth eColorDepth, INDEX iWindowMode) {
   CPutString(LOCALIZE("\n* START NEW DISPLAY MODE ...\n"));
 
   // try to set the mode

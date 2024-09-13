@@ -41,6 +41,9 @@ class CCustomizeAxisMenu : public CGameMenu {
     void EndMenu(void);
     void ObtainActionSettings(void);
     void ApplyActionSettings(void);
+
+    // [Cecil] Change to the menu
+    static void ChangeTo(void);
 };
 
 #endif /* include-once check. */

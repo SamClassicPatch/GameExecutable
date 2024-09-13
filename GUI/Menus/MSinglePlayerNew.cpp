@@ -16,7 +16,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 #include "MenuPrinting.h"
 #include "MenuStuff.h"
-#include "MenuManager.h"
 #include "MSinglePlayerNew.h"
 
 // [Cecil] Convert all characters to uppercase
@@ -32,14 +31,25 @@ static inline void ToUpper(CTString &str) {
 
 // [Cecil] Open gameplay customization config
 static void OpenGameplayCustomization(void) {
-  _pGUIM->gmVarMenu.gm_mgTitle.SetName(TRANS("GAME CUSTOMIZATION"));
-  _pGUIM->gmVarMenu.gm_fnmMenuCFG = CTString("Scripts\\ClassicsPatch\\03_GameplaySettings.cfg");
-  _pGUIM->gmVarMenu.SetParentMenu(&_pGUIM->gmSinglePlayerNewMenu);
+  static DECLARE_CTFILENAME(fnmConfig, "Scripts\\ClassicsPatch\\03_GameplaySettings.cfg");
+  CVarMenu::ChangeTo(TRANS("GAME CUSTOMIZATION"), fnmConfig);
+};
 
-  ChangeToMenu(&_pGUIM->gmVarMenu);
+// [Cecil] Start new game based on the selected difficulty button
+static void StartSinglePlayerGameFromDifficulty(void) {
+  CMGButton &mgDiff = (CMGButton &)*_pmgLastActivatedGadget;
+
+  // Use difficulties and game modes from the API
+  _pShell->SetINDEX("gam_iStartDifficulty", ClassicsModData_GetDiff(mgDiff.mg_iIndex)->m_iLevel);
+  _pShell->SetINDEX("gam_iStartMode", GetGameAPI()->GetGameMode(1));
+
+  extern void StartSinglePlayerGame(void);
+  StartSinglePlayerGame();
 };
 
 void CSinglePlayerNewMenu::Initialize_t(void) {
+  gm_strName = "SinglePlayerNew";
+
   // intialize single player new menu
   gm_mgTitle.SetName(LOCALIZE("NEW GAME"));
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
@@ -87,11 +97,16 @@ void CSinglePlayerNewMenu::Initialize_t(void) {
     ct = 1;
   }
 
+  gm_pmgSelectedByDefault = &gm_amgDifficulties[0];
+
   // Link buttons together
   BOOL bMediumFont = (ct > 9);
 
   for (INDEX iLink = 0; iLink < ct; iLink++) {
     CMGButton &mg = gm_amgDifficulties[iLink];
+
+    // [Cecil] Set selection function
+    mg.mg_pActivatedFunction = &StartSinglePlayerGameFromDifficulty;
 
     // Adjust position
     if (bMediumFont) {
@@ -137,4 +152,9 @@ void CSinglePlayerNewMenu::StartMenu(void) {
       gm_amgDifficulties[6 % ct].mg_pmgUp = &gm_amgDifficulties[4];
     }
   }
+};
+
+// [Cecil] Change to the menu
+void CSinglePlayerNewMenu::ChangeTo(void) {
+  ChangeToMenu(&_pGUIM->gmSinglePlayerNewMenu);
 };

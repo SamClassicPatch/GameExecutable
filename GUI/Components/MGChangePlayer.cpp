@@ -15,7 +15,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "StdH.h"
 #include "MGChangePlayer.h"
-#include "GUI/Menus/MenuManager.h"
 
 extern CSoundData *_psdPress;
 
@@ -28,7 +27,6 @@ void CMGChangePlayer::OnActivate(void) {
   }
 
   _pGUIM->gmPlayerProfile.gm_piCurrentPlayer = &GetGameAPI()->aiMenuLocalPlayers[mg_iLocalPlayer];
-  _pGUIM->gmPlayerProfile.SetParentMenu(&_pGUIM->gmSelectPlayersMenu);
 
   extern BOOL _bPlayerMenuFromSinglePlayer;
   _bPlayerMenuFromSinglePlayer = FALSE;

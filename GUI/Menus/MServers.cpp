@@ -17,7 +17,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuPrinting.h"
 #include "MServers.h"
 
-#include "GUI/Menus/MenuManager.h"
+// [Cecil] Classics patch
+#include <CoreLib/Query/QueryManager.h>
 
 CTString _strServerFilter[7];
 CMGButton mgServerColumn[7];
@@ -80,7 +81,35 @@ static void SwitchMasterServer(void) {
   pstrLegacyMS.GetString() = _astrServerValues[i];
 };
 
+static void RefreshServerList(void) {
+  // [Cecil] Own method
+  IMasterServer::EnumSessions(_pGUIM->gmServersMenu.m_bInternet);
+};
+
+static void SortByColumn(int i) {
+  CServersMenu &gmCurrent = _pGUIM->gmServersMenu;
+
+  if (gmCurrent.gm_mgList.mg_iSort == i) {
+    gmCurrent.gm_mgList.mg_bSortDown = !gmCurrent.gm_mgList.mg_bSortDown;
+  } else {
+    gmCurrent.gm_mgList.mg_bSortDown = FALSE;
+  }
+
+  gmCurrent.gm_mgList.mg_iSort = i;
+};
+
+static void SortByServer(void)  { SortByColumn(0); }
+static void SortByMap(void)     { SortByColumn(1); }
+static void SortByPing(void)    { SortByColumn(2); }
+static void SortByPlayers(void) { SortByColumn(3); }
+static void SortByGame(void)    { SortByColumn(4); }
+static void SortByMod(void)     { SortByColumn(5); }
+static void SortByVer(void)     { SortByColumn(6); }
+
 void CServersMenu::Initialize_t(void) {
+  gm_strName = "Servers";
+  gm_pmgSelectedByDefault = &gm_mgList;
+
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   gm_mgTitle.SetName(LOCALIZE("CHOOSE SERVER"));
   AddChild(&gm_mgTitle);
@@ -117,7 +146,7 @@ void CServersMenu::Initialize_t(void) {
   gm_mgRefresh.mg_iCenterI = -1;
   gm_mgRefresh.mg_pmgUp = &gm_mgList;
   gm_mgRefresh.mg_pmgDown = &gm_mgList;
-  gm_mgRefresh.mg_pActivatedFunction = NULL;
+  gm_mgRefresh.mg_pActivatedFunction = &RefreshServerList;
   AddChild(&gm_mgRefresh);
 
   // [Cecil] Master server switch
@@ -138,13 +167,15 @@ void CServersMenu::Initialize_t(void) {
   mgServerColumn[4].SetText(LOCALIZE("Game"));
   mgServerColumn[5].SetText(LOCALIZE("Mod"));
   mgServerColumn[6].SetText(LOCALIZE("Ver"));
-  mgServerColumn[0].mg_pActivatedFunction = NULL;
-  mgServerColumn[1].mg_pActivatedFunction = NULL;
-  mgServerColumn[2].mg_pActivatedFunction = NULL;
-  mgServerColumn[3].mg_pActivatedFunction = NULL;
-  mgServerColumn[4].mg_pActivatedFunction = NULL;
-  mgServerColumn[5].mg_pActivatedFunction = NULL;
-  mgServerColumn[6].mg_pActivatedFunction = NULL;
+
+  mgServerColumn[0].mg_pActivatedFunction = &SortByServer;
+  mgServerColumn[1].mg_pActivatedFunction = &SortByMap;
+  mgServerColumn[2].mg_pActivatedFunction = &SortByPing;
+  mgServerColumn[3].mg_pActivatedFunction = &SortByPlayers;
+  mgServerColumn[4].mg_pActivatedFunction = &SortByGame;
+  mgServerColumn[5].mg_pActivatedFunction = &SortByMod;
+  mgServerColumn[6].mg_pActivatedFunction = &SortByVer;
+
   mgServerColumn[0].mg_strTip = LOCALIZE("sort by server");
   mgServerColumn[1].mg_strTip = LOCALIZE("sort by map");
   mgServerColumn[2].mg_strTip = LOCALIZE("sort by ping");
@@ -152,6 +183,7 @@ void CServersMenu::Initialize_t(void) {
   mgServerColumn[4].mg_strTip = LOCALIZE("sort by game");
   mgServerColumn[5].mg_strTip = LOCALIZE("sort by mod");
   mgServerColumn[6].mg_strTip = LOCALIZE("sort by version");
+
   mgServerFilter[0].mg_strTip = LOCALIZE("filter by server");
   mgServerFilter[1].mg_strTip = LOCALIZE("filter by map");
   mgServerFilter[2].mg_strTip = LOCALIZE("filter by ping (ie. <200)");
@@ -162,7 +194,6 @@ void CServersMenu::Initialize_t(void) {
 }
 
 void CServersMenu::StartMenu(void) {
-  extern void RefreshServerList(void);
   RefreshServerList();
 
   // [Cecil] Select current master server name
@@ -183,3 +214,8 @@ void CServersMenu::Think(void) {
   }
   _pNetwork->ga_bEnumerationChange = FALSE;
 }
+
+// [Cecil] Change to the menu
+void CServersMenu::ChangeTo(void) {
+  ChangeToMenu(&_pGUIM->gmServersMenu);
+};

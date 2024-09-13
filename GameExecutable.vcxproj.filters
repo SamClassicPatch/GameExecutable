@@ -132,9 +132,6 @@
     <ClCompile Include="GUI\Menus\MLoadSave.cpp">
       <Filter>Source Files\GUI\Menus</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\Menus\MVideoOptions.cpp">
-      <Filter>Source Files\GUI\Menus</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\Menus\MSelectPlayers.cpp">
       <Filter>Source Files\GUI\Menus</Filter>
     </ClCompile>
@@ -148,9 +145,6 @@
       <Filter>Source Files\GUI\Menus</Filter>
     </ClCompile>
     <ClCompile Include="GUI\Menus\MControls.cpp">
-      <Filter>Source Files\GUI\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Menus\MAudioOptions.cpp">
       <Filter>Source Files\GUI\Menus</Filter>
     </ClCompile>
     <ClCompile Include="GUI\Menus\MCustomizeKeyboard.cpp">
@@ -197,18 +191,6 @@
     </ClCompile>
     <ClCompile Include="GUI\Menus\MenuManager.cpp">
       <Filter>Source Files\GUI\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Menus\MenuStarters.cpp">
-      <Filter>Source Files\GUI\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Menus\MenuStartersAF.cpp">
-      <Filter>Source Files\GUI\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Menus\MenuActions.cpp">
-      <Filter>Source Files\GUI\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="Cecil\ScreenResolutions.cpp">
-      <Filter>Source Files\Cecil</Filter>
     </ClCompile>
     <ClCompile Include="Cecil\WindowModes.cpp">
       <Filter>Source Files\Cecil</Filter>
@@ -380,13 +362,7 @@
     <ClInclude Include="GUI\Menus\MConfirm.h">
       <Filter>Header Files\GUI headers\Menus headers</Filter>
     </ClInclude>
-    <ClInclude Include="GUI\Menus\MAudioOptions.h">
-      <Filter>Header Files\GUI headers\Menus headers</Filter>
-    </ClInclude>
     <ClInclude Include="GUI\Menus\MenuStuff.h">
-      <Filter>Header Files\GUI headers\Menus headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Menus\MVideoOptions.h">
       <Filter>Header Files\GUI headers\Menus headers</Filter>
     </ClInclude>
     <ClInclude Include="GUI\Menus\Menu.h">
@@ -406,18 +382,6 @@
     </ClInclude>
     <ClInclude Include="GUI\Menus\MenuManager.h">
       <Filter>Header Files\GUI headers\Menus headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Menus\MenuStarters.h">
-      <Filter>Header Files\GUI headers\Menus headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Menus\MenuStartersAF.h">
-      <Filter>Header Files\GUI headers\Menus headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Menus\MenuActions.h">
-      <Filter>Header Files\GUI headers\Menus headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Cecil\ScreenResolutions.h">
-      <Filter>Header Files\Cecil headers</Filter>
     </ClInclude>
     <ClInclude Include="Cecil\WindowModes.h">
       <Filter>Header Files\Cecil headers</Filter>

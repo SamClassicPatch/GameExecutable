@@ -19,7 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "ArrowDir.h"
 
 // [Cecil] Classics patch
-#include "Cecil/ScreenResolutions.h"
+#include "Cecil/WindowModes.h"
 
 static const FLOAT _fBigStartJ = 0.25f;
 static const FLOAT _fBigSizeJ = 0.066f;

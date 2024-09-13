@@ -401,6 +401,24 @@ void CMGServerList::OnMouseOver(PIX pixI, PIX pixJ) {
   }
 }
 
+extern void JoinNetworkGame(void);
+
+static void StartSelectPlayersMenuFromServers(void) {
+  CSelectPlayersMenu &gmCurrent = _pGUIM->gmSelectPlayersMenu;
+
+  gmCurrent.gm_ulConfigFlags = PLCF_OBSERVING | PLCF_PASSWORD;
+  gmCurrent.gm_mgStart.mg_pActivatedFunction = &JoinNetworkGame;
+  ChangeToMenu(&gmCurrent);
+
+  /*if (sam_strNetworkSettings == "")*/ {
+    extern void StartNetworkSettingsMenu(void);
+    StartNetworkSettingsMenu();
+
+    _pGUIM->gmLoadSaveMenu.gm_bNoEscape = TRUE;
+    _pGUIM->gmLoadSaveMenu.gm_pgmNextMenu = &gmCurrent;
+  }
+};
+
 BOOL CMGServerList::OnKeyDown(int iVKey) {
   switch (iVKey) {
     case VK_UP:
@@ -479,7 +497,6 @@ BOOL CMGServerList::OnKeyDown(int iVKey) {
             itns->ns_strAddress.ScanF("%200[^:]:%d", &strAddress, &iPort);
             GetGameAPI()->JoinAddress() = strAddress;
             _pShell->SetINDEX("net_iPort", iPort);
-            extern void StartSelectPlayersMenuFromServers(void);
             StartSelectPlayersMenuFromServers();
             return TRUE;
           }

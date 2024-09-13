@@ -19,6 +19,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MLoadSave.h"
 
 void CLoadSaveMenu::Initialize_t(void) {
+  gm_strName = "LoadSave";
+  gm_pmgSelectedByDefault = &gm_amgButton[0];
   gm_pgmNextMenu = NULL;
 
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
