@@ -56,6 +56,11 @@ void TranslateLine(CTString &str) {
   if (str.RemovePrefix(CTString("TT") + "RS")) {
     str.TrimSpacesLeft();
     str = TRANSV(str);
+
+  // [Cecil] Translate already officially localized string (ignored by Depend utility compared to "TTRS")
+  } else if (str.RemovePrefix("PATCHLOCALIZE")) {
+    str.TrimSpacesLeft();
+    str = TRANSV(str);
   }
 
   str.TrimSpacesLeft();
