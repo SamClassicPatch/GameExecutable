@@ -464,20 +464,25 @@ static void StartConfigParsing(CTStream &strm) {
 void LoadVarSettings(const CTFileName &fnmCfg) {
   FlushVarSettings(FALSE);
 
+  CTFileStream strm;
+
   try {
-    CTFileStream strm;
     strm.Open_t(fnmCfg);
-    _ctLines = 0;
-    _strFile = fnmCfg;
-
-    // [Cecil] Start parsing the option config
-    _cOpenedConfigs.Clear();
-    _cOpenedConfigs.Add(&strm);
-
-    StartConfigParsing(strm);
-
   } catch (char *strError) {
-    CPrintF("%s (%d) : %s\n", (const char *)_strFile, _ctLines, strError);
+    FatalError("%s (%d) : %s", _strFile.str_String, _ctLines, strError);
+  }
+
+  _ctLines = 0;
+  _strFile = fnmCfg;
+
+  // [Cecil] Start parsing the option config
+  _cOpenedConfigs.Clear();
+  _cOpenedConfigs.Add(&strm);
+
+  try {
+    StartConfigParsing(strm);
+  } catch (char *strError) {
+    CPrintF("%s (%d) : %s\n", _strFile.str_String, _ctLines, strError);
   }
 
   // [Cecil] For each tab
