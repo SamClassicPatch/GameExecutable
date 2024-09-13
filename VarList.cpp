@@ -139,6 +139,8 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
     // [Cecil] Schedule an inline command instead of a script
     } else if (strLine.RemovePrefix("Command:")) {
       CheckPVS_t(pvs);
+      strLine.TrimSpacesLeft();
+      strLine.TrimSpacesRight();
       pvs->vs_strSchedule = strLine;
 
     } else if (strLine.RemovePrefix("Tip:")) {
