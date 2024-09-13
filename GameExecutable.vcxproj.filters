@@ -180,9 +180,6 @@
     <ClCompile Include="GUI\Menus\MLevels.cpp">
       <Filter>Source Files\GUI\Menus</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\Menus\MDisabled.cpp">
-      <Filter>Source Files\GUI\Menus</Filter>
-    </ClCompile>
     <ClCompile Include="GUI\Menus\MSinglePlayerNew.cpp">
       <Filter>Source Files\GUI\Menus</Filter>
     </ClCompile>
@@ -330,9 +327,6 @@
       <Filter>Header Files\GUI headers\Menus headers</Filter>
     </ClInclude>
     <ClInclude Include="GUI\Menus\MCustomizeKeyboard.h">
-      <Filter>Header Files\GUI headers\Menus headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Menus\MDisabled.h">
       <Filter>Header Files\GUI headers\Menus headers</Filter>
     </ClInclude>
     <ClInclude Include="GUI\Menus\MHighScore.h">

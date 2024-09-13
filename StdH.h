@@ -23,6 +23,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // Main game headers
 #include "SeriousSam.h"
 #include "GUI/Menus/Menu.h"
+#include "GUI/Menus/MenuManager.h"
 
 // [Cecil] Extra functionality
 #include "Cecil/CecilExtensions.h"

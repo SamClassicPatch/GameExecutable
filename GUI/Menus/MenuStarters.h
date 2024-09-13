@@ -81,6 +81,5 @@ void StartPatchCreditsMenu(void); // [Cecil]
 void StartNetworkSettingsMenu(void);
 void StartPatchOptionsMenu(void); // [Cecil]
 void StartSinglePlayerMenu(void);
-void DisabledFunction(void);
 
 #endif /* include-once check. */

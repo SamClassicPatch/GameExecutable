@@ -25,7 +25,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MCustomizeAxis.h"
 #include "MCustomizeKeyboard.h"
 #include "MCredits.h"
-#include "MDisabled.h"
 #include "MHighScore.h"
 #include "MInGame.h"
 #include "MLevels.h"
@@ -57,7 +56,6 @@ class CMenuManager {
     CSinglePlayerMenu gmSinglePlayerMenu;
     CLevelCategoriesMenu gmLevelCategories; // [Cecil]
     CSinglePlayerNewMenu gmSinglePlayerNewMenu;
-    CDisabledMenu gmDisabledFunction;
     CLevelsMenu gmLevelsMenu;
     CVarMenu gmVarMenu;
     CPlayerProfileMenu gmPlayerProfile;
