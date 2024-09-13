@@ -68,6 +68,8 @@ BOOL CMGVarButton::OnKeyDown(int iVKey)
     return CMGEdit::OnKeyDown(iVKey);
   }
 
+  CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
+
   // [Cecil] Toggleable setting
   if (mg_pvsVar->vs_eType == CVarSetting::E_TOGGLE)
   {
@@ -101,7 +103,6 @@ BOOL CMGVarButton::OnKeyDown(int iVKey)
       // Copy the string from the setting
       const CTString strConfig = mg_pvsVar->vs_strSchedule;
 
-      CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
       FlushVarSettings(FALSE);
       gmCurrent.EndMenu();
 
@@ -115,8 +116,8 @@ BOOL CMGVarButton::OnKeyDown(int iVKey)
   }
 
   if (iVKey == VK_RETURN) {
-    FlushVarSettings(TRUE);
-    MenuGoToParent();
+    // [Cecil] Emulate the action of clicking on "Apply"
+    gmCurrent.gm_mgApply.OnActivate();
     return TRUE;
   }
 
