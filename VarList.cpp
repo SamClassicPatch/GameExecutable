@@ -127,6 +127,9 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
 
       } else if (strLine == "Textbox") {
         pvs->vs_eType = CVarSetting::E_TEXTBOX;
+
+      } else if (strLine == "Button") {
+        pvs->vs_eType = CVarSetting::E_BUTTON;
       }
 
     } else if (strLine.RemovePrefix("Schedule:")) {
@@ -376,28 +379,35 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
     } else if (strLine.RemovePrefix("Include:")) {
       FixupFileName_t(strLine);
 
-      CTFileStream strmInclude;
-      strmInclude.Open_t(strLine);
+      // Save it for the button gadget
+      if (pvs->vs_eType == CVarSetting::E_BUTTON) {
+        pvs->vs_strSchedule = strLine;
 
-      FOREACHINDYNAMICCONTAINER(_cOpenedConfigs, CTFileStream, itstrm) {
-        // This config is already opened
-        if (itstrm->GetDescription() == strmInclude.GetDescription()) {
-          ThrowF_t(TRANS("Config '%s' is included recursively"), strLine.str_String);
+      // Include contents of it directly
+      } else {
+        CTFileStream strmInclude;
+        strmInclude.Open_t(strLine);
+
+        FOREACHINDYNAMICCONTAINER(_cOpenedConfigs, CTFileStream, itstrm) {
+          // This config is already opened
+          if (itstrm->GetDescription() == strmInclude.GetDescription()) {
+            ThrowF_t(TRANS("Config '%s' is included recursively"), strLine.str_String);
+          }
         }
+
+        // Start new lines and file
+        const INDEX ctRestore = _ctLines;
+        const CTString strRestore = _strFile;
+        _ctLines = 0;
+        _strFile = strLine;
+
+        // Parse included config
+        ParseCFG_t(strmInclude, lhAll);
+
+        // Restore lines and file
+        _ctLines = ctRestore;
+        _strFile = strRestore;
       }
-
-      // Start new lines and file
-      const INDEX ctRestore = _ctLines;
-      const CTString strRestore = _strFile;
-      _ctLines = 0;
-      _strFile = strLine;
-
-      // Parse included config
-      ParseCFG_t(strmInclude, lhAll);
-
-      // Restore lines and file
-      _ctLines = ctRestore;
-      _strFile = strRestore;
 
     } else {
       ThrowF_t(LOCALIZE("unknown keyword"));
@@ -491,8 +501,8 @@ void LoadVarSettings(const CTFileName &fnmCfg) {
     FOREACHINLIST(CVarSetting, vs_lnNode, _aTabs[iTab].lhVars, itvs) {
       CVarSetting &vs = *itvs;
 
-      // Skip if couldn't validate or it's a separator
-      if (!vs.Validate() || vs.vs_eType == CVarSetting::E_SEPARATOR) {
+      // Skip if couldn't validate or it's a separator or a button
+      if (!vs.Validate() || vs.vs_eType == CVarSetting::E_SEPARATOR || vs.vs_eType == CVarSetting::E_BUTTON) {
         continue;
       }
 
@@ -657,6 +667,7 @@ BOOL CVarSetting::Validate(void) {
   switch (vs_eType) {
     case E_SEPARATOR:
     case E_TEXTBOX:
+    case E_BUTTON:
       return TRUE;
   }
 

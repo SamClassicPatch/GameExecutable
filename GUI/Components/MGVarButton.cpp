@@ -93,6 +93,25 @@ BOOL CMGVarButton::OnKeyDown(int iVKey)
         return TRUE;
       }
     }
+
+  // [Cecil] Button setting
+  } else if (mg_pvsVar->vs_eType == CVarSetting::E_BUTTON) {
+    // Enter another option config on click
+    if (iVKey == VK_RETURN || iVKey == VK_LBUTTON) {
+      // Copy the string from the setting
+      const CTString strConfig = mg_pvsVar->vs_strSchedule;
+
+      CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
+      FlushVarSettings(FALSE);
+      gmCurrent.EndMenu();
+
+      gmCurrent.gm_fnmMenuCFG = strConfig;
+      gmCurrent.StartMenu();
+
+      extern CSoundData *_psdPress;
+      PlayMenuSound(_psdPress);
+      return TRUE;
+    }
   }
 
   if (iVKey == VK_RETURN) {
@@ -282,6 +301,11 @@ void CMGVarButton::Render(CDrawPort *pdp) {
     // Textbox
     case CVarSetting::E_TEXTBOX: {
       CMGEdit::Render(pdp);
+    } break;
+
+    // Button
+    case CVarSetting::E_BUTTON: {
+      pdp->PutTextC(mg_pvsVar->vs_strName, pixIC, pixJ, GetCurrentColor());
     } break;
   }
 }

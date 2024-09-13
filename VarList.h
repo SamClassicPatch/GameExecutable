@@ -26,6 +26,7 @@ class CVarSetting {
       E_SEPARATOR, // Equivalent of vanilla 'vs_bSeparator'
       E_TOGGLE,
       E_TEXTBOX,
+      E_BUTTON,
     };
 
     // [Cecil] Slider types
