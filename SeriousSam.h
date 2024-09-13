@@ -23,12 +23,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 extern HINSTANCE _hInstance;
 extern BOOL _bRunning, _bQuitScreen;
 
-extern INDEX sam_iWindowMode; // [Cecil] Different window modes
-extern INDEX sam_iScreenSizeI;
-extern INDEX sam_iScreenSizeJ;
-extern CTString sam_strResolution; // [Cecil] Custom resolution
-extern INDEX sam_iDisplayDepth;
-extern INDEX sam_iDisplayAdapter;
 extern INDEX sam_iGfxAPI;
 // [Cecil] 0 - speed; 1 - normal; 2 - quality; 3 - extreme; >4 - custom
 extern INDEX sam_iVideoSetup;

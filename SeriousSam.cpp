@@ -58,12 +58,19 @@ static INDEX sam_bWideScreen = FALSE; // [Cecil] Dummy; replaced with 'sam_bAdju
 extern FLOAT sam_fPlayerOffset = 0.0f;
 
 // Display mode settings
-extern INDEX sam_iWindowMode = 0; // [Cecil] Different window modes
-extern INDEX sam_iScreenSizeI = 1024; // current size of the window
-extern INDEX sam_iScreenSizeJ = 768;  // current size of the window
-extern CTString sam_strResolution = "1024x768"; // [Cecil] Custom resolution
-extern INDEX sam_iDisplayDepth = 0; // 0 = default, 1 = 16bit, 2 = 32bit
-extern INDEX sam_iDisplayAdapter = 0;
+static INDEX sam_iWindowMode = 0; // [Cecil] Different window modes
+static INDEX sam_iScreenSizeI = 1024; // current size of the window
+static INDEX sam_iScreenSizeJ = 768;  // current size of the window
+static INDEX sam_iDisplayDepth = 0; // 0 = default, 1 = 16bit, 2 = 32bit
+static INDEX sam_iDisplayAdapter = 0;
+
+// [Cecil] Variables for setup via config
+static INDEX sam_iConfigWindowMode = 0;
+static CTString sam_strConfigResolution = "1024x768";
+static INDEX sam_iConfigDisplayDepth = 0;
+static INDEX sam_iConfigDisplayAdapter = 0;
+static INDEX sam_iConfigGfxAPI = 0;
+
 extern INDEX sam_iGfxAPI = 0; // 0 = OpenGL
 extern INDEX sam_bFirstStarted = FALSE;
 extern FLOAT sam_tmDisplayModeReport = 5.0f;
@@ -168,15 +175,13 @@ static void ApplyVideoMode(void) {
   StartNewMode((GfxAPIType)sam_iGfxAPI, sam_iDisplayAdapter, sam_iScreenSizeI, sam_iScreenSizeJ, (DisplayDepth)sam_iDisplayDepth, sam_iWindowMode);
 }
 
-// [Cecil] FIXME: Reverting changes only seem to revert screen resolution and nothing else!
 static INDEX sam_old_iWindowMode; // [Cecil] Different window modes
 static INDEX sam_old_iScreenSizeI;
 static INDEX sam_old_iScreenSizeJ;
-static CTString sam_old_strResolution; // [Cecil] Custom resolution
 static INDEX sam_old_iDisplayDepth;
 static INDEX sam_old_iDisplayAdapter;
 static INDEX sam_old_iGfxAPI;
-static INDEX sam_old_iVideoSetup; // 0 = speed, 1 = normal, 2 = quality, 3 = custom
+static INDEX sam_old_iVideoSetup;
 
 // [Cecil] Methods for applying new video and audio options
 static void RevertVideoSettings(void) {
@@ -184,7 +189,6 @@ static void RevertVideoSettings(void) {
   sam_iWindowMode = sam_old_iWindowMode;
   sam_iScreenSizeI = sam_old_iScreenSizeI;
   sam_iScreenSizeJ = sam_old_iScreenSizeJ;
-  sam_strResolution = sam_old_strResolution;
   sam_iDisplayDepth = sam_old_iDisplayDepth;
   sam_iDisplayAdapter = sam_old_iDisplayAdapter;
   sam_iGfxAPI = sam_old_iGfxAPI;
@@ -199,25 +203,26 @@ static void ApplyVideoOptions(void) {
   sam_old_iWindowMode = sam_iWindowMode;
   sam_old_iScreenSizeI = sam_iScreenSizeI;
   sam_old_iScreenSizeJ = sam_iScreenSizeJ;
-  sam_old_strResolution = sam_strResolution;
   sam_old_iDisplayDepth = sam_iDisplayDepth;
   sam_old_iDisplayAdapter = sam_iDisplayAdapter;
   sam_old_iGfxAPI = sam_iGfxAPI;
   sam_old_iVideoSetup = sam_iVideoSetup;
 
-  const GfxAPIType eAPI = NormalizeGfxAPI(sam_iGfxAPI);
-  const INDEX iAdapter = sam_iDisplayAdapter;
-  DisplayDepth eDisplayDepth = NormalizeDepth(sam_iDisplayDepth);
-  INDEX iWindowMode = Clamp(sam_iWindowMode, (INDEX)E_WM_WINDOWED, (INDEX)E_WM_FULLSCREEN);
+  // [Cecil] Use config values
+  const GfxAPIType eAPI = NormalizeGfxAPI(sam_iConfigGfxAPI);
+  const INDEX iAdapter = sam_iConfigDisplayAdapter;
+  DisplayDepth eDisplayDepth = NormalizeDepth(sam_iConfigDisplayDepth);
+  INDEX iWindowMode = Clamp(sam_iConfigWindowMode, (INDEX)E_WM_WINDOWED, (INDEX)E_WM_FULLSCREEN);
 
-  // setup preferences
+  // [Cecil] Keep custom preferences
   extern INDEX _iLastPreferences;
-  if (sam_iVideoSetup == _iDisplayPrefsLastOpt) {
-    _iLastPreferences = _iDisplayPrefsLastOpt;
+
+  if (sam_iVideoSetup < 0 || sam_iVideoSetup >= _iDisplayPrefsLastOpt) {
+    _iLastPreferences = sam_iVideoSetup;
   }
 
   // force fullscreen mode if needed
-  CDisplayAdapter &da = _pGfx->gl_gaAPI[sam_iGfxAPI].ga_adaAdapter[sam_iDisplayAdapter];
+  CDisplayAdapter &da = _pGfx->gl_gaAPI[eAPI].ga_adaAdapter[iAdapter];
 
   if (da.da_ulFlags & DAF_FULLSCREENONLY) {
     iWindowMode = E_WM_FULLSCREEN;
@@ -235,7 +240,7 @@ static void ApplyVideoOptions(void) {
   // [Cecil] Get resolution from the custom string
   PIX iW, iH;
 
-  if (sam_strResolution.ScanF("%dx%d", &iW, &iH) != 2) {
+  if (sam_strConfigResolution.ScanF("%dx%d", &iW, &iH) != 2) {
     iW = 1024;
     iH = 768;
   }
@@ -567,9 +572,16 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
   _pShell->DeclareSymbol("persistent INDEX sam_iWindowMode;",   &sam_iWindowMode); // [Cecil] Window modes
   _pShell->DeclareSymbol("persistent INDEX sam_iScreenSizeI;",  &sam_iScreenSizeI);
   _pShell->DeclareSymbol("persistent INDEX sam_iScreenSizeJ;",  &sam_iScreenSizeJ);
-  _pShell->DeclareSymbol("persistent CTString sam_strResolution;", &sam_strResolution); // [Cecil] Custom resolution
   _pShell->DeclareSymbol("persistent INDEX sam_iDisplayDepth;", &sam_iDisplayDepth);
   _pShell->DeclareSymbol("persistent INDEX sam_iDisplayAdapter;", &sam_iDisplayAdapter);
+
+  // [Cecil] Variables for setup via config
+  _pShell->DeclareSymbol("INDEX sam_iConfigWindowMode;",      &sam_iConfigWindowMode);
+  _pShell->DeclareSymbol("CTString sam_strConfigResolution;", &sam_strConfigResolution);
+  _pShell->DeclareSymbol("INDEX sam_iConfigDisplayDepth;",    &sam_iConfigDisplayDepth);
+  _pShell->DeclareSymbol("INDEX sam_iConfigDisplayAdapter;",  &sam_iConfigDisplayAdapter);
+  _pShell->DeclareSymbol("INDEX sam_iConfigGfxAPI;",          &sam_iConfigGfxAPI);
+
   _pShell->DeclareSymbol("persistent INDEX sam_iGfxAPI;",         &sam_iGfxAPI);
   _pShell->DeclareSymbol("persistent INDEX sam_bFirstStarted;", &sam_bFirstStarted);
   _pShell->DeclareSymbol("persistent INDEX sam_bAutoAdjustAudio;", &sam_bAutoAdjustAudio);
@@ -1752,10 +1764,16 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
     sam_iWindowMode = eWindowMode; // [Cecil]
     sam_iScreenSizeI = pixSizeI;
     sam_iScreenSizeJ = pixSizeJ;
-    sam_strResolution.PrintF("%dx%d", sam_iScreenSizeI, sam_iScreenSizeJ); // [Cecil]
     sam_iDisplayDepth = eColorDepth;
     sam_iDisplayAdapter = iAdapter;
     sam_iGfxAPI = eGfxAPI;
+
+    // [Cecil] Change config settings
+    sam_iConfigWindowMode = sam_iWindowMode;
+    sam_strConfigResolution.PrintF("%dx%d", sam_iScreenSizeI, sam_iScreenSizeJ);
+    sam_iConfigDisplayDepth = sam_iDisplayDepth;
+    sam_iConfigDisplayAdapter = sam_iDisplayAdapter;
+    sam_iConfigGfxAPI = sam_iGfxAPI;
 
     // report success
     return TRUE;
