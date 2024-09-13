@@ -28,11 +28,19 @@ class CVarSetting {
       E_TEXTBOX,
     };
 
+    // [Cecil] Slider types
+    enum ESliderType {
+      SLD_NOSLIDER = 0,
+      SLD_FILL     = 1,
+      SLD_RATIO    = 2,
+      SLD_BIGFILL  = 3,
+    };
+
   public:
     CListNode vs_lnNode;
     ESettingType vs_eType; // [Cecil] Setting type
     BOOL vs_bCanChangeInGame;
-    INDEX vs_iSlider;
+    ESliderType vs_eSlider;
     CTString vs_strName;
     CTString vs_strTip;
     CTString vs_strVar;

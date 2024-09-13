@@ -168,11 +168,17 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
       strLine.TrimSpacesRight();
 
       if (strLine == "Fill") {
-        pvs->vs_iSlider = 1;
+        pvs->vs_eSlider = CVarSetting::SLD_FILL;
+
       } else if (strLine == "Ratio") {
-        pvs->vs_iSlider = 2;
+        pvs->vs_eSlider = CVarSetting::SLD_RATIO;
+
+      // [Cecil] Big fill bar
+      } else if (strLine == "BigFill") {
+        pvs->vs_eSlider = CVarSetting::SLD_BIGFILL;
+
       } else {
-        pvs->vs_iSlider = 0;
+        pvs->vs_eSlider = CVarSetting::SLD_NOSLIDER;
       }
 
     } else if (strLine.RemovePrefix("InGame:")) {
@@ -576,7 +582,7 @@ void FlushVarSettings(BOOL bApply) {
   }
 
   // [Cecil] Clear tabs
-  _aTabs.Clear();
+  _aTabs.PopAll();
 
   for (INDEX i = 0; i < astrScheduled.Count(); i++) {
     _pShell->Execute(astrScheduled[i]);
@@ -594,7 +600,7 @@ void CVarSetting::Clear() {
   vs_ctValues = 0;
   vs_eType = E_TOGGLE; // [Cecil] Toggleable type by default
   vs_bCanChangeInGame = TRUE;
-  vs_iSlider = 0;
+  vs_eSlider = SLD_NOSLIDER;
   vs_strName.Clear();
   vs_strTip.Clear();
   vs_strVar.Clear();
@@ -632,7 +638,7 @@ CVarSetting::CVarSetting(const CVarSetting &vsOther) {
 
   vs_eType            = vsOther.vs_eType;
   vs_bCanChangeInGame = vsOther.vs_bCanChangeInGame;
-  vs_iSlider          = vsOther.vs_iSlider;
+  vs_eSlider          = vsOther.vs_eSlider;
   vs_strName          = vsOther.vs_strName;
   vs_strTip           = vsOther.vs_strTip;
   vs_strVar           = vsOther.vs_strVar;
