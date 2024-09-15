@@ -37,12 +37,12 @@ class CMGTrigger : public CMenuGadget {
     CMGTrigger(void);
 
     void ApplyCurrentSelection(void);
-    void OnSetNextInList(int iVKey);
+    void OnSetNextInList(PressedMenuButton pmb);
     void (*mg_pPreTriggerChange)(INDEX iCurrentlySelected);
     void (*mg_pOnTriggerChange)(INDEX iCurrentlySelected);
 
     // return TRUE if handled
-    BOOL OnKeyDown(int iVKey);
+    BOOL OnKeyDown(PressedMenuButton pmb);
     void Render(CDrawPort *pdp);
 
     // [Cecil] Get node name

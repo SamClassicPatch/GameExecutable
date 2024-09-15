@@ -369,9 +369,10 @@ void MenuGoToParent(void) {
   }
 }
 
-void MenuOnKeyDown(int iVKey) {
+void MenuOnKeyDown(PressedMenuButton pmb) {
   // check if mouse buttons used
-  _bMouseUsedLast = (iVKey == VK_LBUTTON || iVKey == VK_RBUTTON || iVKey == VK_MBUTTON || iVKey == 10 || iVKey == 11);
+  _bMouseUsedLast = (pmb.iKey == VK_LBUTTON || pmb.iKey == VK_RBUTTON || pmb.iKey == VK_MBUTTON
+    || pmb.iKey == MOUSEWHEEL_DN || pmb.iKey == MOUSEWHEEL_UP);
 
   // ignore mouse when editing
   if (_bEditingString && _bMouseUsedLast) {
@@ -385,13 +386,13 @@ void MenuOnKeyDown(int iVKey) {
   // if not a mouse button, or mouse is over some gadget
   if (!_bMouseUsedLast || _pmgUnderCursor != NULL) {
     // ask current menu to handle the key
-    bHandled = pgmCurrentMenu->OnKeyDown(iVKey);
+    bHandled = pgmCurrentMenu->OnKeyDown(pmb);
   }
 
   // if not handled
   if (!bHandled) {
     // if escape or right mouse pressed
-    if (iVKey == VK_ESCAPE || iVKey == VK_RBUTTON) {
+    if (pmb.Back()) {
       if (pgmCurrentMenu == &_pGUIM->gmLoadSaveMenu && _pGUIM->gmLoadSaveMenu.gm_bNoEscape) {
         return;
       }
@@ -402,12 +403,12 @@ void MenuOnKeyDown(int iVKey) {
 }
 
 // [Cecil] Holding any mouse button
-void MenuOnMouseHold(int iVKey) {
+void MenuOnMouseHold(PressedMenuButton pmb) {
   // Only accept mouse buttons
-  ASSERT(iVKey == VK_LBUTTON || iVKey == VK_RBUTTON || iVKey == VK_MBUTTON);
+  ASSERT(pmb.iKey == VK_LBUTTON || pmb.iKey == VK_RBUTTON || pmb.iKey == VK_MBUTTON);
 
   if (_pmgUnderCursor != NULL) {
-    pgmCurrentMenu->OnMouseHeld(iVKey);
+    pgmCurrentMenu->OnMouseHeld(pmb);
   }
 };
 

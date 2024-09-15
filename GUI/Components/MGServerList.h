@@ -53,7 +53,7 @@ class CMGServerList : public CMGButton {
     BOOL mg_bSortDown; // sort in reverse order
 
     CMGServerList();
-    BOOL OnKeyDown(int iVKey);
+    BOOL OnKeyDown(PressedMenuButton pmb);
     PIXaabbox2D GetScrollBarFullBox(void);
     PIXaabbox2D GetScrollBarHandleBox(void);
     void OnSetFocus(void);

@@ -29,7 +29,7 @@ class CMGEdit : public CMGButton {
     CMGEdit(void);
 
     // return TRUE if handled
-    BOOL OnKeyDown(int iVKey);
+    BOOL OnKeyDown(PressedMenuButton pmb);
     BOOL OnChar(MSG msg);
     void Clear(void);
     void OnActivate(void);

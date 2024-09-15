@@ -38,6 +38,10 @@ extern PIX2D _vpixScreenRes;
   #define SCRIPTS_ADDONS_DIR "Scripts\\AddonsSE\\"
 #endif
 
+// [Cecil] Mouse wheel directions as buttons
+#define MOUSEWHEEL_DN 10
+#define MOUSEWHEEL_UP 11
+
 // [Cecil] Declared here to be widely accessible
 void RunBrowser(const char *strUrl, BOOL bUseSteamOverlay = FALSE);
 

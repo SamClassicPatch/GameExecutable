@@ -1294,30 +1294,30 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
       if (bMenuActive && !_pInput->IsInputEnabled()) {
         // [Cecil] Execute action on mouse button hold
         if (_bLHeld) {
-          MenuOnMouseHold(VK_LBUTTON);
+          MenuOnMouseHold(PressedMenuButton(VK_LBUTTON, -1));
         } else if (_bRHeld) {
-          MenuOnMouseHold(VK_RBUTTON);
+          MenuOnMouseHold(PressedMenuButton(VK_RBUTTON, -1));
         } else if (_bMHeld) {
-          MenuOnMouseHold(VK_MBUTTON);
+          MenuOnMouseHold(PressedMenuButton(VK_MBUTTON, -1));
         }
 
         // pass keyboard/mouse messages to menu
         if (msg.message == WM_KEYDOWN) {
-          MenuOnKeyDown(msg.wParam);
+          MenuOnKeyDown(PressedMenuButton(msg.wParam, -1));
 
         } else if (msg.message == WM_LBUTTONDOWN || msg.message == WM_LBUTTONDBLCLK) {
           // [Cecil] Hold LMB
           _bLHeld = TRUE;
           SetCapture(_hwndMain);
 
-          MenuOnKeyDown(VK_LBUTTON);
+          MenuOnKeyDown(PressedMenuButton(VK_LBUTTON, -1));
 
         } else if (msg.message == WM_RBUTTONDOWN || msg.message == WM_RBUTTONDBLCLK) {
           // [Cecil] Hold RMB
           _bRHeld = TRUE;
           SetCapture(_hwndMain);
 
-          MenuOnKeyDown(VK_RBUTTON);
+          MenuOnKeyDown(PressedMenuButton(VK_RBUTTON, -1));
 
         // [Cecil] Press MMB
         } else if (msg.message == WM_MBUTTONDOWN || msg.message == WM_MBUTTONDBLCLK) {
@@ -1325,7 +1325,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
           _bMHeld = TRUE;
           SetCapture(_hwndMain);
 
-          MenuOnKeyDown(VK_MBUTTON);
+          MenuOnKeyDown(PressedMenuButton(VK_MBUTTON, -1));
 
         // [Cecil] Release held LMB
         } else if (msg.message == WM_LBUTTONUP) {
@@ -1349,9 +1349,9 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
           SWORD swDir = SWORD(UWORD(HIWORD(msg.wParam)));
 
           if (swDir > 0) {
-            MenuOnKeyDown(11);
+            MenuOnKeyDown(PressedMenuButton(MOUSEWHEEL_UP, -1));
           } else if (swDir < 0) {
-            MenuOnKeyDown(10);
+            MenuOnKeyDown(PressedMenuButton(MOUSEWHEEL_DN, -1));
           }
 
         } else if (msg.message == WM_CHAR) {

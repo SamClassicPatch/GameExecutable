@@ -175,7 +175,7 @@ BOOL CGameMenu::OnChar(MSG msg) {
 }
 
 // return TRUE if handled
-BOOL CGameMenu::OnKeyDown(int iVKey) {
+BOOL CGameMenu::OnKeyDown(PressedMenuButton pmb) {
   // find curently active gadget
   CMenuGadget *pmgActive = NULL;
   // for each menu gadget in menu
@@ -194,102 +194,95 @@ BOOL CGameMenu::OnKeyDown(int iVKey) {
   }
 
   // if active gadget handles it
-  if (pmgActive->OnKeyDown(iVKey)) {
+  if (pmgActive->OnKeyDown(pmb)) {
     // key is handled
     return TRUE;
   }
 
-  // process normal in menu movement
-  switch (iVKey) {
-    case VK_PRIOR:
-      ScrollList(-2);
+  // [Cecil] Scroll in some direction
+  const INDEX iScroll = pmb.ScrollPower();
+
+  if (iScroll != 0) {
+    ScrollList(iScroll * 2);
+    return TRUE;
+  }
+
+  // [Cecil] Go up in the menu
+  if (pmb.Up()) {
+    // if this is top button in list
+    if (pmgActive == gm_pmgListTop) {
+      // scroll list up
+      ScrollList(-1);
+      // key is handled
       return TRUE;
-
-    case VK_NEXT:
-      ScrollList(+2);
+    }
+    // if we can go up
+    if (pmgActive->mg_pmgUp != NULL && pmgActive->mg_pmgUp->mg_bVisible) {
+      // call lose focus to still active gadget and
+      pmgActive->OnKillFocus();
+      // set focus to new one
+      pmgActive = pmgActive->mg_pmgUp;
+      pmgActive->OnSetFocus();
+      // key is handled
       return TRUE;
+    }
+  }
 
-    case 11:
-      ScrollList(-4);
+  // [Cecil] Go down in the menu
+  if (pmb.Down()) {
+    // if this is bottom button in list
+    if (pmgActive == gm_pmgListBottom) {
+      // scroll list down
+      ScrollList(+1);
+      // key is handled
       return TRUE;
-
-    case 10:
-      ScrollList(+4);
+    }
+    // if we can go down
+    if (pmgActive->mg_pmgDown != NULL && pmgActive->mg_pmgDown->mg_bVisible) {
+      // call lose focus to still active gadget and
+      pmgActive->OnKillFocus();
+      // set focus to new one
+      pmgActive = pmgActive->mg_pmgDown;
+      pmgActive->OnSetFocus();
+      // key is handled
       return TRUE;
+    }
+  }
 
-    case VK_UP:
-      // if this is top button in list
-      if (pmgActive == gm_pmgListTop) {
-        // scroll list up
-        ScrollList(-1);
-        // key is handled
-        return TRUE;
+  // [Cecil] Go left in the menu
+  if (pmb.Left()) {
+    // if we can go left
+    if (pmgActive->mg_pmgLeft != NULL) {
+      // call lose focus to still active gadget and
+      pmgActive->OnKillFocus();
+      // set focus to new one
+      if (!pmgActive->mg_pmgLeft->mg_bVisible && gm_pmgSelectedByDefault != NULL) {
+        pmgActive = gm_pmgSelectedByDefault;
+      } else {
+        pmgActive = pmgActive->mg_pmgLeft;
       }
-      // if we can go up
-      if (pmgActive->mg_pmgUp != NULL && pmgActive->mg_pmgUp->mg_bVisible) {
-        // call lose focus to still active gadget and
-        pmgActive->OnKillFocus();
-        // set focus to new one
-        pmgActive = pmgActive->mg_pmgUp;
-        pmgActive->OnSetFocus();
-        // key is handled
-        return TRUE;
-      }
-      break;
+      pmgActive->OnSetFocus();
+      // key is handled
+      return TRUE;
+    }
+  }
 
-    case VK_DOWN:
-      // if this is bottom button in list
-      if (pmgActive == gm_pmgListBottom) {
-        // scroll list down
-        ScrollList(+1);
-        // key is handled
-        return TRUE;
+  // [Cecil] Go right in the menu
+  if (pmb.Right()) {
+    // if we can go right
+    if (pmgActive->mg_pmgRight != NULL) {
+      // call lose focus to still active gadget and
+      pmgActive->OnKillFocus();
+      // set focus to new one
+      if (!pmgActive->mg_pmgRight->mg_bVisible && gm_pmgSelectedByDefault != NULL) {
+        pmgActive = gm_pmgSelectedByDefault;
+      } else {
+        pmgActive = pmgActive->mg_pmgRight;
       }
-      // if we can go down
-      if (pmgActive->mg_pmgDown != NULL && pmgActive->mg_pmgDown->mg_bVisible) {
-        // call lose focus to still active gadget and
-        pmgActive->OnKillFocus();
-        // set focus to new one
-        pmgActive = pmgActive->mg_pmgDown;
-        pmgActive->OnSetFocus();
-        // key is handled
-        return TRUE;
-      }
-      break;
-
-    case VK_LEFT:
-      // if we can go left
-      if (pmgActive->mg_pmgLeft != NULL) {
-        // call lose focus to still active gadget and
-        pmgActive->OnKillFocus();
-        // set focus to new one
-        if (!pmgActive->mg_pmgLeft->mg_bVisible && gm_pmgSelectedByDefault != NULL) {
-          pmgActive = gm_pmgSelectedByDefault;
-        } else {
-          pmgActive = pmgActive->mg_pmgLeft;
-        }
-        pmgActive->OnSetFocus();
-        // key is handled
-        return TRUE;
-      }
-      break;
-
-    case VK_RIGHT:
-      // if we can go right
-      if (pmgActive->mg_pmgRight != NULL) {
-        // call lose focus to still active gadget and
-        pmgActive->OnKillFocus();
-        // set focus to new one
-        if (!pmgActive->mg_pmgRight->mg_bVisible && gm_pmgSelectedByDefault != NULL) {
-          pmgActive = gm_pmgSelectedByDefault;
-        } else {
-          pmgActive = pmgActive->mg_pmgRight;
-        }
-        pmgActive->OnSetFocus();
-        // key is handled
-        return TRUE;
-      }
-      break;
+      pmgActive->OnSetFocus();
+      // key is handled
+      return TRUE;
+    }
   }
 
   // key is not handled
@@ -297,7 +290,7 @@ BOOL CGameMenu::OnKeyDown(int iVKey) {
 }
 
 // [Cecil] Process held mouse buttons
-BOOL CGameMenu::OnMouseHeld(int iVKey) {
+BOOL CGameMenu::OnMouseHeld(PressedMenuButton pmb) {
   // Find curently active gadget
   CMenuGadget *pmgActive = NULL;
 
@@ -311,7 +304,7 @@ BOOL CGameMenu::OnMouseHeld(int iVKey) {
   if (pmgActive == NULL) return FALSE;
 
   // Let the gadget process it
-  return pmgActive->OnMouseHeld(iVKey);
+  return pmgActive->OnMouseHeld(pmb);
 };
 
 void CGameMenu::StartMenu(void) {

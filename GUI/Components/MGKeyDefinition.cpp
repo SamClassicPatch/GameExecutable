@@ -32,7 +32,7 @@ void CMGKeyDefinition::OnActivate(void) {
   mg_iState = RELEASE_RETURN_WAITING;
 }
 
-BOOL CMGKeyDefinition::OnKeyDown(int iVKey) {
+BOOL CMGKeyDefinition::OnKeyDown(PressedMenuButton pmb) {
   // if waiting for a key definition
   if (mg_iState == PRESS_KEY_WAITING) {
     // do nothing
@@ -40,14 +40,14 @@ BOOL CMGKeyDefinition::OnKeyDown(int iVKey) {
   }
 
   // if backspace pressed
-  if (iVKey == VK_BACK) {
+  if (pmb.iKey == VK_BACK) {
     // clear both keys
     DefineKey(KID_NONE);
     // message is processed
     return TRUE;
   }
 
-  return CMenuGadget::OnKeyDown(iVKey);
+  return CMenuGadget::OnKeyDown(pmb);
 }
 
 // set names for both key bindings

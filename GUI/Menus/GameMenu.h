@@ -41,8 +41,8 @@ class CGameMenu : public CLinkedNode {
     virtual void FillListItems(void);
     virtual void EndMenu(void);
     // return TRUE if handled
-    virtual BOOL OnKeyDown(int iVKey);
-    virtual BOOL OnMouseHeld(int iVKey); // [Cecil]
+    virtual BOOL OnKeyDown(PressedMenuButton pmb);
+    virtual BOOL OnMouseHeld(PressedMenuButton pmb); // [Cecil]
     virtual BOOL OnChar(MSG msg);
     virtual void Think(void);
 };

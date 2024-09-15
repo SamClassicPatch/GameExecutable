@@ -118,12 +118,12 @@ void CConfirmMenu::SetText(const CTString &strLabel, const CTString &strYes, con
 };
 
 // return TRUE if handled
-BOOL CConfirmMenu::OnKeyDown(int iVKey) {
-  if ((iVKey == VK_ESCAPE || iVKey == VK_RBUTTON) && gm_mgConfirmNo.mg_pActivatedFunction != NULL) {
+BOOL CConfirmMenu::OnKeyDown(PressedMenuButton pmb) {
+  if (pmb.Back() && gm_mgConfirmNo.mg_pActivatedFunction != NULL) {
     gm_mgConfirmNo.OnActivate();
     return TRUE;
   }
-  return CGameMenu::OnKeyDown(iVKey);
+  return CGameMenu::OnKeyDown(pmb);
 }
 
 // [Cecil] Change to the menu

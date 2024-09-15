@@ -16,16 +16,20 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 #include "MGTrigger.h"
 
-INDEX GetNewLoopValue(int iVKey, INDEX iCurrent, INDEX ctMembers) {
+static INDEX GetNewLoopValue(PressedMenuButton pmb, INDEX iCurrent, INDEX ctMembers)
+{
   INDEX iPrev = (iCurrent + ctMembers - 1) % ctMembers;
   INDEX iNext = (iCurrent + 1) % ctMembers;
+
   // return and right arrow set new text
-  if (iVKey == VK_RETURN || iVKey == VK_LBUTTON || iVKey == VK_RIGHT) {
+  if (pmb.Next()) {
     return iNext;
+
   // left arrow and backspace sets prev text
-  } else if ((iVKey == VK_BACK || iVKey == VK_RBUTTON) || (iVKey == VK_LEFT)) {
+  } else if (pmb.Prev()) {
     return iPrev;
   }
+
   return iCurrent;
 }
 
@@ -41,12 +45,12 @@ void CMGTrigger::ApplyCurrentSelection(void) {
   SetText(mg_astrTexts[mg_iSelected]);
 }
 
-void CMGTrigger::OnSetNextInList(int iVKey) {
+void CMGTrigger::OnSetNextInList(PressedMenuButton pmb) {
   if (mg_pPreTriggerChange != NULL) {
     mg_pPreTriggerChange(mg_iSelected);
   }
 
-  mg_iSelected = GetNewLoopValue(iVKey, mg_iSelected, mg_ctTexts);
+  mg_iSelected = GetNewLoopValue(pmb, mg_iSelected, mg_ctTexts);
   SetText(mg_astrTexts[mg_iSelected]);
 
   if (mg_pOnTriggerChange != NULL) {
@@ -54,17 +58,13 @@ void CMGTrigger::OnSetNextInList(int iVKey) {
   }
 }
 
-BOOL CMGTrigger::OnKeyDown(int iVKey) {
-  if ((iVKey == VK_RETURN || iVKey == VK_LBUTTON) ||
-    (iVKey == VK_LEFT) ||
-    (iVKey == VK_BACK || iVKey == VK_RBUTTON) ||
-    (iVKey == VK_RIGHT)) {
+BOOL CMGTrigger::OnKeyDown(PressedMenuButton pmb) {
+  if (pmb.Prev() || pmb.Next()) {
     // key is handled
-    if (mg_bEnabled) {
-      OnSetNextInList(iVKey);
-    }
+    if (mg_bEnabled) OnSetNextInList(pmb);
     return TRUE;
   }
+
   // key is not handled
   return FALSE;
 }

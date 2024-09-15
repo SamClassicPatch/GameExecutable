@@ -43,7 +43,7 @@ class CMGFileButton : public CMGEdit {
     void StartEdit(void);
 
     // return TRUE if handled
-    BOOL OnKeyDown(int iVKey);
+    BOOL OnKeyDown(PressedMenuButton pmb);
     void OnActivate(void);
     void OnSetFocus(void);
     void OnKillFocus(void);

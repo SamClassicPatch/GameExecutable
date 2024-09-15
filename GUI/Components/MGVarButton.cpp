@@ -56,16 +56,16 @@ PIXaabbox2D CMGVarButton::GetSliderBox(INDEX iSliderType) {
 }
 
 extern BOOL _bVarChanged;
-BOOL CMGVarButton::OnKeyDown(int iVKey)
+BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
 {
   if (mg_pvsVar == NULL || mg_pvsVar->vs_eType == CVarSetting::E_SEPARATOR || !mg_pvsVar->Validate() || !mg_bEnabled) {
     // [Cecil] CMenuGadget::OnKeyDown() would call CMGEdit::OnActivate(), which shouldn't happen
-    return (iVKey == VK_RETURN || iVKey == VK_LBUTTON);
+    return pmb.Apply();
   }
 
   // [Cecil] Editing the textbox
   if (mg_bEditing) {
-    return CMGEdit::OnKeyDown(iVKey);
+    return CMGEdit::OnKeyDown(pmb);
   }
 
   CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
@@ -76,12 +76,12 @@ BOOL CMGVarButton::OnKeyDown(int iVKey)
     // handle slider
     if (mg_pvsVar->vs_eSlider != CVarSetting::SLD_NOSLIDER && !mg_pvsVar->vs_bCustom) {
       // ignore RMB
-      if (iVKey == VK_RBUTTON) {
+      if (pmb.iKey == VK_RBUTTON) {
         return TRUE;
       }
 
       // handle LMB
-      if (iVKey == VK_LBUTTON) {
+      if (pmb.iKey == VK_LBUTTON) {
         // get position of slider box on screen
         PIXaabbox2D boxSlider = GetSliderBox(mg_pvsVar->vs_eSlider);
         // if mouse is within
@@ -99,7 +99,7 @@ BOOL CMGVarButton::OnKeyDown(int iVKey)
   // [Cecil] Button setting
   } else if (mg_pvsVar->vs_eType == CVarSetting::E_BUTTON) {
     // Enter another option config on click
-    if (iVKey == VK_RETURN || iVKey == VK_LBUTTON) {
+    if (pmb.Apply()) {
       // Copy the string from the setting
       const CTString strConfig = mg_pvsVar->vs_strSchedule;
 
@@ -115,7 +115,7 @@ BOOL CMGVarButton::OnKeyDown(int iVKey)
     }
   }
 
-  if (iVKey == VK_RETURN) {
+  if (pmb.Apply()) {
     // [Cecil] Emulate the action of clicking on "Apply"
     gmCurrent.gm_mgApply.OnActivate();
     return TRUE;
@@ -126,7 +126,7 @@ BOOL CMGVarButton::OnKeyDown(int iVKey)
     // Toggle values
     case CVarSetting::E_TOGGLE: {
       // Select next value
-      if (iVKey == VK_LBUTTON || iVKey == VK_RIGHT) {
+      if (pmb.Next()) {
         if (mg_pvsVar != NULL) {
           INDEX iOldValue = mg_pvsVar->vs_iValue;
           mg_pvsVar->vs_iValue++;
@@ -149,7 +149,7 @@ BOOL CMGVarButton::OnKeyDown(int iVKey)
         return TRUE;
 
       // Select previous value
-      } else if (iVKey == VK_LEFT || iVKey == VK_RBUTTON) {
+      } else if (pmb.Prev()) {
         if (mg_pvsVar != NULL) {
           INDEX iOldValue = mg_pvsVar->vs_iValue;
           mg_pvsVar->vs_iValue--;
@@ -180,19 +180,19 @@ BOOL CMGVarButton::OnKeyDown(int iVKey)
   }
 
   // not handled
-  return CMenuGadget::OnKeyDown(iVKey);
+  return CMenuGadget::OnKeyDown(pmb);
 }
 
 // [Cecil] Adjust the slider by holding a button
-BOOL CMGVarButton::OnMouseHeld(int iVKey)
+BOOL CMGVarButton::OnMouseHeld(PressedMenuButton pmb)
 {
-  if (iVKey != VK_LBUTTON) return FALSE;
+  if (pmb.iKey != VK_LBUTTON) return FALSE;
 
   // Forward the key if it's a toggleable slider without a custom value
   if (mg_pvsVar != NULL && mg_pvsVar->vs_eType == CVarSetting::E_TOGGLE
    && mg_pvsVar->vs_eSlider != CVarSetting::SLD_NOSLIDER && !mg_pvsVar->vs_bCustom)
   {
-    OnKeyDown(iVKey);
+    OnKeyDown(pmb);
   }
 
   return FALSE;

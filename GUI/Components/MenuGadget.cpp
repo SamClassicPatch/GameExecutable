@@ -46,9 +46,9 @@ void CMenuGadget::OnActivate(void) {
 }
 
 // return TRUE if handled
-BOOL CMenuGadget::OnKeyDown(int iVKey) {
+BOOL CMenuGadget::OnKeyDown(PressedMenuButton pmb) {
   // if return pressed
-  if (iVKey == VK_RETURN || iVKey == VK_LBUTTON) {
+  if (pmb.Apply()) {
     // activate
     OnActivate();
     // key is handled
@@ -59,7 +59,7 @@ BOOL CMenuGadget::OnKeyDown(int iVKey) {
 }
 
 // [Cecil] Process held mouse buttons
-BOOL CMenuGadget::OnMouseHeld(int iVKey) {
+BOOL CMenuGadget::OnMouseHeld(PressedMenuButton pmb) {
   return FALSE;
 };
 

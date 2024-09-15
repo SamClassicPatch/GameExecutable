@@ -40,7 +40,7 @@ class CMGKeyDefinition : public CMenuGadget {
     void Disappear(void);
     void OnActivate(void);
     // return TRUE if handled
-    BOOL OnKeyDown(int iVKey);
+    BOOL OnKeyDown(PressedMenuButton pmb);
     void Think(void);
     // set names for both key bindings
     void SetBindingNames(BOOL bDefining);

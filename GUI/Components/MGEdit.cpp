@@ -47,7 +47,7 @@ void CMGEdit::OnActivate(void) {
 void CMGEdit::OnKillFocus(void) {
   // go out of editing mode
   if (mg_bEditing) {
-    OnKeyDown(VK_RETURN);
+    OnKeyDown(PressedMenuButton(VK_RETURN, -1));
     Clear();
   }
   // proceed
@@ -58,7 +58,7 @@ void CMGEdit::OnKillFocus(void) {
 void CMGEdit::Disappear(void) {
   // Cancel string editing
   if (mg_bEditing) {
-    OnKeyDown(VK_RETURN);
+    OnKeyDown(PressedMenuButton(VK_RETURN, -1));
     Clear();
   }
 
@@ -97,44 +97,45 @@ static void Key_BackDel(CTString &str, INDEX &iPos, BOOL bShift, BOOL bRight) {
 }
 
 // key/mouse button pressed
-BOOL CMGEdit::OnKeyDown(int iVKey) {
+BOOL CMGEdit::OnKeyDown(PressedMenuButton pmb) {
   // if not in edit mode
   if (!mg_bEditing) {
     // behave like normal gadget
-    return CMenuGadget::OnKeyDown(iVKey);
+    return CMenuGadget::OnKeyDown(pmb);
+  }
+
+  // [Cecil] Apply changes
+  if (pmb.Apply()) {
+    *mg_pstrToChange = GetText();
+    Clear();
+    OnStringChanged();
+    return TRUE;
+  }
+
+  // [Cecil] Discard changes
+  if (pmb.Back()) {
+    SetText(*mg_pstrToChange);
+    Clear();
+    OnStringCanceled();
+    return TRUE;
+  }
+
+  // [Cecil] Move left
+  if (pmb.Up() || pmb.Left()) {
+    if (mg_iCursorPos > 0) mg_iCursorPos--;
+    return TRUE;
+  }
+
+  // [Cecil] Move right
+  if (pmb.Down() || pmb.Right()) {
+    if (mg_iCursorPos < GetText().Length()) mg_iCursorPos++;
+    return TRUE;
   }
 
   // finish editing?
   BOOL bShift = GetKeyState(VK_SHIFT) & 0x8000;
-  switch (iVKey) {
-    case VK_UP:
-    case VK_DOWN:
-    case VK_RETURN:
-    case VK_LBUTTON: {
-      *mg_pstrToChange = GetText();
-      Clear();
-      OnStringChanged();
-    } break;
 
-    case VK_ESCAPE:
-    case VK_RBUTTON: {
-      SetText(*mg_pstrToChange);
-      Clear();
-      OnStringCanceled();
-    } break;
-
-    case VK_LEFT: {
-      if (mg_iCursorPos > 0) {
-        mg_iCursorPos--;
-      }
-    } break;
-
-    case VK_RIGHT: {
-      if (mg_iCursorPos < GetText().Length()) {
-        mg_iCursorPos++;
-      }
-    } break;
-
+  switch (pmb.iKey) {
     case VK_HOME: {
       mg_iCursorPos = 0;
     } break;
@@ -156,11 +157,9 @@ BOOL CMGEdit::OnKeyDown(int iVKey) {
 
       SetText(strText);
     } break;
-
-    default: break; // ignore all other special keys
   }
 
-  // key is handled
+  // Ignore all other special keys and mark them as handled
   return TRUE;
 }
 

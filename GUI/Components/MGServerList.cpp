@@ -419,96 +419,83 @@ static void StartSelectPlayersMenuFromServers(void) {
   }
 };
 
-BOOL CMGServerList::OnKeyDown(int iVKey) {
-  switch (iVKey) {
-    case VK_UP:
-      mg_iSelected -= 1;
-      AdjustFirstOnScreen();
-      break;
-    case VK_DOWN:
-      mg_iSelected += 1;
-      AdjustFirstOnScreen();
-      break;
-
-    case VK_PRIOR:
-      mg_iSelected -= mg_ctOnScreen - 1;
-      mg_iFirstOnScreen -= mg_ctOnScreen - 1;
-      AdjustFirstOnScreen();
-      break;
-
-    case VK_NEXT:
-      mg_iSelected += mg_ctOnScreen - 1;
-      mg_iFirstOnScreen += mg_ctOnScreen - 1;
-      AdjustFirstOnScreen();
-      break;
-
-    case 11:
-      mg_iSelected -= 3;
-      mg_iFirstOnScreen -= 3;
-      AdjustFirstOnScreen();
-      break;
-
-    case 10:
-      mg_iSelected += 3;
-      mg_iFirstOnScreen += 3;
-      AdjustFirstOnScreen();
-      break;
-
-    case VK_LBUTTON:
-      /*if (mg_pixMouseJ >= mg_pixHeaderMinJ && mg_pixMouseJ <= mg_pixHeaderMidJ
-      && mg_pixMouseI >= mg_pixHeaderI[0] && mg_pixMouseI <= mg_pixHeaderI[7]) {
-        INDEX iNewSort = mg_iSort;
-        if (mg_pixMouseI <= mg_pixHeaderI[1]) {
-          iNewSort = 0;
-        } else if (mg_pixMouseI <= mg_pixHeaderI[2]) {
-          iNewSort = 1;
-        } else if (mg_pixMouseI <= mg_pixHeaderI[3]) {
-          iNewSort = 2;
-        } else if (mg_pixMouseI <= mg_pixHeaderI[4]) {
-          iNewSort = 3;
-        } else if (mg_pixMouseI <= mg_pixHeaderI[5]) {
-          iNewSort = 4;
-        } else if (mg_pixMouseI <= mg_pixHeaderI[6]) {
-          iNewSort = 5;
-        } else if (mg_pixMouseI <= mg_pixHeaderI[7]) {
-          iNewSort = 6;
-        }
-        if (iNewSort == mg_iSort) {
-          mg_bSortDown = !mg_bSortDown;
-        } else {
-          mg_bSortDown = FALSE;
-        }
-        mg_iSort = iNewSort;
-        break;
-      } else */if (mg_pixMouseDrag >= 0) {
-        mg_pixDragJ = mg_pixMouseDrag;
-        mg_iDragLine = mg_iFirstOnScreen;
-        break;
-      }
-
-    case VK_RETURN:
-      PlayMenuSound(_psdPress);
-      {
-        INDEX i = 0;
-        FOREACHINLIST(CNetworkSession, ns_lnNode, _lhServers, itns) {
-          if (i == mg_iSelected) {
-            char strAddress[256];
-            int iPort;
-            itns->ns_strAddress.ScanF("%200[^:]:%d", &strAddress, &iPort);
-            GetGameAPI()->JoinAddress() = strAddress;
-            _pShell->SetINDEX("net_iPort", iPort);
-            StartSelectPlayersMenuFromServers();
-            return TRUE;
-          }
-          i++;
-        }
-      }
-      break;
-
-    default:
-      return FALSE;
+BOOL CMGServerList::OnKeyDown(PressedMenuButton pmb) {
+  // [Cecil] Start dragging with left mouse button
+  if (pmb.iKey == VK_LBUTTON)
+  {
+    if (mg_pixMouseDrag >= 0) {
+      mg_pixDragJ = mg_pixMouseDrag;
+      mg_iDragLine = mg_iFirstOnScreen;
+      return TRUE;
+    }
   }
-  return TRUE;
+
+  // [Cecil] Scroll in some direction
+  const INDEX iScroll = pmb.ScrollPower();
+
+  if (iScroll != 0) {
+    const INDEX iPower = Abs(iScroll);
+    INDEX ctScroll = 0;
+
+    // Entire page at a time
+    if (iPower == 1) {
+      ctScroll = (mg_ctOnScreen - 1);
+
+    // A few at a time
+    } else if (iPower == 2) {
+      ctScroll = 3;
+    }
+
+    if (ctScroll != 0) {
+      const INDEX iDir = SgnNZ(iScroll);
+      mg_iSelected      += ctScroll * iDir;
+      mg_iFirstOnScreen += ctScroll * iDir;
+      AdjustFirstOnScreen();
+    }
+  }
+
+  // [Cecil] Go up one listing
+  if (pmb.Up()) {
+    mg_iSelected -= 1;
+    AdjustFirstOnScreen();
+    return TRUE;
+  }
+
+  // [Cecil] Go down one listing
+  if (pmb.Down()) {
+    mg_iSelected += 1;
+    AdjustFirstOnScreen();
+    return TRUE;
+  }
+
+  // [Cecil] Select the listing
+  if (pmb.Apply()) {
+    PlayMenuSound(_psdPress);
+    IFeel_PlayEffect("Menu_press");
+
+    INDEX i = 0;
+
+    FOREACHINLIST(CNetworkSession, ns_lnNode, _lhServers, itns) {
+      if (i == mg_iSelected) {
+        char strAddress[256];
+        int iPort;
+        itns->ns_strAddress.ScanF("%200[^:]:%d", &strAddress, &iPort);
+        _pGame->gam_strJoinAddress = strAddress;
+        _pShell->SetINDEX("net_iPort", iPort);
+
+        extern void StartSelectPlayersMenuFromServers(void);
+        StartSelectPlayersMenuFromServers();
+        return TRUE;
+      }
+
+      i++;
+    }
+
+    // [Cecil] NOTE: It skipped to the end with TRUE before, so not sure
+    return TRUE;
+  }
+
+  return FALSE;
 }
 
 void CMGServerList::OnSetFocus(void) {

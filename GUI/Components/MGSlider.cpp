@@ -63,32 +63,32 @@ BOOL CMGSlider::OnLMB(void) {
   return FALSE;
 };
 
-BOOL CMGSlider::OnKeyDown(int iVKey) {
-  // if scrolling left
-  if ((iVKey == VK_BACK || iVKey == VK_LEFT) && mg_iCurPos > mg_iMinPos) {
-    mg_iCurPos--;
+BOOL CMGSlider::OnKeyDown(PressedMenuButton pmb) {
+  // [Cecil] Increase/decrease the value
+  const INDEX iPower = pmb.ChangeValue();
+
+  if (iPower != 0) {
+    mg_iCurPos = Clamp(mg_iCurPos + iPower, mg_iMinPos, mg_iMaxPos);
     ApplyCurrentPosition();
-    return TRUE;
-    // if scrolling right
-  } else if ((iVKey == VK_RETURN || iVKey == VK_RIGHT) && mg_iCurPos < mg_iMaxPos) {
-    mg_iCurPos++;
-    ApplyCurrentPosition();
-    return TRUE;
-    // if lmb pressed
-  } else if (iVKey == VK_LBUTTON && OnLMB()) {
     return TRUE;
   }
-  return CMenuGadget::OnKeyDown(iVKey);
+
+  // if lmb pressed
+  if (pmb.iKey == VK_LBUTTON && OnLMB()) {
+    return TRUE;
+  }
+
+  return CMenuGadget::OnKeyDown(pmb);
 }
 
 // [Cecil] Adjust the slider by holding a button
-BOOL CMGSlider::OnMouseHeld(int iVKey)
+BOOL CMGSlider::OnMouseHeld(PressedMenuButton pmb)
 {
-  if (iVKey == VK_LBUTTON && OnLMB()) {
+  if (pmb.iKey == VK_LBUTTON && OnLMB()) {
     return TRUE;
   }
 
-  return CMenuGadget::OnMouseHeld(iVKey);
+  return CMenuGadget::OnMouseHeld(pmb);
 };
 
 PIXaabbox2D CMGSlider::GetSliderBox(void) {

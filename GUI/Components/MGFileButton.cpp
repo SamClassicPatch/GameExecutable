@@ -134,10 +134,10 @@ void CMGFileButton::OnActivate(void) {
   }
 }
 
-BOOL CMGFileButton::OnKeyDown(int iVKey) {
+BOOL CMGFileButton::OnKeyDown(PressedMenuButton pmb) {
   if (mg_iState == FBS_NORMAL) {
     if (_pGUIM->gmLoadSaveMenu.gm_bSave || _pGUIM->gmLoadSaveMenu.gm_bManage) {
-      if (iVKey == VK_F2) {
+      if (pmb.iKey == VK_F2) {
         if (FileExistsForWriting(mg_fnm)) {
           // switch to renaming mode
           _strOrgDescription =
@@ -148,7 +148,7 @@ BOOL CMGFileButton::OnKeyDown(int iVKey) {
         }
         return TRUE;
 
-      } else if (iVKey == VK_DELETE) {
+      } else if (pmb.iKey == VK_DELETE) {
         if (FileExistsForWriting(mg_fnm)) {
           // delete the file, its description and thumbnail
           RemoveFile(mg_fnm);
@@ -162,15 +162,15 @@ BOOL CMGFileButton::OnKeyDown(int iVKey) {
         return TRUE;
       }
     }
-    return CMenuGadget::OnKeyDown(iVKey);
+    return CMenuGadget::OnKeyDown(pmb);
   } else {
     // go out of editing mode
     if (mg_bEditing) {
-      if (iVKey == VK_UP || iVKey == VK_DOWN) {
-        CMGEdit::OnKeyDown(VK_ESCAPE);
+      if (pmb.Up() || pmb.Down()) {
+        CMGEdit::OnKeyDown(PressedMenuButton(VK_ESCAPE, -1));
       }
     }
-    return CMGEdit::OnKeyDown(iVKey);
+    return CMGEdit::OnKeyDown(pmb);
   }
 }
 
@@ -190,7 +190,7 @@ void CMGFileButton::OnSetFocus(void) {
 void CMGFileButton::OnKillFocus(void) {
   // go out of editing mode
   if (mg_bEditing) {
-    OnKeyDown(VK_ESCAPE);
+    OnKeyDown(PressedMenuButton(VK_ESCAPE, -1));
   }
 
   CMGEdit::OnKillFocus();

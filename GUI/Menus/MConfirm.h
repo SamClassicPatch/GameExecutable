@@ -41,7 +41,7 @@ class CConfirmMenu : public CGameMenu {
 
     void Initialize_t(void);
     // return TRUE if handled
-    BOOL OnKeyDown(int iVKey);
+    BOOL OnKeyDown(PressedMenuButton pmb);
 
     // [Cecil] Height adjustment
     void BeLarge(FLOAT fHeight = 0.2f);

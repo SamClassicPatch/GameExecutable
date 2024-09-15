@@ -19,6 +19,73 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #pragma once
 #endif
 
+// [Cecil] One pressed menu button (keyboard, mouse or controller)
+struct PressedMenuButton {
+  int iKey; // Keyboard key (or mouse button)
+  int iCtrl; // Controller button
+
+  PressedMenuButton(int iSetKey, int iSetCtrl) :
+    iKey(iSetKey), iCtrl(iSetCtrl) {};
+
+  // Cancel / Go back to the previous menu
+  inline bool Back(void) {
+    return iKey == VK_ESCAPE || iKey == VK_RBUTTON;
+  };
+
+  // Apply / Enter the next menu
+  inline bool Apply(void) {
+    return iKey == VK_RETURN || iKey == VK_LBUTTON;
+  };
+
+  // Decrease value
+  inline bool Decrease(void) {
+    return iKey == VK_BACK || iKey == VK_LEFT;
+  };
+
+  // Increase value
+  inline bool Increase(void) {
+    return iKey == VK_RETURN || iKey == VK_RIGHT;
+  };
+
+  inline INDEX ChangeValue(void) {
+    // Weak
+    if (Decrease()) return -1;
+    if (Increase()) return +1;
+
+    // None
+    return 0;
+  };
+
+  // Select previous value
+  inline bool Prev(void) {
+    return Decrease() || iKey == VK_RBUTTON;
+  };
+
+  // Select next value
+  inline bool Next(void) {
+    return Increase() || iKey == VK_LBUTTON;
+  };
+
+  // Directions
+  inline bool Up(void)    { return iKey == VK_UP; };
+  inline bool Down(void)  { return iKey == VK_DOWN; };
+  inline bool Left(void)  { return iKey == VK_LEFT; };
+  inline bool Right(void) { return iKey == VK_RIGHT; };
+
+  inline INDEX ScrollPower(void) {
+    // Weak
+    if (iKey == VK_PRIOR) return -1;
+    if (iKey == VK_NEXT)  return +1;
+
+    // Strong
+    if (iKey == MOUSEWHEEL_UP) return -2;
+    if (iKey == MOUSEWHEEL_DN) return +2;
+
+    // None
+    return 0;
+  };
+};
+
 // set new thumbnail
 void SetThumbnail(CTFileName fn);
 // remove thumbnail
@@ -27,8 +94,8 @@ void ClearThumbnail(void);
 void InitializeMenus(void);
 void DestroyMenus(void);
 void MenuGoToParent(void); // [Cecil] Declared here
-void MenuOnKeyDown(int iVKey);
-void MenuOnMouseHold(int iVKey); // [Cecil]
+void MenuOnKeyDown(PressedMenuButton pmb); // [Cecil] Handle different buttons
+void MenuOnMouseHold(PressedMenuButton pmb); // [Cecil]
 void MenuOnChar(MSG msg);
 void MenuOnMouseMove(PIX pixI, PIX pixJ);
 void MenuOnLMBDown(void);
