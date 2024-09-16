@@ -93,7 +93,7 @@ void CExtrasMenu::Initialize_t(void) {
   AddChild(&gm_mgGameCredits);
 
   gm_mgDocs.SetText(TRANS("DOCUMENTATION"));
-  gm_mgDocs.mg_strTip = LOCALIZE("visit classics patch wiki for documentation");
+  gm_mgDocs.mg_strTip = TRANS("visit classics patch wiki for documentation");
   gm_mgDocs.mg_bfsFontSize = BFS_LARGE;
   gm_mgDocs.mg_boxOnScreen = BoxBigRow(4.0f);
 
