@@ -69,12 +69,13 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
   }
 
   CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
+  const BOOL bSlider = (mg_pvsVar->vs_eSlider != CVarSetting::SLD_NOSLIDER);
 
   // [Cecil] Toggleable setting
   if (mg_pvsVar->vs_eType == CVarSetting::E_TOGGLE)
   {
     // handle slider
-    if (mg_pvsVar->vs_eSlider != CVarSetting::SLD_NOSLIDER && !mg_pvsVar->vs_bCustom) {
+    if (bSlider && !mg_pvsVar->vs_bCustom) {
       // ignore RMB
       if (pmb.iKey == VK_RBUTTON) {
         return TRUE;
@@ -125,50 +126,42 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
   switch (mg_pvsVar->vs_eType) {
     // Toggle values
     case CVarSetting::E_TOGGLE: {
-      // Select next value
-      if (pmb.Next()) {
-        if (mg_pvsVar != NULL) {
-          INDEX iOldValue = mg_pvsVar->vs_iValue;
-          mg_pvsVar->vs_iValue++;
+      // [Cecil] Increase/decrease the value
+      INDEX iPower = pmb.ChangeValue();
 
-          if (mg_pvsVar->vs_iValue >= mg_pvsVar->vs_ctValues) {
-            // wrap non-sliders, clamp sliders
-            if (mg_pvsVar->vs_eSlider != CVarSetting::SLD_NOSLIDER) {
-              mg_pvsVar->vs_iValue = mg_pvsVar->vs_ctValues - 1L;
-            } else {
-              mg_pvsVar->vs_iValue = 0;
-            }
-          }
+      // Try previous/next value
+      if (iPower == 0) {
+        if (pmb.Prev()) iPower = -1;
+        else
+        if (pmb.Next()) iPower = +1;
+      }
 
-          if (iOldValue != mg_pvsVar->vs_iValue) {
-            _bVarChanged = TRUE;
-            mg_pvsVar->vs_bCustom = FALSE;
-            mg_pvsVar->Validate();
-          }
+      if (iPower != 0) {
+        // Change one value at a time for non-sliders
+        if (!bSlider) iPower = SgnNZ(iPower);
+
+        INDEX iOldValue = mg_pvsVar->vs_iValue;
+        mg_pvsVar->vs_iValue += iPower;
+
+        // Clamp sliders
+        if (bSlider) {
+          mg_pvsVar->vs_iValue = Clamp(mg_pvsVar->vs_iValue, (INDEX)0, INDEX(mg_pvsVar->vs_ctValues - 1));
+
+        // Wrap to the beginning
+        } else if (mg_pvsVar->vs_iValue >= mg_pvsVar->vs_ctValues) {
+          mg_pvsVar->vs_iValue = 0;
+
+        // Wrap to the end
+        } else if (mg_pvsVar->vs_iValue < 0) {
+          mg_pvsVar->vs_iValue = mg_pvsVar->vs_ctValues - 1;
         }
-        return TRUE;
 
-      // Select previous value
-      } else if (pmb.Prev()) {
-        if (mg_pvsVar != NULL) {
-          INDEX iOldValue = mg_pvsVar->vs_iValue;
-          mg_pvsVar->vs_iValue--;
-
-          if (mg_pvsVar->vs_iValue < 0) {
-            // wrap non-sliders, clamp sliders
-            if (mg_pvsVar->vs_eSlider != CVarSetting::SLD_NOSLIDER) {
-              mg_pvsVar->vs_iValue = 0;
-            } else {
-              mg_pvsVar->vs_iValue = mg_pvsVar->vs_ctValues - 1L;
-            }
-          }
-
-          if (iOldValue != mg_pvsVar->vs_iValue) {
-            _bVarChanged = TRUE;
-            mg_pvsVar->vs_bCustom = FALSE;
-            mg_pvsVar->Validate();
-          }
+        if (iOldValue != mg_pvsVar->vs_iValue) {
+          _bVarChanged = TRUE;
+          mg_pvsVar->vs_bCustom = FALSE;
+          mg_pvsVar->Validate();
         }
+
         return TRUE;
       }
     } break;
