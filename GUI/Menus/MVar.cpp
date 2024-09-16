@@ -66,6 +66,11 @@ static void VarApply(void) {
   FlushVarSettings(TRUE);
   gmCurrent.EndMenu();
   gmCurrent.StartMenu();
+
+  // [Cecil] Select the top option by default
+  gmCurrent.gm_pmgSelectedByDefault->OnKillFocus();
+  gmCurrent.gm_pmgSelectedByDefault = &gmCurrent.gm_mgVar[0];
+  gmCurrent.gm_pmgSelectedByDefault->OnSetFocus();
 };
 
 void CVarMenu::Initialize_t(void) {

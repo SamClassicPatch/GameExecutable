@@ -28,13 +28,13 @@ struct PressedMenuButton {
     iKey(iSetKey), iCtrl(iSetCtrl) {};
 
   // Cancel / Go back to the previous menu
-  inline bool Back(void) {
-    return iKey == VK_ESCAPE || iKey == VK_RBUTTON;
+  inline bool Back(BOOL bMouse) {
+    return iKey == VK_ESCAPE || (bMouse && iKey == VK_RBUTTON);
   };
 
   // Apply / Enter the next menu
-  inline bool Apply(void) {
-    return iKey == VK_RETURN || iKey == VK_LBUTTON;
+  inline bool Apply(BOOL bMouse) {
+    return iKey == VK_RETURN || (bMouse && iKey == VK_LBUTTON);
   };
 
   // Decrease value

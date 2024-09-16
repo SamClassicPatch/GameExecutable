@@ -60,7 +60,7 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
 {
   if (mg_pvsVar == NULL || mg_pvsVar->vs_eType == CVarSetting::E_SEPARATOR || !mg_pvsVar->Validate() || !mg_bEnabled) {
     // [Cecil] CMenuGadget::OnKeyDown() would call CMGEdit::OnActivate(), which shouldn't happen
-    return pmb.Apply();
+    return pmb.Apply(TRUE);
   }
 
   // [Cecil] Editing the textbox
@@ -99,7 +99,7 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
   // [Cecil] Button setting
   } else if (mg_pvsVar->vs_eType == CVarSetting::E_BUTTON) {
     // Enter another option config on click
-    if (pmb.Apply()) {
+    if (pmb.Apply(TRUE)) {
       // Copy the string from the setting
       const CTString strConfig = mg_pvsVar->vs_strSchedule;
 
@@ -115,7 +115,7 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
     }
   }
 
-  if (pmb.Apply()) {
+  if (pmb.Apply(FALSE)) {
     // [Cecil] Emulate the action of clicking on "Apply"
     gmCurrent.gm_mgApply.OnActivate();
     return TRUE;

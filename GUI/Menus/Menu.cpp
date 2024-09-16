@@ -392,7 +392,7 @@ void MenuOnKeyDown(PressedMenuButton pmb) {
   // if not handled
   if (!bHandled) {
     // if escape or right mouse pressed
-    if (pmb.Back()) {
+    if (pmb.Back(TRUE)) {
       if (pgmCurrentMenu == &_pGUIM->gmLoadSaveMenu && _pGUIM->gmLoadSaveMenu.gm_bNoEscape) {
         return;
       }
