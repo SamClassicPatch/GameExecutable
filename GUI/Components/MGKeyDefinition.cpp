@@ -154,9 +154,30 @@ void CMGKeyDefinition::Think(void) {
     _bMouseUsedLast = FALSE;
     _pInput->SetJoyPolling(TRUE);
     _pInput->GetInput(FALSE);
-    if (_pInput->IsInputEnabled() && !_pInput->GetButtonState(KID_ENTER) && !_pInput->GetButtonState(KID_MOUSE1)) {
-      mg_iState = PRESS_KEY_WAITING;
+
+    if (_pInput->IsInputEnabled()) {
+      BOOL bActivationKey = !!_pInput->GetButtonState(KID_ENTER) || !!_pInput->GetButtonState(KID_MOUSE1);
+
+    #if _PATCHCONFIG_ENGINEPATCHES && _PATCHCONFIG_EXTEND_INPUT
+      if (!bActivationKey) {
+        // [Cecil] See if any controller buttons for binding activation are being held
+        for (INDEX iCtrl = 0; iCtrl < MAX_JOYSTICKS; iCtrl++) {
+          const INDEX iFirstButton = FIRST_JOYBUTTON + iCtrl * SDL_CONTROLLER_BUTTON_MAX;
+
+          if (_pInput->GetButtonState(iFirstButton + SDL_CONTROLLER_BUTTON_A)
+           || _pInput->GetButtonState(iFirstButton + SDL_CONTROLLER_BUTTON_START)) {
+            bActivationKey = TRUE;
+            break;
+          }
+        }
+      }
+    #endif // _PATCHCONFIG_EXTEND_INPUT
+
+      if (!bActivationKey) {
+        mg_iState = PRESS_KEY_WAITING;
+      }
     }
+
   } else if (mg_iState == PRESS_KEY_WAITING) {
     _pInput->SetJoyPolling(TRUE);
     _pInput->GetInput(FALSE);

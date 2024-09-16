@@ -17,6 +17,9 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <CoreLib/Core.h>
 #include <EnginePatches/Patches.h>
 
+// [Cecil] New input
+#include <EnginePatches/Input/Input.h>
+
 // [Cecil] Moved from many individual files
 #include <Engine/Base/KeyNames.h>
 

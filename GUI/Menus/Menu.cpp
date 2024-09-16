@@ -372,7 +372,7 @@ void MenuGoToParent(void) {
 void MenuOnKeyDown(PressedMenuButton pmb) {
   // check if mouse buttons used
   _bMouseUsedLast = (pmb.iKey == VK_LBUTTON || pmb.iKey == VK_RBUTTON || pmb.iKey == VK_MBUTTON
-    || pmb.iKey == MOUSEWHEEL_DN || pmb.iKey == MOUSEWHEEL_UP);
+    || pmb.iKey == VK_XBUTTON1 || pmb.iKey == VK_XBUTTON2 || pmb.iKey == MOUSEWHEEL_DN || pmb.iKey == MOUSEWHEEL_UP);
 
   // ignore mouse when editing
   if (_bEditingString && _bMouseUsedLast) {

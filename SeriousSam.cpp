@@ -931,6 +931,65 @@ void TeleportPlayer(int iPosition) {
   _pShell->Execute(strCommand);
 }
 
+// [Cecil] Poll input & window events
+static BOOL PollEvent(MSG &msg) {
+#if _PATCHCONFIG_ENGINEPATCHES && _PATCHCONFIG_EXTEND_INPUT
+
+  // Manual joystick update
+  CInputPatch::UpdateJoysticks();
+
+  // Process event for the first controller that sends it
+  const INDEX ctControllers = inp_aControllers.Count();
+
+  for (INDEX iCtrl = 0; iCtrl < ctControllers; iCtrl++) {
+    if (CInputPatch::SetupControllerEvent(iCtrl, msg)) {
+      return TRUE;
+    }
+  }
+
+#endif // _PATCHCONFIG_EXTEND_INPUT
+
+  if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+    // If it's not a mouse message
+    if (msg.message < WM_MOUSEFIRST || msg.message > WM_MOUSELAST) {
+      // And not system key messages
+      if (!((msg.message == WM_KEYDOWN && msg.wParam == VK_F10) || msg.message == WM_SYSKEYDOWN)) {
+        // Dispatch it
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+      }
+    }
+
+    return TRUE;
+  }
+
+  return FALSE;
+};
+
+// [Cecil] Check any significant controller button
+static BOOL AnyControllerButton(MSG &msg) {
+#if _PATCHCONFIG_ENGINEPATCHES && _PATCHCONFIG_EXTEND_INPUT
+
+  if (msg.message == WM_CTRLBUTTONDOWN) {
+    switch (msg.wParam) {
+      case SDL_CONTROLLER_BUTTON_A: case SDL_CONTROLLER_BUTTON_B:
+      case SDL_CONTROLLER_BUTTON_X: case SDL_CONTROLLER_BUTTON_Y:
+      case SDL_CONTROLLER_BUTTON_BACK: case SDL_CONTROLLER_BUTTON_GUIDE: case SDL_CONTROLLER_BUTTON_START:
+        return TRUE;
+    }
+  }
+
+#endif // _PATCHCONFIG_EXTEND_INPUT
+
+  return FALSE;
+};
+
+// [Cecil] Check if the "Back" button is pressed
+static BOOL IsBackPressed(MSG &msg) {
+  return (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE)
+      || (msg.message == WM_CTRLBUTTONDOWN && msg.wParam == SDL_CONTROLLER_BUTTON_START);
+};
+
 CTextureObject _toStarField;
 static FLOAT _fLastVolume = 1.0f;
 
@@ -1002,7 +1061,7 @@ void QuitScreenLoop(void) {
     // while there are any messages in the message queue
     MSG msg;
 
-    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+    while (PollEvent(msg)) {
       // [Cecil] Change credits scroll speed
       if (msg.message == WM_MOUSEWHEEL) {
         SWORD swDir = SWORD(UWORD(HIWORD(msg.wParam)));
@@ -1013,8 +1072,22 @@ void QuitScreenLoop(void) {
           Credits_Speed(2, +1);
         }
 
-      // if it is not a keyboard or mouse message
-      } else if (msg.message == WM_LBUTTONDOWN || msg.message == WM_RBUTTONDOWN || msg.message == WM_KEYDOWN) {
+        continue;
+
+      // Using a controller too
+      } else if (msg.message == WM_CTRLBUTTONDOWN) {
+        switch (msg.wParam) {
+          case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:  Credits_Speed(4, -1); continue;
+          case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: Credits_Speed(4, +1); continue;
+
+          case SDL_CONTROLLER_BUTTON_DPAD_UP:       Credits_Speed(2, -1); continue;
+          case SDL_CONTROLLER_BUTTON_DPAD_DOWN:     Credits_Speed(2, +1); continue;
+        }
+      }
+
+      // [Cecil] Quit the quit screen on any button/key/controller press
+      if (msg.message == WM_LBUTTONDOWN || msg.message == WM_RBUTTONDOWN || msg.message == WM_KEYDOWN
+       || AnyControllerButton(msg)) {
         return;
       }
     }
@@ -1061,14 +1134,21 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
     // while there are any messages in the message queue
     MSG msg;
 
-    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-      // if it is not a mouse message
-      if (!(msg.message >= WM_MOUSEFIRST && msg.message <= WM_MOUSELAST)) {
-        // if not system key messages
-        if (!(msg.message == WM_KEYDOWN && msg.wParam == VK_F10 || msg.message == WM_SYSKEYDOWN)) {
-          // dispatch it
-          TranslateMessage(&msg);
-          DispatchMessage(&msg);
+    while (PollEvent(msg)) {
+      // [Cecil] Remap controller axes to buttons
+      if (msg.message == WM_CTRLAXISMOTION) {
+        switch (msg.wParam) {
+          case SDL_CONTROLLER_AXIS_LEFTX: {
+            msg.message = WM_CTRLBUTTONDOWN;
+            msg.wParam = (msg.lParam < 0 ? SDL_CONTROLLER_BUTTON_DPAD_LEFT : SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
+            msg.lParam = TRUE;
+          } break;
+
+          case SDL_CONTROLLER_AXIS_LEFTY: {
+            msg.message = WM_CTRLBUTTONDOWN;
+            msg.wParam = (msg.lParam < 0 ? SDL_CONTROLLER_BUTTON_DPAD_UP : SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+            msg.lParam = TRUE;
+          } break;
         }
       }
 
@@ -1180,20 +1260,21 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         _bReconsiderInput = TRUE;
       }
 
-      if (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE &&
+      // [Cecil] Stop demo on some controller buttons
+      if ((AnyControllerButton(msg) || IsBackPressed(msg)) &&
         (_gmRunningGameMode == GM_DEMO || _gmRunningGameMode == GM_INTRO)) {
         _pGame->StopGame();
         _gmRunningGameMode = GM_NONE;
       }
 
-      if (GetGameAPI()->GetConState() == CS_TALK && msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE) {
+      if (GetGameAPI()->GetConState() == CS_TALK && IsBackPressed(msg)) {
         GetGameAPI()->SetConState(CS_OFF);
         msg.message = WM_NULL;
       }
 
       BOOL bMenuForced = (_gmRunningGameMode == GM_NONE &&
         (GetGameAPI()->GetConState() == CS_OFF || GetGameAPI()->GetConState() == CS_TURNINGOFF));
-      BOOL bMenuToggle = (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE
+      BOOL bMenuToggle = (IsBackPressed(msg)
         && (GetGameAPI()->GetCompState() == CS_OFF || GetGameAPI()->GetCompState() == CS_ONINBACKGROUND));
 
       if (!bMenuActive) {
@@ -1215,7 +1296,9 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
       } else {
         if (bMenuForced && bMenuToggle && _pGUIM->aVisitedMenus.Count() == 0) {
           // delete key down message so menu would not exit because of it
-          msg.message = WM_NULL;
+          if (msg.message != WM_CTRLBUTTONDOWN) {
+            msg.message = WM_NULL;
+          }
         }
       }
 
@@ -1250,7 +1333,43 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
       // interpret console key presses
       if (_iAddonExecState == 0) {
-        if (msg.message == WM_KEYDOWN) {
+        // [Cecil] Remap controller buttons to keyboard for the computer
+        if (msg.message == WM_CTRLBUTTONDOWN) {
+          MSG msgCompKey;
+          memset(&msgCompKey, 0, sizeof(msgCompKey));
+
+          msgCompKey.message = WM_KEYDOWN;
+
+          switch (msg.wParam) {
+            // Exit on Start
+            case SDL_CONTROLLER_BUTTON_START: msgCompKey.wParam = VK_ESCAPE; break;
+
+            // Change message types on ABXY
+            case SDL_CONTROLLER_BUTTON_A: msgCompKey.wParam = '1'; break;
+            case SDL_CONTROLLER_BUTTON_B: msgCompKey.wParam = '2'; break;
+            case SDL_CONTROLLER_BUTTON_X: msgCompKey.wParam = '3'; break;
+            case SDL_CONTROLLER_BUTTON_Y: msgCompKey.wParam = '4'; break;
+
+            // Statistics on Back
+            case SDL_CONTROLLER_BUTTON_BACK: msgCompKey.wParam = '5'; break;
+
+            // Left/Right to switch between messages
+            case SDL_CONTROLLER_BUTTON_DPAD_LEFT:  msgCompKey.wParam = 219; break;
+            case SDL_CONTROLLER_BUTTON_DPAD_RIGHT: msgCompKey.wParam = 221; break;
+
+            // Scroll message text
+            case SDL_CONTROLLER_BUTTON_DPAD_UP:       msgCompKey.wParam = VK_UP; break;
+            case SDL_CONTROLLER_BUTTON_DPAD_DOWN:     msgCompKey.wParam = VK_DOWN; break;
+            case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:  msgCompKey.wParam = VK_PRIOR; break;
+            case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER: msgCompKey.wParam = VK_NEXT; break;
+          }
+
+          // Only if console isn't in the way
+          if (GetGameAPI()->GetConState() != CS_ON && msgCompKey.wParam != 0) {
+            _pGame->ComputerKeyDown(msgCompKey);
+          }
+
+        } else if (msg.message == WM_KEYDOWN) {
           _pGame->ConsoleKeyDown(msg);
 
           if (GetGameAPI()->GetConState() != CS_ON) {
@@ -1304,6 +1423,10 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         // pass keyboard/mouse messages to menu
         if (msg.message == WM_KEYDOWN) {
           MenuOnKeyDown(PressedMenuButton(msg.wParam, -1));
+
+        // [Cecil] Pass controller buttons
+        } else if (msg.message == WM_CTRLBUTTONDOWN) {
+          MenuOnKeyDown(PressedMenuButton(-1, msg.wParam));
 
         } else if (msg.message == WM_LBUTTONDOWN || msg.message == WM_LBUTTONDBLCLK) {
           // [Cecil] Hold LMB
@@ -1371,9 +1494,9 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
       }
 
       // if toggling console
-      BOOL bConsoleKey = sam_bToggleConsole || msg.message == WM_KEYDOWN &&
+      BOOL bConsoleKey = sam_bToggleConsole || (msg.message == WM_KEYDOWN &&
         (MapVirtualKey(msg.wParam, 0) == 41 // scan code for '~'
-        || msg.wParam == VK_F1 || (msg.wParam == VK_ESCAPE && _iAddonExecState == 3));
+        || msg.wParam == VK_F1)) || (IsBackPressed(msg) && _iAddonExecState == 3);
 
       if (bConsoleKey && !_bDefiningKey) {
         sam_bToggleConsole = FALSE;
@@ -1427,7 +1550,7 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
       // if demo is playing
       if (_gmRunningGameMode == GM_DEMO || _gmRunningGameMode == GM_INTRO) {
         // check if escape is pressed
-        BOOL bEscape = (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE);
+        BOOL bEscape = IsBackPressed(msg);
 
         // check if console-invoke key is pressed
         BOOL bTilde = (msg.message == WM_KEYDOWN &&
