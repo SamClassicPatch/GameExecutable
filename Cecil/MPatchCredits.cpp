@@ -21,57 +21,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 // Random quote index
 static INDEX _iRandomQuote = 0;
 
-// Label box for 5 names in a row
-static FLOATaabbox2D BoxCredits5(FLOAT fRow, INDEX iCenter) {
-  // Left
-  if (iCenter == -2) {
-    return FLOATaabbox2D(FLOAT2D(0.10f, 0.25f + (fRow + 0) * 0.04f),
-                         FLOAT2D(0.26f, 0.25f + (fRow + 1) * 0.04f));
-
-  } else if (iCenter == -1) {
-    return FLOATaabbox2D(FLOAT2D(0.26f, 0.25f + (fRow + 0) * 0.04f),
-                         FLOAT2D(0.42f, 0.25f + (fRow + 1) * 0.04f));
-
-  // Right
-  } else if (iCenter == +1) {
-    return FLOATaabbox2D(FLOAT2D(0.58f, 0.25f + (fRow + 0) * 0.04f),
-                         FLOAT2D(0.74f, 0.25f + (fRow + 1) * 0.04f));
-
-  } else if (iCenter == +2) {
-    return FLOATaabbox2D(FLOAT2D(0.74f, 0.25f + (fRow + 0) * 0.04f),
-                         FLOAT2D(0.90f, 0.25f + (fRow + 1) * 0.04f));
-  }
-
-  // Center
-  return FLOATaabbox2D(FLOAT2D(0.42f, 0.25f + (fRow + 0) * 0.04f),
-                       FLOAT2D(0.58f, 0.25f + (fRow + 1) * 0.04f));
-};
-
-// Label box for 4 names in a row
-static FLOATaabbox2D BoxCredits4(FLOAT fRow, INDEX iCenter) {
-  // Left
-  if (iCenter == -2) {
-    return FLOATaabbox2D(FLOAT2D(0.1f, 0.25f + (fRow + 0) * 0.04f),
-                         FLOAT2D(0.3f, 0.25f + (fRow + 1) * 0.04f));
-
-  } else if (iCenter == -1) {
-    return FLOATaabbox2D(FLOAT2D(0.3f, 0.25f + (fRow + 0) * 0.04f),
-                         FLOAT2D(0.5f, 0.25f + (fRow + 1) * 0.04f));
-
-  // Right
-  } else if (iCenter == +1) {
-    return FLOATaabbox2D(FLOAT2D(0.5f, 0.25f + (fRow + 0) * 0.04f),
-                         FLOAT2D(0.7f, 0.25f + (fRow + 1) * 0.04f));
-
-  } else if (iCenter == +2) {
-    return FLOATaabbox2D(FLOAT2D(0.7f, 0.25f + (fRow + 0) * 0.04f),
-                         FLOAT2D(0.9f, 0.25f + (fRow + 1) * 0.04f));
-  }
-
-  // Center
-  return BoxCredits5(fRow, 0);
-};
-
 // Click on some name
 static void NameClick(void) {
   const INDEX iName = ((CMGButton *)_pmgLastActivatedGadget)->mg_iIndex;
@@ -90,6 +39,10 @@ static void NameClick(void) {
     case PCN_NIKC75: RunBrowser("https://nikc75.newgrounds.com/"); break;
     case PCN_TIN: RunBrowser("https://youtu.be/o2W3jfvZU4w"); break;
     case PCN_ZDZICHU: RunBrowser("https://www.facebook.com/SeriousSamAlphaRemake"); break;
+
+    case PCN_SDL: RunBrowser("https://libsdl.org/"); break;
+    case PCN_STEAMAPI: RunBrowser("https://partner.steamgames.com/"); break;
+    case PCN_ZLIB: RunBrowser("https://zlib.net/"); break;
   }
 };
 
@@ -122,92 +75,116 @@ void CPatchCreditsMenu::Initialize_t(void) {
   gm_mgPatchLink.mg_pmgDown = &gm_amgNames[PCN_CECIL];
   AddChild(&gm_mgPatchLink);
 
-  const FLOAT fHeightLead = 4.0f;
-  const FLOAT fHeightThanks = 9.0f;
+  const FLOAT fHeightLead = 3.0f;
+  const FLOAT fHeightThanks = 6.0f;
+  const FLOAT fHeightThirdParty = 3.0f;
 
   // Project lead
   gm_mgLead.SetText(TRANS("DESIGN AND PROGRAMMING"));
-  gm_mgLead.mg_bfsFontSize = BFS_LARGE;
-  gm_mgLead.mg_boxOnScreen = BoxCredits5(fHeightLead, 0);
-  gm_mgLead.mg_iCenterI = 0;
+  gm_mgLead.mg_bfsFontSize = BFS_MEDIUM;
+  gm_mgLead.mg_boxOnScreen = BoxMediumLeft(fHeightLead);
+  gm_mgLead.mg_iCenterI = -1;
   gm_mgLead.mg_bEnabled = FALSE;
   gm_mgLead.mg_bLabel = TRUE;
   AddChild(&gm_mgLead);
 
   gm_amgNames[PCN_CECIL].SetText("Dreamy Cecil");
-  gm_amgNames[PCN_CECIL].mg_bfsFontSize = BFS_MEDIUM;
-  gm_amgNames[PCN_CECIL].mg_boxOnScreen = BoxCredits5(fHeightLead + 2.0f, 0);
+  gm_amgNames[PCN_CECIL].mg_boxOnScreen = BoxMediumLeft(fHeightLead + 1);
   gm_amgNames[PCN_CECIL].mg_pmgUp = &gm_mgPatchLink;
   gm_amgNames[PCN_CECIL].mg_pmgDown = &gm_amgNames[PCN_FREEKNIK];
 
   // Special thanks
   gm_mgThanks.SetText(TRANS("SPECIAL THANKS"));
-  gm_mgThanks.mg_bfsFontSize = BFS_LARGE;
-  gm_mgThanks.mg_boxOnScreen = BoxCredits5(fHeightThanks, 0);
-  gm_mgThanks.mg_iCenterI = 0;
+  gm_mgThanks.mg_bfsFontSize = BFS_MEDIUM;
+  gm_mgThanks.mg_boxOnScreen = BoxMediumLeft(fHeightThanks);
+  gm_mgThanks.mg_iCenterI = -1;
   gm_mgThanks.mg_bEnabled = FALSE;
   gm_mgThanks.mg_bLabel = TRUE;
   AddChild(&gm_mgThanks);
 
   gm_amgNames[PCN_FREEKNIK].SetText("FreekNik");
   gm_amgNames[PCN_FREEKNIK].mg_strTip = "^i#1 Nettie Fan";
-  gm_amgNames[PCN_FREEKNIK].mg_bfsFontSize = BFS_MEDIUM;
-  gm_amgNames[PCN_FREEKNIK].mg_boxOnScreen = BoxCredits4(fHeightThanks + 2.0f, -1);
+  gm_amgNames[PCN_FREEKNIK].mg_boxOnScreen = BoxMediumLeft(fHeightThanks + 1.0f);
   gm_amgNames[PCN_FREEKNIK].mg_pmgUp = &gm_amgNames[PCN_CECIL];
-  gm_amgNames[PCN_FREEKNIK].mg_pmgDown = &gm_amgNames[PCN_NIKC75];
-  gm_amgNames[PCN_FREEKNIK].mg_pmgLeft = &gm_amgNames[PCN_MAX512];
-  gm_amgNames[PCN_FREEKNIK].mg_pmgRight = &gm_amgNames[PCN_MAX512];
+  gm_amgNames[PCN_FREEKNIK].mg_pmgDown = &gm_amgNames[PCN_MAX512];
 
   gm_amgNames[PCN_MAX512].SetText("M@x512 BLR");
   gm_amgNames[PCN_MAX512].mg_strTip = "^i\"The sufferings. The sweet sufferings.\"";
-  gm_amgNames[PCN_MAX512].mg_bfsFontSize = BFS_MEDIUM;
-  gm_amgNames[PCN_MAX512].mg_boxOnScreen = BoxCredits4(fHeightThanks + 2.0f, +1);
-  gm_amgNames[PCN_MAX512].mg_pmgUp = &gm_amgNames[PCN_CECIL];
-  gm_amgNames[PCN_MAX512].mg_pmgDown = &gm_amgNames[PCN_SUPERSNIPER98];
-  gm_amgNames[PCN_MAX512].mg_pmgLeft = &gm_amgNames[PCN_FREEKNIK];
-  gm_amgNames[PCN_MAX512].mg_pmgRight = &gm_amgNames[PCN_FREEKNIK];
+  gm_amgNames[PCN_MAX512].mg_boxOnScreen = BoxMediumLeft(fHeightThanks + 2.0f);
+  gm_amgNames[PCN_MAX512].mg_pmgUp = &gm_amgNames[PCN_FREEKNIK];
+  gm_amgNames[PCN_MAX512].mg_pmgDown = &gm_amgNames[PCN_NIKC75];
 
   gm_amgNames[PCN_NIKC75].SetText("Nikc75");
   gm_amgNames[PCN_NIKC75].mg_strTip = "^i\"Where there's will, there's way.\"";
-  gm_amgNames[PCN_NIKC75].mg_bfsFontSize = BFS_MEDIUM;
-  gm_amgNames[PCN_NIKC75].mg_boxOnScreen = BoxCredits4(fHeightThanks + 3.0f, -1);
-  gm_amgNames[PCN_NIKC75].mg_pmgUp = &gm_amgNames[PCN_FREEKNIK];
-  gm_amgNames[PCN_NIKC75].mg_pmgDown = &gm_amgNames[PCN_TIN];
-  gm_amgNames[PCN_NIKC75].mg_pmgLeft = &gm_amgNames[PCN_SUPERSNIPER98];
-  gm_amgNames[PCN_NIKC75].mg_pmgRight = &gm_amgNames[PCN_SUPERSNIPER98];
+  gm_amgNames[PCN_NIKC75].mg_boxOnScreen = BoxMediumLeft(fHeightThanks + 3.0f);
+  gm_amgNames[PCN_NIKC75].mg_pmgUp = &gm_amgNames[PCN_MAX512];
+  gm_amgNames[PCN_NIKC75].mg_pmgDown = &gm_amgNames[PCN_SUPERSNIPER98];
 
   gm_amgNames[PCN_SUPERSNIPER98].SetText("Supersniper98");
   gm_amgNames[PCN_SUPERSNIPER98].mg_strTip = "^i\"Problems? FIGHT them!\"";
-  gm_amgNames[PCN_SUPERSNIPER98].mg_bfsFontSize = BFS_MEDIUM;
-  gm_amgNames[PCN_SUPERSNIPER98].mg_boxOnScreen = BoxCredits4(fHeightThanks + 3.0f, +1);
-  gm_amgNames[PCN_SUPERSNIPER98].mg_pmgUp = &gm_amgNames[PCN_MAX512];
-  gm_amgNames[PCN_SUPERSNIPER98].mg_pmgDown = &gm_amgNames[PCN_ZDZICHU];
-  gm_amgNames[PCN_SUPERSNIPER98].mg_pmgLeft = &gm_amgNames[PCN_NIKC75];
-  gm_amgNames[PCN_SUPERSNIPER98].mg_pmgRight = &gm_amgNames[PCN_NIKC75];
+  gm_amgNames[PCN_SUPERSNIPER98].mg_boxOnScreen = BoxMediumLeft(fHeightThanks + 4.0f);
+  gm_amgNames[PCN_SUPERSNIPER98].mg_pmgUp = &gm_amgNames[PCN_NIKC75];
+  gm_amgNames[PCN_SUPERSNIPER98].mg_pmgDown = &gm_amgNames[PCN_TIN];
 
   gm_amgNames[PCN_TIN].SetText("Tin Kesaro");
   gm_amgNames[PCN_TIN].mg_strTip = "^iClick for leaked patch for Next Encounter";
-  gm_amgNames[PCN_TIN].mg_bfsFontSize = BFS_MEDIUM;
-  gm_amgNames[PCN_TIN].mg_boxOnScreen = BoxCredits4(fHeightThanks + 4.0f, -1);
-  gm_amgNames[PCN_TIN].mg_pmgUp = &gm_amgNames[PCN_NIKC75];
-  gm_amgNames[PCN_TIN].mg_pmgDown = &gm_mgPatchLink;
-  gm_amgNames[PCN_TIN].mg_pmgLeft = &gm_amgNames[PCN_ZDZICHU];
-  gm_amgNames[PCN_TIN].mg_pmgRight = &gm_amgNames[PCN_ZDZICHU];
+  gm_amgNames[PCN_TIN].mg_boxOnScreen = BoxMediumLeft(fHeightThanks + 5.0f);
+  gm_amgNames[PCN_TIN].mg_pmgUp = &gm_amgNames[PCN_SUPERSNIPER98];
+  gm_amgNames[PCN_TIN].mg_pmgDown = &gm_amgNames[PCN_ZDZICHU];
 
   gm_amgNames[PCN_ZDZICHU].SetText("Zdzichu");
   gm_amgNames[PCN_ZDZICHU].mg_strTip = "^i\"Boys make the best girls.\"";
-  gm_amgNames[PCN_ZDZICHU].mg_bfsFontSize = BFS_MEDIUM;
-  gm_amgNames[PCN_ZDZICHU].mg_boxOnScreen = BoxCredits4(fHeightThanks + 4.0f, +1);
-  gm_amgNames[PCN_ZDZICHU].mg_pmgUp = &gm_amgNames[PCN_SUPERSNIPER98];
+  gm_amgNames[PCN_ZDZICHU].mg_boxOnScreen = BoxMediumLeft(fHeightThanks + 6.0f);
+  gm_amgNames[PCN_ZDZICHU].mg_pmgUp = &gm_amgNames[PCN_TIN];
   gm_amgNames[PCN_ZDZICHU].mg_pmgDown = &gm_mgPatchLink;
-  gm_amgNames[PCN_ZDZICHU].mg_pmgLeft = &gm_amgNames[PCN_TIN];
-  gm_amgNames[PCN_ZDZICHU].mg_pmgRight = &gm_amgNames[PCN_TIN];
+
+  // Third party
+  gm_mgThirdParty.SetText(TRANS("THIRD PARTY LIBRARIES"));
+  gm_mgThirdParty.mg_bfsFontSize = BFS_MEDIUM;
+  gm_mgThirdParty.mg_boxOnScreen = BoxMediumRight(fHeightThirdParty);
+  gm_mgThirdParty.mg_iCenterI = +1;
+  gm_mgThirdParty.mg_bEnabled = FALSE;
+  gm_mgThirdParty.mg_bLabel = TRUE;
+  AddChild(&gm_mgThirdParty);
+
+  gm_amgNames[PCN_SDL].SetText("Simple DirectMedia Layer");
+  gm_amgNames[PCN_SDL].mg_strTip = "Copyright (C) 1997-2020 Sam Lantinga";
+  gm_amgNames[PCN_SDL].mg_boxOnScreen = BoxMediumRight(fHeightThirdParty + 1.0f);
+  gm_amgNames[PCN_SDL].mg_pmgUp = &gm_mgPatchLink;
+  gm_amgNames[PCN_SDL].mg_pmgDown = &gm_amgNames[PCN_STEAMAPI];
+
+  gm_amgNames[PCN_STEAMAPI].SetText("Steamworks API");
+  gm_amgNames[PCN_STEAMAPI].mg_strTip = "Copyright (C) 1996-2022, Valve Corporation, All rights reserved.";
+  gm_amgNames[PCN_STEAMAPI].mg_boxOnScreen = BoxMediumRight(fHeightThirdParty + 2.0f);
+  gm_amgNames[PCN_STEAMAPI].mg_pmgUp = &gm_amgNames[PCN_SDL];
+  gm_amgNames[PCN_STEAMAPI].mg_pmgDown = &gm_amgNames[PCN_ZLIB];
+
+  gm_amgNames[PCN_ZLIB].SetText("zlib");
+  gm_amgNames[PCN_ZLIB].mg_strTip = "Copyright (C) 1995-2024 Jean-loup Gailly and Mark Adler";
+  gm_amgNames[PCN_ZLIB].mg_boxOnScreen = BoxMediumRight(fHeightThirdParty + 3.0f);
+  gm_amgNames[PCN_ZLIB].mg_pmgUp = &gm_amgNames[PCN_STEAMAPI];
+  gm_amgNames[PCN_ZLIB].mg_pmgDown = &gm_mgPatchLink;
 
   // Add all names
   for (INDEX i = 0; i < PCN_LAST; i++) {
-    gm_amgNames[i].mg_iCenterI = 0;
+    // Pad the name
+    gm_amgNames[i].SetText("  " + gm_amgNames[i].GetText() + "  ");
+
+    gm_amgNames[i].mg_bfsFontSize = BFS_MEDIUM;
     gm_amgNames[i].mg_iIndex = i;
     gm_amgNames[i].mg_pActivatedFunction = &NameClick;
+
+    if (i < PCN_FIRST_THIRDPARTY) {
+      gm_amgNames[i].mg_iCenterI = -1;
+      gm_amgNames[i].mg_pmgLeft = &gm_amgNames[PCN_FIRST_THIRDPARTY];
+      gm_amgNames[i].mg_pmgRight = &gm_amgNames[PCN_FIRST_THIRDPARTY];
+
+    } else {
+      gm_amgNames[i].mg_iCenterI = +1;
+      gm_amgNames[i].mg_pmgLeft = &gm_amgNames[PCN_CECIL];
+      gm_amgNames[i].mg_pmgRight = &gm_amgNames[PCN_CECIL];
+    }
+
     AddChild(&gm_amgNames[i]);
   }
 };

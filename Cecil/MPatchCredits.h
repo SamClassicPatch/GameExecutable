@@ -35,6 +35,12 @@ enum EPatchCreditsName {
   PCN_TIN,
   PCN_ZDZICHU,
 
+  PCN_FIRST_THIRDPARTY,
+
+  PCN_SDL = PCN_FIRST_THIRDPARTY,
+  PCN_STEAMAPI,
+  PCN_ZLIB,
+
   PCN_LAST,
 };
 
@@ -45,6 +51,7 @@ class CPatchCreditsMenu : public CGameMenu {
 
     CMGButton gm_mgLead;
     CMGButton gm_mgThanks;
+    CMGButton gm_mgThirdParty;
     CMGButton gm_amgNames[PCN_LAST];
 
     // Initialize credits
