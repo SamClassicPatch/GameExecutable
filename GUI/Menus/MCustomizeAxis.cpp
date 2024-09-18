@@ -18,6 +18,66 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuStuff.h"
 #include "MCustomizeAxis.h"
 
+// [Cecil] Render special icons for each axis
+static void AxisRenderCallback(CMGTrigger *pmg, CDrawPort *pdp) {
+  const INDEX iValue = pmg->mg_iSelected;
+  INDEX iAxis;
+
+  if (pmg->mg_astrTexts[iValue].ScanF("%d", &iAxis) != 1) {
+    iAxis = EIA_NONE;
+  }
+
+  const PIXaabbox2D box = FloatBoxToPixBox(pdp, pmg->mg_boxOnScreen);
+  const FLOAT fSize = box.Size()(2) * 1.5f;
+  FLOAT fX = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioR;
+  FLOAT fY = box.Min()(2) - 8 * FLOAT(pdp->GetHeight() / 480.0f);
+
+  const FLOAT fUSize = 1.0f / 8.0f;
+  const FLOAT fVSize = 1.0f / 4.0f;
+  FLOAT fU = 0.0f;
+  FLOAT fV = 0.0f;
+
+  COLOR col = pmg->GetCurrentColor();
+
+  pdp->InitTexture(&_pGUIM->gmCustomizeAxisMenu.gm_toAxisIcons, TRUE);
+
+  // No axis
+  if (iAxis == EIA_NONE) {
+    fU = 0.0f;
+    fV = 0.0f;
+    col = C_WHITE | CT_OPAQUE;
+
+  // Select mouse axis
+  } else if (iAxis < EIA_MAX_MOUSE) {
+    // First row
+    fU = fUSize * (FLOAT)iAxis;
+    fV = 0.0f;
+
+  // Select controller axis
+  } else {
+    iAxis -= EIA_CONTROLLER_OFFSET;
+
+    // Fourth row
+    fU = fUSize * FLOAT(iAxis / SDL_CONTROLLER_AXIS_MAX);
+    fV = fVSize * 3.0f;
+
+    // Add controller icon
+    pdp->AddTexture(fX, fY, fX + fSize, fY + fSize, fU, fV, fU + fUSize, fV + fVSize, col);
+
+    // Shift axis icon
+    fX += fSize;
+
+    // Second row
+    fU = fUSize * FLOAT(iAxis % SDL_CONTROLLER_AXIS_MAX);
+    fV = fVSize;
+  }
+
+  // Add axis icon
+  pdp->AddTexture(fX, fY, fX + fSize, fY + fSize, fU, fV, fU + fUSize, fV + fVSize, col);
+
+  pdp->FlushRenderingQueue();
+};
+
 // [Cecil] Select new axis action
 static void ChangeAxis(void) {
   // Apply current axis
@@ -100,9 +160,29 @@ void CCustomizeAxisMenu::Initialize_t(void) {
   gm_mgMountedTrigger.mg_astrTexts = new CTString[ctAxis];
   gm_mgMountedTrigger.mg_ctTexts = ctAxis;
 
-  // for all axis actions that can be mounted
-  for (INDEX iAxis = 0; iAxis < ctAxis; iAxis++) {
-    gm_mgMountedTrigger.mg_astrTexts[iAxis] = _pInput->GetAxisTransName(iAxis);
+  // [Cecil] Load axis icons
+  try {
+    gm_toAxisIcons.SetData_t(CTFILENAME("TexturesPatch\\General\\AxisIcons.tex"));
+  } catch (char *strError) {
+    CPrintF("%s\n", strError);
+  }
+
+  // [Cecil] If axis icons have been loaded
+  if (gm_toAxisIcons.GetData() != NULL) {
+    // Set custom rendering method
+    gm_mgMountedTrigger.mg_bVisual = TRUE;
+    gm_mgMountedTrigger.mg_pRenderCallback = &AxisRenderCallback;
+
+    // And use axis index for each value
+    for (INDEX iAxis = 0; iAxis < ctAxis; iAxis++) {
+      gm_mgMountedTrigger.mg_astrTexts[iAxis].PrintF("%d", iAxis);
+    }
+
+  // Otherwise use axis display names
+  } else {
+    for (INDEX iAxis = 0; iAxis < ctAxis; iAxis++) {
+      gm_mgMountedTrigger.mg_astrTexts[iAxis] = _pInput->GetAxisTransName(iAxis);
+    }
   }
 
   gm_mgSensitivity.mg_boxOnScreen = BoxMediumRow(7);
@@ -131,6 +211,7 @@ void CCustomizeAxisMenu::Initialize_t(void) {
 
 CCustomizeAxisMenu::~CCustomizeAxisMenu(void) {
   delete[] gm_mgMountedTrigger.mg_astrTexts;
+  gm_toAxisIcons.SetData(NULL); // [Cecil]
 }
 
 void CCustomizeAxisMenu::ObtainActionSettings(void) {

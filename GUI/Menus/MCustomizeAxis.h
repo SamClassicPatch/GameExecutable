@@ -38,6 +38,9 @@ class CCustomizeAxisMenu : public CGameMenu {
     // [Cecil] Currently selected axis
     INDEX gm_iAxisAction;
 
+    // [Cecil] Sprite sheet with all axis icons
+    CTextureObject gm_toAxisIcons;
+
     ~CCustomizeAxisMenu(void);
     void Initialize_t(void);
     void StartMenu(void);
