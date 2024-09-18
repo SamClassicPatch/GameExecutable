@@ -36,23 +36,20 @@ BOOL CMGVarButton::IsEnabled(void) {
 // return slider position on scren
 PIXaabbox2D CMGVarButton::GetSliderBox(INDEX iSliderType) {
   extern CDrawPort *pdp;
-  PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
-  PIX pixIR = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioR;
-  PIX pixJ = box.Min()(2);
-
-  PIX pixISize, pixJSize;
 
   // [Cecil] Big fill slider
   if (iSliderType == CVarSetting::SLD_BIGFILL) {
-    pixJSize = box.Size()(2) * 0.95f;
-    pixISize = box.Size()(1) * _fGadgetSideRatioL;
-
-  } else {
-    pixISize = box.Size()(1) * 0.13f;
-    pixJSize = box.Size()(2);
+    extern PIXaabbox2D GetHorSliderBox(CDrawPort *pdp, FLOATaabbox2D boxOnScreen, BOOL bHasLabel);
+    return GetHorSliderBox(pdp, mg_boxOnScreen, TRUE);
   }
 
-  return PIXaabbox2D(PIX2D(pixIR, pixJ + 1), PIX2D(pixIR + pixISize - 4, pixJ + pixJSize - 6));
+  PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
+  PIX pixIR = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioR;
+  PIX pixJ = box.Min()(2);
+  PIX pixISize = box.Size()(1) * 0.13f;
+  PIX pixJSize = box.Size()(2);
+
+  return PIXaabbox2D(PIX2D(pixIR + 1, pixJ + 1), PIX2D(pixIR + pixISize - 4, pixJ + pixJSize - 6));
 }
 
 extern BOOL _bVarChanged;
@@ -235,51 +232,43 @@ void CMGVarButton::Render(CDrawPort *pdp) {
           strText = mg_pvsVar->vs_astrTexts[mg_pvsVar->vs_iValue];
 
           const FLOAT fFactor = FLOAT(mg_pvsVar->vs_iValue + 1) / (FLOAT)mg_pvsVar->vs_ctValues;
+          const CVarSetting::ESliderType eSlider = mg_pvsVar->vs_eSlider;
 
-          PIX pixISize = box.Size()(1) * 0.13f;
-          PIX pixJSize = box.Size()(2);
+          // [Cecil] Use pre-calculated slider box for rendering
+          PIXaabbox2D boxSlider = GetSliderBox(eSlider);
+          const PIX pixSliderX = boxSlider.Min()(1) + 1;
+          const PIX pixSliderY = boxSlider.Min()(2) + 1;
+          const PIX2D vSliderSize = boxSlider.Size();
 
-          // need slider?
-          if (mg_pvsVar->vs_eSlider == CVarSetting::SLD_FILL) {
-            // draw box around slider
-            _pGame->LCDDrawBox(0, -1, PIXaabbox2D(PIX2D(pixIR, pixJ + 1), PIX2D(pixIR + pixISize - 4, pixJ + pixJSize - 6)),
-                               _pGame->LCDGetColor(C_GREEN | 255, "slider box"));
-
-            // fill slider
-            pdp->Fill(pixIR + 1, pixJ + 2, (pixISize - 6) * fFactor, pixJSize - 9, col);
-
-            // move text printout to the right of slider
-            pixIR += box.Size()(1) * 0.15f;
-
-          // [Cecil] Big fill slider
-          } else if (mg_pvsVar->vs_eSlider == CVarSetting::SLD_BIGFILL) {
-            // get geometry
-            pixJSize = box.Size()(2) * 0.95f;
-            pixISize = box.Size()(1) * _fGadgetSideRatioL;
-
+          // [Cecil] Unified both fill slider types
+          if (eSlider == CVarSetting::SLD_FILL || eSlider == CVarSetting::SLD_BIGFILL) {
             // Draw box around the slider
-            _pGame->LCDDrawBox(0, -1, PIXaabbox2D(PIX2D(pixIR + 1, pixJ), PIX2D(pixIR + pixISize - 2, pixJ + pixJSize - 2)),
-                                _pGame->LCDGetColor(C_GREEN | 255, "slider box"));
+            _pGame->LCDDrawBox(0, -1, boxSlider, _pGame->LCDGetColor(C_GREEN | 255, "slider box"));
 
-            // Fiil slider
-            pdp->Fill(pixIR + 2, pixJ + 1, (pixISize - 5) * fFactor, (pixJSize - 4), col);
+            // Fill slider
+            pdp->Fill(pixSliderX, pixSliderY, (vSliderSize(1) - 2) * fFactor, (vSliderSize(2) - 2), col);
 
-            // Move text in the middle of the box
-            pixIR += pixISize / 2;
-            pixJ += 2;
-            bCenteredText = TRUE;
+            // [Cecil] Move text in the middle of the box
+            if (eSlider == CVarSetting::SLD_BIGFILL) {
+              pixIR += vSliderSize(1) / 2;
+              pixJ += 2;
+              bCenteredText = TRUE;
 
-          // ratio slider
-          } else if (mg_pvsVar->vs_eSlider == CVarSetting::SLD_RATIO) {
-            // draw box around slider
-            _pGame->LCDDrawBox(0, -1, PIXaabbox2D(PIX2D(pixIR, pixJ + 1), PIX2D(pixIR + pixISize - 4, pixJ + pixJSize - 6)),
-                                _pGame->LCDGetColor(C_GREEN | 255, "slider box"));
+            } else {
+              // Move text to the right of the box
+              pixIR += vSliderSize(1) * 1.15f;
+            }
 
-            FLOAT fUnitWidth = (FLOAT)(pixISize - 5) / mg_pvsVar->vs_ctValues;
-            pdp->Fill(pixIR + 1 + (mg_pvsVar->vs_iValue * fUnitWidth), pixJ + 2, fUnitWidth, pixJSize - 9, col);
+          // Ratio slider
+          } else if (eSlider == CVarSetting::SLD_RATIO) {
+            // Draw box around the slider
+            _pGame->LCDDrawBox(0, -1, boxSlider, _pGame->LCDGetColor(C_GREEN | 255, "slider box"));
 
-            // move text printout to the right of slider
-            pixIR += box.Size()(1) * 0.15f;
+            FLOAT fUnitWidth = FLOAT(vSliderSize(1) - 1) / mg_pvsVar->vs_ctValues;
+            pdp->Fill(pixSliderX + (mg_pvsVar->vs_iValue * fUnitWidth), pixSliderY, fUnitWidth, (vSliderSize(2) - 2), col);
+            
+            // Move text to the right of the box
+            pixIR += vSliderSize(1) * 1.15f;
           }
         }
 

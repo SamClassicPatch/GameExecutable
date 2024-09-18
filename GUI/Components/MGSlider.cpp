@@ -45,12 +45,12 @@ void CMGSlider::ApplyGivenPosition(INDEX iMin, INDEX iMax, INDEX iCur) {
 }
 
 // [Cecil] Global method for getting a slider box
-PIXaabbox2D GetSliderBox(CDrawPort *pdp, FLOATaabbox2D boxOnScreen, BOOL bHasLabel) {
+PIXaabbox2D GetHorSliderBox(CDrawPort *pdp, FLOATaabbox2D boxOnScreen, BOOL bHasLabel) {
   PIXaabbox2D box = FloatBoxToPixBox(pdp, boxOnScreen);
-  PIX pixIR;
   PIX pixJ = box.Min()(2);
   PIX pixJSize = box.Size()(2) * 0.95f;
-  PIX pixISizeR;
+
+  PIX pixIR, pixISizeR;
 
   // [Cecil] Use the entire box if there's no text
   if (!bHasLabel) {
@@ -69,7 +69,7 @@ PIXaabbox2D GetSliderBox(CDrawPort *pdp, FLOATaabbox2D boxOnScreen, BOOL bHasLab
 BOOL CMGSlider::OnLMB(void) {
   // get position of slider box on screen
   extern CDrawPort *pdp;
-  PIXaabbox2D boxSlider = GetSliderBox(pdp, mg_boxOnScreen, GetText() != "");
+  PIXaabbox2D boxSlider = GetHorSliderBox(pdp, mg_boxOnScreen, GetText() != "");
 
   // if mouse is within
   if (boxSlider >= PIX2D(_pixCursorPosI, _pixCursorPosJ)) {
@@ -132,7 +132,7 @@ void CMGSlider::Render(CDrawPort *pdp) {
   }
 
   // [Cecil] Use pre-calculated slider box for rendering
-  PIXaabbox2D boxSlider = GetSliderBox(pdp, mg_boxOnScreen, bHasLabel);
+  PIXaabbox2D boxSlider = GetHorSliderBox(pdp, mg_boxOnScreen, bHasLabel);
   const PIX pixX = boxSlider.Min()(1) + 1;
   const PIX pixY = boxSlider.Min()(2) + 1;
   const PIX2D vSize = boxSlider.Size();
