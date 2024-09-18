@@ -22,6 +22,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MenuGadget.h"
 
 class CMGTrigger : public CMenuGadget {
+  public:
+    // [Cecil] Callback for rendering visual values
+    typedef void (*CVisualRenderFunc)(CMGTrigger *pmg, CDrawPort *pdp);
+
   // [Cecil] Private strings
   private:
     CTString mg_strLabel;
@@ -33,6 +37,9 @@ class CMGTrigger : public CMenuGadget {
     INDEX mg_iSelected;
     INDEX mg_iCenterI;
     BOOL mg_bVisual;
+
+    // [Cecil] For custom rendering of visual values
+    CVisualRenderFunc mg_pRenderCallback;
 
     CMGTrigger(void);
 

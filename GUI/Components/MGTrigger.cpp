@@ -38,6 +38,7 @@ CMGTrigger::CMGTrigger(void) {
   mg_pOnTriggerChange = NULL;
   mg_iCenterI = 0;
   mg_bVisual = FALSE;
+  mg_pRenderCallback = NULL; // [Cecil]
 }
 
 void CMGTrigger::ApplyCurrentSelection(void) {
@@ -78,35 +79,46 @@ void CMGTrigger::Render(CDrawPort *pdp) {
   PIX pixJ = box.Min()(2);
 
   COLOR col = GetCurrentColor();
+
+  // [Cecil] Render label
+  if (mg_iCenterI == -1) {
+    pdp->PutText(GetName(), box.Min()(1), pixJ, col);
+  } else {
+    pdp->PutTextR(GetName(), pixIL, pixJ, col);
+  }
+
+  // Render non-visual string values or "none" for empty visual values
   if (!mg_bVisual || GetText() == "") {
-    CTString strValue = GetText();
-    if (mg_bVisual) {
-      strValue = LOCALIZE("none");
-    }
+    CTString strValue = (mg_bVisual ? LOCALIZE("none") : GetText());
 
     if (mg_iCenterI == -1) {
-      pdp->PutText(GetName(), box.Min()(1), pixJ, col);
       pdp->PutTextR(strValue, box.Max()(1), pixJ, col);
     } else {
-      pdp->PutTextR(GetName(), pixIL, pixJ, col);
       pdp->PutText(strValue, pixIR, pixJ, col);
     }
+
+  // [Cecil] Use custom rendering callback
+  } else if (mg_pRenderCallback != NULL) {
+    mg_pRenderCallback(this, pdp);
+
   } else {
-    CTString strLabel = GetName() + ": ";
-    pdp->PutText(strLabel, box.Min()(1), pixJ, col);
     CTextureObject to;
+
     try {
       to.SetData_t(GetText());
       CTextureData *ptd = (CTextureData *)to.GetData();
       PIX pixSize = box.Size()(2);
       PIX pixCX = box.Max()(1) - pixSize / 2;
       PIX pixCY = box.Center()(2);
+
       pdp->PutTexture(&to, PIXaabbox2D(
         PIX2D(pixCX - pixSize / 2, pixCY - pixSize / 2),
         PIX2D(pixCX - pixSize / 2 + pixSize, pixCY - pixSize / 2 + pixSize)), C_WHITE | 255);
+
     } catch (char *strError) {
       CPrintF("%s\n", strError);
     }
+
     to.SetData(NULL);
   }
 }
