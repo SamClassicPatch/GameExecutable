@@ -81,17 +81,31 @@ void CMGTrigger::Render(CDrawPort *pdp) {
   COLOR col = GetCurrentColor();
 
   // [Cecil] Render label
-  if (mg_iCenterI == -1) {
-    pdp->PutText(GetName(), box.Min()(1), pixJ, col);
-  } else {
-    pdp->PutTextR(GetName(), pixIL, pixJ, col);
+  const BOOL bHasLabel = (GetName() != "");
+
+  if (bHasLabel) {
+    if (mg_iCenterI == -1) {
+      pdp->PutText(GetName(), box.Min()(1), pixJ, col);
+    } else {
+      pdp->PutTextR(GetName(), pixIL, pixJ, col);
+    }
   }
 
   // Render non-visual string values or "none" for empty visual values
   if (!mg_bVisual || GetText() == "") {
     CTString strValue = (mg_bVisual ? LOCALIZE("none") : GetText());
 
-    if (mg_iCenterI == -1) {
+    // [Cecil] Render value with any centering if there's no label
+    if (!bHasLabel) {
+      if (mg_iCenterI == -1) {
+        pdp->PutText(strValue, box.Min()(1), pixJ, col);
+      } else if (mg_iCenterI == +1) {
+        pdp->PutTextR(strValue, box.Max()(1), pixJ, col);
+      } else {
+        pdp->PutTextC(strValue, box.Center()(1), pixJ, col);
+      }
+
+    } else if (mg_iCenterI == -1) {
       pdp->PutTextR(strValue, box.Max()(1), pixJ, col);
     } else {
       pdp->PutText(strValue, pixIR, pixJ, col);
