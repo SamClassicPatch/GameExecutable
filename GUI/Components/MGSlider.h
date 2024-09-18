@@ -35,7 +35,6 @@ class CMGSlider : public CMGButton {
     virtual BOOL OnKeyDown(PressedMenuButton pmb);
     virtual BOOL OnMouseHeld(PressedMenuButton pmb); // [Cecil]
     void (*mg_pOnSliderChange)(INDEX iCurPos);
-    PIXaabbox2D GetSliderBox(void);
     void Render(CDrawPort *pdp);
 
     // [Cecil] Separate method

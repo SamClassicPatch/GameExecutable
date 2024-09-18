@@ -44,10 +44,32 @@ void CMGSlider::ApplyGivenPosition(INDEX iMin, INDEX iMax, INDEX iCur) {
   ApplyCurrentPosition();
 }
 
+// [Cecil] Global method for getting a slider box
+PIXaabbox2D GetSliderBox(CDrawPort *pdp, FLOATaabbox2D boxOnScreen, BOOL bHasLabel) {
+  PIXaabbox2D box = FloatBoxToPixBox(pdp, boxOnScreen);
+  PIX pixIR;
+  PIX pixJ = box.Min()(2);
+  PIX pixJSize = box.Size()(2) * 0.95f;
+  PIX pixISizeR;
+
+  // [Cecil] Use the entire box if there's no text
+  if (!bHasLabel) {
+    pixIR = box.Min()(1);
+    pixISizeR = box.Size()(1) - 1;
+
+  } else {
+    pixIR = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioR;
+    pixISizeR = box.Size()(1) * _fGadgetSideRatioL;
+  }
+
+  return PIXaabbox2D(PIX2D(pixIR + 1, pixJ), PIX2D(pixIR + pixISizeR - 2, pixJ + pixJSize - 2));
+};
+
 // [Cecil] Separate method
 BOOL CMGSlider::OnLMB(void) {
   // get position of slider box on screen
-  PIXaabbox2D boxSlider = GetSliderBox();
+  extern CDrawPort *pdp;
+  PIXaabbox2D boxSlider = GetSliderBox(pdp, mg_boxOnScreen, GetText() != "");
 
   // if mouse is within
   if (boxSlider >= PIX2D(_pixCursorPosI, _pixCursorPosJ)) {
@@ -91,41 +113,38 @@ BOOL CMGSlider::OnMouseHeld(PressedMenuButton pmb)
   return CMenuGadget::OnMouseHeld(pmb);
 };
 
-PIXaabbox2D CMGSlider::GetSliderBox(void) {
-  extern CDrawPort *pdp;
-  PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
-  PIX pixIR = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioR;
-  PIX pixJ = box.Min()(2);
-  PIX pixJSize = box.Size()(2) * 0.95f;
-  PIX pixISizeR = box.Size()(1) * _fGadgetSideRatioL;
-
-  return PIXaabbox2D(PIX2D(pixIR + 1, pixJ + 1), PIX2D(pixIR + pixISizeR - 2, pixJ + pixJSize - 2));
-}
-
 void CMGSlider::Render(CDrawPort *pdp) {
   SetFontMedium(pdp, mg_fTextScale);
 
   // get geometry
   COLOR col = GetCurrentColor();
-  PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
-  PIX pixIL = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioL;
-  PIX pixIR = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioR;
-  PIX pixJ = box.Min()(2);
-  PIX pixJSize = box.Size()(2) * 0.95f;
-  PIX pixISizeR = box.Size()(1) * _fGadgetSideRatioL;
 
-  // print text left of slider
-  pdp->PutTextR(GetText(), pixIL, pixJ, col);
+  // [Cecil] If there's any text
+  const BOOL bHasLabel = (GetText() != "");
+
+  if (bHasLabel) {
+    // Print text on the left side
+    PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
+    PIX pixTextX = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioL;
+    PIX pixTextY = box.Min()(2);
+
+    pdp->PutTextR(GetText(), pixTextX, pixTextY, col);
+  }
+
+  // [Cecil] Use pre-calculated slider box for rendering
+  PIXaabbox2D boxSlider = GetSliderBox(pdp, mg_boxOnScreen, bHasLabel);
+  const PIX pixX = boxSlider.Min()(1) + 1;
+  const PIX pixY = boxSlider.Min()(2) + 1;
+  const PIX2D vSize = boxSlider.Size();
 
   // draw box around slider
-  _pGame->LCDDrawBox(0, -1, PIXaabbox2D(PIX2D(pixIR + 1, pixJ), PIX2D(pixIR + pixISizeR - 2, pixJ + pixJSize - 2)),
-                     _pGame->LCDGetColor(C_GREEN | 255, "slider box"));
+  _pGame->LCDDrawBox(0, -1, boxSlider, _pGame->LCDGetColor(C_GREEN | 255, "slider box"));
 
   // draw filled part of slider
-  pdp->Fill(pixIR + 2, pixJ + 1, (pixISizeR - 5) * mg_fFactor, (pixJSize - 4), col);
+  pdp->Fill(pixX, pixY, (vSize(1) - 2) * mg_fFactor, (vSize(2) - 2), col);
 
   // print percentage text
   CTString strPercentage;
   strPercentage.PrintF("%d%%", (int)floor(mg_fFactor * 100 + 0.5f));
-  pdp->PutTextC(strPercentage, pixIR + pixISizeR / 2, pixJ + 1, col);
+  pdp->PutTextC(strPercentage, pixX + vSize(1) / 2, pixY, col);
 }
