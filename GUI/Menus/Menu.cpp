@@ -734,22 +734,8 @@ BOOL DoMenu(CDrawPort *pdp) {
       _pGame->MenuPostRenderMenu(pgmLast->gm_strName);
     }
 
-    // gray it out
-    dpMenu.Fill(C_BLACK | 128);
-
-    // clear popup box
-    dpMenu.Unlock();
-    PIXaabbox2D box = FloatBoxToPixBox(&dpMenu, BoxPopup(pgmCurrentMenu->gm_fPopupSize));
-    CDrawPort dpPopup(pdp, box);
-    dpPopup.Lock();
-    SetDrawportForGame(&dpPopup);
-    dpPopup.Fill(C_BLACK | 255);
-    _pGame->LCDRenderClouds1();
-    _pGame->LCDRenderGrid();
-    //_pGame->LCDRenderClouds2();
-    _pGame->LCDScreenBox(_pGame->LCDGetColor(C_GREEN | 255, "popup box"));
-    dpPopup.Unlock();
-    dpMenu.Lock();
+    // [Cecil] Render popup box in a separate method
+    CGameMenu::RenderPopup(&dpMenu, pgmCurrentMenu->gm_fPopupSize);
   }
 
   // no entity is under cursor initially
@@ -797,6 +783,9 @@ BOOL DoMenu(CDrawPort *pdp) {
     // render the edit gadget again
     pmgActive->Render(&dpMenu);
   }
+
+  // [Cecil] Render menu extras on top of everything
+  pgmCurrentMenu->PostRender(&dpMenu);
 
   // if there is some active gadget and it has tips
   if (pmgActive != NULL && (pmgActive->mg_strTip != "" || _bEditingString)) {

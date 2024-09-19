@@ -353,3 +353,26 @@ void CGameMenu::EndMenu(void) {
     itmg->Disappear();
   }
 }
+
+// [Cecil] Render popup box in a separate method
+void CGameMenu::RenderPopup(CDrawPort *pdp, FLOAT fPopupSize) {
+  // Gray it out
+  pdp->Fill(C_BLACK | 128);
+
+  pdp->Unlock();
+  {
+    CDrawPort dpPopup(pdp, FloatBoxToPixBox(pdp, BoxPopup(fPopupSize)));
+    dpPopup.Lock();
+
+    SetDrawportForGame(&dpPopup);
+    dpPopup.Fill(C_BLACK | 255);
+
+    _pGame->LCDRenderClouds1();
+    _pGame->LCDRenderGrid();
+    //_pGame->LCDRenderClouds2();
+    _pGame->LCDScreenBox(_pGame->LCDGetColor(C_GREEN | 255, "popup box"));
+
+    dpPopup.Unlock();
+  }
+  pdp->Lock();
+};

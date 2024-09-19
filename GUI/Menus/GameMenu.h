@@ -45,6 +45,12 @@ class CGameMenu : public CLinkedNode {
     virtual BOOL OnMouseHeld(PressedMenuButton pmb); // [Cecil]
     virtual BOOL OnChar(MSG msg);
     virtual void Think(void);
+
+    // [Cecil] Render extras on top of all gadgets
+    virtual void PostRender(CDrawPort *pdp) {};
+
+    // [Cecil] Render popup box in a separate method
+    static void RenderPopup(CDrawPort *pdp, FLOAT fPopupSize);
 };
 
 #endif /* include-once check. */
