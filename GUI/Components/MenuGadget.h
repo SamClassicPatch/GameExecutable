@@ -75,4 +75,7 @@ enum ButtonFontSize {
 
 extern CMenuGadget *_pmgLastActivatedGadget;
 
+// [Cecil] Last pressed gadget
+extern CMenuGadget *_pmgLastGadgetLMB;
+
 #endif /* include-once check. */

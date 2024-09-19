@@ -187,6 +187,9 @@ BOOL CGameMenu::OnKeyDown(PressedMenuButton pmb) {
     }
   }
 
+  // [Cecil] Reset last pressed gadget
+  _pmgLastGadgetLMB = NULL;
+
   // if none focused
   if (pmgActive == NULL) {
     // do nothing
@@ -195,6 +198,11 @@ BOOL CGameMenu::OnKeyDown(PressedMenuButton pmb) {
 
   // if active gadget handles it
   if (pmgActive->OnKeyDown(pmb)) {
+    // [Cecil] Remember last pressed gadget
+    if (pmb.iKey == VK_LBUTTON) {
+      _pmgLastGadgetLMB = pmgActive;
+    }
+
     // key is handled
     return TRUE;
   }

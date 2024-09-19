@@ -28,6 +28,9 @@ extern BOOL _bDefiningKey = FALSE;
 extern BOOL _bEditingString = FALSE;
 extern CMenuGadget *_pmgLastActivatedGadget = NULL;
 
+// [Cecil] Last pressed gadget
+CMenuGadget *_pmgLastGadgetLMB = NULL;
+
 CMenuGadget::CMenuGadget(void) {
   mg_pmgLeft = NULL;
   mg_pmgRight = NULL;

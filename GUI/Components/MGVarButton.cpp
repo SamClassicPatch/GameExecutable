@@ -177,12 +177,14 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
 BOOL CMGVarButton::OnMouseHeld(PressedMenuButton pmb)
 {
   if (pmb.iKey != VK_LBUTTON) return FALSE;
+  if (mg_pvsVar == NULL) return FALSE;
 
-  // Forward the key if it's a toggleable slider without a custom value
-  if (mg_pvsVar != NULL && mg_pvsVar->vs_eType == CVarSetting::E_TOGGLE
-   && mg_pvsVar->vs_eSlider != CVarSetting::SLD_NOSLIDER && !mg_pvsVar->vs_bCustom)
+  // If it's a toggleable slider without a custom value that was pressed last
+  if (_pmgLastGadgetLMB == this && mg_pvsVar->vs_eType == CVarSetting::E_TOGGLE
+   && !mg_pvsVar->vs_bCustom && mg_pvsVar->vs_eSlider != CVarSetting::SLD_NOSLIDER)
   {
-    OnKeyDown(pmb);
+    // Forward the key
+    return OnKeyDown(pmb);
   }
 
   return FALSE;

@@ -106,7 +106,8 @@ BOOL CMGSlider::OnKeyDown(PressedMenuButton pmb) {
 // [Cecil] Adjust the slider by holding a button
 BOOL CMGSlider::OnMouseHeld(PressedMenuButton pmb)
 {
-  if (pmb.iKey == VK_LBUTTON && OnLMB()) {
+  // Only when it's the last pressed slider
+  if (_pmgLastGadgetLMB == this && pmb.iKey == VK_LBUTTON && OnLMB()) {
     return TRUE;
   }
 
