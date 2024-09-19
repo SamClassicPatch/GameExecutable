@@ -37,6 +37,7 @@ CMGTrigger::CMGTrigger(void) {
   mg_pPreTriggerChange = NULL;
   mg_pOnTriggerChange = NULL;
   mg_iCenterI = 0;
+  mg_iCenterJ = -1; // [Cecil]
   mg_bVisual = FALSE;
   mg_pRenderCallback = NULL; // [Cecil]
 }
@@ -76,18 +77,31 @@ void CMGTrigger::Render(CDrawPort *pdp) {
   PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
   PIX pixIL = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioL;
   PIX pixIR = box.Min()(1) + box.Size()(1) * _fGadgetSideRatioR;
-  PIX pixJ = box.Min()(2);
 
   COLOR col = GetCurrentColor();
+
+  // [Cecil] Align text vertically
+  const PIX pixTextHeight = pdp->dp_FontData->GetHeight() * pdp->dp_fTextScaling;
+  PIX pixTextY;
+
+  if (mg_iCenterJ == -1) {
+    pixTextY = box.Min()(2);
+
+  } else if (mg_iCenterJ == +1) {
+    pixTextY = box.Max()(2) - pixTextHeight;
+
+  } else {
+    pixTextY = box.Center()(2) - pixTextHeight * 0.5f;
+  }
 
   // [Cecil] Render label
   const BOOL bHasLabel = (GetName() != "");
 
   if (bHasLabel) {
     if (mg_iCenterI == -1) {
-      pdp->PutText(GetName(), box.Min()(1), pixJ, col);
+      pdp->PutText(GetName(), box.Min()(1), pixTextY, col);
     } else {
-      pdp->PutTextR(GetName(), pixIL, pixJ, col);
+      pdp->PutTextR(GetName(), pixIL, pixTextY, col);
     }
   }
 
@@ -98,17 +112,17 @@ void CMGTrigger::Render(CDrawPort *pdp) {
     // [Cecil] Render value with any centering if there's no label
     if (!bHasLabel) {
       if (mg_iCenterI == -1) {
-        pdp->PutText(strValue, box.Min()(1), pixJ, col);
+        pdp->PutText(strValue, box.Min()(1), pixTextY, col);
       } else if (mg_iCenterI == +1) {
-        pdp->PutTextR(strValue, box.Max()(1), pixJ, col);
+        pdp->PutTextR(strValue, box.Max()(1), pixTextY, col);
       } else {
-        pdp->PutTextC(strValue, box.Center()(1), pixJ, col);
+        pdp->PutTextC(strValue, box.Center()(1), pixTextY, col);
       }
 
     } else if (mg_iCenterI == -1) {
-      pdp->PutTextR(strValue, box.Max()(1), pixJ, col);
+      pdp->PutTextR(strValue, box.Max()(1), pixTextY, col);
     } else {
-      pdp->PutText(strValue, pixIR, pixJ, col);
+      pdp->PutText(strValue, pixIR, pixTextY, col);
     }
 
   // [Cecil] Use custom rendering callback

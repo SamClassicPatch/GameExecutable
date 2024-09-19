@@ -143,8 +143,22 @@ void CMGSlider::Render(CDrawPort *pdp) {
   // draw filled part of slider
   pdp->Fill(pixX, pixY, (vSize(1) - 2) * mg_fFactor, (vSize(2) - 2), col);
 
+  // [Cecil] Align text vertically
+  const PIX pixTextHeight = pdp->dp_FontData->GetHeight() * pdp->dp_fTextScaling;
+  PIX pixTextY;
+
+  if (mg_iCenterJ == -1) {
+    pixTextY = boxSlider.Min()(2);
+
+  } else if (mg_iCenterJ == +1) {
+    pixTextY = boxSlider.Max()(2) - pixTextHeight;
+
+  } else {
+    pixTextY = boxSlider.Center()(2) - pixTextHeight * 0.5f;
+  }
+
   // print percentage text
   CTString strPercentage;
   strPercentage.PrintF("%d%%", (int)floor(mg_fFactor * 100 + 0.5f));
-  pdp->PutTextC(strPercentage, pixX + vSize(1) / 2, pixY, col);
+  pdp->PutTextC(strPercentage, pixX + vSize(1) / 2, pixTextY + 1, col);
 }

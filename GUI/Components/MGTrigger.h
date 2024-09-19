@@ -35,7 +35,7 @@ class CMGTrigger : public CMenuGadget {
     CTString *mg_astrTexts;
     INDEX mg_ctTexts;
     INDEX mg_iSelected;
-    INDEX mg_iCenterI;
+    INDEX mg_iCenterI, mg_iCenterJ; // [Cecil] Vertical centering
     BOOL mg_bVisual;
 
     // [Cecil] For custom rendering of visual values
