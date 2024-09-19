@@ -1409,6 +1409,20 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         }
       }
 
+      // [Cecil] Release held mouse buttons regardless of enabled input
+      if (msg.message == WM_LBUTTONUP) {
+        _bLHeld = FALSE;
+        ReleaseCapture();
+
+      } else if (msg.message == WM_RBUTTONUP) {
+        _bRHeld = FALSE;
+        ReleaseCapture();
+
+      } else if (msg.message == WM_MBUTTONUP) {
+        _bMHeld = FALSE;
+        ReleaseCapture();
+      }
+
       // if menu is active and no input on
       if (bMenuActive && !_pInput->IsInputEnabled()) {
         // [Cecil] Execute action on mouse button hold
@@ -1449,21 +1463,6 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
           SetCapture(_hwndMain);
 
           MenuOnKeyDown(PressedMenuButton(VK_MBUTTON, -1));
-
-        // [Cecil] Release held LMB
-        } else if (msg.message == WM_LBUTTONUP) {
-          _bLHeld = FALSE;
-          ReleaseCapture();
-
-        // [Cecil] Release held RMB
-        } else if (msg.message == WM_RBUTTONUP) {
-          _bRHeld = FALSE;
-          ReleaseCapture();
-
-        // [Cecil] Release held MMB
-        } else if (msg.message == WM_MBUTTONUP) {
-          _bMHeld = FALSE;
-          ReleaseCapture();
 
         } else if (msg.message == WM_MOUSEMOVE) {
           MenuOnMouseMove(LOWORD(msg.lParam), HIWORD(msg.lParam));
