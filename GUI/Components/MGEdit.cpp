@@ -18,8 +18,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 extern CSoundData *_psdPress;
 
-extern BOOL _bEditingString;
-
 CMGEdit::CMGEdit(void) {
   mg_pstrToChange = NULL;
   mg_ctMaxStringLen = 70;
@@ -29,7 +27,7 @@ CMGEdit::CMGEdit(void) {
 void CMGEdit::Clear(void) {
   mg_iCursorPos = 0;
   mg_bEditing = FALSE;
-  _bEditingString = FALSE;
+  _bEditingValue = FALSE;
 }
 
 void CMGEdit::OnActivate(void) {
@@ -40,7 +38,7 @@ void CMGEdit::OnActivate(void) {
   PlayMenuSound(_psdPress);
   mg_iCursorPos = GetText().Length();
   mg_bEditing = TRUE;
-  _bEditingString = TRUE;
+  _bEditingValue = TRUE;
 }
 
 // focus lost

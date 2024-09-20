@@ -66,8 +66,6 @@ extern PIX _pixCursorExternPosI = 0;
 extern PIX _pixCursorExternPosJ = 0;
 extern BOOL _bMouseUsedLast = FALSE;
 extern CMenuGadget *_pmgUnderCursor = NULL;
-extern BOOL _bDefiningKey;
-extern BOOL _bEditingString;
 
 // thumbnail for showing in menu
 CTextureObject _toThumbnail;
@@ -375,7 +373,7 @@ void MenuOnKeyDown(PressedMenuButton pmb) {
     || pmb.iKey == VK_XBUTTON1 || pmb.iKey == VK_XBUTTON2 || pmb.iKey == MOUSEWHEEL_DN || pmb.iKey == MOUSEWHEEL_UP);
 
   // ignore mouse when editing
-  if (_bEditingString && _bMouseUsedLast) {
+  if (_bEditingValue && _bMouseUsedLast) {
     _bMouseUsedLast = FALSE;
     return;
   }
@@ -428,7 +426,7 @@ void MenuOnMouseMove(PIX pixI, PIX pixJ) {
   }
   pixLastI = pixI;
   pixLastJ = pixJ;
-  _bMouseUsedLast = !_bEditingString && !_bDefiningKey && !_pInput->IsInputEnabled();
+  _bMouseUsedLast = !_bEditingValue && !_bDefiningKey && !_pInput->IsInputEnabled();
 }
 
 void MenuUpdateMouseFocus(void) {
@@ -443,7 +441,7 @@ void MenuUpdateMouseFocus(void) {
   _pixCursorExternPosJ = pt.y;
 
   // if mouse not used last
-  if (!_bMouseUsedLast || _bDefiningKey || _bEditingString) {
+  if (!_bMouseUsedLast || _bDefiningKey || _bEditingValue) {
     // do nothing
     return;
   }
@@ -526,7 +524,7 @@ void SetMenuLerping(void) {
 // render mouse cursor if needed
 void RenderMouseCursor(CDrawPort *pdp) {
   // if mouse not used last
-  if (!_bMouseUsedLast || _bDefiningKey || _bEditingString) {
+  if (!_bMouseUsedLast || _bDefiningKey || _bEditingValue) {
     // don't render cursor
     return;
   }
@@ -777,7 +775,7 @@ BOOL DoMenu(CDrawPort *pdp) {
   }
 
   // if editing
-  if (_bEditingString && pmgActive != NULL) {
+  if (_bEditingValue && pmgActive != NULL) {
     // dim the menu  bit
     dpMenu.Fill(C_BLACK | 0x40);
     // render the edit gadget again
@@ -788,9 +786,9 @@ BOOL DoMenu(CDrawPort *pdp) {
   pgmCurrentMenu->PostRender(&dpMenu);
 
   // if there is some active gadget and it has tips
-  if (pmgActive != NULL && (pmgActive->mg_strTip != "" || _bEditingString)) {
+  if (pmgActive != NULL && (pmgActive->mg_strTip != "" || _bEditingValue)) {
     CTString strTip = pmgActive->mg_strTip;
-    if (_bEditingString) {
+    if (_bEditingValue) {
       strTip = LOCALIZE("Enter - OK, Escape - Cancel");
     }
     // print the tip

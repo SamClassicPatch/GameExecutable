@@ -45,7 +45,6 @@ extern BOOL _bQuitScreen = TRUE;
 extern BOOL bMenuActive = FALSE;
 extern BOOL bMenuRendering = FALSE;
 
-extern BOOL _bDefiningKey;
 static BOOL _bReconsiderInput = FALSE;
 
 // [Cecil] Computer screen resolution

@@ -24,9 +24,9 @@ FLOAT _fGadgetSideRatioR = 0.53f;
 
 extern CSoundData *_psdSelect;
 
-extern BOOL _bDefiningKey = FALSE;
-extern BOOL _bEditingString = FALSE;
-extern CMenuGadget *_pmgLastActivatedGadget = NULL;
+BOOL _bDefiningKey = FALSE;
+BOOL _bEditingValue = FALSE;
+CMenuGadget *_pmgLastActivatedGadget = NULL;
 
 // [Cecil] Last pressed gadget
 CMenuGadget *_pmgLastGadgetLMB = NULL;

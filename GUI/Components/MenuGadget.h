@@ -73,6 +73,9 @@ enum ButtonFontSize {
   BFS_LARGE = 2,
 };
 
+// [Cecil] Declared here
+extern BOOL _bDefiningKey;
+extern BOOL _bEditingValue;
 extern CMenuGadget *_pmgLastActivatedGadget;
 
 // [Cecil] Last pressed gadget

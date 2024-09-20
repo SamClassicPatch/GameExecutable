@@ -19,8 +19,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 extern CSoundData *_psdSelect;
 extern CSoundData *_psdPress;
 
-extern BOOL _bDefiningKey;
-
 CMGKeyDefinition::CMGKeyDefinition(void) {
   mg_iState = DOING_NOTHING;
   mg_pControls = NULL; // [Cecil]
