@@ -60,10 +60,9 @@ void (*_pAfterLevelChosen)(void);
 static void FixupBackButton(CGameMenu *pgm);
 
 // mouse cursor position
-extern PIX _pixCursorPosI = 0;
-extern PIX _pixCursorPosJ = 0;
-extern PIX _pixCursorExternPosI = 0;
-extern PIX _pixCursorExternPosJ = 0;
+PIX _pixCursorPosI = 0;
+PIX _pixCursorPosJ = 0;
+
 extern BOOL _bMouseUsedLast = FALSE;
 extern CMenuGadget *_pmgUnderCursor = NULL;
 
@@ -435,10 +434,8 @@ void MenuUpdateMouseFocus(void) {
   GetCursorPos(&pt);
   ScreenToClient(_hwndMain, &pt);
 
-  _pixCursorPosI += pt.x - _pixCursorExternPosI;
-  _pixCursorPosJ = _pixCursorExternPosJ;
-  _pixCursorExternPosI = pt.x;
-  _pixCursorExternPosJ = pt.y;
+  _pixCursorPosI = pt.x;
+  _pixCursorPosJ = pt.y;
 
   // if mouse not used last
   if (!_bMouseUsedLast || _bDefiningKey || _bEditingValue) {
@@ -524,7 +521,7 @@ void SetMenuLerping(void) {
 // render mouse cursor if needed
 void RenderMouseCursor(CDrawPort *pdp) {
   // if mouse not used last
-  if (!_bMouseUsedLast || _bDefiningKey || _bEditingValue) {
+  if (!_bMouseUsedLast || _bDefiningKey) {
     // don't render cursor
     return;
   }
@@ -545,15 +542,11 @@ BOOL DoMenu(CDrawPort *pdp) {
   // if in fullscreen
   CDisplayMode dmCurrent;
   _pGfx->GetCurrentDisplayMode(dmCurrent);
+
   if (dmCurrent.IsFullScreen()) {
     // clamp mouse pointer
     _pixCursorPosI = Clamp(_pixCursorPosI, 0L, dpMenu.GetWidth());
     _pixCursorPosJ = Clamp(_pixCursorPosJ, 0L, dpMenu.GetHeight());
-  // if in window
-  } else {
-    // use same mouse pointer as windows
-    _pixCursorPosI = _pixCursorExternPosI;
-    _pixCursorPosJ = _pixCursorExternPosJ;
   }
 
   pgmCurrentMenu->Think();
