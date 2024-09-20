@@ -1125,8 +1125,8 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
 
   // while it is still running
   while (_bRunning && _fnmModToLoad == "") {
-    // [Cecil] Release all keys if the window loses focus
-    if (GetActiveWindow() != _hwndMain) {
+    // [Cecil] Release all keys if the window loses focus in non-fullscreen mode
+    if (sam_iWindowMode != E_WM_FULLSCREEN && GetActiveWindow() != _hwndMain) {
       ReleaseHeldMouseButtons();
     }
 
@@ -1983,6 +1983,9 @@ void StartNewMode(GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ
 
   // apply 3D-acc settings
   ApplyGLSettings(FALSE);
+
+  // [Cecil] Release all keys
+  ReleaseHeldMouseButtons();
 
   // remember time of mode setting
   _tmDisplayModeChanged = _pTimer->GetRealTimeTick();
