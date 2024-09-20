@@ -24,19 +24,30 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "GUI/Components/MGTitle.h"
 #include "GUI/Components/MGTrigger.h"
 
+#include "Cecil/MGAxisDetector.h"
+
 class CCustomizeAxisMenu : public CGameMenu {
   public:
     CMGTitle gm_mgTitle;
-    CMGButton gm_amgAxes[AXIS_ACTIONS_CT]; // [Cecil]
-    CMGTrigger gm_mgMountedTrigger;
-    CMGSlider gm_mgSensitivity;
-    CMGSlider gm_mgDeadzone;
-    CMGTrigger gm_mgInvertTrigger;
-    CMGTrigger gm_mgRelativeTrigger;
-    CMGTrigger gm_mgSmoothTrigger;
 
-    // [Cecil] Currently selected axis
-    INDEX gm_iAxisAction;
+    // [Cecil] Labels for each gadget kind
+    CMGButton gm_amgLabels[3];
+
+    // [Cecil] Tab buttons
+    CMGButton gm_mgSenseTab;
+    CMGButton gm_mgFlagsTab;
+
+    // [Cecil] One gadget of each kind for each axis
+    CMGAxisDetector gm_amgDetect[AXIS_ACTIONS_CT];
+    CMGTrigger gm_amgMounted    [AXIS_ACTIONS_CT];
+    CMGSlider  gm_amgSensitivity[AXIS_ACTIONS_CT];
+    CMGSlider  gm_amgDeadzone   [AXIS_ACTIONS_CT];
+    CMGTrigger gm_amgInvert     [AXIS_ACTIONS_CT];
+    CMGTrigger gm_amgRelative   [AXIS_ACTIONS_CT];
+    CMGTrigger gm_amgSmooth     [AXIS_ACTIONS_CT];
+
+    // [Cecil] Currently selected tab
+    INDEX gm_iTab;
 
     // [Cecil] Sprite sheet with all axis icons
     CTextureObject gm_toAxisIcons;
@@ -47,6 +58,9 @@ class CCustomizeAxisMenu : public CGameMenu {
     void EndMenu(void);
     void ObtainActionSettings(void);
     void ApplyActionSettings(void);
+
+    // [Cecil] Extra rendering
+    virtual void PostRender(CDrawPort *pdp);
 
     // [Cecil] Change to the menu
     static void ChangeTo(void);

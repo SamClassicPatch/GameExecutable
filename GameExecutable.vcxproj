@@ -380,6 +380,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cecil\CecilExtensions.cpp" />
+    <ClCompile Include="Cecil\MGAxisDetector.cpp" />
     <ClCompile Include="Cecil\MPatchCredits.cpp" />
     <ClCompile Include="Cecil\MExtras.cpp" />
     <ClCompile Include="Cecil\MLevelCategories.cpp" />
@@ -434,6 +435,7 @@
     <ClCompile Include="LevelInfo.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClInclude Include="Cecil\CecilExtensions.h" />
+    <ClInclude Include="Cecil\MGAxisDetector.h" />
     <ClInclude Include="Cecil\MPatchCredits.h" />
     <ClInclude Include="Cecil\MExtras.h" />
     <ClInclude Include="Cecil\MLevelCategories.h" />
