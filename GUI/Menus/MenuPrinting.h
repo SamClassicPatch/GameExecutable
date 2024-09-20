@@ -52,8 +52,8 @@ FLOATaabbox2D BoxNoUp(FLOAT fRow);
 FLOATaabbox2D BoxNoDown(FLOAT fRow);
 FLOATaabbox2D BoxPlayerModel(void);
 FLOATaabbox2D BoxPlayerModelName(void);
-PIXaabbox2D FloatBoxToPixBox(const CDrawPort *pdp, const FLOATaabbox2D &boxF);
-FLOATaabbox2D PixBoxToFloatBox(const CDrawPort *pdp, const PIXaabbox2D &boxP);
+PIXaabbox2D FloatBoxToPixBox(CDrawPort *pdp, const FLOATaabbox2D &boxF);
+FLOATaabbox2D PixBoxToFloatBox(CDrawPort *pdp, const PIXaabbox2D &boxP);
 void SetFontTitle(CDrawPort *pdp);
 
 // [Cecil] Added text scale

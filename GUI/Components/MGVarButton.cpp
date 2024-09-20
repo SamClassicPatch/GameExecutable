@@ -34,9 +34,7 @@ BOOL CMGVarButton::IsEnabled(void) {
 }
 
 // return slider position on scren
-PIXaabbox2D CMGVarButton::GetSliderBox(INDEX iSliderType) {
-  extern CDrawPort *pdp;
-
+PIXaabbox2D CMGVarButton::GetSliderBox(CDrawPort *pdp, INDEX iSliderType) {
   // [Cecil] Big fill slider
   if (iSliderType == CVarSetting::SLD_BIGFILL) {
     extern PIXaabbox2D GetHorSliderBox(CDrawPort *pdp, FLOATaabbox2D boxOnScreen, BOOL bHasLabel);
@@ -81,7 +79,7 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
       // handle LMB
       if (pmb.iKey == VK_LBUTTON) {
         // get position of slider box on screen
-        PIXaabbox2D boxSlider = GetSliderBox(mg_pvsVar->vs_eSlider);
+        PIXaabbox2D boxSlider = GetSliderBox(_pdpMenu, mg_pvsVar->vs_eSlider);
         // if mouse is within
         if (boxSlider >= PIX2D(_pixCursorPosI, _pixCursorPosJ)) {
           // set new position exactly where mouse pointer is
@@ -237,7 +235,7 @@ void CMGVarButton::Render(CDrawPort *pdp) {
           const CVarSetting::ESliderType eSlider = mg_pvsVar->vs_eSlider;
 
           // [Cecil] Use pre-calculated slider box for rendering
-          PIXaabbox2D boxSlider = GetSliderBox(eSlider);
+          PIXaabbox2D boxSlider = GetSliderBox(pdp, eSlider);
           const PIX pixSliderX = boxSlider.Min()(1) + 1;
           const PIX pixSliderY = boxSlider.Min()(2) + 1;
           const PIX2D vSliderSize = boxSlider.Size();

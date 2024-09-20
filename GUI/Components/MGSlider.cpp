@@ -68,8 +68,7 @@ PIXaabbox2D GetHorSliderBox(CDrawPort *pdp, FLOATaabbox2D boxOnScreen, BOOL bHas
 // [Cecil] Separate method
 BOOL CMGSlider::OnLMB(void) {
   // get position of slider box on screen
-  extern CDrawPort *pdp;
-  PIXaabbox2D boxSlider = GetHorSliderBox(pdp, mg_boxOnScreen, GetText() != "");
+  PIXaabbox2D boxSlider = GetHorSliderBox(_pdpMenu, mg_boxOnScreen, GetText() != "");
 
   // if mouse is within
   if (boxSlider >= PIX2D(_pixCursorPosI, _pixCursorPosJ)) {

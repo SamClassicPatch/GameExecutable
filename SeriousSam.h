@@ -20,6 +20,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
   #define WM_MOUSEWHEEL 0x020A
 #endif
 
+// [Cecil] Renamed and declared here
+extern CDrawPort *_pdpMenu;
+extern CDrawPort *_pdpNormal;
+extern CViewPort *_pvpViewPort;
+
 extern HINSTANCE _hInstance;
 extern BOOL _bRunning, _bQuitScreen;
 

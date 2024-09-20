@@ -149,9 +149,9 @@ void SetDrawportForGame(CDrawPort *pdpSet) {
 };
 
 // Main window canvas
-CDrawPort *pdp;
-CDrawPort *pdpNormal;
-CViewPort *pvpViewPort;
+CDrawPort *_pdpMenu = NULL;
+CDrawPort *_pdpNormal = NULL;
+CViewPort *_pvpViewPort = NULL;
 HINSTANCE _hInstance;
 
 static void PlayDemo(SHELL_FUNC_ARGS) {
@@ -273,7 +273,7 @@ static void ApplyAudioOptions(void) {
 };
 
 static void BenchMark(void) {
-  _pGfx->Benchmark(pvpViewPort, pdp);
+  _pGfx->Benchmark(_pvpViewPort, _pdpMenu);
 }
 
 static void QuitGame(void) {
@@ -705,10 +705,10 @@ void End(void) {
   ClearDemosList();
 
   // destroy the main window and its canvas
-  if (pvpViewPort != NULL) {
-    _pGfx->DestroyWindowCanvas(pvpViewPort);
-    pvpViewPort = NULL;
-    pdpNormal = NULL;
+  if (_pvpViewPort != NULL) {
+    _pGfx->DestroyWindowCanvas(_pvpViewPort);
+    _pvpViewPort = NULL;
+    _pdpNormal = NULL;
   }
 
   CloseMainWindow();
@@ -733,10 +733,10 @@ void PrintDisplayModeInfo(void) {
   }
 
   // cache some general vars
-  SLONG slDPWidth = pdp->GetWidth();
-  SLONG slDPHeight = pdp->GetHeight();
+  SLONG slDPWidth = _pdpMenu->GetWidth();
+  SLONG slDPHeight = _pdpMenu->GetHeight();
 
-  if (pdp->IsDualHead()) {
+  if (_pdpMenu->IsDualHead()) {
     slDPWidth /= 2;
   }
 
@@ -782,10 +782,10 @@ void PrintDisplayModeInfo(void) {
   }
 
   // print it all
-  pdp->SetFont(_pfdDisplayFont);
-  pdp->SetTextScaling(fTextScale);
-  pdp->SetTextAspect(1.0f);
-  pdp->PutText(strRes, slDPWidth * 0.05f, slDPHeight * 0.85f, _pGame->LCDGetColor(C_GREEN | 255, "display mode"));
+  _pdpMenu->SetFont(_pfdDisplayFont);
+  _pdpMenu->SetTextScaling(fTextScale);
+  _pdpMenu->SetTextAspect(1.0f);
+  _pdpMenu->PutText(strRes, slDPWidth * 0.05f, slDPHeight * 0.85f, _pGame->LCDGetColor(C_GREEN | 255, "display mode"));
 }
 
 // Do the main game loop and render screen
@@ -841,16 +841,16 @@ void DoGame(void) {
   }
 
   // redraw the view
-  if (!IsIconic(_hwndMain) && pdp != NULL && pdp->Lock()) {
+  if (!IsIconic(_hwndMain) && _pdpMenu != NULL && _pdpMenu->Lock()) {
     // [Cecil] Set drawport that will be used for custom Steam screenshots
-    GetSteamAPI()->SetScreenshotHook(pdp);
+    GetSteamAPI()->SetScreenshotHook(_pdpMenu);
 
     // [Cecil] Keep rendering the game in the background while in menu
     BOOL bRenderGame = (!bMenuActive || sam_bBackgroundGameRender);
 
     if (_gmRunningGameMode != GM_NONE && bRenderGame) {
       // [Cecil] Call API before redrawing the game
-      IHooks::OnPreDraw(pdp);
+      IHooks::OnPreDraw(_pdpMenu);
 
       // [Cecil] Don't wait for server while playing demos (removes "Waiting for server to continue" message)
       if (_pNetwork->IsPlayingDemo()) {
@@ -863,18 +863,18 @@ void DoGame(void) {
     #endif
 
       // handle pretouching of textures and shadowmaps
-      pdp->Unlock();
-      _pGame->GameRedrawView(pdp, (GetGameAPI()->GetConState() != CS_OFF) ? 0 : GRV_SHOWEXTRAS);
+      _pdpMenu->Unlock();
+      _pGame->GameRedrawView(_pdpMenu, (GetGameAPI()->GetConState() != CS_OFF) ? 0 : GRV_SHOWEXTRAS);
 
-      pdp->Lock();
-      _pGame->ComputerRender(pdp);
+      _pdpMenu->Lock();
+      _pGame->ComputerRender(_pdpMenu);
 
       // [Cecil] Call API after redrawing the game
-      IHooks::OnPostDraw(pdp);
+      IHooks::OnPostDraw(_pdpMenu);
 
-      pdp->Unlock();
+      _pdpMenu->Unlock();
 
-      CDrawPort dpScroller(pdp, TRUE);
+      CDrawPort dpScroller(_pdpMenu, TRUE);
       dpScroller.Lock();
 
       if (Credits_Render(&dpScroller) == 0) {
@@ -882,19 +882,19 @@ void DoGame(void) {
       }
 
       dpScroller.Unlock();
-      pdp->Lock();
+      _pdpMenu->Lock();
 
     } else {
-      pdp->Fill(_pGame->LCDGetColor(C_dGREEN | CT_OPAQUE, "bcg fill"));
+      _pdpMenu->Fill(_pGame->LCDGetColor(C_dGREEN | CT_OPAQUE, "bcg fill"));
     }
 
     // do menu
     if (bMenuRendering) {
       // clear z-buffer
-      pdp->FillZBuffer(ZBUF_BACK);
+      _pdpMenu->FillZBuffer(ZBUF_BACK);
 
       // remember if we should render menus next tick
-      bMenuRendering = DoMenu(pdp);
+      bMenuRendering = DoMenu(_pdpMenu);
     }
 
     // print display mode info if needed
@@ -902,20 +902,20 @@ void DoGame(void) {
 
     #if SE1_GAME == SS_REV
       // [Cecil] Rev: Render Steam overlay
-      _pSteam->RenderCustomOverlay(pdp);
+      _pSteam->RenderCustomOverlay(_pdpMenu);
     #endif
 
     // render console
-    _pGame->ConsoleRender(pdp);
+    _pGame->ConsoleRender(_pdpMenu);
 
     // [Cecil] Call API every render frame
-    IHooks::OnFrame(pdp);
+    IHooks::OnFrame(_pdpMenu);
 
     // done with all
-    pdp->Unlock();
+    _pdpMenu->Unlock();
 
     // show
-    pvpViewPort->SwapBuffers();
+    _pvpViewPort->SwapBuffers();
 
   // [Cecil] Reset drawport for screenshots
   } else {
@@ -1047,7 +1047,7 @@ void QuitScreenLoop(void) {
 
   // while it is still running
   FOREVER {
-    FLOAT fVolume = RenderQuitScreen(pdp, pvpViewPort);
+    FLOAT fVolume = RenderQuitScreen(_pdpMenu, _pvpViewPort);
 
     if (fVolume <= 0) {
       return;
@@ -1780,10 +1780,10 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
   // destroy canvas if existing
   _pGame->DisableLoadingHook();
 
-  if (pvpViewPort != NULL) {
-    _pGfx->DestroyWindowCanvas(pvpViewPort);
-    pvpViewPort = NULL;
-    pdpNormal = NULL;
+  if (_pvpViewPort != NULL) {
+    _pGfx->DestroyWindowCanvas(_pvpViewPort);
+    _pvpViewPort = NULL;
+    _pdpNormal = NULL;
   }
 
   // close the application window
@@ -1828,38 +1828,38 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
   // if new mode was set
   if (bSuccess) {
     // create canvas
-    ASSERT(pvpViewPort == NULL);
-    ASSERT(pdpNormal == NULL);
+    ASSERT(_pvpViewPort == NULL);
+    ASSERT(_pdpNormal == NULL);
 
-    _pGfx->CreateWindowCanvas(_hwndMain, &pvpViewPort, &pdpNormal);
+    _pGfx->CreateWindowCanvas(_hwndMain, &_pvpViewPort, &_pdpNormal);
 
     // erase context of both buffers (for the sake of wide-screen)
-    pdp = pdpNormal;
+    _pdpMenu = _pdpNormal;
 
-    if (pdp != NULL && pdp->Lock()) {
-      pdp->Fill(C_BLACK | CT_OPAQUE);
+    if (_pdpMenu != NULL && _pdpMenu->Lock()) {
+      _pdpMenu->Fill(C_BLACK | CT_OPAQUE);
 
-      pdp->Unlock();
-      pvpViewPort->SwapBuffers();
-      pdp->Lock();
+      _pdpMenu->Unlock();
+      _pvpViewPort->SwapBuffers();
+      _pdpMenu->Lock();
 
-      pdp->Fill(C_BLACK | CT_OPAQUE);
+      _pdpMenu->Fill(C_BLACK | CT_OPAQUE);
 
-      pdp->Unlock();
-      pvpViewPort->SwapBuffers();
+      _pdpMenu->Unlock();
+      _pvpViewPort->SwapBuffers();
     }
 
     // initial screen fill and swap, just to get context running
     BOOL bSuccess = FALSE;
 
-    if (pdp != NULL && pdp->Lock()) {
-      pdp->Fill(_pGame->LCDGetColor(C_dGREEN | CT_OPAQUE, "bcg fill"));
-      pdp->Unlock();
-      pvpViewPort->SwapBuffers();
+    if (_pdpMenu != NULL && _pdpMenu->Lock()) {
+      _pdpMenu->Fill(_pGame->LCDGetColor(C_dGREEN | CT_OPAQUE, "bcg fill"));
+      _pdpMenu->Unlock();
+      _pvpViewPort->SwapBuffers();
       bSuccess = TRUE;
     }
 
-    _pGame->EnableLoadingHook(pdp);
+    _pGame->EnableLoadingHook(_pdpMenu);
 
     // if the mode is not working, or is not accelerated
     if (!bSuccess || !_pGfx->IsCurrentModeAccelerated()) {
@@ -1867,11 +1867,11 @@ BOOL TryToSetDisplayMode(enum GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, 
       CPutString(LOCALIZE("This mode does not support hardware acceleration.\n"));
 
       // destroy canvas if existing
-      if (pvpViewPort != NULL) {
+      if (_pvpViewPort != NULL) {
         _pGame->DisableLoadingHook();
-        _pGfx->DestroyWindowCanvas(pvpViewPort);
-        pvpViewPort = NULL;
-        pdpNormal = NULL;
+        _pGfx->DestroyWindowCanvas(_pvpViewPort);
+        _pvpViewPort = NULL;
+        _pdpNormal = NULL;
       }
 
       // close the application window
@@ -1975,7 +1975,7 @@ void StartNewMode(GfxAPIType eGfxAPI, INDEX iAdapter, PIX pixSizeI, PIX pixSizeJ
   }
 
   // [Cecil] Calculate aspect ratio (half the width for dualhead resolutions)
-  if (pdp->IsDualHead()) {
+  if (_pdpMenu->IsDualHead()) {
     _fAspectRatio = FLOAT(pixSizeI * 0.5f) / FLOAT(pixSizeJ);
   } else {
     _fAspectRatio = FLOAT(pixSizeI) / FLOAT(pixSizeJ);

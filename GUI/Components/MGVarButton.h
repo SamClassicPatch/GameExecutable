@@ -25,7 +25,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 class CMGVarButton : public CMGEdit {
   public:
     class CVarSetting *mg_pvsVar;
-    PIXaabbox2D GetSliderBox(INDEX iSliderType);
+    PIXaabbox2D GetSliderBox(CDrawPort *pdp, INDEX iSliderType);
     BOOL OnKeyDown(PressedMenuButton pmb);
     BOOL OnMouseHeld(PressedMenuButton pmb); // [Cecil]
     void Render(CDrawPort *pdp);

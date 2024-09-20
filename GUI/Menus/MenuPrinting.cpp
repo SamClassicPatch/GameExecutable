@@ -246,15 +246,17 @@ FLOATaabbox2D BoxPlayerModelName(void) {
   return FLOATaabbox2D(FLOAT2D(0.68f, 0.78f), FLOAT2D(0.965f, 0.82f));
 }
 
-PIXaabbox2D FloatBoxToPixBox(const CDrawPort *pdp, const FLOATaabbox2D &boxF) {
-  PIX pixW = pdp->GetWidth();
+PIXaabbox2D FloatBoxToPixBox(CDrawPort *pdp, const FLOATaabbox2D &boxF) {
+  // [Cecil] NOTE: Half the width for dualhead drawports. They are never dualhead
+  // during rendering, so this is purely for logic that uses _pdpMenu directly instead.
+  PIX pixW = pdp->GetWidth() * (pdp->IsDualHead() ? 0.5f : 1.0f);
   PIX pixH = pdp->GetHeight();
   return PIXaabbox2D(
     PIX2D(boxF.Min()(1) * pixW, boxF.Min()(2) * pixH),
     PIX2D(boxF.Max()(1) * pixW, boxF.Max()(2) * pixH));
 }
 
-FLOATaabbox2D PixBoxToFloatBox(const CDrawPort *pdp, const PIXaabbox2D &boxP) {
+FLOATaabbox2D PixBoxToFloatBox(CDrawPort *pdp, const PIXaabbox2D &boxP) {
   FLOAT fpixW = pdp->GetWidth();
   FLOAT fpixH = pdp->GetHeight();
   return FLOATaabbox2D(
