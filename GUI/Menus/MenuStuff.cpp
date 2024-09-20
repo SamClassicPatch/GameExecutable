@@ -77,7 +77,7 @@ extern CTString astrDisplayPrefsRadioTexts[] = {
   RADIOTRANS("Speed"),
   RADIOTRANS("Normal"),
   RADIOTRANS("Quality"),
-  RADIOTRANS("Extreme"), // [Cecil]
+  RADIOTRANS("Extreme quality"), // [Cecil]
   RADIOTRANS("Custom"),
 };
 
