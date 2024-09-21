@@ -27,7 +27,7 @@ CMGEdit::CMGEdit(void) {
 void CMGEdit::Clear(void) {
   mg_iCursorPos = 0;
   mg_bEditing = FALSE;
-  _bEditingValue = FALSE;
+  _eEditingValue = VED_NONE;
 }
 
 void CMGEdit::OnActivate(void) {
@@ -38,7 +38,7 @@ void CMGEdit::OnActivate(void) {
   PlayMenuSound(_psdPress);
   mg_iCursorPos = GetText().Length();
   mg_bEditing = TRUE;
-  _bEditingValue = TRUE;
+  _eEditingValue = VED_STRING;
 }
 
 // focus lost

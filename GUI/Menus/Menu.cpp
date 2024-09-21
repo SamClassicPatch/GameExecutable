@@ -371,8 +371,8 @@ void MenuOnKeyDown(PressedMenuButton pmb) {
   _bMouseUsedLast = (pmb.iKey == VK_LBUTTON || pmb.iKey == VK_RBUTTON || pmb.iKey == VK_MBUTTON
     || pmb.iKey == VK_XBUTTON1 || pmb.iKey == VK_XBUTTON2 || pmb.iKey == MOUSEWHEEL_DN || pmb.iKey == MOUSEWHEEL_UP);
 
-  // ignore mouse when editing
-  if (_bEditingValue && _bMouseUsedLast) {
+  // [Cecil] Ignore mouse only when editing strings
+  if (_eEditingValue == VED_STRING && _bMouseUsedLast) {
     _bMouseUsedLast = FALSE;
     return;
   }
@@ -425,7 +425,7 @@ void MenuOnMouseMove(PIX pixI, PIX pixJ) {
   }
   pixLastI = pixI;
   pixLastJ = pixJ;
-  _bMouseUsedLast = !_bEditingValue && !_bDefiningKey && !_pInput->IsInputEnabled();
+  _bMouseUsedLast = _eEditingValue == VED_NONE && !_bDefiningKey && !_pInput->IsInputEnabled();
 }
 
 void MenuUpdateMouseFocus(void) {
@@ -438,7 +438,7 @@ void MenuUpdateMouseFocus(void) {
   _pixCursorPosJ = pt.y;
 
   // if mouse not used last
-  if (!_bMouseUsedLast || _bDefiningKey || _bEditingValue) {
+  if (!_bMouseUsedLast || _bDefiningKey || _eEditingValue != VED_NONE) {
     // do nothing
     return;
   }
@@ -729,8 +729,13 @@ BOOL DoMenu(CDrawPort *pdp) {
     CGameMenu::RenderPopup(&dpMenu, pgmCurrentMenu->gm_fPopupSize);
   }
 
-  // no entity is under cursor initially
-  _pmgUnderCursor = NULL;
+  const BOOL bEditingValue = (_eEditingValue != VED_NONE); // [Cecil]
+
+  // [Cecil] If not editing anything
+  if (!bEditingValue) {
+    // Reset gadget under the cursor
+    _pmgUnderCursor = NULL;
+  }
 
   BOOL bStilInMenus = FALSE;
   _pGame->MenuPreRenderMenu(pgmCurrentMenu->gm_strName);
@@ -740,7 +745,11 @@ BOOL DoMenu(CDrawPort *pdp) {
     if (itmg->mg_bVisible) {
       bStilInMenus = TRUE;
       itmg->Render(&dpMenu);
-      if (FloatBoxToPixBox(&dpMenu, itmg->mg_boxOnScreen) >= PIX2D(_pixCursorPosI, _pixCursorPosJ)) {
+
+      // [Cecil] Don't update the gadget under the cursor during editing
+      if (!bEditingValue
+       && FloatBoxToPixBox(&dpMenu, itmg->mg_boxOnScreen) >= PIX2D(_pixCursorPosI, _pixCursorPosJ))
+      {
         _pmgUnderCursor = itmg;
       }
     }
@@ -768,7 +777,7 @@ BOOL DoMenu(CDrawPort *pdp) {
   }
 
   // if editing
-  if (_bEditingValue && pmgActive != NULL) {
+  if (bEditingValue && pmgActive != NULL) {
     // dim the menu  bit
     dpMenu.Fill(C_BLACK | 0x40);
     // render the edit gadget again
@@ -779,9 +788,9 @@ BOOL DoMenu(CDrawPort *pdp) {
   pgmCurrentMenu->PostRender(&dpMenu);
 
   // if there is some active gadget and it has tips
-  if (pmgActive != NULL && (pmgActive->mg_strTip != "" || _bEditingValue)) {
+  if (pmgActive != NULL && (pmgActive->mg_strTip != "" || bEditingValue)) {
     CTString strTip = pmgActive->mg_strTip;
-    if (_bEditingValue) {
+    if (bEditingValue) {
       strTip = LOCALIZE("Enter - OK, Escape - Cancel");
     }
     // print the tip

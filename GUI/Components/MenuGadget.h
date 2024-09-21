@@ -73,9 +73,16 @@ enum ButtonFontSize {
   BFS_LARGE = 2,
 };
 
+// [Cecil] Value editing state
+enum EValueEdit {
+  VED_NONE = 0,
+  VED_STRING, // Equivalent of vanilla '_bEditingString'
+  VED_LIST,
+};
+
 // [Cecil] Declared here
 extern BOOL _bDefiningKey;
-extern BOOL _bEditingValue;
+extern EValueEdit _eEditingValue;
 extern CMenuGadget *_pmgLastActivatedGadget;
 
 // [Cecil] Last pressed gadget
