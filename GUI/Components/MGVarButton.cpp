@@ -74,6 +74,7 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
 
   CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
   const BOOL bToggle = (mg_pvsVar->vs_eType == CVarSetting::E_TOGGLE);
+  const BOOL bTextbox = (mg_pvsVar->vs_eType == CVarSetting::E_TEXTBOX);
   const BOOL bSlider = (mg_pvsVar->vs_eSlider != CVarSetting::SLD_NOSLIDER);
 
   if (mg_bEditing) {
@@ -130,69 +131,70 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
   }
 
   if (pmb.Apply(FALSE)) {
+    // [Cecil] Allow using controllers for textbox editing
+    if (bTextbox && pmb.iCtrl != -1) {
+      return CMGEdit::OnKeyDown(pmb);
+    }
+
     // [Cecil] Emulate the action of clicking on "Apply"
     gmCurrent.gm_mgApply.OnActivate();
     return TRUE;
   }
 
-  // [Cecil] Different types
-  switch (mg_pvsVar->vs_eType) {
-    // Toggle values
-    case CVarSetting::E_TOGGLE: {
-      // [Cecil] Open a list of values for toggleable non-sliders
-      if (sam_bConfigValueLists && pmb.Apply(TRUE) && !bSlider && mg_pvsVar->vs_ctValues > 2) {
-        ListActivate();
-        return TRUE;
+  // [Cecil] Toggle values
+  if (bToggle) {
+    // [Cecil] Open a list of values for toggleable non-sliders
+    if (sam_bConfigValueLists && pmb.Apply(TRUE) && !bSlider && mg_pvsVar->vs_ctValues > 2) {
+      ListActivate();
+      return TRUE;
+    }
+
+    // [Cecil] Increase/decrease the value
+    INDEX iPower = pmb.ChangeValue();
+
+    // Try previous/next value
+    if (iPower == 0) {
+      if (pmb.Prev()) iPower = -1;
+      else
+      if (pmb.Next()) iPower = +1;
+    }
+
+    if (iPower != 0) {
+      // Change one value at a time for non-sliders
+      if (!bSlider) iPower = SgnNZ(iPower);
+
+      INDEX iOldValue = mg_pvsVar->vs_iValue;
+      mg_pvsVar->vs_iValue += iPower;
+
+      // Clamp sliders
+      if (bSlider) {
+        mg_pvsVar->vs_iValue = Clamp(mg_pvsVar->vs_iValue, (INDEX)0, INDEX(mg_pvsVar->vs_ctValues - 1));
+
+      // Wrap to the beginning
+      } else if (mg_pvsVar->vs_iValue >= mg_pvsVar->vs_ctValues) {
+        mg_pvsVar->vs_iValue = 0;
+
+      // Wrap to the end
+      } else if (mg_pvsVar->vs_iValue < 0) {
+        mg_pvsVar->vs_iValue = mg_pvsVar->vs_ctValues - 1;
       }
 
-      // [Cecil] Increase/decrease the value
-      INDEX iPower = pmb.ChangeValue();
-
-      // Try previous/next value
-      if (iPower == 0) {
-        if (pmb.Prev()) iPower = -1;
-        else
-        if (pmb.Next()) iPower = +1;
+      if (iOldValue != mg_pvsVar->vs_iValue) {
+        _bVarChanged = TRUE;
+        mg_pvsVar->vs_bCustom = FALSE;
+        mg_pvsVar->Validate();
       }
 
-      if (iPower != 0) {
-        // Change one value at a time for non-sliders
-        if (!bSlider) iPower = SgnNZ(iPower);
+      return TRUE;
+    }
 
-        INDEX iOldValue = mg_pvsVar->vs_iValue;
-        mg_pvsVar->vs_iValue += iPower;
-
-        // Clamp sliders
-        if (bSlider) {
-          mg_pvsVar->vs_iValue = Clamp(mg_pvsVar->vs_iValue, (INDEX)0, INDEX(mg_pvsVar->vs_ctValues - 1));
-
-        // Wrap to the beginning
-        } else if (mg_pvsVar->vs_iValue >= mg_pvsVar->vs_ctValues) {
-          mg_pvsVar->vs_iValue = 0;
-
-        // Wrap to the end
-        } else if (mg_pvsVar->vs_iValue < 0) {
-          mg_pvsVar->vs_iValue = mg_pvsVar->vs_ctValues - 1;
-        }
-
-        if (iOldValue != mg_pvsVar->vs_iValue) {
-          _bVarChanged = TRUE;
-          mg_pvsVar->vs_bCustom = FALSE;
-          mg_pvsVar->Validate();
-        }
-
-        return TRUE;
-      }
-    } break;
-
-    // Reset editing value
-    case CVarSetting::E_TEXTBOX: {
-      OnStringCanceled();
-    } break;
+  // [Cecil] Reset editing value
+  } else if (bTextbox) {
+    OnStringCanceled();
   }
 
-  // not handled
-  return CMenuGadget::OnKeyDown(pmb);
+  // [Cecil] Pass to CMGEdit instead of CMenuGadget
+  return CMGEdit::OnKeyDown(pmb);
 }
 
 // [Cecil] Pass character events only to textboxes

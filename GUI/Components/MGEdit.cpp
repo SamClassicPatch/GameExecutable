@@ -98,8 +98,20 @@ static void Key_BackDel(CTString &str, INDEX &iPos, BOOL bShift, BOOL bRight) {
 BOOL CMGEdit::OnKeyDown(PressedMenuButton pmb) {
   // if not in edit mode
   if (!mg_bEditing) {
-    // behave like normal gadget
-    return CMenuGadget::OnKeyDown(pmb);
+    // [Cecil] Activate string editing inline
+    if (pmb.Apply(TRUE)) {
+      OnActivate();
+
+      // [Cecil] Activate on-screen keyboard for controller input
+      if (pmb.iCtrl != -1) {
+        const PIXaabbox2D box = FloatBoxToPixBox(_pdpMenu, mg_boxOnScreen);
+        GetSteamAPI()->ShowFloatingGamepadTextInput(box.Min()(1), box.Min()(2), box.Size()(1), box.Size()(2));
+      }
+
+      return TRUE;
+    }
+
+    return FALSE;
   }
 
   // [Cecil] Apply changes
