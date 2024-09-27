@@ -492,22 +492,54 @@ void CMGVarButton::ListRender(CDrawPort *pdp, PIX2D vListBox, CTString strValue)
 
   // Shift box down and expand size for all values
   const PIX2D vListOffset(0, mg_boxList.Size()(2) * 1.2f);
-  vListBox += vListOffset;
-  mg_boxList += vListOffset;
 
-  // Start at one value
-  mg_ctListValuesAtOnce = 1;
+  {
+    // Start at one value
+    INDEX ctValuesAtOnceDown = 1;
+    INDEX ctValuesAtOnceUp = 1;
 
-  for (iList = 0; iList < ctList; iList++) {
-    // Stop counting if the height is lower than the limit
-    if (FLOAT(mg_boxList.Min()(2) + pixTextHeight * iList) / pdp->GetHeight() > 0.85f) {
-      break;
+    // Count how many values fit upwards
+    for (iList = 0; iList < ctList; iList++) {
+      // Stop counting if the height is lower than the limit
+      if (FLOAT(mg_boxList.Min()(2) - pixTextHeight * iList) / pdp->GetHeight() < 0.2f) {
+        break;
+      }
+
+      ctValuesAtOnceUp = iList + 1;
     }
 
-    mg_ctListValuesAtOnce = iList + 1;
-  }
+    // Count how many values fit downwards
+    for (iList = 0; iList < ctList; iList++) {
+      // Stop counting if the height is lower than the limit
+      if (FLOAT(mg_boxList.Min()(2) + pixTextHeight * iList) / pdp->GetHeight() > 0.8f) {
+        break;
+      }
 
-  mg_boxList.maxvect(2) += pixTextHeight * (mg_ctListValuesAtOnce - 1);
+      ctValuesAtOnceDown = iList + 1;
+    }
+
+    // Shift value list down
+    if (ctValuesAtOnceDown >= ctValuesAtOnceUp) {
+      mg_ctListValuesAtOnce = ctValuesAtOnceDown;
+      PIX pixValuesOffset = pixTextHeight * (mg_ctListValuesAtOnce - 1);
+
+      vListBox += vListOffset;
+
+      mg_boxList += vListOffset;
+      mg_boxList.maxvect(2) += pixValuesOffset;
+
+    // Shift value list up
+    } else {
+      mg_ctListValuesAtOnce = ctValuesAtOnceUp;
+      PIX pixValuesOffset = pixTextHeight * (mg_ctListValuesAtOnce - 1);
+      
+      vListBox -= vListOffset;
+      vListBox(2) -= pixValuesOffset;
+
+      mg_boxList -= vListOffset;
+      mg_boxList.minvect(2) -= pixValuesOffset;
+    }
+  }
 
   const PIX2D vCursorPos(_pixCursorPosI, _pixCursorPosJ);
 
