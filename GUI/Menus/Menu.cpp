@@ -521,7 +521,7 @@ void SetMenuLerping(void) {
 // render mouse cursor if needed
 void RenderMouseCursor(CDrawPort *pdp) {
   // if mouse not used last
-  if (!_bMouseUsedLast || _bDefiningKey) {
+  if ((!_bMouseUsedLast && _eEditingValue != VED_LIST) || _bDefiningKey) {
     // don't render cursor
     return;
   }
