@@ -25,8 +25,19 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 class CMGVarButton : public CMGEdit {
   public:
     class CVarSetting *mg_pvsVar;
+
+    // [Cecil] Active value list
+    INDEX mg_ctListValuesAtOnce;
+    INDEX mg_iValueListOffset;
+    PIXaabbox2D mg_boxList;
+    INDEX mg_iListValue;
+    INDEX mg_iLastListValue;
+    BOOL mg_bOnListScrollbar;
+
+    CMGVarButton(); // [Cecil]
     PIXaabbox2D GetSliderBox(CDrawPort *pdp, INDEX iSliderType);
     BOOL OnKeyDown(PressedMenuButton pmb);
+    BOOL OnChar(MSG msg); // [Cecil]
     BOOL OnMouseHeld(PressedMenuButton pmb); // [Cecil]
     void Render(CDrawPort *pdp);
     BOOL IsSeparator(void);
@@ -35,6 +46,18 @@ class CMGVarButton : public CMGEdit {
     // [Cecil] Change strings
     void OnStringChanged(void);
     void OnStringCanceled(void);
+
+    // [Cecil] Activate value list
+    void ListActivate(void);
+
+    // [Cecil] Deactivate value list
+    void ListDeactivate(INDEX iSelectValue);
+
+    // [Cecil] Value list interactions
+    BOOL ListOnKeyDown(PressedMenuButton pmb);
+
+    // [Cecil] Render value list
+    void ListRender(CDrawPort *pdp, PIX2D vListBox, CTString strValue);
 };
 
 #endif /* include-once check. */

@@ -20,6 +20,21 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 extern PIX _pixCursorPosI;
 extern PIX _pixCursorPosJ;
 
+extern BOOL _bVarChanged;
+extern CSoundData *_psdSelect;
+extern CSoundData *_psdPress;
+
+// [Cecil] Constructor
+CMGVarButton::CMGVarButton() {
+  mg_pvsVar = NULL;
+  mg_ctListValuesAtOnce = 0;
+  mg_iValueListOffset = 0;
+  mg_boxList = PIXaabbox2D(PIX2D(0, 0), PIX2D(0, 0));
+  mg_iListValue = -1;
+  mg_iLastListValue = -1;
+  mg_bOnListScrollbar = FALSE;
+};
+
 BOOL CMGVarButton::IsSeparator(void) {
   if (mg_pvsVar == NULL) {
     return FALSE;
@@ -50,7 +65,6 @@ PIXaabbox2D CMGVarButton::GetSliderBox(CDrawPort *pdp, INDEX iSliderType) {
   return PIXaabbox2D(PIX2D(pixIR + 1, pixJ + 1), PIX2D(pixIR + pixISize - 4, pixJ + pixJSize - 6));
 }
 
-extern BOOL _bVarChanged;
 BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
 {
   if (mg_pvsVar == NULL || mg_pvsVar->vs_eType == CVarSetting::E_SEPARATOR || !mg_pvsVar->Validate() || !mg_bEnabled) {
@@ -58,17 +72,22 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
     return pmb.Apply(TRUE);
   }
 
-  // [Cecil] Editing the textbox
+  CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
+  const BOOL bToggle = (mg_pvsVar->vs_eType == CVarSetting::E_TOGGLE);
+  const BOOL bSlider = (mg_pvsVar->vs_eSlider != CVarSetting::SLD_NOSLIDER);
+
   if (mg_bEditing) {
+    // [Cecil] Interact with the value list
+    if (bToggle && !bSlider) {
+      return ListOnKeyDown(pmb);
+    }
+
+    // [Cecil] Editing the textbox
     return CMGEdit::OnKeyDown(pmb);
   }
 
-  CVarMenu &gmCurrent = _pGUIM->gmVarMenu;
-  const BOOL bSlider = (mg_pvsVar->vs_eSlider != CVarSetting::SLD_NOSLIDER);
-
   // [Cecil] Toggleable setting
-  if (mg_pvsVar->vs_eType == CVarSetting::E_TOGGLE)
-  {
+  if (bToggle) {
     // handle slider
     if (bSlider && !mg_pvsVar->vs_bCustom) {
       // ignore RMB
@@ -105,7 +124,6 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
       gmCurrent.gm_fnmMenuCFG = strConfig;
       gmCurrent.StartMenu();
 
-      extern CSoundData *_psdPress;
       PlayMenuSound(_psdPress);
       return TRUE;
     }
@@ -121,6 +139,12 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
   switch (mg_pvsVar->vs_eType) {
     // Toggle values
     case CVarSetting::E_TOGGLE: {
+      // [Cecil] Open a list of values for toggleable non-sliders
+      if (sam_bConfigValueLists && pmb.Apply(TRUE) && !bSlider && mg_pvsVar->vs_ctValues > 2) {
+        ListActivate();
+        return TRUE;
+      }
+
       // [Cecil] Increase/decrease the value
       INDEX iPower = pmb.ChangeValue();
 
@@ -171,16 +195,32 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
   return CMenuGadget::OnKeyDown(pmb);
 }
 
+// [Cecil] Pass character events only to textboxes
+BOOL CMGVarButton::OnChar(MSG msg) {
+  if (mg_pvsVar == NULL || mg_pvsVar->vs_eType != CVarSetting::E_TEXTBOX) {
+    return CMenuGadget::OnChar(msg);
+  }
+
+  return CMGEdit::OnChar(msg);
+};
+
 // [Cecil] Adjust the slider by holding a button
 BOOL CMGVarButton::OnMouseHeld(PressedMenuButton pmb)
 {
   if (pmb.iKey != VK_LBUTTON) return FALSE;
   if (mg_pvsVar == NULL) return FALSE;
 
+  const BOOL bToggle = (mg_pvsVar->vs_eType == CVarSetting::E_TOGGLE);
+  const BOOL bSlider = (mg_pvsVar->vs_eSlider != CVarSetting::SLD_NOSLIDER);
+
+  // [Cecil] Scroll the value list
+  if (mg_bEditing && bToggle && !bSlider && mg_bOnListScrollbar) {
+    // Forward the key
+    return OnKeyDown(pmb);
+  }
+
   // If it's a toggleable slider without a custom value that was pressed last
-  if (_pmgLastGadgetLMB == this && mg_pvsVar->vs_eType == CVarSetting::E_TOGGLE
-   && !mg_pvsVar->vs_bCustom && mg_pvsVar->vs_eSlider != CVarSetting::SLD_NOSLIDER)
-  {
+  if (_pmgLastGadgetLMB == this && bToggle && bSlider && !mg_pvsVar->vs_bCustom) {
     // Forward the key
     return OnKeyDown(pmb);
   }
@@ -227,12 +267,19 @@ void CMGVarButton::Render(CDrawPort *pdp) {
         CTString strText = LOCALIZE("Custom");
         BOOL bCenteredText = FALSE;
 
+        const CVarSetting::ESliderType eSlider = mg_pvsVar->vs_eSlider;
+
+        // [Cecil] Render currently active value list
+        if (mg_bEditing && eSlider == CVarSetting::SLD_NOSLIDER) {
+          ListRender(pdp, PIX2D(pixIR, pixJ), strText);
+          break;
+        }
+
         // Not a custom value
         if (!mg_pvsVar->vs_bCustom) {
           strText = mg_pvsVar->vs_astrTexts[mg_pvsVar->vs_iValue];
 
           const FLOAT fFactor = FLOAT(mg_pvsVar->vs_iValue + 1) / (FLOAT)mg_pvsVar->vs_ctValues;
-          const CVarSetting::ESliderType eSlider = mg_pvsVar->vs_eSlider;
 
           // [Cecil] Use pre-calculated slider box for rendering
           PIXaabbox2D boxSlider = GetSliderBox(pdp, eSlider);
@@ -311,4 +358,220 @@ void CMGVarButton::OnStringChanged(void) {
 void CMGVarButton::OnStringCanceled(void) {
   // Restore string from the setting
   SetText(mg_pvsVar->vs_strValue);
+};
+
+// [Cecil] Activate value list
+void CMGVarButton::ListActivate(void) {
+  mg_ctListValuesAtOnce = 0;
+  mg_iValueListOffset = 0;
+  mg_boxList = PIXaabbox2D(PIX2D(0, 0), PIX2D(0, 0));
+  mg_iListValue = -1;
+  mg_iLastListValue = -1;
+  mg_bOnListScrollbar = FALSE;
+
+  mg_bEditing = TRUE;
+  _eEditingValue = VED_LIST;
+  PlayMenuSound(_psdPress);
+};
+
+// [Cecil] Deactivate value list
+void CMGVarButton::ListDeactivate(INDEX iSelectValue) {
+  if (mg_pvsVar != NULL && iSelectValue != -1) {
+    INDEX iOldValue = mg_pvsVar->vs_iValue;
+    mg_pvsVar->vs_iValue = Clamp(iSelectValue, (INDEX)0, INDEX(mg_pvsVar->vs_ctValues - 1));
+
+    if (iOldValue != mg_pvsVar->vs_iValue) {
+      _bVarChanged = TRUE;
+      mg_pvsVar->vs_bCustom = FALSE;
+      mg_pvsVar->Validate();
+    }
+
+    PlayMenuSound(_psdPress);
+  }
+
+  mg_bEditing = FALSE;
+  _eEditingValue = VED_NONE;
+};
+
+// [Cecil] Value list interactions
+BOOL CMGVarButton::ListOnKeyDown(PressedMenuButton pmb) {
+  // Scroll the list
+  if (mg_ctListValuesAtOnce < mg_pvsVar->vs_ctValues) {
+    INDEX iScroll = pmb.ScrollPower();
+    const INDEX iLastOffset = (mg_pvsVar->vs_ctValues - mg_ctListValuesAtOnce);
+
+    if (iScroll != 0) {
+      const INDEX iDir = SgnNZ(iScroll);
+
+      if (Abs(iScroll) == 1) {
+        iScroll = iDir * mg_ctListValuesAtOnce;
+      } else {
+        iScroll = iDir * 3;
+      }
+
+      mg_iValueListOffset = Clamp(mg_iValueListOffset + iScroll, (INDEX)0, iLastOffset);
+      return TRUE;
+    }
+
+    // Grab the scrollbar
+    if (mg_bOnListScrollbar && pmb.iKey == VK_LBUTTON) {
+      const FLOAT fRatio = Clamp(FLOAT(_pixCursorPosJ - mg_boxList.Min()(2)) / mg_boxList.Size()(2), 0.0f, 1.0f);
+      const FLOAT fLerp = Lerp(0.0f, (FLOAT)iLastOffset, fRatio);
+
+      // Round to the nearest value
+      mg_iValueListOffset = (INDEX)floorf(fLerp + 0.5f);
+      return TRUE;
+    }
+  }
+
+  // Select value
+  if (pmb.Apply(TRUE)) {
+    ListDeactivate(mg_iListValue);
+    return TRUE;
+  }
+
+  // Cancel value selection
+  if (pmb.Back(TRUE)) {
+    ListDeactivate(-1);
+    return TRUE;
+  }
+
+  return TRUE;
+};
+
+// [Cecil] Render value list
+void CMGVarButton::ListRender(CDrawPort *pdp, PIX2D vListBox, CTString strValue) {
+  mg_iListValue = -1;
+  mg_bOnListScrollbar = FALSE;
+
+  extern CFontData _fdMedium;
+  const PIX pixTextHeight = _fdMedium.GetHeight() * pdp->dp_fTextScaling;
+
+  INDEX iList;
+  const INDEX ctList = mg_pvsVar->vs_ctValues;
+
+  const COLOR colCurrent = GetCurrentColor();
+  const COLOR colListBox = _pGame->LCDGetColor(C_GREEN | 0xFF, "slider box");
+  const COLOR colHighlighted = _pGame->LCDGetColor(C_WHITE | 0xFF, "hilited");
+  const COLOR colUnselected = _pGame->LCDGetColor(C_GREEN, "unselected");
+
+  // Figure out the longest string length
+  const BOOL bCustom = mg_pvsVar->vs_bCustom;
+  PIX pixBoxWidth = (bCustom ? IRender::GetTextWidth(pdp, strValue) : 0);
+
+  for (iList = 0; iList < ctList; iList++) {
+    PIX pixLen = IRender::GetTextWidth(pdp, mg_pvsVar->vs_astrTexts[iList]);
+
+    if (pixLen > pixBoxWidth) {
+      pixBoxWidth = pixLen;
+    }
+  }
+
+  // Add space for a scroll bar
+  const PIX pixScrollBar = 10 * HEIGHT_SCALING(pdp);
+  const PIX pixBoxNoScrollBarWidth = pixBoxWidth;
+  pixBoxWidth += pixScrollBar + 4 * HEIGHT_SCALING(pdp);
+
+  // Create box for the value list
+  const PIX pixNegateMargin = pixTextHeight * 0.15f;
+
+  mg_boxList = PIXaabbox2D(vListBox, vListBox + PIX2D(pixBoxWidth, pixTextHeight - pixNegateMargin));
+  mg_boxList.Expand(5);
+
+  // Render current value within its own box
+  _pGame->LCDDrawBox(1, 1, mg_boxList, colListBox);
+  pdp->Fill(mg_boxList.Min()(1), mg_boxList.Min()(2), mg_boxList.Size()(1) + 1, mg_boxList.Size()(2) + 1, 0xBF);
+
+  if (!bCustom) {
+    strValue = mg_pvsVar->vs_astrTexts[mg_pvsVar->vs_iValue];
+  }
+
+  pdp->PutText(strValue, vListBox(1), vListBox(2), colHighlighted);
+
+  // Shift box down and expand size for all values
+  const PIX2D vListOffset(0, mg_boxList.Size()(2) * 1.2f);
+  vListBox += vListOffset;
+  mg_boxList += vListOffset;
+
+  // Start at one value
+  mg_ctListValuesAtOnce = 1;
+
+  for (iList = 0; iList < ctList; iList++) {
+    // Stop counting if the height is lower than the limit
+    if (FLOAT(mg_boxList.Min()(2) + pixTextHeight * iList) / pdp->GetHeight() > 0.85f) {
+      break;
+    }
+
+    mg_ctListValuesAtOnce = iList + 1;
+  }
+
+  mg_boxList.maxvect(2) += pixTextHeight * (mg_ctListValuesAtOnce - 1);
+
+  const PIX2D vCursorPos(_pixCursorPosI, _pixCursorPosJ);
+
+  // Render all values in the list
+  _pGame->LCDDrawBox(1, 1, mg_boxList, colListBox);
+  pdp->Fill(mg_boxList.Min()(1), mg_boxList.Min()(2), mg_boxList.Size()(1) + 1, mg_boxList.Size()(2) + 1, 0xBF);
+
+  for (iList = 0; iList < mg_ctListValuesAtOnce; iList++) {
+    COLOR colList = colUnselected;
+    const PIX pixListValueY = (vListBox(2) + pixTextHeight * iList);
+
+    // Check if the mouse is hovering over the value
+    const PIX2D vValueStart(vListBox(1), pixListValueY);
+    const PIX2D vValueSize(pixBoxNoScrollBarWidth, pixTextHeight - 1);
+    const PIXaabbox2D boxValue(vValueStart, vValueStart + vValueSize);
+
+    const INDEX iActualValue = iList + mg_iValueListOffset;
+
+    if (boxValue >= vCursorPos) {
+      colList = colCurrent;
+
+      // Play selection sound
+      if (mg_iLastListValue != iActualValue) {
+        mg_iLastListValue = iActualValue;
+        PlayMenuSound(_psdSelect, FALSE);
+      }
+
+      mg_iListValue = iActualValue;
+
+    } else if (!bCustom && iActualValue == mg_pvsVar->vs_iValue) {
+      colList = colHighlighted;
+    }
+
+    pdp->PutText(mg_pvsVar->vs_astrTexts[iActualValue], vListBox(1), pixListValueY, colList);
+  }
+
+  // No value selected
+  if (mg_iListValue == -1) {
+    mg_iLastListValue = -1;
+  }
+
+  // Render scroll bar
+  if (mg_ctListValuesAtOnce < ctList) {
+    PIX2D vScrollStart(mg_boxList.Max()(1) - pixScrollBar, mg_boxList.Min()(2));
+    PIX2D vScrollSize(pixScrollBar, mg_boxList.Size()(2));
+
+    PIXaabbox2D boxScroll(vScrollStart, vScrollStart + vScrollSize);
+    _pGame->LCDDrawBox(1, 1, boxScroll, colListBox);
+
+    COLOR colScroll = colUnselected;
+
+    // Grab the scrollbar
+    if (boxScroll >= vCursorPos) {
+      mg_iListValue = -1;
+      mg_bOnListScrollbar = TRUE;
+      colScroll = colCurrent;
+    }
+
+    vScrollStart += PIX2D(2, 2);
+    vScrollSize  -= PIX2D(3, 3);
+
+    // Adjust slider for the current values on screen
+    const FLOAT fScrollH = (FLOAT)vScrollSize(2) / (FLOAT)ctList;
+    vScrollStart(2) += fScrollH * mg_iValueListOffset;
+    vScrollSize(2) *= (FLOAT)mg_ctListValuesAtOnce / (FLOAT)ctList;
+
+    pdp->Fill(vScrollStart(1), vScrollStart(2), vScrollSize(1), vScrollSize(2), colScroll);
+  }
 };
