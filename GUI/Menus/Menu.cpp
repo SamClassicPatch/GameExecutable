@@ -55,6 +55,10 @@ extern CTString sam_strNetworkSettings;
 // function to activate when level is chosen
 void (*_pAfterLevelChosen)(void);
 
+// [Cecil] Rewind visited menus to this one before changing to some menu
+CGameMenu *_pgmRewindToAfterLevelChosen = NULL; // Sets _pgmRewindTo before calling _pAfterLevelChosen()
+CGameMenu *_pgmRewindTo = NULL;
+
 // functions for init actions
 
 static void FixupBackButton(CGameMenu *pgm);
@@ -884,6 +888,18 @@ void ChangeToMenu(CGameMenu *pgmNewMenu) {
   // Otherwise remember this menu before changing from it
   } else if (pgmCurrentMenu != NULL && pgmCurrentMenu != pgmNewMenu) {
     _pGUIM->aVisitedMenus.Add(pgmCurrentMenu);
+
+    // [Cecil] Rewind back a few menus until the specified one, if needed
+    if (_pgmRewindTo != NULL) {
+      while (_pGUIM->aVisitedMenus.Count() != 0) {
+        CGameMenu *pgmPrev = _pGUIM->aVisitedMenus.Pop();
+
+        // Popped the menu to rewind to
+        if (pgmPrev == _pgmRewindTo) break;
+      }
+
+      _pgmRewindTo = NULL;
+    }
   }
 
   ASSERT(pgmNewMenu != NULL);

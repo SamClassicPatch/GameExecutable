@@ -44,12 +44,16 @@ void StartSelectLevel(ULONG ulFlags, void (*pAfterChosen)(void), CGameMenu *pgmP
 
   _pAfterLevelChosen = pAfterChosen;
 
+  // [Cecil] Rewind visited menus to the parent
+  extern CGameMenu *_pgmRewindToAfterLevelChosen;
+  _pgmRewindToAfterLevelChosen = pgmParent;
+
   ChangeToMenu(pgmCurrent);
 };
 
 static void StartSelectLevelFromSingle(void) {
   // [Cecil] Select singleplayer levels
-  StartSelectLevel(SPF_SINGLEPLAYER, &CSinglePlayerNewMenu::ChangeTo, &_pGUIM->gmSinglePlayerMenu);
+  StartSelectLevel(SPF_SINGLEPLAYER, &CSinglePlayerNewMenu::ChangeTo, NULL);
 };
 
 static BOOL LSLoadSinglePlayer(const CTFileName &fnm) {
