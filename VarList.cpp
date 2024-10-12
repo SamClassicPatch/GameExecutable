@@ -146,8 +146,34 @@ static void ParseAutoValue(CVarSetting *pvs, CTString &strLine) {
   strLine.RemovePrefix("#" + strVar + "#");
   strLine.TrimSpacesLeft();
 
+  // Generate a list of values based on some numeric range
+  if (strVar == "RANGE") {
+    DOUBLE fMin, fMax, fStep;
+
+    if (strLine.ScanF("%lf %lf %lf", &fMin, &fMax, &fStep) != 3) {
+      ThrowF_t(TRANS("Range property requires three numbers: min, max and step"));
+    }
+
+    // Safety checks
+    if (fMin  < -1e6) ThrowF_t(TRANS("Range: min value is too low"));
+    if (fMax  > +1e6) ThrowF_t(TRANS("Range: max value is too high"));
+    if (fStep < 1e-3) ThrowF_t(TRANS("Range: step value is too low"));
+
+    // Add each step from min to max
+    for (DOUBLE fAdd = fMin; fAdd < fMax; fAdd += fStep) {
+      const DOUBLE fRatio = (fAdd - fMin) / (fMax - fMin);
+
+      // E.g. "25%" and "0.25"
+      pvs->vs_astrTexts.Push().PrintF("%d%%", INDEX(fRatio * 100));
+      pvs->vs_astrValues.Push().PrintF("%g", fAdd);
+    }
+
+    // Add maximum value
+    pvs->vs_astrTexts.Push() = "100%";
+    pvs->vs_astrValues.Push().PrintF("%g", fMax);
+
   // Add screen resolutions from the list file
-  if (strVar == "RESOLUTION_LIST") {
+  } else if (strVar == "RESOLUTION_LIST") {
     CFileList aResList;
 
     if (!IFiles::LoadStringList(aResList, CTString("Data\\ClassicsPatch\\Resolutions.lst"))) {
@@ -479,36 +505,6 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
         // Set value to the filename
         pvs->vs_astrValues.Push() = fnm;
       }
-
-    // [Cecil] Generate a list of values based on some numeric range
-    } else if (strLine.RemovePrefix("Range:")) {
-      CheckPVS_t(pvs);
-      strLine.TrimSpacesLeft();
-      strLine.TrimSpacesRight();
-
-      DOUBLE fMin, fMax, fStep;
-
-      if (strLine.ScanF("%lf %lf %lf", &fMin, &fMax, &fStep) != 3) {
-        ThrowF_t(TRANS("Range property requires three numbers: min, max and step"));
-      }
-
-      // Safety checks
-      if (fMin  < -1e6) ThrowF_t(TRANS("Range: min value is too low"));
-      if (fMax  > +1e6) ThrowF_t(TRANS("Range: max value is too high"));
-      if (fStep < 1e-3) ThrowF_t(TRANS("Range: step value is too low"));
-
-      // Add each step from min to max
-      for (DOUBLE fAdd = fMin; fAdd < fMax; fAdd += fStep) {
-        const DOUBLE fRatio = (fAdd - fMin) / (fMax - fMin);
-
-        // E.g. "25%" and "0.25"
-        pvs->vs_astrTexts.Push().PrintF("%d%%", INDEX(fRatio * 100));
-        pvs->vs_astrValues.Push().PrintF("%g", fAdd);
-      }
-
-      // Add maximum value
-      pvs->vs_astrTexts.Push() = "100%";
-      pvs->vs_astrValues.Push().PrintF("%g", fMax);
 
     } else if (strLine.RemovePrefix("String:")) {
       CheckPVS_t(pvs);
