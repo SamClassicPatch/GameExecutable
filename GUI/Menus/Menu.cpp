@@ -293,8 +293,6 @@ void InitializeMenus(void) {
   ((CTextureData *)_toPatchLogo1.GetData())->Force(TEX_CONSTANT);
   ((CTextureData *)_toPatchLogo2.GetData())->Force(TEX_CONSTANT);
 
-  // menu's relative placement
-  CPlacement3D plRelative = CPlacement3D(FLOAT3D(0.0f, 0.0f, -9.0f), ANGLE3D(0.0f, 0.0f, 0.0f));
   try {
     TRANSLATERADIOARRAY(astrNoYes);
     TRANSLATERADIOARRAY(astrComputerInvoke);
@@ -335,7 +333,7 @@ void InitializeMenus(void) {
     _pGUIM->gmPatchCredits.Initialize_t();
 
   } catch (char *strError) {
-    FatalError(strError);
+    FatalError("Cannot initialize game menus:\n", strError);
   }
 }
 

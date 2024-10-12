@@ -54,7 +54,8 @@ void OpenMainWindowBorderless(PIX pixSizeI, PIX pixSizeJ) {
 
   // Can't create the window
   if (_hwndMain == NULL) {
-    FatalError(LOCALIZE("Cannot open main window!"));
+    // Append windows error message
+    FatalError("OpenMainWindowBorderless(): %s\n%s", LOCALIZE("Cannot open main window!"), GetWindowsError(GetLastError()));
   }
 
   SE_UpdateWindowHandle(_hwndMain);

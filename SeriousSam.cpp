@@ -557,7 +557,7 @@ BOOL Init(HINSTANCE hInstance, int nCmdShow, CTString strCmdLine) {
     FinishTranslationTable();
 
   } catch (char *strError) {
-    FatalError("%s", strError);
+    FatalError("Cannot load translation tables:\n%s", strError);
   }
 
   // [Cecil] Translate the mod name

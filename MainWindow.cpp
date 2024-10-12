@@ -139,12 +139,8 @@ void MainWindow_Init(void) {
   wc.hIconSm = NULL;
 
   if (0 == RegisterClassExA(&wc)) {
-    DWORD dwError = GetLastError();
-
-    CTString strError;
-    strError.PrintF("%s Error %d", LOCALIZE("Cannot open main window!"), dwError);
-
-    FatalError(strError);
+    // [Cecil] Append windows error message
+    FatalError("MainWindow_Init(): %s\n%s", LOCALIZE("Cannot open main window!"), GetWindowsError(GetLastError()));
   }
 
   // load bitmaps
@@ -206,7 +202,8 @@ void OpenMainWindowNormal(PIX pixSizeI, PIX pixSizeJ) {
 
   // didn't make it
   if (_hwndMain == NULL) {
-    FatalError(LOCALIZE("Cannot open main window!"));
+    // [Cecil] Append windows error message
+    FatalError("OpenMainWindowNormal(): %s\n%s", LOCALIZE("Cannot open main window!"), GetWindowsError(GetLastError()));
   }
 
   SE_UpdateWindowHandle(_hwndMain);
@@ -240,7 +237,8 @@ void OpenMainWindowFullScreen(PIX pixSizeI, PIX pixSizeJ) {
 
   // didn't make it
   if (_hwndMain == NULL) {
-    FatalError(LOCALIZE("Cannot open main window!"));
+    // [Cecil] Append windows error message
+    FatalError("OpenMainWindowFullScreen(): %s\n%s", LOCALIZE("Cannot open main window!"), GetWindowsError(GetLastError()));
   }
 
   SE_UpdateWindowHandle(_hwndMain);
@@ -271,12 +269,8 @@ void OpenMainWindowInvisible(void) {
 
   // didn't make it
   if (_hwndMain == NULL) {
-    DWORD dwError = GetLastError();
-
-    CTString strError;
-    strError.PrintF("%s Error %d", LOCALIZE("Cannot open main window!"), dwError);
-
-    FatalError(strError);
+    // [Cecil] Append windows error message
+    FatalError("OpenMainWindowInvisible(): %s\n%s", LOCALIZE("Cannot open main window!"), GetWindowsError(GetLastError()));
   }
 
   SE_UpdateWindowHandle(_hwndMain);
