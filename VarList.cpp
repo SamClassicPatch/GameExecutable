@@ -149,9 +149,22 @@ static void ParseAutoValue(CVarSetting *pvs, CTString &strLine) {
   // Generate a list of values based on some numeric range
   if (strVar == "RANGE") {
     DOUBLE fMin, fMax, fStep;
+    INDEX iScan = strLine.ScanF("%lf %lf %lf %255s", &fMin, &fMax, &fStep, strScanVar);
 
-    if (strLine.ScanF("%lf %lf %lf", &fMin, &fMax, &fStep) != 3) {
+    if (iScan < 3) {
       ThrowF_t(TRANS("Range property requires three numbers: min, max and step"));
+    }
+
+    // 0 - numbers as is; 1 - min..max ratio
+    INDEX iDisplayType = 0;
+
+    // Determine display type
+    if (iScan >= 4) {
+      CTString strDisplay = strScanVar;
+
+      if (strDisplay == "ratio") {
+        iDisplayType = 1;
+      }
     }
 
     // Safety checks
@@ -163,14 +176,30 @@ static void ParseAutoValue(CVarSetting *pvs, CTString &strLine) {
     for (DOUBLE fAdd = fMin; fAdd < fMax; fAdd += fStep) {
       const DOUBLE fRatio = (fAdd - fMin) / (fMax - fMin);
 
-      // E.g. "25%" and "0.25"
-      pvs->vs_astrTexts.Push().PrintF("%d%%", INDEX(fRatio * 100));
-      pvs->vs_astrValues.Push().PrintF("%g", fAdd);
+      // E.g. "0.25" value and "25%" text
+      CTString &strValue = pvs->vs_astrValues.Push();
+      strValue.PrintF("%g", fAdd);
+
+      CTString &strText = pvs->vs_astrTexts.Push();
+
+      if (iDisplayType == 1) {
+        strText.PrintF("%d%%", INDEX(fRatio * 100));
+      } else {
+        strText = strValue;
+      }
     }
 
     // Add maximum value
-    pvs->vs_astrTexts.Push() = "100%";
-    pvs->vs_astrValues.Push().PrintF("%g", fMax);
+    CTString &strMaxValue = pvs->vs_astrValues.Push();
+    strMaxValue.PrintF("%g", fMax);
+
+    CTString &strMaxText = pvs->vs_astrTexts.Push();
+
+    if (iDisplayType == 1) {
+      strMaxText = "100%";
+    } else {
+      strMaxText = strMaxValue;
+    }
 
   // Add screen resolutions from the list file
   } else if (strVar == "RESOLUTION_LIST") {
