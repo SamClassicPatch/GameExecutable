@@ -57,12 +57,17 @@ void CMGAxisDetector::Think(void) {
     }
   }
 
+  // Compatibility
+  #if !_PATCHCONFIG_EXTEND_INPUT
+    static const FLOAT inp_fAxisPressThreshold = 0.2f;
+  #endif
+
   // Check every axis
-  for (INDEX iAxis = EIA_NONE + 1; iAxis < EIA_MAX_ALL; iAxis++) {
+  for (INDEX iAxis = 1; iAxis < MAX_OVERALL_AXES; iAxis++) {
     const FLOAT fReading = Abs(_pInput->GetAxisValue(iAxis));
     BOOL bDetected = FALSE;
 
-    if (iAxis < EIA_MAX_MOUSE) {
+    if (iAxis < FIRST_JOYAXIS) {
       bDetected = fReading >= 5.0f;
     } else {
       bDetected = fReading >= Clamp(inp_fAxisPressThreshold, 0.01f, 1.0f);

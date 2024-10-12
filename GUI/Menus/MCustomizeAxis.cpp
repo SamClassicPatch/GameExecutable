@@ -24,7 +24,7 @@ static void AxisRenderCallback(CMGTrigger *pmg, CDrawPort *pdp) {
   INDEX iAxis;
 
   if (pmg->mg_astrTexts[iValue].ScanF("%d", &iAxis) != 1) {
-    iAxis = EIA_NONE;
+    iAxis = 0;
   }
 
   const PIXaabbox2D box = FloatBoxToPixBox(pdp, pmg->mg_boxOnScreen);
@@ -42,20 +42,20 @@ static void AxisRenderCallback(CMGTrigger *pmg, CDrawPort *pdp) {
   pdp->InitTexture(&_pGUIM->gmCustomizeAxisMenu.gm_toAxisIcons, TRUE);
 
   // No axis
-  if (iAxis == EIA_NONE) {
+  if (iAxis == 0) {
     fU = 0.0f;
     fV = 0.0f;
     col = C_WHITE | CT_OPAQUE;
 
   // Select mouse axis
-  } else if (iAxis < EIA_MAX_MOUSE) {
+  } else if (iAxis < FIRST_JOYAXIS) {
     // First row
     fU = fUSize * (FLOAT)iAxis;
     fV = 0.0f;
 
   // Select controller axis
   } else {
-    iAxis -= EIA_CONTROLLER_OFFSET;
+    iAxis -= FIRST_JOYAXIS;
 
     // Fourth row
     fU = fUSize * FLOAT(iAxis / SDL_CONTROLLER_AXIS_MAX);
