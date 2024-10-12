@@ -120,6 +120,111 @@ static void AddScreenResolution(CVarSetting *pvs, CStaticStackArray<PIX2D> &aRes
   }
 };
 
+// [Cecil] For keeping track of added resolutions under one option
+static CStaticStackArray<PIX2D> _aScreenResolutions;
+
+// [Cecil] Parse an autovalue
+static void ParseAutoValue(CVarSetting *pvs, CTString &strLine) {
+  // Scan special variable
+  char strScanVar[256] = { 0 };
+  CTString strVar = "";
+
+  // Simply add the same text and value, if couldn't parse any variable
+  if (strLine.ScanF("#%[^#]#", strScanVar) == 0) {
+    // Translate text but not value
+    CTString &strAddedText = pvs->vs_astrTexts.Push();
+    strAddedText = strLine;
+    TranslateLine(strAddedText);
+
+    pvs->vs_astrValues.Push() = strLine;
+    return;
+  }
+
+  strVar = strScanVar;
+
+  // Remove variable from the rest of the string
+  strLine.RemovePrefix("#" + strVar + "#");
+  strLine.TrimSpacesLeft();
+
+  // Add screen resolutions from the list file
+  if (strVar == "RESOLUTION_LIST") {
+    CFileList aResList;
+
+    if (!IFiles::LoadStringList(aResList, CTString("Data\\ClassicsPatch\\Resolutions.lst"))) {
+      ThrowF_t(TRANS("AutoValue: Cannot load resolution list"));
+    }
+
+    const INDEX ctRes = aResList.Count();
+    PIX2D vRes;
+
+    for (INDEX iAddRes = 0; iAddRes < ctRes; iAddRes++) {
+      CTFileName &strRes = aResList[iAddRes];
+
+      // Skip invalid strings
+      if (strRes.ScanF("%dx%d", &vRes(1), &vRes(2)) != 2) continue;
+
+      AddScreenResolution(pvs, _aScreenResolutions, vRes);
+    }
+
+  // Add native screen resolution if it's not already in the list
+  } else if (strVar == "NATIVE_RESOLUTION") {
+    BOOL bAdded = FALSE;
+    const INDEX ctRes = _aScreenResolutions.Count();
+
+    for (INDEX iRes = 0; iRes < ctRes; iRes++) {
+      if (_aScreenResolutions[iRes] == _vpixScreenRes) {
+        bAdded = TRUE;
+        break;
+      }
+    }
+
+    if (!bAdded) {
+      AddScreenResolution(pvs, _aScreenResolutions, _vpixScreenRes);
+    }
+
+  // Add a display adapter under a specific number
+  } else if (strVar == "DISPLAY_ADAPTER") {
+    INDEX iAdapter;
+
+    if (strLine.ScanF("%d", &iAdapter) != 1) {
+      ThrowF_t(TRANS("AutoValue: Expected display adapter index"));
+    }
+
+    INDEX iAPI = NormalizeGfxAPI(sam_iGfxAPI);
+    const INDEX ctAdapters = _pGfx->gl_gaAPI[iAPI].ga_ctAdapters;
+
+    if (iAdapter >= 0 && iAdapter < ctAdapters) {
+      CTString strAdapter = _pGfx->gl_gaAPI[iAPI].ga_adaAdapter[iAdapter].da_strRenderer;
+
+      // Make sure it's not a duplicate
+      BOOL bDuplicate = FALSE;
+      const INDEX ctAdaptersInList = pvs->vs_astrTexts.Count();
+
+      for (INDEX iCheckAdapter = 0; iCheckAdapter < ctAdaptersInList; iCheckAdapter++) {
+        if (pvs->vs_astrTexts[iCheckAdapter] == strAdapter) {
+          bDuplicate = TRUE;
+          break;
+        }
+      }
+
+      if (!bDuplicate) {
+        pvs->vs_astrTexts.Push() = strAdapter;
+        pvs->vs_astrValues.Push() = strLine;
+      }
+
+      // Filter out the option if there's only one adapter
+      if (pvs->vs_astrTexts.Count() <= 1) {
+        pvs->vs_strFilter = "FALSE";
+      } else {
+        pvs->vs_strFilter.Clear();
+      }
+    }
+
+  } else {
+    ThrowF_t(TRANS("AutoValue: Unknown variable '%s'"), strVar.str_String);
+  }
+};
+
 // [Cecil] All settings list argument
 static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
   CVarSetting *pvs = NULL;
@@ -127,8 +232,8 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
   // [Cecil] Skip everything until the next gadget
   BOOL bSkipUntilNext = FALSE;
 
-  // [Cecil] Keep track of added resolutions under one option
-  CStaticStackArray<PIX2D> aScreenResolutions;
+  // [Cecil] Clear last resolutions
+  _aScreenResolutions.PopAll();
 
   // repeat
   FOREVER {
@@ -154,7 +259,7 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
       // [Cecil] Parse this gadget
       bSkipUntilNext = FALSE;
 
-      aScreenResolutions.PopAll();
+      _aScreenResolutions.PopAll();
 
     } else if (strLine.RemovePrefix("Type:")) {
       CheckPVS_t(pvs);
@@ -424,104 +529,7 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
       strLine.TrimSpacesLeft();
       strLine.TrimSpacesRight();
 
-      // Scan special variable
-      char strScanVar[256] = { 0 };
-      CTString strVar = "";
-
-      if (strLine.ScanF("#%[^#]#", strScanVar) != 0) {
-        strVar = strScanVar;
-
-        // Remove variable from the rest of the string
-        strLine.RemovePrefix("#" + strVar + "#");
-        strLine.TrimSpacesLeft();
-
-        // Add screen resolutions from the list file
-        if (strVar == "RESOLUTION_LIST") {
-          CFileList aResList;
-
-          if (!IFiles::LoadStringList(aResList, CTString("Data\\ClassicsPatch\\Resolutions.lst"))) {
-            ThrowF_t(TRANS("AutoValue: Cannot load resolution list"));
-          }
-
-          const INDEX ctRes = aResList.Count();
-          PIX2D vRes;
-
-          for (INDEX iAddRes = 0; iAddRes < ctRes; iAddRes++) {
-            CTFileName &strRes = aResList[iAddRes];
-
-            // Skip invalid strings
-            if (strRes.ScanF("%dx%d", &vRes(1), &vRes(2)) != 2) continue;
-
-            AddScreenResolution(pvs, aScreenResolutions, vRes);
-          }
-
-        // Add native screen resolution if it's not already in the list
-        } else if (strVar == "NATIVE_RESOLUTION") {
-          BOOL bAdded = FALSE;
-          const INDEX ctRes = aScreenResolutions.Count();
-
-          for (INDEX iRes = 0; iRes < ctRes; iRes++) {
-            if (aScreenResolutions[iRes] == _vpixScreenRes) {
-              bAdded = TRUE;
-              break;
-            }
-          }
-
-          if (!bAdded) {
-            AddScreenResolution(pvs, aScreenResolutions, _vpixScreenRes);
-          }
-
-        // Add a display adapter under a specific number
-        } else if (strVar == "DISPLAY_ADAPTER") {
-          INDEX iAdapter;
-
-          if (strLine.ScanF("%d", &iAdapter) != 1) {
-            ThrowF_t(TRANS("AutoValue: Expected display adapter index"));
-          }
-
-          INDEX iAPI = NormalizeGfxAPI(sam_iGfxAPI);
-          const INDEX ctAdapters = _pGfx->gl_gaAPI[iAPI].ga_ctAdapters;
-
-          if (iAdapter >= 0 && iAdapter < ctAdapters) {
-            CTString strAdapter = _pGfx->gl_gaAPI[iAPI].ga_adaAdapter[iAdapter].da_strRenderer;
-
-            // Make sure it's not a duplicate
-            BOOL bDuplicate = FALSE;
-            const INDEX ctAdaptersInList = pvs->vs_astrTexts.Count();
-
-            for (INDEX iCheckAdapter = 0; iCheckAdapter < ctAdaptersInList; iCheckAdapter++) {
-              if (pvs->vs_astrTexts[iCheckAdapter] == strAdapter) {
-                bDuplicate = TRUE;
-                break;
-              }
-            }
-
-            if (!bDuplicate) {
-              pvs->vs_astrTexts.Push() = strAdapter;
-              pvs->vs_astrValues.Push() = strLine;
-            }
-
-            // Filter out the option if there's only one adapter
-            if (pvs->vs_astrTexts.Count() <= 1) {
-              pvs->vs_strFilter = "FALSE";
-            } else {
-              pvs->vs_strFilter.Clear();
-            }
-          }
-
-        } else {
-          ThrowF_t(TRANS("AutoValue: Unknown variable '%s'"), strVar.str_String);
-        }
-
-      // Simply add the same text and value
-      } else {
-        // Translate text but not value
-        CTString &strAddedText = pvs->vs_astrTexts.Push();
-        strAddedText = strLine;
-        TranslateLine(strAddedText);
-
-        pvs->vs_astrValues.Push() = strLine;
-      }
+      ParseAutoValue(pvs, strLine);
 
     // [Cecil] Include another config in the middle of this one
     } else if (strLine.RemovePrefix("Include:")) {
