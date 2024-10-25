@@ -205,8 +205,8 @@ void StartMenus(const char *str) {
     FixupBackButton(&_pGUIM->gmControls);
 
   } else if (strMenu == "join") {
-    extern void StartSelectPlayersMenuFromOpen(void);
-    StartSelectPlayersMenuFromOpen();
+    extern void StartJoinServerMenu(void);
+    StartJoinServerMenu();
     FixupBackButton(&_pGUIM->gmSelectPlayersMenu);
 
   } else if (strMenu == "hiscore") {
@@ -392,9 +392,6 @@ void MenuOnKeyDown(PressedMenuButton pmb) {
   if (!bHandled) {
     // if escape or right mouse pressed
     if (pmb.Back(TRUE)) {
-      if (pgmCurrentMenu == &_pGUIM->gmLoadSaveMenu && _pGUIM->gmLoadSaveMenu.gm_bNoEscape) {
-        return;
-      }
       // go to parent menu if possible
       MenuGoToParent();
     }

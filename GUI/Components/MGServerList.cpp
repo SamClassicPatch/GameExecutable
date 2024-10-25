@@ -401,24 +401,6 @@ void CMGServerList::OnMouseOver(PIX pixI, PIX pixJ) {
   }
 }
 
-extern void JoinNetworkGame(void);
-
-static void StartSelectPlayersMenuFromServers(void) {
-  CSelectPlayersMenu &gmCurrent = _pGUIM->gmSelectPlayersMenu;
-
-  gmCurrent.gm_ulConfigFlags = PLCF_OBSERVING | PLCF_PASSWORD;
-  gmCurrent.gm_mgStart.mg_pActivatedFunction = &JoinNetworkGame;
-  ChangeToMenu(&gmCurrent);
-
-  /*if (sam_strNetworkSettings == "")*/ {
-    extern void StartNetworkSettingsMenu(void);
-    StartNetworkSettingsMenu();
-
-    _pGUIM->gmLoadSaveMenu.gm_bNoEscape = TRUE;
-    _pGUIM->gmLoadSaveMenu.gm_pgmNextMenu = &gmCurrent;
-  }
-};
-
 BOOL CMGServerList::OnKeyDown(PressedMenuButton pmb) {
   // [Cecil] Start dragging with left mouse button
   if (pmb.iKey == VK_LBUTTON)
@@ -483,8 +465,8 @@ BOOL CMGServerList::OnKeyDown(PressedMenuButton pmb) {
         _pGame->gam_strJoinAddress = strAddress;
         _pShell->SetINDEX("net_iPort", iPort);
 
-        extern void StartSelectPlayersMenuFromServers(void);
-        StartSelectPlayersMenuFromServers();
+        extern void StartJoinServerMenu(void);
+        StartJoinServerMenu();
         return TRUE;
       }
 

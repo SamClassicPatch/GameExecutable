@@ -92,20 +92,20 @@ void JoinNetworkGame(void) {
   }
 };
 
-void StartSelectPlayersMenuFromOpen(void) {
+// [Cecil] Open menu for joining a remote server
+void StartJoinServerMenu(void) {
+  // Setup player selection menu in advance (but don't change to it!)
   CSelectPlayersMenu &gmCurrent = _pGUIM->gmSelectPlayersMenu;
-
   gmCurrent.gm_ulConfigFlags = PLCF_OBSERVING | PLCF_PASSWORD;
   gmCurrent.gm_mgStart.mg_pActivatedFunction = &JoinNetworkGame;
-  ChangeToMenu(&gmCurrent);
 
-  /*if (sam_strNetworkSettings == "")*/ {
-    extern void StartNetworkSettingsMenu(void);
-    StartNetworkSettingsMenu();
+  // Open network settings list
+  extern void StartNetworkSettingsMenu(void);
+  StartNetworkSettingsMenu();
 
-    _pGUIM->gmLoadSaveMenu.gm_bNoEscape = TRUE;
-    _pGUIM->gmLoadSaveMenu.gm_pgmNextMenu = &gmCurrent;
-  }
+  // Go to the player selection menu afterwards
+  extern CGameMenu *_pgmAfterNetSetting;
+  _pgmAfterNetSetting = &gmCurrent;
 };
 
 void CNetworkOpenMenu::Initialize_t(void) {
@@ -154,7 +154,7 @@ void CNetworkOpenMenu::Initialize_t(void) {
   gm_mgJoin.mg_pmgDown = &gm_mgAddress;
   gm_mgJoin.SetText(LOCALIZE("Join"));
   AddChild(&gm_mgJoin);
-  gm_mgJoin.mg_pActivatedFunction = &StartSelectPlayersMenuFromOpen;
+  gm_mgJoin.mg_pActivatedFunction = &StartJoinServerMenu;
 }
 
 void CNetworkOpenMenu::StartMenu(void) {

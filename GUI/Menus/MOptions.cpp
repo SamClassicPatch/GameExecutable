@@ -36,13 +36,24 @@ static void StartChangePlayerMenuFromOptions(void) {
   ChangeToMenu(&_pGUIM->gmPlayerProfile);
 };
 
+// [Cecil] Menu to switch to after selecting a network setting
+CGameMenu *_pgmAfterNetSetting = NULL;
+
 static BOOL LSLoadNetSettings(const CTFileName &fnm) {
   sam_strNetworkSettings = fnm;
   CTString strCmd;
   strCmd.PrintF("include \"%s\"", (const char *)sam_strNetworkSettings);
   _pShell->Execute(strCmd);
 
+  // Exit network settings menu
   MenuGoToParent();
+
+  // [Cecil] And then switch to the next menu
+  if (_pgmAfterNetSetting != NULL) {
+    ChangeToMenu(_pgmAfterNetSetting);
+    _pgmAfterNetSetting = NULL;
+  }
+
   return TRUE;
 };
 
@@ -71,6 +82,9 @@ void StartNetworkSettingsMenu(void) {
   }
 
   ChangeToMenu(&gmCurrent);
+
+  // [Cecil] Reset next menu (can be configured after calling this whole function)
+  _pgmAfterNetSetting = NULL;
 };
 
 // [Cecil] Load config settings from the patch

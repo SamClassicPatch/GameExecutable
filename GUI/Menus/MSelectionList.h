@@ -30,10 +30,8 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 class CSelectListMenu : public CGameMenu {
   public:
     // Settings adjusted before starting the menu
-    CGameMenu *gm_pgmNextMenu; // Menu to go to after selecting a file (if NULL, use parent menu)
     CTString gm_strSelected;   // Button that's selected initially
     BOOL gm_bAllowThumbnails;  // Sets thumbnail for a currently selected button
-    BOOL gm_bNoEscape;         // Forbid exiting with escape/RMB
 
     // Function to activate when button is pressed
     // Returns TRUE if loading or saving has succeeded - description is saved automatically

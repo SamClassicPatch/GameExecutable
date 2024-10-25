@@ -19,8 +19,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "MSelectionList.h"
 
 void CSelectListMenu::Initialize_t(void) {
-  gm_pgmNextMenu = NULL;
-
   gm_mgTitle.mg_boxOnScreen = BoxTitle();
   AddChild(&gm_mgTitle);
 
@@ -64,8 +62,6 @@ void CSelectListMenu::Initialize_t(void) {
 };
 
 void CSelectListMenu::StartMenu(void) {
-  gm_bNoEscape = FALSE;
-
   // Delete all file infos
   FORDELETELIST(CFileInfo, fi_lnNode, gm_lhFileInfos, itfi) {
     delete &itfi.Current();
@@ -104,8 +100,6 @@ void CSelectListMenu::EndMenu(void) {
   FORDELETELIST(CFileInfo, fi_lnNode, gm_lhFileInfos, itfi) {
     delete &itfi.Current();
   }
-
-  gm_pgmNextMenu = NULL;
 
   CGameMenu::EndMenu();
 };
