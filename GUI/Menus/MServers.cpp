@@ -79,6 +79,13 @@ static void SwitchMasterServer(void) {
   // Set button name and master server
   mgServer.SetText(_astrServerNames[i]);
   pstrLegacyMS.GetString() = _astrServerValues[i];
+
+  // Call UpdateInternalGameSpyMS() to update the actual master server
+  CShellSymbol *pss = pstrLegacyMS._pss;
+
+  if (pss->ss_pPostFunc != NULL) {
+    pss->ss_pPostFunc(pss);
+  }
 };
 
 static void RefreshServerList(void) {
