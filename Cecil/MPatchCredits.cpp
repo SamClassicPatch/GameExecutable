@@ -200,7 +200,7 @@ void CPatchCreditsMenu::Initialize_t(void) {
 void CPatchCreditsMenu::StartMenu(void) {
   // Randomize Cecil's quote
   static const CTString astrQuotes[] = {
-    "^iAlso try Half-Life 2 Immersion Mod!",
+    "^iAlso try Serious Immersion: Half-Life 2!",
     "^iAlso try Cecil's Bot Mod!",
     "^iI love this game",
     "^iMaking my own Serious Sam: Revolution one semicolon at a time",
