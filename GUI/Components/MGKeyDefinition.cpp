@@ -157,7 +157,7 @@ void CMGKeyDefinition::Think(void) {
       BOOL bActivationKey = !!_pInput->GetButtonState(KID_ENTER) || !!_pInput->GetButtonState(KID_MOUSE1);
 
     #if _PATCHCONFIG_ENGINEPATCHES && _PATCHCONFIG_EXTEND_INPUT
-      if (!bActivationKey) {
+      if (CInputPatch::IsInitialized() && !bActivationKey) {
         // [Cecil] See if any controller buttons for binding activation are being held
         for (INDEX iCtrl = 0; iCtrl < MAX_JOYSTICKS; iCtrl++) {
           const INDEX iFirstButton = FIRST_JOYBUTTON + iCtrl * SDL_CONTROLLER_BUTTON_MAX;

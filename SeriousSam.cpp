@@ -934,15 +934,17 @@ void TeleportPlayer(int iPosition) {
 static BOOL PollEvent(MSG &msg) {
 #if _PATCHCONFIG_ENGINEPATCHES && _PATCHCONFIG_EXTEND_INPUT
 
-  // Manual joystick update
-  CInputPatch::UpdateJoysticks();
+  if (CInputPatch::IsInitialized()) {
+    // Manual joystick update
+    CInputPatch::UpdateJoysticks();
 
-  // Process event for the first controller that sends it
-  const INDEX ctControllers = inp_aControllers.Count();
+    // Process event for the first controller that sends it
+    const INDEX ctControllers = inp_aControllers.Count();
 
-  for (INDEX iCtrl = 0; iCtrl < ctControllers; iCtrl++) {
-    if (CInputPatch::SetupControllerEvent(iCtrl, msg)) {
-      return TRUE;
+    for (INDEX iCtrl = 0; iCtrl < ctControllers; iCtrl++) {
+      if (CInputPatch::SetupControllerEvent(iCtrl, msg)) {
+        return TRUE;
+      }
     }
   }
 
@@ -969,7 +971,7 @@ static BOOL PollEvent(MSG &msg) {
 static BOOL AnyControllerButton(MSG &msg) {
 #if _PATCHCONFIG_ENGINEPATCHES && _PATCHCONFIG_EXTEND_INPUT
 
-  if (msg.message == WM_CTRLBUTTONDOWN) {
+  if (CInputPatch::IsInitialized() && msg.message == WM_CTRLBUTTONDOWN) {
     switch (msg.wParam) {
       case SDL_CONTROLLER_BUTTON_A: case SDL_CONTROLLER_BUTTON_B:
       case SDL_CONTROLLER_BUTTON_X: case SDL_CONTROLLER_BUTTON_Y:
