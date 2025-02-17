@@ -61,6 +61,7 @@ void StartSplitScreenQuickLoadMenu(void) {
   gmCurrent.gm_fnmDirectory = CTString("SaveGame\\SplitScreen\\Quick\\");
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".sav");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSLoadSplitScreen;
 
   extern void SetQuickLoadNotes(void);
@@ -82,6 +83,7 @@ void StartSplitScreenLoadMenu(void) {
   gmCurrent.gm_fnmDirectory = CTString("SaveGame\\SplitScreen\\");
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".sav");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSLoadSplitScreen;
   gmCurrent.gm_mgNotes.SetText("");
 

@@ -56,6 +56,7 @@ static void StartControlsLoadMenu(void) {
   gmCurrent.gm_fnmDirectory = CTString("Controls\\");
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".ctl");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSLoadControls;
   gmCurrent.gm_mgNotes.SetText("");
 

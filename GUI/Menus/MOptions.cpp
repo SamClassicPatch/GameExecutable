@@ -68,6 +68,7 @@ void StartNetworkSettingsMenu(void) {
   gmCurrent.gm_fnmDirectory = CTString("Scripts\\NetSettings\\");
   gmCurrent.gm_strSelected = sam_strNetworkSettings;
   gmCurrent.gm_fnmExt = CTString(".ini");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSLoadNetSettings;
 
   if (sam_strNetworkSettings == "") {
@@ -105,6 +106,8 @@ static void StartPatchOptionsMenu(void) {
   gmCurrent.gm_fnmDirectory = CTString("Scripts\\ClassicsPatch\\");
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".cfg");
+  // Ignore lists to prevents mods from hiding patch options when excluding the entire "Scripts" directory
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD | FLF_IGNORELISTS;
   gmCurrent.gm_pAfterFileChosen = &LSLoadPatchConfig;
   gmCurrent.gm_mgNotes.SetText("");
 
@@ -127,6 +130,7 @@ static void StartCustomLoadMenu(void) {
   gmCurrent.gm_fnmDirectory = CTString("Scripts\\CustomOptions\\");
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".cfg");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSLoadCustom;
   gmCurrent.gm_mgNotes.SetText("");
 
@@ -152,6 +156,7 @@ static void StartAddonsLoadMenu(void) {
   gmCurrent.gm_fnmDirectory = CTString(SCRIPTS_ADDONS_DIR);
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".ini");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSLoadAddon;
   gmCurrent.gm_mgNotes.SetText("");
 

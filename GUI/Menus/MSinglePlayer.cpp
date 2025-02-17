@@ -101,6 +101,7 @@ void StartSinglePlayerQuickLoadMenu(void) {
   gmCurrent.gm_fnmDirectory.PrintF("SaveGame\\Player%d\\Quick\\", GetGameAPI()->GetProfileForSP());
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".sav");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSLoadSinglePlayer;
 
   SetQuickLoadNotes();
@@ -121,6 +122,7 @@ void StartSinglePlayerLoadMenu(void) {
   gmCurrent.gm_fnmDirectory.PrintF("SaveGame\\Player%d\\", GetGameAPI()->GetProfileForSP());
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".sav");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSLoadSinglePlayer;
   gmCurrent.gm_mgNotes.SetText("");
 
@@ -161,6 +163,7 @@ void StartSinglePlayerSaveMenu(void) {
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmBaseName = CTString("SaveGame");
   gmCurrent.gm_fnmExt = CTString(".sav");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSSaveAnyGame;
   gmCurrent.gm_mgNotes.SetText("");
   gmCurrent.gm_strSaveDes = _pGame->GetDefaultGameDescription(TRUE);

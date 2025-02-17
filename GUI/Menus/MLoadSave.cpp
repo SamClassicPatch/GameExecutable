@@ -64,7 +64,7 @@ void CLoadSaveMenu::Initialize_t(void) {
 void CLoadSaveMenu::CreateButtons(void) {
   // List the directory
   CFileList afnmDir;
-  ListGameFiles(afnmDir, gm_fnmDirectory, "", FLF_SEARCHMOD);
+  ListGameFiles(afnmDir, gm_fnmDirectory, "", gm_ulListFlags);
   gm_iLastFile = -1;
 
   // For each file in the directory

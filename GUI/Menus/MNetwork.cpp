@@ -61,6 +61,7 @@ void StartNetworkQuickLoadMenu(void) {
   gmCurrent.gm_fnmDirectory = CTString("SaveGame\\Network\\Quick\\");
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".sav");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSLoadNetwork;
 
   extern void SetQuickLoadNotes(void);
@@ -82,6 +83,7 @@ void StartNetworkLoadMenu(void) {
   gmCurrent.gm_fnmDirectory = CTString("SaveGame\\Network\\");
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".sav");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSLoadNetwork;
   gmCurrent.gm_mgNotes.SetText("");
 

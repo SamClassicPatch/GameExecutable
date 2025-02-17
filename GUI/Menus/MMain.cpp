@@ -47,6 +47,7 @@ void StartModsLoadMenu(void) {
   gmCurrent.gm_fnmDirectory = CTString("Mods\\");
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".des");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSLoadMod;
 
   // [Cecil] Set current menu as the parent menu
@@ -107,6 +108,7 @@ static void StartDemoLoadMenu(void) {
   gmCurrent.gm_fnmDirectory = CTString("Demos\\");
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmExt = CTString(".dem");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSLoadDemo;
   gmCurrent.gm_mgNotes.SetText("");
 

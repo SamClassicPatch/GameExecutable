@@ -148,6 +148,7 @@ static void StartPlayerModelLoadMenu(void) {
   gmCurrent.gm_fnmDirectory = CTString("Models\\Player\\");
   gmCurrent.gm_strSelected = _strLastPlayerAppearance;
   gmCurrent.gm_fnmExt = CTString(".amc");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSLoadPlayerModel;
   gmCurrent.gm_mgNotes.SetText("");
 

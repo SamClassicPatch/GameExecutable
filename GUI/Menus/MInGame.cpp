@@ -50,6 +50,7 @@ static void StartNetworkSaveMenu(void) {
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmBaseName = CTString("SaveGame");
   gmCurrent.gm_fnmExt = CTString(".sav");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSSaveAnyGame;
   gmCurrent.gm_mgNotes.SetText("");
   gmCurrent.gm_strSaveDes = _pGame->GetDefaultGameDescription(TRUE);
@@ -75,6 +76,7 @@ static void StartSplitScreenSaveMenu(void) {
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmBaseName = CTString("SaveGame");
   gmCurrent.gm_fnmExt = CTString(".sav");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSSaveAnyGame;
   gmCurrent.gm_mgNotes.SetText("");
   gmCurrent.gm_strSaveDes = _pGame->GetDefaultGameDescription(TRUE);
@@ -267,6 +269,7 @@ void StartDemoSaveMenu(void) {
   gmCurrent.gm_strSelected = CTString("");
   gmCurrent.gm_fnmBaseName = CTString("Demo");
   gmCurrent.gm_fnmExt = CTString(".dem");
+  gmCurrent.gm_ulListFlags = FLF_SEARCHMOD; // [Cecil]
   gmCurrent.gm_pAfterFileChosen = &LSSaveDemo;
   gmCurrent.gm_mgNotes.SetText("");
   gmCurrent.gm_strSaveDes = _pGame->GetDefaultGameDescription(FALSE);

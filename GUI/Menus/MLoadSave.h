@@ -41,6 +41,7 @@ class CLoadSaveMenu : public CSelectListMenu {
     CTFileName gm_fnmDirectory; // directory that should be read
     CTFileName gm_fnmBaseName;  // base file name for saving (numbers are auto-added)
     CTFileName gm_fnmExt;       // accepted file extension
+    ULONG gm_ulListFlags;       // [Cecil] Flags to pass into ListGameFiles()
     BOOL gm_bSave;              // set when chosing file for saving
     BOOL gm_bManage;            // set if managing (rename/delet is enabled)
     CTString gm_strSaveDes;     // default description (if saving)
