@@ -36,7 +36,12 @@ static void ModNotInstalled(void) {
   CTString strNoMod;
   strNoMod.PrintF(LOCALIZE("You don't have MOD '%s' installed.\nDo you want to visit its web site?"), _fnmModSelected.str_String);
 
-  CConfirmMenu::ChangeTo(strNoMod, &ExitAndSpawnExplorer, NULL, FALSE);
+  // [Cecil] Append the link that will be opened
+  strNoMod += "\n\n";
+  strNoMod += TRANS("The following link will open in your web browser:\n");
+  strNoMod += _strModURLSelected;
+
+  CConfirmMenu::ChangeTo(strNoMod, &ExitAndSpawnExplorer, NULL, FALSE, "", "", 0.3f);
 };
 
 static void ModConnect(void) {
@@ -54,7 +59,6 @@ static void ModConnectConfirm(void) {
    && !FileExists(fnmModPath + "BaseWriteExclude.lst")
    && !FileExists(fnmModPath + "BaseBrowseInclude.lst")
    && !FileExists(fnmModPath + "BaseBrowseExclude.lst")) {
-    extern void ModNotInstalled(void);
     ModNotInstalled();
     return;
   }
