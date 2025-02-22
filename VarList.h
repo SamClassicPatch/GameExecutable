@@ -61,6 +61,9 @@ class CVarSetting {
 
     // [Cecil] Copy constructor
     CVarSetting(const CVarSetting &vsOther);
+
+    // [Cecil] Immediately apply new value to this setting (taken out of FlushVarSettings() method)
+    BOOL ApplyValue(void);
 };
 
 // [Cecil] Options tab
