@@ -1596,10 +1596,14 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
       strSteamJoinCommand = "";
     }
 
-    // [Cecil] Display notification about a new release in the menu
+    // [Cecil] Display notifications about certain events in the menu
     if (bMenuActive && !_pInput->IsInputEnabled()) {
+      // New releases
       QueryPatchUpdates();
       NotifyAboutNewVersion();
+
+      // Seasonal events
+      NotifyAboutCurrentSeason();
     }
 
     // get real cursor position

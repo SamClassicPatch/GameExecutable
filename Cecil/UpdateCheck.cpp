@@ -155,3 +155,98 @@ void QueryPatchUpdates(void) {
 
   sam_strLastVersionCheck.PrintF("%X:'%s'", (ULONG)iTime, str);
 };
+
+// Display notification about the current season
+void NotifyAboutCurrentSeason(void) {
+  // Check only once
+  static BOOL bChecked = FALSE;
+
+  if (bChecked) return;
+  bChecked = TRUE;
+
+  EClassicsPatchSeason eCurrent = ClassicsCore_GetSeason();
+
+  // Reset season
+  if (eCurrent == k_EClassicsPatchSeason_None) {
+    sam_iLastSeasonCheck = k_EClassicsPatchSeason_None;
+    return;
+  }
+
+  // Don't display notifications for the same season each time
+  if (eCurrent == sam_iLastSeasonCheck) return;
+
+  sam_iLastSeasonCheck = eCurrent;
+
+  CTString strText, strStartDate, strEndDate;
+
+  switch (eCurrent) {
+    case k_EClassicsPatchSeason_Valentine: {
+      strText = TRANS(
+        "Happy Valentine's Day!\n\n"
+
+        "Love is in the air? WRONG! Smoke and the smell of napalm are in\n"
+        "the air as you tear through Mental's horde, killing everyone in\n"
+        "your path for what they did to your loved ones!\n"
+        "It's the perfect time to break alien hearts... with your bare hands!"
+      );
+      strStartDate = TRANS("February 10");
+      strEndDate   = TRANS("February 18");
+    } break;
+
+    case k_EClassicsPatchSeason_Birthday: {
+      strText = TRANS(
+        "Happy Birthday to Serious Sam!\n\n"
+
+        "March 21st saw the birth of a man who vowed to save all of\n"
+        "humanity by any means necessary!\n"
+        "But unfortunately for Sam, Mental stole all the cakes and stuffed\n"
+        "them into his horde. It's time for a real birthday bash!"
+      );
+      strStartDate = TRANS("March 19");
+      strEndDate   = TRANS("March 23");
+    } break;
+
+    case k_EClassicsPatchSeason_Anniversary: {
+      strText = TRANS(
+        "Happy Anniversary to Classics Patch!\n\n"
+
+        "The very first release of Classics Patch was on June 22, 2022.\n"
+        "Mental was so excited about this anniversary that he simply could\n"
+        "not resist the temptation to throw his own party for his horde,\n"
+        "who had eaten their fill of cakes and other colorful pastries.\n"
+        "It's time to crash this party!"
+      );
+      strStartDate = TRANS("June 20");
+      strEndDate   = TRANS("June 24");
+    } break;
+
+    case k_EClassicsPatchSeason_Halloween: {
+      strText = TRANS(
+        "Happy Halloween!\n\n"
+
+        "On this special occasion, Mental's horde ate so much candy and\n"
+        "pumpkins that all of their internal organs turned into them!\n"
+        "Although, as delicious as it looks, I wouldn't recommend eating it."
+      );
+      strStartDate = TRANS("October 1");
+      strEndDate   = TRANS("October 31");
+    } break;
+
+    case k_EClassicsPatchSeason_Christmas: {
+      strText = TRANS(
+        "Merry Christmas & Happy Holidays!\n\n"
+
+        "Enjoy the snowy winter wonderland as you pulp Mental's horde\n"
+        "into festive-looking chunks!\n"
+        "That Kleer skull will look beautiful on the Christmas tree..."
+      );
+      strStartDate = TRANS("December 15");
+      strEndDate   = TRANS("January 15");
+    } break;
+
+    default: return;
+  }
+
+  strText += "\n\n" + CTString(0, TRANS("^cffffffEvent period: %s - %s"), strStartDate, strEndDate);
+  CConfirmMenu::ChangeTo(strText, NULL, NULL, FALSE, TRANS("SERIOUSLY AWESOME!"), TRANS("SERIOUSLY LAME..."), 0.4f);
+};

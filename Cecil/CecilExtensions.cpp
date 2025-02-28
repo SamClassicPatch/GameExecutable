@@ -31,6 +31,8 @@ INDEX sam_bDecoratedServerNames = TRUE;
 INDEX sam_iUpdateReminder = 0;
 CTString sam_strLastVersionCheck = "";
 
+INDEX sam_iLastSeasonCheck = k_EClassicsPatchSeason_None;
+
 // Level filtering
 INDEX sam_iShowLevelFormat = -1; // Show all
 CTString sam_strLevelTitleFilter = "";
@@ -118,6 +120,8 @@ void ClassicsPatch_InitExt(void) {
 
   _pShell->DeclareSymbol("persistent INDEX sam_iUpdateReminder;", &sam_iUpdateReminder);
   _pShell->DeclareSymbol("persistent CTString sam_strLastVersionCheck;", &sam_strLastVersionCheck);
+
+  _pShell->DeclareSymbol("persistent INDEX sam_iLastSeasonCheck;", &sam_iLastSeasonCheck);
 
   _pShell->DeclareSymbol("user void Restart(void);", &RestartGame);
   _pShell->DeclareSymbol("user void ListLevels(CTString);", &ListLevels);

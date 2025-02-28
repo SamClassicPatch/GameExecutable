@@ -33,6 +33,8 @@ extern INDEX sam_bDecoratedServerNames;
 extern INDEX sam_iUpdateReminder;
 extern CTString sam_strLastVersionCheck;
 
+extern INDEX sam_iLastSeasonCheck;
+
 // Level filtering
 extern INDEX sam_iShowLevelFormat;
 extern CTString sam_strLevelTitleFilter;

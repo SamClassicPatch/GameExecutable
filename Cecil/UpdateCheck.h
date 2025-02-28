@@ -26,4 +26,7 @@ void NotifyAboutNewVersion(void);
 // Check for patch updates
 void QueryPatchUpdates(void);
 
+// Display notification about the current season
+void NotifyAboutCurrentSeason(void);
+
 #endif
