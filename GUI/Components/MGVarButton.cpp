@@ -104,7 +104,7 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
         if (boxSlider >= PIX2D(_pixCursorPosI, _pixCursorPosJ)) {
           // set new position exactly where mouse pointer is
           mg_pvsVar->vs_iValue = (FLOAT)(_pixCursorPosI - boxSlider.Min()(1)) / boxSlider.Size()(1) * (mg_pvsVar->vs_ctValues);
-          _bVarChanged = TRUE;
+          OnVarChanged(); // [Cecil]
         }
 
         // handled
@@ -180,9 +180,9 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
       }
 
       if (iOldValue != mg_pvsVar->vs_iValue) {
-        _bVarChanged = TRUE;
         mg_pvsVar->vs_bCustom = FALSE;
         mg_pvsVar->Validate();
+        OnVarChanged(); // [Cecil]
       }
 
       return TRUE;
@@ -342,6 +342,24 @@ void CMGVarButton::Render(CDrawPort *pdp) {
   }
 }
 
+// [Cecil] Signal that some variable has been changed
+void CMGVarButton::OnVarChanged(void) {
+  // Apply new value immediately without having to press "Apply"
+  if (mg_pvsVar->vs_bRealTime) {
+    const BOOL bScheduled = mg_pvsVar->ApplyValue();
+
+    // Execute scheduled command
+    if (bScheduled && mg_pvsVar->vs_strSchedule != "") {
+      _pShell->Execute(mg_pvsVar->vs_strSchedule);
+    }
+
+    mg_pvsVar->UpdateValue();
+  }
+
+  // Not necessary for the code above but good for the old reflexes of clicking "Apply" anyway
+  _bVarChanged = TRUE;
+};
+
 // [Cecil] Change strings
 void CMGVarButton::OnStringChanged(void) {
   // No textbox attached
@@ -353,7 +371,7 @@ void CMGVarButton::OnStringChanged(void) {
   ULONG ulOldHash = static_cast<ULONG>(mg_pvsVar->vs_iOrgValue);
 
   if (mg_pvsVar->vs_strValue.GetHash() != ulOldHash) {
-    _bVarChanged = TRUE;
+    OnVarChanged(); // [Cecil]
   }
 };
 
@@ -383,9 +401,9 @@ void CMGVarButton::ListDeactivate(INDEX iSelectValue) {
     mg_pvsVar->vs_iValue = Clamp(iSelectValue, (INDEX)0, INDEX(mg_pvsVar->vs_ctValues - 1));
 
     if (iOldValue != mg_pvsVar->vs_iValue) {
-      _bVarChanged = TRUE;
       mg_pvsVar->vs_bCustom = FALSE;
       mg_pvsVar->Validate();
+      OnVarChanged(); // [Cecil]
     }
 
     PlayMenuSound(_psdPress);

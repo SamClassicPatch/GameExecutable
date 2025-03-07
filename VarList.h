@@ -53,6 +53,7 @@ class CVarSetting {
     INDEX vs_iOrgValue;
     BOOL vs_bCustom;
     BOOL vs_bHidden; // [Cecil] Hide value string
+    BOOL vs_bRealTime; // [Cecil] Apply values in real time while changing them
     CStringStack vs_astrTexts;
     CStringStack vs_astrValues;
     CVarSetting();
@@ -64,6 +65,9 @@ class CVarSetting {
 
     // [Cecil] Immediately apply new value to this setting (taken out of FlushVarSettings() method)
     BOOL ApplyValue(void);
+
+    // [Cecil] Update original value after applying it with ApplyValue() (taken out of LoadVarSettings() method)
+    void UpdateValue(void);
 };
 
 // [Cecil] Options tab

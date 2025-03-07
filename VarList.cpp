@@ -419,6 +419,19 @@ static void ParseCFG_t(CTStream &strm, CListHead &lhAll) {
         pvs->vs_bHidden = TRUE;
       }
 
+    // [Cecil] Apply values in real time
+    } else if (strLine.RemovePrefix("RealTime:")) {
+      CheckPVS_t(pvs);
+      strLine.TrimSpacesLeft();
+      strLine.TrimSpacesRight();
+
+      if (strLine == "No") {
+        pvs->vs_bRealTime = FALSE;
+      } else {
+        ASSERT(strLine == "Yes");
+        pvs->vs_bRealTime = TRUE;
+      }
+
     // [Cecil] Skip adding this option if it doesn't belong to the current game
     } else if (strLine.RemovePrefix("Games:")) {
       CheckPVS_t(pvs);
@@ -687,40 +700,7 @@ void LoadVarSettings(const CTFileName &fnmCfg) {
         continue;
       }
 
-      // Get value from the shell variable
-      CTString strValue = _pShell->GetValue(vs.vs_strVar);
-
-      // [Cecil] Different types
-      switch (vs.vs_eType)
-      {
-        case CVarSetting::E_TOGGLE: {
-          const INDEX ctValues = vs.vs_ctValues;
-
-          // Custom value by default
-          vs.vs_bCustom = TRUE;
-          vs.vs_iOrgValue = -1;
-          vs.vs_iValue = -1;
-
-          // Search for the same value in the value list
-          for (INDEX iValue = 0; iValue < ctValues; iValue++) {
-            // If it matches this value
-            if (strValue == vs.vs_astrValues[iValue]) {
-              // Set index to the value in the list
-              vs.vs_iOrgValue = vs.vs_iValue = iValue;
-              vs.vs_bCustom = FALSE;
-              break;
-            }
-          }
-        } break;
-
-        case CVarSetting::E_TEXTBOX: {
-          // Set new string
-          vs.vs_strValue = strValue;
-
-          // Save hash value of the string
-          vs.vs_iOrgValue = static_cast<ULONG>(strValue.GetHash());
-        } break;
-      }
+      vs.UpdateValue(); // [Cecil]
     }
   }
 }
@@ -787,6 +767,7 @@ void CVarSetting::Clear() {
   vs_strSchedule.Clear();
   vs_bCustom = FALSE;
   vs_bHidden = FALSE; // [Cecil]
+  vs_bRealTime = FALSE; // [Cecil]
 }
 
 BOOL CVarSetting::Validate(void) {
@@ -830,6 +811,7 @@ CVarSetting::CVarSetting(const CVarSetting &vsOther) {
   vs_iOrgValue        = vsOther.vs_iOrgValue;
   vs_bCustom          = vsOther.vs_bCustom;
   vs_bHidden          = vsOther.vs_bHidden;
+  vs_bRealTime        = vsOther.vs_bRealTime;
 
   INDEX ct;
   CTString *pstr;
@@ -910,4 +892,42 @@ BOOL CVarSetting::ApplyValue(void) {
 
   // Schedule a command for execution afterwards
   return TRUE;
+};
+
+// [Cecil] Update original value after applying it with ApplyValue() (taken out of LoadVarSettings() method)
+void CVarSetting::UpdateValue(void) {
+  // Get value from the shell variable
+  CTString strValue = _pShell->GetValue(vs_strVar);
+
+  // [Cecil] Different types
+  switch (vs_eType)
+  {
+    case CVarSetting::E_TOGGLE: {
+      const INDEX ctValues = vs_ctValues;
+
+      // Custom value by default
+      vs_bCustom = TRUE;
+      vs_iOrgValue = -1;
+      vs_iValue = -1;
+
+      // Search for the same value in the value list
+      for (INDEX iValue = 0; iValue < ctValues; iValue++) {
+        // If it matches this value
+        if (strValue == vs_astrValues[iValue]) {
+          // Set index to the value in the list
+          vs_iOrgValue = vs_iValue = iValue;
+          vs_bCustom = FALSE;
+          break;
+        }
+      }
+    } break;
+
+    case CVarSetting::E_TEXTBOX: {
+      // Set new string
+      vs_strValue = strValue;
+
+      // Save hash value of the string
+      vs_iOrgValue = static_cast<ULONG>(strValue.GetHash());
+    } break;
+  }
 };

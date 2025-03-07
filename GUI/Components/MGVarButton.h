@@ -43,6 +43,9 @@ class CMGVarButton : public CMGEdit {
     BOOL IsSeparator(void);
     BOOL IsEnabled(void);
 
+    // [Cecil] Signal that some variable has been changed
+    void OnVarChanged(void);
+
     // [Cecil] Change strings
     void OnStringChanged(void);
     void OnStringCanceled(void);
