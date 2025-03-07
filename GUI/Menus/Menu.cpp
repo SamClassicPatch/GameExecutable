@@ -736,24 +736,7 @@ BOOL DoMenu(CDrawPort *pdp) {
     _pmgUnderCursor = NULL;
   }
 
-  BOOL bStilInMenus = FALSE;
-  _pGame->MenuPreRenderMenu(pgmCurrentMenu->gm_strName);
-  // for each menu gadget
-  FOREACHNODE(CMenuGadget, pgmCurrentMenu->GetChildren(), itmg) {
-    // if gadget is visible
-    if (itmg->mg_bVisible) {
-      bStilInMenus = TRUE;
-      itmg->Render(&dpMenu);
-
-      // [Cecil] Don't update the gadget under the cursor during editing
-      if (!bEditingValue
-       && FloatBoxToPixBox(&dpMenu, itmg->mg_boxOnScreen) >= PIX2D(_pixCursorPosI, _pixCursorPosJ))
-      {
-        _pmgUnderCursor = itmg;
-      }
-    }
-  }
-  _pGame->MenuPostRenderMenu(pgmCurrentMenu->gm_strName);
+  // [Cecil] Determine active gadget to prevent double rendering of the "currently edited" gadget
 
   // no currently active gadget initially
   CMenuGadget *pmgActive = NULL;
@@ -774,6 +757,28 @@ BOOL DoMenu(CDrawPort *pdp) {
     // gadget under cursor is active
     pmgActive = _pmgUnderCursor;
   }
+
+  BOOL bStilInMenus = FALSE;
+  _pGame->MenuPreRenderMenu(pgmCurrentMenu->gm_strName);
+  // for each menu gadget
+  FOREACHNODE(CMenuGadget, pgmCurrentMenu->GetChildren(), itmg) {
+    // [Cecil] Skip active gadget as it's drawn again later
+    if (bEditingValue && pmgActive == itmg) continue;
+
+    // if gadget is visible
+    if (itmg->mg_bVisible) {
+      bStilInMenus = TRUE;
+      itmg->Render(&dpMenu);
+
+      // [Cecil] Don't update the gadget under the cursor during editing
+      if (!bEditingValue
+       && FloatBoxToPixBox(&dpMenu, itmg->mg_boxOnScreen) >= PIX2D(_pixCursorPosI, _pixCursorPosJ))
+      {
+        _pmgUnderCursor = itmg;
+      }
+    }
+  }
+  _pGame->MenuPostRenderMenu(pgmCurrentMenu->gm_strName);
 
   // if editing
   if (bEditingValue && pmgActive != NULL) {
