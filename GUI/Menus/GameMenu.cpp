@@ -188,7 +188,7 @@ BOOL CGameMenu::OnKeyDown(PressedMenuButton pmb) {
   }
 
   // [Cecil] Reset last pressed gadget
-  _pmgLastGadgetLMB = NULL;
+  _pmgLastPressedGadget = NULL;
 
   // if none focused
   if (pmgActive == NULL) {
@@ -199,9 +199,7 @@ BOOL CGameMenu::OnKeyDown(PressedMenuButton pmb) {
   // if active gadget handles it
   if (pmgActive->OnKeyDown(pmb)) {
     // [Cecil] Remember last pressed gadget
-    if (pmb.iKey == VK_LBUTTON) {
-      _pmgLastGadgetLMB = pmgActive;
-    }
+    _pmgLastPressedGadget = pmgActive;
 
     // key is handled
     return TRUE;
@@ -296,6 +294,18 @@ BOOL CGameMenu::OnKeyDown(PressedMenuButton pmb) {
   // key is not handled
   return FALSE;
 }
+
+// [Cecil] Releasing some button
+BOOL CGameMenu::OnKeyUp(PressedMenuButton pmb) {
+  // No gadget to release
+  if (_pmgLastPressedGadget == NULL) return FALSE;
+
+  // Let the gadget process it
+  const BOOL bHandled = _pmgLastPressedGadget->OnKeyUp(pmb);
+  _pmgLastPressedGadget = NULL;
+
+  return bHandled;
+};
 
 // [Cecil] Process held mouse buttons
 BOOL CGameMenu::OnMouseHeld(PressedMenuButton pmb) {

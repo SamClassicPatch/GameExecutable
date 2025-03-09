@@ -217,12 +217,12 @@ BOOL CMGVarButton::OnMouseHeld(PressedMenuButton pmb)
 
   // [Cecil] Scroll the value list
   if (mg_bEditing && bToggle && !bSlider && mg_bOnListScrollbar) {
-    // Forward the key
+    // Forward the key (always ends up in ListOnKeyDown())
     return OnKeyDown(pmb);
   }
 
   // If it's a toggleable slider without a custom value that was pressed last
-  if (_pmgLastGadgetLMB == this && bToggle && bSlider && !mg_pvsVar->vs_bCustom) {
+  if (_pmgLastPressedGadget == this && pmb.iKey == VK_LBUTTON && bToggle && bSlider && !mg_pvsVar->vs_bCustom) {
     // Forward the key
     return OnKeyDown(pmb);
   }

@@ -106,7 +106,7 @@ BOOL CMGSlider::OnKeyDown(PressedMenuButton pmb) {
 BOOL CMGSlider::OnMouseHeld(PressedMenuButton pmb)
 {
   // Only when it's the last pressed slider
-  if (_pmgLastGadgetLMB == this && pmb.iKey == VK_LBUTTON && OnLMB()) {
+  if (_pmgLastPressedGadget == this && pmb.iKey == VK_LBUTTON && OnLMB()) {
     return TRUE;
   }
 

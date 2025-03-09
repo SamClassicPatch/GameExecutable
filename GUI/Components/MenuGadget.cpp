@@ -29,7 +29,7 @@ EValueEdit _eEditingValue = VED_NONE;
 CMenuGadget *_pmgLastActivatedGadget = NULL;
 
 // [Cecil] Last pressed gadget
-CMenuGadget *_pmgLastGadgetLMB = NULL;
+CMenuGadget *_pmgLastPressedGadget = NULL;
 
 CMenuGadget::CMenuGadget(void) {
   mg_pmgLeft = NULL;
@@ -60,6 +60,11 @@ BOOL CMenuGadget::OnKeyDown(PressedMenuButton pmb) {
   // key is not handled
   return FALSE;
 }
+
+// [Cecil] Releasing some button
+BOOL CMenuGadget::OnKeyUp(PressedMenuButton pmb) {
+  return FALSE;
+};
 
 // [Cecil] Process held mouse buttons
 BOOL CMenuGadget::OnMouseHeld(PressedMenuButton pmb) {

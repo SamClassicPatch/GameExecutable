@@ -54,6 +54,7 @@ class CMGServerList : public CMGButton {
 
     CMGServerList();
     BOOL OnKeyDown(PressedMenuButton pmb);
+    BOOL OnKeyUp(PressedMenuButton pmb); // [Cecil]
     PIXaabbox2D GetScrollBarFullBox(void);
     PIXaabbox2D GetScrollBarHandleBox(void);
     void OnSetFocus(void);

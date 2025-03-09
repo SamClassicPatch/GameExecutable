@@ -49,6 +49,7 @@ class CMenuGadget : public CLinkedNode {
     CMenuGadget(void);
     // return TRUE if handled
     virtual BOOL OnKeyDown(PressedMenuButton pmb);
+    virtual BOOL OnKeyUp(PressedMenuButton pmb); // [Cecil]
     virtual BOOL OnMouseHeld(PressedMenuButton pmb); // [Cecil]
     virtual BOOL OnChar(MSG msg);
     virtual void OnActivate(void);
@@ -86,6 +87,6 @@ extern EValueEdit _eEditingValue;
 extern CMenuGadget *_pmgLastActivatedGadget;
 
 // [Cecil] Last pressed gadget
-extern CMenuGadget *_pmgLastGadgetLMB;
+extern CMenuGadget *_pmgLastPressedGadget;
 
 #endif /* include-once check. */

@@ -372,10 +372,6 @@ void CMGServerList::OnMouseOver(PIX pixI, PIX pixJ) {
   mg_pixMouseI = pixI;
   mg_pixMouseJ = pixJ;
 
-  if (!(GetKeyState(VK_LBUTTON) & 0x8000)) {
-    mg_pixDragJ = -1;
-  }
-
   BOOL bInSlider = (pixI >= mg_pixSBMinI && pixI <= mg_pixSBMaxI && pixJ >= mg_pixSBMinJ && pixJ <= mg_pixSBMaxJ);
   if (mg_pixDragJ >= 0 && bInSlider) {
     PIX pixDelta = pixJ - mg_pixDragJ;
@@ -479,6 +475,16 @@ BOOL CMGServerList::OnKeyDown(PressedMenuButton pmb) {
 
   return FALSE;
 }
+
+// [Cecil] Stop dragging the scrollbar
+BOOL CMGServerList::OnKeyUp(PressedMenuButton pmb) {
+  if (pmb.iKey == VK_LBUTTON) {
+    mg_pixDragJ = -1;
+    return TRUE;
+  }
+
+  return CMGButton::OnKeyUp(pmb);
+};
 
 void CMGServerList::OnSetFocus(void) {
   mg_bFocused = TRUE;

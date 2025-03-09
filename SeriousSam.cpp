@@ -1415,13 +1415,19 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         _bLHeld = FALSE;
         ReleaseCapture();
 
+        MenuOnKeyUp(PressedMenuButton(VK_LBUTTON, -1));
+
       } else if (msg.message == WM_RBUTTONUP) {
         _bRHeld = FALSE;
         ReleaseCapture();
 
+        MenuOnKeyUp(PressedMenuButton(VK_RBUTTON, -1));
+
       } else if (msg.message == WM_MBUTTONUP) {
         _bMHeld = FALSE;
         ReleaseCapture();
+
+        MenuOnKeyUp(PressedMenuButton(VK_MBUTTON, -1));
       }
 
       // if menu is active and no input on
@@ -1439,9 +1445,16 @@ int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         if (msg.message == WM_KEYDOWN) {
           MenuOnKeyDown(PressedMenuButton(msg.wParam, -1));
 
+        // [Cecil] Key up callback
+        } else if (msg.message == WM_KEYUP) {
+          MenuOnKeyUp(PressedMenuButton(msg.wParam, -1));
+
         // [Cecil] Pass controller buttons
         } else if (msg.message == WM_CTRLBUTTONDOWN) {
           MenuOnKeyDown(PressedMenuButton(-1, msg.wParam));
+
+        } else if (msg.message == WM_CTRLBUTTONUP) {
+          MenuOnKeyUp(PressedMenuButton(-1, msg.wParam));
 
         } else if (msg.message == WM_LBUTTONDOWN || msg.message == WM_LBUTTONDBLCLK) {
           // [Cecil] Hold LMB

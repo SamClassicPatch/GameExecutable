@@ -103,6 +103,7 @@ void InitializeMenus(void);
 void DestroyMenus(void);
 void MenuGoToParent(void); // [Cecil] Declared here
 void MenuOnKeyDown(PressedMenuButton pmb); // [Cecil] Handle different buttons
+void MenuOnKeyUp(PressedMenuButton pmb); // [Cecil]
 void MenuOnMouseHold(PressedMenuButton pmb); // [Cecil]
 void MenuOnChar(MSG msg);
 void MenuOnMouseMove(PIX pixI, PIX pixJ);

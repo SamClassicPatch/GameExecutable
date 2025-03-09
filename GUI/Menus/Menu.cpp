@@ -398,6 +398,13 @@ void MenuOnKeyDown(PressedMenuButton pmb) {
   }
 }
 
+// [Cecil] Releasing some button
+void MenuOnKeyUp(PressedMenuButton pmb) {
+  // Let the menu handle released buttons
+  const BOOL bHandled = pgmCurrentMenu->OnKeyUp(pmb);
+  (void)bHandled;
+};
+
 // [Cecil] Holding any mouse button
 void MenuOnMouseHold(PressedMenuButton pmb) {
   // Only accept mouse buttons
