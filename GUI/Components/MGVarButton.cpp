@@ -32,7 +32,13 @@ CMGVarButton::CMGVarButton() {
   mg_boxList = PIXaabbox2D(PIX2D(0, 0), PIX2D(0, 0));
   mg_iListValue = -1;
   mg_iLastListValue = -1;
-  mg_bOnListScrollbar = FALSE;
+
+  mg_vMouseInScrollbarArea = PIX2D(-1, -1);
+  mg_boxScrollbarArea = PIXaabbox2D(PIX2D(0, 0), PIX2D(0, 0));
+
+  mg_vMouseScrollbarDrag = PIX2D(-1, -1);
+  mg_bMouseOnScrollbar = FALSE;
+  mg_iLastValueListOffset = -1;
 };
 
 BOOL CMGVarButton::IsSeparator(void) {
@@ -80,6 +86,13 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
   if (mg_bEditing) {
     // [Cecil] Interact with the value list
     if (bToggle && !bSlider) {
+      // Start dragging with left mouse button
+      if (pmb.iKey == VK_LBUTTON && mg_vMouseInScrollbarArea != PIX2D(-1, -1)) {
+        mg_vMouseScrollbarDrag = mg_vMouseInScrollbarArea;
+        mg_bMouseOnScrollbar = (mg_boxScrollbarArea >= mg_vMouseInScrollbarArea);
+        mg_iLastValueListOffset = mg_iValueListOffset;
+      }
+
       return ListOnKeyDown(pmb);
     }
 
@@ -197,6 +210,16 @@ BOOL CMGVarButton::OnKeyDown(PressedMenuButton pmb)
   return CMGEdit::OnKeyDown(pmb);
 }
 
+// [Cecil] Stop dragging the scrollbar
+BOOL CMGVarButton::OnKeyUp(PressedMenuButton pmb) {
+  if (pmb.iKey == VK_LBUTTON) {
+    mg_vMouseScrollbarDrag = PIX2D(-1, -1);
+    return TRUE;
+  }
+
+  return CMGEdit::OnKeyUp(pmb);
+};
+
 // [Cecil] Pass character events only to textboxes
 BOOL CMGVarButton::OnChar(MSG msg) {
   if (mg_pvsVar == NULL || mg_pvsVar->vs_eType != CVarSetting::E_TEXTBOX) {
@@ -212,17 +235,18 @@ BOOL CMGVarButton::OnMouseHeld(PressedMenuButton pmb)
   if (pmb.iKey != VK_LBUTTON) return FALSE;
   if (mg_pvsVar == NULL) return FALSE;
 
-  const BOOL bToggle = (mg_pvsVar->vs_eType == CVarSetting::E_TOGGLE);
+  // Not a toggleable setting
+  if (mg_pvsVar->vs_eType != CVarSetting::E_TOGGLE) return FALSE;
+
   const BOOL bSlider = (mg_pvsVar->vs_eSlider != CVarSetting::SLD_NOSLIDER);
 
   // [Cecil] Scroll the value list
-  if (mg_bEditing && bToggle && !bSlider && mg_bOnListScrollbar) {
-    // Forward the key (always ends up in ListOnKeyDown())
-    return OnKeyDown(pmb);
+  if (mg_bEditing && !bSlider && mg_vMouseScrollbarDrag != PIX2D(-1, -1)) {
+    return ListDragScrollbar();
   }
 
   // If it's a toggleable slider without a custom value that was pressed last
-  if (_pmgLastPressedGadget == this && pmb.iKey == VK_LBUTTON && bToggle && bSlider && !mg_pvsVar->vs_bCustom) {
+  if (_pmgLastPressedGadget == this && pmb.iKey == VK_LBUTTON && bSlider && !mg_pvsVar->vs_bCustom) {
     // Forward the key
     return OnKeyDown(pmb);
   }
@@ -387,7 +411,6 @@ void CMGVarButton::ListActivate(void) {
   mg_boxList = PIXaabbox2D(PIX2D(0, 0), PIX2D(0, 0));
   mg_iListValue = -1;
   mg_iLastListValue = -1;
-  mg_bOnListScrollbar = FALSE;
 
   mg_bEditing = TRUE;
   _eEditingValue = VED_LIST;
@@ -415,10 +438,12 @@ void CMGVarButton::ListDeactivate(INDEX iSelectValue) {
 
 // [Cecil] Value list interactions
 BOOL CMGVarButton::ListOnKeyDown(PressedMenuButton pmb) {
+  const INDEX ctList = mg_pvsVar->vs_ctValues;
+
   // Scroll the list
-  if (mg_ctListValuesAtOnce < mg_pvsVar->vs_ctValues) {
+  if (mg_ctListValuesAtOnce < ctList) {
     INDEX iScroll = pmb.ScrollPower();
-    const INDEX iLastOffset = (mg_pvsVar->vs_ctValues - mg_ctListValuesAtOnce);
+    const INDEX iLastOffset = (ctList - mg_ctListValuesAtOnce);
 
     if (iScroll != 0) {
       const INDEX iDir = SgnNZ(iScroll);
@@ -433,15 +458,8 @@ BOOL CMGVarButton::ListOnKeyDown(PressedMenuButton pmb) {
       return TRUE;
     }
 
-    // Grab the scrollbar
-    if (mg_bOnListScrollbar && pmb.iKey == VK_LBUTTON) {
-      const FLOAT fRatio = Clamp(FLOAT(_pixCursorPosJ - mg_boxList.Min()(2)) / mg_boxList.Size()(2), 0.0f, 1.0f);
-      const FLOAT fLerp = Lerp(0.0f, (FLOAT)iLastOffset, fRatio);
-
-      // Round to the nearest value
-      mg_iValueListOffset = (INDEX)floorf(fLerp + 0.5f);
-      return TRUE;
-    }
+    // Immitate scrollbar dragging on the initial button press
+    if (ListDragScrollbar()) return TRUE;
   }
 
   // Select value
@@ -459,10 +477,39 @@ BOOL CMGVarButton::ListOnKeyDown(PressedMenuButton pmb) {
   return TRUE;
 };
 
+BOOL CMGVarButton::ListDragScrollbar(void) {
+  const INDEX ctList = mg_pvsVar->vs_ctValues;
+
+  // All values are already visible
+  if (mg_ctListValuesAtOnce >= ctList) return FALSE;
+
+  // Can't grab the scrollbar
+  if (mg_vMouseScrollbarDrag == PIX2D(-1, -1)) return FALSE;
+
+  const INDEX iLastOffset = (ctList - mg_ctListValuesAtOnce);
+
+  // Move scrollbar to a specific position
+  if (!mg_bMouseOnScrollbar) {
+    const FLOAT fRatio = Clamp(FLOAT(_pixCursorPosJ - mg_boxList.Min()(2)) / mg_boxList.Size()(2), 0.0f, 1.0f);
+
+    // Round to the nearest value
+    mg_iValueListOffset = (INDEX)floorf((FLOAT)iLastOffset * fRatio + 0.5f);
+    return TRUE;
+  }
+
+  // Drag the scrollbar relative to the last offset
+  const PIX pixDelta = _pixCursorPosJ - mg_vMouseScrollbarDrag(2);
+  const INDEX iWantedValue = mg_iLastValueListOffset + (ctList * pixDelta) / mg_boxList.Size()(2);
+
+  mg_iValueListOffset = Clamp(iWantedValue, (INDEX)0, iLastOffset);
+  return TRUE;
+};
+
 // [Cecil] Render value list
 void CMGVarButton::ListRender(CDrawPort *pdp, PIX2D vListBox, CTString strValue) {
   mg_iListValue = -1;
-  mg_bOnListScrollbar = FALSE;
+  mg_vMouseInScrollbarArea = PIX2D(-1, -1);
+  mg_boxScrollbarArea = PIXaabbox2D(PIX2D(0, 0), PIX2D(0, 0));
 
   extern CFontData _fdMedium;
   const PIX pixTextHeight = _fdMedium.GetHeight() * pdp->dp_fTextScaling;
@@ -487,7 +534,7 @@ void CMGVarButton::ListRender(CDrawPort *pdp, PIX2D vListBox, CTString strValue)
     }
   }
 
-  // Add space for a scroll bar
+  // Add space for a scrollbar
   const PIX pixScrollBar = 10 * HEIGHT_SCALING(pdp);
   const PIX pixBoxNoScrollBarWidth = pixBoxWidth;
   pixBoxWidth += pixScrollBar + 4 * HEIGHT_SCALING(pdp);
@@ -599,7 +646,7 @@ void CMGVarButton::ListRender(CDrawPort *pdp, PIX2D vListBox, CTString strValue)
     mg_iLastListValue = -1;
   }
 
-  // Render scroll bar
+  // Render scrollbar
   if (mg_ctListValuesAtOnce < ctList) {
     PIX2D vScrollStart(mg_boxList.Max()(1) - pixScrollBar, mg_boxList.Min()(2));
     PIX2D vScrollSize(pixScrollBar, mg_boxList.Size()(2));
@@ -609,20 +656,23 @@ void CMGVarButton::ListRender(CDrawPort *pdp, PIX2D vListBox, CTString strValue)
 
     COLOR colScroll = colUnselected;
 
-    // Grab the scrollbar
-    if (boxScroll >= vCursorPos) {
-      mg_iListValue = -1;
-      mg_bOnListScrollbar = TRUE;
-      colScroll = colCurrent;
-    }
-
     vScrollStart += PIX2D(2, 2);
     vScrollSize  -= PIX2D(3, 3);
 
     // Adjust slider for the current values on screen
     const FLOAT fScrollH = (FLOAT)vScrollSize(2) / (FLOAT)ctList;
     vScrollStart(2) += fScrollH * mg_iValueListOffset;
+
     vScrollSize(2) *= (FLOAT)mg_ctListValuesAtOnce / (FLOAT)ctList;
+    vScrollSize(2) = ClampDn(vScrollSize(2), (PIX)1);
+
+    // Grab the scrollbar
+    if (boxScroll >= vCursorPos) {
+      mg_iListValue = -1;
+      mg_vMouseInScrollbarArea = vCursorPos;
+      mg_boxScrollbarArea = PIXaabbox2D(vScrollStart, vScrollStart + vScrollSize);
+      colScroll = colCurrent;
+    }
 
     pdp->Fill(vScrollStart(1), vScrollStart(2), vScrollSize(1), vScrollSize(2), colScroll);
   }

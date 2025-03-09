@@ -27,16 +27,25 @@ class CMGVarButton : public CMGEdit {
     class CVarSetting *mg_pvsVar;
 
     // [Cecil] Active value list
-    INDEX mg_ctListValuesAtOnce;
-    INDEX mg_iValueListOffset;
-    PIXaabbox2D mg_boxList;
-    INDEX mg_iListValue;
-    INDEX mg_iLastListValue;
-    BOOL mg_bOnListScrollbar;
+    INDEX mg_ctListValuesAtOnce; // Amount of rendered values in the defined list area (<= total values)
+    INDEX mg_iValueListOffset; // First value shown in the defined list area (always 0 if able to display all values at once)
+    PIXaabbox2D mg_boxList; // Defined list area during rendering
+
+    // [Cecil] Values during list scrollbar rendering
+    INDEX mg_iListValue; // Currently selected list value
+    INDEX mg_iLastListValue; // For playing selection sound
+    PIX2D mg_vMouseInScrollbarArea; // Precise mouse position when it's inside the scroll area, otherwise [-1, -1]
+    PIXaabbox2D mg_boxScrollbarArea; // Scrollbar area inside the overall scroll area
+
+    // [Cecil] Values in the beginning of scrolling
+    PIX2D mg_vMouseScrollbarDrag; // Mouse position
+    BOOL mg_bMouseOnScrollbar; // Whether the mouse was specifically on the scrollbar
+    INDEX mg_iLastValueListOffset; // Value of mg_iValueListOffset
 
     CMGVarButton(); // [Cecil]
     PIXaabbox2D GetSliderBox(CDrawPort *pdp, INDEX iSliderType);
     BOOL OnKeyDown(PressedMenuButton pmb);
+    BOOL OnKeyUp(PressedMenuButton pmb); // [Cecil]
     BOOL OnChar(MSG msg); // [Cecil]
     BOOL OnMouseHeld(PressedMenuButton pmb); // [Cecil]
     void Render(CDrawPort *pdp);
@@ -58,6 +67,7 @@ class CMGVarButton : public CMGEdit {
 
     // [Cecil] Value list interactions
     BOOL ListOnKeyDown(PressedMenuButton pmb);
+    BOOL ListDragScrollbar(void);
 
     // [Cecil] Render value list
     void ListRender(CDrawPort *pdp, PIX2D vListBox, CTString strValue);
