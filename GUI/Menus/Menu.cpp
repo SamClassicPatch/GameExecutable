@@ -759,23 +759,20 @@ BOOL DoMenu(CDrawPort *pdp) {
         break;
       }
     }
-  // if mouse was active last
-  } else {
-    // gadget under cursor is active
-    pmgActive = _pmgUnderCursor;
   }
 
   BOOL bStilInMenus = FALSE;
   _pGame->MenuPreRenderMenu(pgmCurrentMenu->gm_strName);
   // for each menu gadget
   FOREACHNODE(CMenuGadget, pgmCurrentMenu->GetChildren(), itmg) {
-    // [Cecil] Skip active gadget as it's drawn again later
-    if (bEditingValue && pmgActive == itmg) continue;
-
     // if gadget is visible
     if (itmg->mg_bVisible) {
       bStilInMenus = TRUE;
-      itmg->Render(&dpMenu);
+
+      // [Cecil] Skip active gadget that's being edited as it's drawn again later
+      if (!bEditingValue || pmgActive != itmg) {
+        itmg->Render(&dpMenu);
+      }
 
       // [Cecil] Don't update the gadget under the cursor during editing
       if (!bEditingValue
@@ -786,6 +783,12 @@ BOOL DoMenu(CDrawPort *pdp) {
     }
   }
   _pGame->MenuPostRenderMenu(pgmCurrentMenu->gm_strName);
+
+  // if mouse was active last
+  if (_bMouseUsedLast) {
+    // gadget under cursor is active
+    pmgActive = _pmgUnderCursor;
+  }
 
   // if editing
   if (bEditingValue && pmgActive != NULL) {
