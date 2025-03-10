@@ -16,12 +16,60 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "StdH.h"
 #include "MGArrow.h"
 
+// [Cecil] Setup arrow gadget for some menu
+void CMGArrow::SetupForMenu(CGameMenu *pgmMenu, ArrowDir eDir, CMenuGadget *pmgLeave) {
+  mg_adDirection = eDir;
+
+  if (eDir == AD_DOWN) {
+    mg_pmgLeft = mg_pmgRight = mg_pmgUp = pmgLeave;
+  } else {
+    mg_pmgLeft = mg_pmgRight = mg_pmgDown = pmgLeave;
+  }
+
+  pgmMenu->AddChild(this);
+};
+
+// [Cecil] Update the arrow upon filling list items
+void CMGArrow::UpdateArrow(BOOL bEnable) {
+  mg_bEnabled = bEnable;
+  mg_bModern = sam_bModernScrollbars;
+
+  // Set appropriate area
+  if (mg_bModern) {
+    mg_boxOnScreen = BoxScrollbarArrow(mg_adDirection);
+  } else {
+    mg_boxOnScreen = BoxArrow(mg_adDirection);
+  }
+};
+
 void CMGArrow::Render(CDrawPort *pdp) {
   SetFontMedium(pdp, mg_fTextScale);
 
   PIXaabbox2D box = FloatBoxToPixBox(pdp, mg_boxOnScreen);
   COLOR col = GetCurrentColor();
 
+  // [Cecil] Render arrow icons in boxes on the right for the modern scrollbar
+  if (mg_bModern) {
+    const PIX2D vSize = box.Size();
+    const PIX pixW = Min(vSize(1), vSize(2)) * 0.5f;
+
+    // Upside down for AD_DOWN
+    const PIX2D vOffset(pixW, (mg_adDirection == AD_DOWN) ? -pixW : +pixW);
+
+    const PIX2D boxArrow0 = box.Center() - vOffset;
+    const PIX2D boxArrow1 = box.Center() + vOffset;
+
+    extern CTextureObject _toMenuArrow;
+
+    pdp->InitTexture(&_toMenuArrow, TRUE);
+    pdp->AddTexture(boxArrow0(1), boxArrow0(2), boxArrow1(1), boxArrow1(2), col);
+    pdp->FlushRenderingQueue();
+
+    pdp->DrawBorder(box.Min()(1), box.Min()(2), vSize(1), vSize(2), col);
+    return;
+  }
+
+  // Render regular "Page Up" and "Page Down" buttons on the left
   CTString str;
   if (mg_adDirection == AD_NONE) {
     str = "???";

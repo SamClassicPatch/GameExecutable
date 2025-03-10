@@ -24,6 +24,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "GUI/Components/MGButton.h"
 #include "GUI/Components/MGFileButton.h"
 #include "GUI/Components/MGTitle.h"
+#include "Cecil/MGScrollbar.h"
 
 #define SELECTLIST_BUTTONS_CT 14
 
@@ -45,6 +46,7 @@ class CSelectListMenu : public CGameMenu {
     CMGFileButton gm_amgButton[SELECTLIST_BUTTONS_CT];
     CMGArrow gm_mgArrowUp;
     CMGArrow gm_mgArrowDn;
+    CMGScrollbar gm_mgScrollbar; // [Cecil]
 
     void Initialize_t(void);
     void StartMenu(void);

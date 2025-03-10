@@ -213,6 +213,32 @@ FLOATaabbox2D BoxArrow(enum ArrowDir ad) {
   }
 }
 
+// [Cecil] Horizontal arrow positions regardless of the aspect ratio
+#define ARROW_L (1.0f - 0.045f / _fAspectRatio * (4.0f / 3.0f))
+#define ARROW_R (1.0f - 0.020f / _fAspectRatio * (4.0f / 3.0f))
+
+// [Cecil] Arrows around the scrollbar
+FLOATaabbox2D BoxScrollbarArrow(ArrowDir ad) {
+  switch (ad) {
+    default: ASSERT(FALSE);
+    case AD_UP:
+      return FLOATaabbox2D(
+        FLOAT2D(ARROW_L, _fBigStartJ - 3.0f * _fMediumSizeJ),
+        FLOAT2D(ARROW_R, _fBigStartJ - 2.1f * _fMediumSizeJ));
+    case AD_DOWN:
+      return FLOATaabbox2D(
+        FLOAT2D(ARROW_L, _fBigStartJ + 15.1f * _fMediumSizeJ),
+        FLOAT2D(ARROW_R, _fBigStartJ + 16.0f * _fMediumSizeJ));
+  }
+};
+
+// [Cecil] Scrollbar between the arrows
+FLOATaabbox2D BoxScrollbar(void) {
+  return FLOATaabbox2D(
+    FLOAT2D(ARROW_L, _fBigStartJ -  1.95f * _fMediumSizeJ),
+    FLOAT2D(ARROW_R, _fBigStartJ + 14.95f * _fMediumSizeJ));
+};
+
 FLOATaabbox2D BoxBack(void) {
   return FLOATaabbox2D(
     FLOAT2D(0.02f, 0.95f),

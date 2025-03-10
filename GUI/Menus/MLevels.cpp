@@ -71,17 +71,15 @@ void CLevelsMenu::Initialize_t(void) {
     AddChild(&gm_mgManualLevel[iLabel]);
   }
 
-  gm_mgArrowUp.mg_adDirection = AD_UP;
-  gm_mgArrowUp.mg_boxOnScreen = BoxArrow(AD_UP);
-  gm_mgArrowUp.mg_pmgRight = &gm_mgManualLevel[0];
+  gm_mgArrowUp.SetupForMenu(this, AD_UP, &gm_mgManualLevel[0]);
   gm_mgArrowUp.mg_pmgDown = &gm_mgVisibility;
-  AddChild(&gm_mgArrowUp);
+  gm_mgArrowDn.SetupForMenu(this, AD_DOWN, &gm_mgManualLevel[LEVELS_ON_SCREEN - 1]);
+  gm_mgArrowDn.mg_pmgUp = &gm_mgTitleFilter;
 
-  gm_mgArrowDn.mg_adDirection = AD_DOWN;
-  gm_mgArrowDn.mg_boxOnScreen = BoxArrow(AD_DOWN);
-  gm_mgArrowDn.mg_pmgRight = &gm_mgManualLevel[LEVELS_ON_SCREEN - 1];
-  gm_mgArrowDn.mg_pmgUp = &gm_mgLevelFormat;
-  AddChild(&gm_mgArrowDn);
+  // [Cecil] Scrollbar between the arrows
+  gm_mgScrollbar.mg_pmgUp = &gm_mgArrowUp;
+  gm_mgScrollbar.mg_pmgDown = &gm_mgArrowDn;
+  AddChild(&gm_mgScrollbar);
 
   gm_ctListVisible = LEVELS_ON_SCREEN;
   gm_pmgArrowUp = &gm_mgArrowUp;
@@ -190,8 +188,11 @@ void CLevelsMenu::FillListItems(void) {
   }
 
   // enable/disable up/down arrows
-  gm_mgArrowUp.mg_bEnabled = !bHasFirst && ctLabels > 0;
-  gm_mgArrowDn.mg_bEnabled = !bHasLast && ctLabels > 0;
+  gm_mgArrowUp.UpdateArrow(!bHasFirst && ctLabels > 0);
+  gm_mgArrowDn.UpdateArrow(!bHasLast  && ctLabels > 0);
+
+  // [Cecil] Disable scrollbar if can't scroll in either direction
+  gm_mgScrollbar.UpdateScrollbar(gm_mgArrowUp.mg_bEnabled || gm_mgArrowDn.mg_bEnabled);
 }
 
 void CLevelsMenu::StartMenu(void) {

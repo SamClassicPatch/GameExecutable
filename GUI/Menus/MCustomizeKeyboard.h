@@ -23,6 +23,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "GUI/Components/MGArrow.h"
 #include "GUI/Components/MGKeyDefinition.h"
 #include "GUI/Components/MGTitle.h"
+#include "Cecil/MGScrollbar.h"
 
 class CCustomizeKeyboardMenu : public CGameMenu {
   public:
@@ -30,6 +31,7 @@ class CCustomizeKeyboardMenu : public CGameMenu {
     CMGKeyDefinition gm_mgKey[KEYS_ON_SCREEN];
     CMGArrow gm_mgArrowUp;
     CMGArrow gm_mgArrowDn;
+    CMGScrollbar gm_mgScrollbar; // [Cecil]
 
     // [Cecil] Controls that are currently being edited
     CControls *gm_pControls;

@@ -23,6 +23,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "GUI/Components/MGArrow.h"
 #include "GUI/Components/MGLevelButton.h"
 #include "GUI/Components/MGTitle.h"
+#include "Cecil/MGScrollbar.h"
 
 class CLevelsMenu : public CGameMenu {
   public:
@@ -30,6 +31,7 @@ class CLevelsMenu : public CGameMenu {
     CMGLevelButton gm_mgManualLevel[LEVELS_ON_SCREEN];
     CMGArrow gm_mgArrowUp;
     CMGArrow gm_mgArrowDn;
+    CMGScrollbar gm_mgScrollbar; // [Cecil]
 
     CMGButton gm_mgFiltersLabel; // [Cecil] Filters label
     CMGButton gm_mgVisibility;   // [Cecil] Level visibility switch

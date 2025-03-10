@@ -91,6 +91,9 @@ static CTextureObject _toLogoMenuB;
 static CTextureObject _toPatchLogo1;
 static CTextureObject _toPatchLogo2;
 
+// [Cecil] Scrollbar arrow texture
+CTextureObject _toMenuArrow;
+
 // -------------- All possible menu entities
 #define BIG_BUTTONS_CT 6
 
@@ -281,6 +284,9 @@ void InitializeMenus(void) {
     _toPatchLogo1.SetData_t(CTFILENAME("TexturesPatch\\General\\PatchLogo1.tex"));
     _toPatchLogo2.SetData_t(CTFILENAME("TexturesPatch\\General\\PatchLogo2.tex"));
 
+    // [Cecil] Scrollbar arrow texture
+    _toMenuArrow.SetData_t(CTFILENAME("TexturesPatch\\General\\MenuArrow.tex"));
+
   } catch (char *strError) {
     FatalError(strError);
   }
@@ -292,6 +298,9 @@ void InitializeMenus(void) {
   // [Cecil] Classics Patch logo
   ((CTextureData *)_toPatchLogo1.GetData())->Force(TEX_CONSTANT);
   ((CTextureData *)_toPatchLogo2.GetData())->Force(TEX_CONSTANT);
+
+  // [Cecil] Scrollbar arrow texture
+  ((CTextureData *)_toMenuArrow.GetData())->Force(TEX_CONSTANT);
 
   try {
     TRANSLATERADIOARRAY(astrNoYes);
@@ -654,7 +663,7 @@ BOOL DoMenu(CDrawPort *pdp) {
         const INDEX iSize = 95;
         const PIX pixLogoWidth = iSize;
         const PIX pixLogoHeight = iSize * td.GetHeight() / td.GetWidth();
-        pixI0 = (pixR - pixLogoWidth - 35) * fScale;
+        pixI0 = (pixR - pixLogoWidth - 45) * fScale;
         pixJ0 = (480 - pixLogoHeight - 35) * fScale;
         pixI1 = pixI0 + pixLogoWidth * fScale;
         pixJ1 = pixJ0 + pixLogoHeight * fScale;

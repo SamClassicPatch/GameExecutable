@@ -25,7 +25,7 @@ extern CSoundData *_psdSelect;
 extern CSoundData *_psdPress;
 
 // [Cecil] Constructor
-CMGVarButton::CMGVarButton() {
+CMGVarButton::CMGVarButton() : CMGEdit() {
   mg_pvsVar = NULL;
   mg_ctListValuesAtOnce = 0;
   mg_iValueListOffset = 0;

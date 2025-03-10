@@ -38,13 +38,29 @@ inline INDEX GetGadgetCount(void) {
 };
 
 // Constructor
-CMGScrollbar::CMGScrollbar() {
+CMGScrollbar::CMGScrollbar() : CMGButton() {
   mg_vMouseInScrollbarArea = PIX2D(-1, -1);
   mg_boxScrollbarArea = PIXaabbox2D(PIX2D(0, 0), PIX2D(0, 0));
 
   mg_vMouseScrollbarDrag = PIX2D(-1, -1);
   mg_bMouseOnScrollbar = FALSE;
   mg_iLastGadgetOffset = -1;
+};
+
+// Update the scrollbar upon filling list items
+void CMGScrollbar::UpdateScrollbar(BOOL bEnable) {
+  // Add the scrollbar
+  if (sam_bModernScrollbars) {
+    mg_bEnabled = bEnable;
+    Appear();
+
+    // Set appropriate area
+    mg_boxOnScreen = BoxScrollbar();
+
+  // Remove the scrollbar
+  } else {
+    Disappear();
+  }
 };
 
 BOOL CMGScrollbar::OnKeyDown(PressedMenuButton pmb) {

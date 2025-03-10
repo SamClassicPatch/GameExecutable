@@ -44,6 +44,8 @@ FLOATaabbox2D BoxInfoTable(INDEX iTable);
 FLOATaabbox2D BoxChangePlayer(INDEX iTable, INDEX iButton);
 FLOATaabbox2D BoxKeyRow(FLOAT fRow);
 FLOATaabbox2D BoxArrow(enum ArrowDir ad);
+FLOATaabbox2D BoxScrollbarArrow(ArrowDir ad); // [Cecil]
+FLOATaabbox2D BoxScrollbar(void); // [Cecil]
 FLOATaabbox2D BoxBack(void);
 FLOATaabbox2D BoxNext(void);
 FLOATaabbox2D BoxLeftColumn(FLOAT fRow);

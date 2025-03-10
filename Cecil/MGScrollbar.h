@@ -36,6 +36,9 @@ class CMGScrollbar : public CMGButton {
 
     CMGScrollbar();
 
+    // Update the scrollbar upon filling list items
+    void UpdateScrollbar(BOOL bEnable);
+
     BOOL OnKeyDown(PressedMenuButton pmb);
     BOOL OnKeyUp(PressedMenuButton pmb);
     BOOL OnMouseHeld(PressedMenuButton pmb);

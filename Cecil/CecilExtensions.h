@@ -25,6 +25,7 @@ extern INDEX sam_bPatchVersionLabel;
 extern INDEX sam_bBackgroundGameRender;
 extern INDEX sam_bOptionTabs;
 extern INDEX sam_bConfigValueLists;
+extern INDEX sam_bModernScrollbars;
 extern INDEX sam_bLevelCategories;
 extern INDEX sam_bLevelFiltering;
 extern INDEX sam_bExtrasMenu;

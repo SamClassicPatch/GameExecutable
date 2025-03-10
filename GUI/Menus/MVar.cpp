@@ -111,14 +111,13 @@ void CVarMenu::Initialize_t(void) {
   AddChild(&gm_mgApply);
   gm_mgApply.mg_pActivatedFunction = &VarApply;
 
-  AddChild(&gm_mgArrowUp);
-  AddChild(&gm_mgArrowDn);
-  gm_mgArrowUp.mg_adDirection = AD_UP;
-  gm_mgArrowDn.mg_adDirection = AD_DOWN;
-  gm_mgArrowUp.mg_boxOnScreen = BoxArrow(AD_UP);
-  gm_mgArrowDn.mg_boxOnScreen = BoxArrow(AD_DOWN);
-  gm_mgArrowUp.mg_pmgRight = gm_mgArrowUp.mg_pmgDown = &gm_mgVar[0];
-  gm_mgArrowDn.mg_pmgRight = gm_mgArrowDn.mg_pmgUp = &gm_mgVar[VARS_ON_SCREEN - 1];
+  gm_mgArrowUp.SetupForMenu(this, AD_UP, &gm_mgVar[0]);
+  gm_mgArrowDn.SetupForMenu(this, AD_DOWN, &gm_mgVar[VARS_ON_SCREEN - 1]);
+
+  // [Cecil] Scrollbar between the arrows
+  gm_mgScrollbar.mg_pmgUp = &gm_mgArrowUp;
+  gm_mgScrollbar.mg_pmgDown = &gm_mgArrowDn;
+  AddChild(&gm_mgScrollbar);
 
   gm_ctListVisible = VARS_ON_SCREEN;
   gm_pmgArrowUp = &gm_mgArrowUp;
@@ -171,8 +170,11 @@ void CVarMenu::FillListItems(void) {
     iLabel++;
   }
   // enable/disable up/down arrows
-  gm_mgArrowUp.mg_bEnabled = !bHasFirst && ctLabels > 0;
-  gm_mgArrowDn.mg_bEnabled = !bHasLast && ctLabels > 0;
+  gm_mgArrowUp.UpdateArrow(!bHasFirst && ctLabels > 0);
+  gm_mgArrowDn.UpdateArrow(!bHasLast  && ctLabels > 0);
+
+  // [Cecil] Disable scrollbar if can't scroll in either direction
+  gm_mgScrollbar.UpdateScrollbar(gm_mgArrowUp.mg_bEnabled || gm_mgArrowDn.mg_bEnabled);
 }
 
 void CVarMenu::StartMenu(void) {

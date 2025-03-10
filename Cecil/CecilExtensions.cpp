@@ -23,6 +23,7 @@ INDEX sam_bPatchVersionLabel = TRUE;
 INDEX sam_bBackgroundGameRender = TRUE;
 INDEX sam_bOptionTabs = TRUE;
 INDEX sam_bConfigValueLists = TRUE;
+INDEX sam_bModernScrollbars = TRUE;
 INDEX sam_bLevelCategories = TRUE;
 INDEX sam_bLevelFiltering = TRUE;
 INDEX sam_bExtrasMenu = TRUE;
@@ -113,6 +114,7 @@ void ClassicsPatch_InitExt(void) {
   _pShell->DeclareSymbol("persistent user INDEX sam_bBackgroundGameRender;", &sam_bBackgroundGameRender);
   _pShell->DeclareSymbol("persistent user INDEX sam_bOptionTabs;",           &sam_bOptionTabs);
   _pShell->DeclareSymbol("persistent user INDEX sam_bConfigValueLists;",     &sam_bConfigValueLists);
+  _pShell->DeclareSymbol("persistent user INDEX sam_bModernScrollbars;",     &sam_bModernScrollbars);
   _pShell->DeclareSymbol("persistent user INDEX sam_bLevelCategories;",      &sam_bLevelCategories);
   _pShell->DeclareSymbol("persistent user INDEX sam_bLevelFiltering;",       &sam_bLevelFiltering);
   _pShell->DeclareSymbol("persistent user INDEX sam_bExtrasMenu;",           &sam_bExtrasMenu);

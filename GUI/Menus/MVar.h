@@ -24,6 +24,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "GUI/Components/MGButton.h"
 #include "GUI/Components/MGTitle.h"
 #include "GUI/Components/MGVarButton.h"
+#include "Cecil/MGScrollbar.h"
 
 class CVarMenu : public CGameMenu {
   public:
@@ -34,6 +35,7 @@ class CVarMenu : public CGameMenu {
     CMGButton gm_mgApply;
     CMGArrow gm_mgArrowUp;
     CMGArrow gm_mgArrowDn;
+    CMGScrollbar gm_mgScrollbar; // [Cecil]
 
     // [Cecil] Set when applying option changes
     BOOL gm_bApplying;

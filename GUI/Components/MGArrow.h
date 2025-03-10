@@ -24,7 +24,20 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 class CMGArrow : public CMGButton {
   public:
-    enum ArrowDir mg_adDirection;
+    ArrowDir mg_adDirection;
+    BOOL mg_bModern; // [Cecil]
+
+    // [Cecil] Constructor
+    CMGArrow() : CMGButton(), mg_adDirection(AD_NONE), mg_bModern(FALSE)
+    {
+    };
+
+    // [Cecil] Setup arrow gadget for some menu
+    void SetupForMenu(CGameMenu *pgmMenu, ArrowDir eDir, CMenuGadget *pmgLeave);
+
+    // [Cecil] Update the arrow upon filling list items
+    void UpdateArrow(BOOL bEnable);
+
     void Render(CDrawPort *pdp);
     void OnActivate(void);
 };
