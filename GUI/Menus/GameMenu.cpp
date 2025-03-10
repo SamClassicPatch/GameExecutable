@@ -189,6 +189,7 @@ BOOL CGameMenu::OnKeyDown(PressedMenuButton pmb) {
 
   // [Cecil] Reset last pressed gadget
   _pmgLastPressedGadget = NULL;
+  _pmbLastPressedButton.SetNone();
 
   // if none focused
   if (pmgActive == NULL) {
@@ -196,10 +197,16 @@ BOOL CGameMenu::OnKeyDown(PressedMenuButton pmb) {
     return FALSE;
   }
 
+  // [Cecil] Remember current menu, in case it changes on click
+  CGameMenu *pgmLast = pgmCurrentMenu;
+
   // if active gadget handles it
   if (pmgActive->OnKeyDown(pmb)) {
-    // [Cecil] Remember last pressed gadget
-    _pmgLastPressedGadget = pmgActive;
+    // [Cecil] Remember last pressed gadget, if it's still the same menu
+    if (pgmCurrentMenu == pgmLast) {
+      _pmgLastPressedGadget = pmgActive;
+      _pmbLastPressedButton = pmb;
+    }
 
     // key is handled
     return TRUE;
@@ -300,11 +307,8 @@ BOOL CGameMenu::OnKeyUp(PressedMenuButton pmb) {
   // No gadget to release
   if (_pmgLastPressedGadget == NULL) return FALSE;
 
-  // Let the gadget process it
-  const BOOL bHandled = _pmgLastPressedGadget->OnKeyUp(pmb);
-  _pmgLastPressedGadget = NULL;
-
-  return bHandled;
+  // Let the gadget process it (the pointer is reset in MenuOnKeyUp() right after)
+  return _pmgLastPressedGadget->OnKeyUp(pmb);
 };
 
 // [Cecil] Process held mouse buttons

@@ -1107,6 +1107,11 @@ void ReleaseHeldMouseButtons(void) {
   _bLHeld = FALSE;
   _bRHeld = FALSE;
   _bMHeld = FALSE;
+
+  // Release held gadget
+  if (!_pmbLastPressedButton.IsNone()) {
+    MenuOnKeyUp(_pmbLastPressedButton);
+  }
 };
 
 int SubMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {

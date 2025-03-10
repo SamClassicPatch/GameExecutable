@@ -410,8 +410,14 @@ void MenuOnKeyDown(PressedMenuButton pmb) {
 // [Cecil] Releasing some button
 void MenuOnKeyUp(PressedMenuButton pmb) {
   // Let the menu handle released buttons
-  const BOOL bHandled = pgmCurrentMenu->OnKeyUp(pmb);
-  (void)bHandled;
+  if (pgmCurrentMenu != NULL) {
+    const BOOL bHandled = pgmCurrentMenu->OnKeyUp(pmb);
+    (void)bHandled;
+  }
+
+  // Reset last pressed gadget, if there was any
+  _pmgLastPressedGadget = NULL;
+  _pmbLastPressedButton.SetNone();
 };
 
 // [Cecil] Holding any mouse button
@@ -749,7 +755,7 @@ BOOL DoMenu(CDrawPort *pdp) {
   // [Cecil] If not editing anything
   if (!bEditingValue) {
     // Reset gadget under the cursor
-    _pmgUnderCursor = NULL;
+    _pmgUnderCursor = _pmgLastPressedGadget; // [Cecil] To the last pressed one
   }
 
   // [Cecil] Determine active gadget to prevent double rendering of the "currently edited" gadget
@@ -783,8 +789,8 @@ BOOL DoMenu(CDrawPort *pdp) {
         itmg->Render(&dpMenu);
       }
 
-      // [Cecil] Don't update the gadget under the cursor during editing
-      if (!bEditingValue
+      // [Cecil] Don't update the gadget under the cursor during editing or while holding a button on another gadget
+      if (!bEditingValue && _pmgLastPressedGadget == NULL
        && FloatBoxToPixBox(&dpMenu, itmg->mg_boxOnScreen) >= PIX2D(_pixCursorPosI, _pixCursorPosJ))
       {
         _pmgUnderCursor = itmg;
@@ -891,12 +897,12 @@ void ChangeToMenu(CGameMenu *pgmNewMenu) {
   // auto-clear old thumbnail when going out of menu
   ClearThumbnail();
 
-  // [Cecil] Reset gadget under the cursor
-  _pmgUnderCursor = NULL;
-
   // [Cecil] Reset held mouse buttons
   extern void ReleaseHeldMouseButtons(void);
   ReleaseHeldMouseButtons();
+
+  // [Cecil] Reset gadget under the cursor
+  _pmgUnderCursor = NULL;
 
   // [Cecil] If no new menu specified
   if (pgmNewMenu == NULL) {

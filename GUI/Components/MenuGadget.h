@@ -88,5 +88,6 @@ extern CMenuGadget *_pmgLastActivatedGadget;
 
 // [Cecil] Last pressed gadget
 extern CMenuGadget *_pmgLastPressedGadget;
+extern PressedMenuButton _pmbLastPressedButton;
 
 #endif /* include-once check. */

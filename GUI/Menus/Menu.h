@@ -27,6 +27,16 @@ struct PressedMenuButton {
   PressedMenuButton(int iSetKey, int iSetCtrl) :
     iKey(iSetKey), iCtrl(iSetCtrl) {};
 
+  // Set to "no button" state
+  inline void SetNone(void) {
+    iKey = iCtrl = -1;
+  };
+
+  // Check if there is no button
+  inline bool IsNone(void) {
+    return (iKey == -1 && iCtrl == -1);
+  };
+
   // Cancel / Go back to the previous menu
   inline bool Back(BOOL bMouse) {
     return iKey == VK_ESCAPE || (bMouse && iKey == VK_RBUTTON)

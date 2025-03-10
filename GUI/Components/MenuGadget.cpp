@@ -30,6 +30,7 @@ CMenuGadget *_pmgLastActivatedGadget = NULL;
 
 // [Cecil] Last pressed gadget
 CMenuGadget *_pmgLastPressedGadget = NULL;
+PressedMenuButton _pmbLastPressedButton(-1, -1);
 
 CMenuGadget::CMenuGadget(void) {
   mg_pmgLeft = NULL;
